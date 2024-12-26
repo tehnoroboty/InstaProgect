@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import '../styles/globals.css';
+import '@/src/styles/globals.css';
 
 export default function RootLayout({
   children,
