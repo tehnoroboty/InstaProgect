@@ -1,0 +1,19 @@
+.button {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+  color: inherit;
+  font-family: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-info-500);
+  }
+}
+
+.primary {
+  background-color: var(--primary-300);
+}
+
+.secondary {
+  background-color: var(--dark-300);
+}
