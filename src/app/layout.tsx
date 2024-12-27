@@ -1,7 +1,9 @@
-import type { Metadata } from 'next'
-import localFont from 'next/font/local'
-import '@/src/styles/globals.css'
+import '../styles/index.scss'
+import React from 'react'
 
+import '@fontsource-variable/inter'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -1,4 +1,9 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from '@storybook/react'
+import '../src/styles/index.scss'
+
+import '@fontsource-variable/inter'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
 
 const preview: Preview = {
   parameters: {
@@ -9,6 +14,6 @@ const preview: Preview = {
       },
     },
   },
-};
+}
 
-export default preview;
+export default preview
