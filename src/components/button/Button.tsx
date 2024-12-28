@@ -6,6 +6,6 @@ export type Props = {
 
 import s from './button.module.scss'
 
-export const Button = ({ className, variant = 'primary', ...rest }: Props) => {
+export const Button = ({ className, title, variant = 'primary', ...rest }: Props) => {
   return <button className={`${s.button} ${s[variant]} `} {...rest} />
 }
