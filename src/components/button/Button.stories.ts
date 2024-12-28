@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Button } from './button'
+import { Button } from './Button'
 
 const meta = {
   title: 'Components/Button',
@@ -7,7 +7,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      options: ['primary', 'secondary'],
+      options: ['primary', 'secondary', 'bordered', 'transparent'],
       control: { type: 'radio' },
     },
   },
@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>
 export const Primary: Story = {
   args: {
     variant: 'primary',
-    children: 'Primary Button',
+    children: 'Button',
     disabled: false,
   },
 }
@@ -27,7 +27,22 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
-    children: 'Secondary Button',
+    children: 'Button ',
+    disabled: false,
+  },
+}
+
+export const BordredButton: Story = {
+  args: {
+    variant: 'bordered',
+    children: 'Button ',
+    disabled: false,
+  },
+}
+export const TransparentButton: Story = {
+  args: {
+    variant: 'transparent',
+    children: 'Button ',
     disabled: false,
   },
 }

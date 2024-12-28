@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 export type Props = {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'bordered' | 'transparent'
 } & ComponentPropsWithoutRef<'button'>
 
 import s from './button.module.scss'
