@@ -1,9 +1,9 @@
-import '../styles/index.scss'
 import React from 'react'
 
-import '@fontsource-variable/inter'
+import '../styles/index.scss'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
+import '@fontsource-variable/inter'
 
 export default function RootLayout({
   children,
@@ -11,7 +11,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang={'en'}>
       <body>{children}</body>
     </html>
   )
