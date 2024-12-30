@@ -1,6 +1,6 @@
 #Устанавливаем зависимости
 FROM node:20.11-alpine as dependencies
-RUN curl -fsSL https://get.pnpm.io/install.sh | sh -
+RUN npm install -g pnpm
 WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
 RUN pnpm install
@@ -9,7 +9,7 @@ RUN pnpm install
 #Кэширование зависимостей — если файлы в проекте изменились,
 #но package.json остался неизменным, то стейдж с установкой зависимостей повторно не выполняется, что экономит время.
 FROM node:20.11-alpine as builder
-RUN curl -fsSL https://get.pnpm.io/install.sh | sh -
+RUN npm install -g pnpm
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
