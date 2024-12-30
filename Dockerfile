@@ -3,7 +3,7 @@ FROM node:20.11-alpine as dependencies
 RUN npm install -g pnpm
 WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 #Билдим приложение
 #Кэширование зависимостей — если файлы в проекте изменились,
