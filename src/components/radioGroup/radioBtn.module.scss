@@ -12,15 +12,15 @@
   text-align: left;
   text-transform: capitalize;
 }
-.checkbox {
+.radiobtn {
   all: unset;
   cursor: pointer;
   box-sizing: border-box;
   background: transparent;
   border: 2px solid var(--light-100);
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
   position: relative;
 
   &::after {
@@ -43,42 +43,35 @@
   &:focus::after {
     background-color: var(--dark-500);
   }
-
   &:disabled {
     border-color: var(--light-900);
   }
-
   &:checked {
-    background-color: var(--light-100);
-    border: none;
+    border: 2px solid var(--light-100);
   }
   &:disabled:checked {
-    background-color: var(--dark-100);
-    border: none;
+    background: transparent;
+    border: 2px solid var(--light-900);
   }
-
   &::before {
     content: '';
     position: absolute;
-    top: 45%;
-    left: 50%;
-    width: 13px;
-    height: 6px;
-    border-left: 2px solid var(--dark-700);
-    border-bottom: 2px solid var(--dark-700);
-    transform: translate(-50%, -50%) rotate(-45deg);
+    top: 3.5px;
+    left: 3.5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
     opacity: 0;
+    background-color: var(--light-100);
     transition: opacity 0.3s ease;
   }
   &:disabled::before {
-    border-left: 2px solid var(--light-500);
-    border-bottom: 2px solid var(--light-500);
+    background-color: var(--light-900);
   }
-
   &:checked::before {
     opacity: 1;
   }
 }
-.checkbox:disabled + .label {
+.radiobtn:disabled + .label {
   color: var(--light-900);
 }
