@@ -1,4 +1,7 @@
 // "lint": "next lint",
-export default function Home() {
-  return <div>Hello</div>
+
+const Home = () => {
+  return <div style={{ padding: '2rem' }}>{'Some text'}</div>
 }
+
+export default Home
