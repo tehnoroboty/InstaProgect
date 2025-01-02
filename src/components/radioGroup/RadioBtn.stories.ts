@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-
-import { CheckBox } from '@/src/components/checkbox/CheckBox'
+import { RadioBtn } from '@/src/components/radioGroup/RadioBtn'
 
 const meta = {
   argTypes: {
@@ -8,10 +7,10 @@ const meta = {
       control: 'text',
     },
   },
-  component: CheckBox,
+  component: RadioBtn,
   tags: ['autodocs'],
-  title: 'Components/Checkbox',
-} satisfies Meta<typeof CheckBox>
+  title: 'Components/RadioBtn',
+} satisfies Meta<typeof RadioBtn>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -20,5 +19,6 @@ export const Primary: Story = {
   args: {
     disabled: false,
     label: 'text',
+    checked: true,
   },
 }

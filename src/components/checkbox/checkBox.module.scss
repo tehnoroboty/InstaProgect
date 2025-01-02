@@ -80,5 +80,5 @@
   }
 }
 .checkbox:disabled + .label {
-  color: #aaa;
+  color: var(--light-900);
 }
