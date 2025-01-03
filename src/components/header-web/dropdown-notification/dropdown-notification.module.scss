@@ -1,0 +1,95 @@
+.content {
+  max-height: 440px;
+  width: 355px;
+  background-color: var(--dark-500);
+  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid var(--dark-100);
+  position: relative;
+  transform: translateX(17px);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    right: 20px;
+    top: -20px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid var(--dark-100);
+  }
+  &::after {
+    border-bottom: 10px solid var(--dark-500);
+    top: -19px;
+  }
+}
+
+.separator {
+  height: 1px;
+  background-color: var(--dark-100);
+  margin: 12px 4px;
+}
+
+.buttonIcon {
+  all: unset;
+  cursor: pointer;
+  position: relative;
+}
+.title {
+  font-family: var(--second-family), sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--light-100);
+  padding-left: 10px;
+}
+.notification {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 10px;
+}
+.notificationBadge {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+.notificationTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--light-100);
+}
+.notificationStatus {
+  margin-left: 2px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--primary-500);
+}
+.notificationMessages {
+  margin: 0;
+  font-family: var(--second-family), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--light-100);
+  width: 100%;
+}
+.notificationTime {
+  width: 100%;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--light-900);
+}

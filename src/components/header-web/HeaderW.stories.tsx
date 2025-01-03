@@ -1,17 +1,21 @@
-// @flow
-import * as React from 'react'
-import { ComponentPropsWithoutRef } from 'react'
+import type { Meta, StoryObj } from '@storybook/react'
+import { HeaderW } from '@/src/components/header-web/HeaderW'
 
-export type Props = {
-  title?: string
-  subtitle?: string
-} & ComponentPropsWithoutRef<'header'>
+const meta = {
+  argTypes: {
+    title: { control: 'text' },
+  },
+  component: HeaderW,
+  tags: ['autodocs'],
+  title: 'Components/HeaderW',
+} satisfies Meta<typeof HeaderW>
 
-export const HeaderW = (props: Props) => {
-  return (
-    <header {...props}>
-      <span>{props.title}</span>
-      <span>{props.subtitle}</span>
-    </header>
-  )
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Primary: Story = {
+  args: {
+    title: 'Momenttify',
+    isLoggedIn: true,
+  },
 }
