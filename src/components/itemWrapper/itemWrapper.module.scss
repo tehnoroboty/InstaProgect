@@ -1,0 +1,20 @@
+.item {
+  background-color: transparent;
+  border: none;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.itemTitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--light-100);
+}
+.icon {
+  color: var(--light-100);
+  &:active {
+    color: var(--primary-500);
+  }
+}
