@@ -1,8 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react'
-
-type Props = ComponentPropsWithoutRef<'svg'>
-
-export const SelectIconUk = ({ ...props }: Props) => {
+export const SelectIconUk = () => {
   return (
     <svg
       width="20"
