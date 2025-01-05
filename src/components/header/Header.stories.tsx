@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { HeaderW } from '@/src/components/header-web/HeaderW'
+import { HeaderW } from '@/src/components/header/header-web/HeaderW'
 
 const meta = {
   argTypes: {

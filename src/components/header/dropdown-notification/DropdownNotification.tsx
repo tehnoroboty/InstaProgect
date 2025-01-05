@@ -80,12 +80,8 @@ type Notification = {
   createdAt: string
 }
 
-type Props = {
-  notifications?: Notification[]
-}
-
-export const DropdownNotification = ({ notifications = placeholderNotifications }: Props) => {
-  console.log(notifications)
+export const DropdownNotification = () => {
+  const notifications = placeholderNotifications
   const [open, setOpen] = useState(false)
   const hasNotification = notifications.length > 0
   const filteredNotifications = notifications?.filter(notification => !notification.isRead).length
@@ -103,7 +99,9 @@ export const DropdownNotification = ({ notifications = placeholderNotifications 
           ) : (
             <Image src={notification} alt={''} width={24} height={24} />
           )}
-          <span className={s.notificationBadge}>{filteredNotifications}</span>
+          {hasNotification ? (
+            <span className={s.notificationBadge}>{filteredNotifications}</span>
+          ) : null}
         </button>
       </DropdownMenu.Trigger>
 
