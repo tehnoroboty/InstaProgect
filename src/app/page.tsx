@@ -1,9 +1,9 @@
 // "lint": "next lint",
 
-import { HeaderW } from '@/src/components/header-web/HeaderW'
+import { Header } from '../components/header/Header'
 
 const Home = () => {
-  return <div style={{ padding: '2rem' }}>{'Hello'}</div>
+  return <div style={{ padding: '2rem' }}>{'Some text'}</div>
 }
 
 export default Home

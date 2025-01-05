@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import s from './headerW.module.scss'
+import s from './headerWeb.module.scss'
 import { Button } from '../../button/Button'
 import { DropdownNotification } from '@/src/components/header/dropdown-notification/DropdownNotification'
 
@@ -10,7 +10,7 @@ export type Props = {
   isLoggedIn?: boolean
 }
 
-export const HeaderW = (props: Props) => {
+export const HeaderWeb = (props: Props) => {
   const { title, isLoggedIn, notification } = props
   return (
     <div className={s.container}>

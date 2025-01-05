@@ -1,7 +1,7 @@
 import React from 'react'
 import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
 import Link from 'next/link'
-import s from '../dropdownMenu.module.scss'
+import s from './ItemWrapper.module.scss'
 
 type DropdownMenuItemWithLinkProps = {
   href: string

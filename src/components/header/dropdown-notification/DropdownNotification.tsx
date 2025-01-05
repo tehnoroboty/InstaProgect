@@ -1,14 +1,14 @@
 // @flow
 'use client'
 import * as React from 'react'
-import notification from '@/public/icons/outlinebell.svg'
-import fillbell from '@/public/icons/fillbell.svg'
-import Image from 'next/image'
+import { useState } from 'react'
 import s from './dropdown-notification.module.scss'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import { useState } from 'react'
-import { GetServerSideProps } from 'next'
 import { ScrollBar } from '@/src/components/scroll/ScrollBar'
+import {
+  NotificationActive,
+  NotificationOutline,
+} from '@/src/components/header/dropdown-notification/index'
 
 const placeholderNotifications: Notification[] = [
   {
@@ -95,9 +95,9 @@ export const DropdownNotification = () => {
       <DropdownMenu.Trigger asChild>
         <button className={s.buttonIcon} aria-label="Customise options">
           {open ? (
-            <Image src={fillbell} alt={''} width={25} height={25} />
+            <NotificationActive width={25} height={25} />
           ) : (
-            <Image src={notification} alt={''} width={24} height={24} />
+            <NotificationOutline width={24} height={24} />
           )}
           {hasNotification ? (
             <span className={s.notificationBadge}>{filteredNotifications}</span>
