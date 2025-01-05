@@ -1,0 +1,27 @@
+.content {
+  min-width: 161px;
+  height: 204px;
+  background-color: var(--dark-500);
+  border: 1px solid var(--dark-100);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.iconButton {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  color: var(--light-100);
+}
+.iconActive {
+  color: var(--primary-500);
+}
