@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { HeaderW } from '@/src/components/header-web/HeaderW'
+import { Header } from '@/src/components/header/Header'
+import { boolean } from 'zod'
 
 const meta = {
   argTypes: {
     title: { control: 'text' },
   },
-  component: HeaderW,
+  component: Header,
   tags: ['autodocs'],
-  title: 'Components/HeaderW',
-} satisfies Meta<typeof HeaderW>
+  title: 'Components/Header',
+} satisfies Meta<typeof Header>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -16,6 +17,5 @@ type Story = StoryObj<typeof meta>
 export const Primary: Story = {
   args: {
     title: 'Momenttify',
-    isLoggedIn: true,
   },
 }
