@@ -29,3 +29,66 @@
   width: 30px;
   height: 30px;
 }
+
+.loadingContainer {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loaderCircle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top: 4px solid #4285f4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.greenCheck {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-color: transparent; /* Зеленый фон */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 20px;
+    height: 10px;
+    border-left: 3px solid var(--success-500);
+    border-bottom: 3px solid var(--success-500);
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+}
+.textError {
+  font-family: var(--second-family), sans-serif;
+  color: rgba(255, 0, 0, 1);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 11.72px;
+  margin-top: 13px;
+}
+
+.error {
+  width: max-content;
+  padding: 8px 7px;
+  border: 1px solid rgba(255, 0, 0, 1);
+}
