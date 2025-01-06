@@ -33,17 +33,27 @@ export const Secondary: Story = {
   },
 }
 
-export const BordredButton: Story = {
+export const BorderedButton: Story = {
   args: {
     children: 'Button ',
     disabled: false,
     variant: 'bordered',
   },
 }
+
 export const TransparentButton: Story = {
   args: {
     children: 'Button ',
     disabled: false,
     variant: 'transparent',
+  },
+}
+
+export const AsLink: Story = {
+  args: {
+    variant: 'primary',
+    children: 'Link that looks like a button',
+    as: 'a',
+    href: 'https://www.google.ru/?hl=ru',
   },
 }
