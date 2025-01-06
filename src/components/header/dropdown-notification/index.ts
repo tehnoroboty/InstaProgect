@@ -1,2 +1,2 @@
-export { default as NotificationOutline } from '@/public/icons/outlinebell.svg'
-export { default as NotificationActive } from '@/public/icons/fillbell.svg'
+export { default as NotificationOutline } from '@/src/assets/icons/outlinebell.svg'
+export { default as NotificationActive } from '@/src/assets/icons/fillbell.svg'
