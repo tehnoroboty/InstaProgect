@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { ComponentPropsWithoutRef } from 'react'
 import s from './header.module.scss'
-import { HeaderWeb } from './header-web/HeaderWeb'
+import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
 
 export type Props = {
   title: string
@@ -15,7 +15,7 @@ export const Header = (props: Props) => {
 
   return (
     <header {...rest} className={s.header}>
-      <HeaderWeb title={title} notification={notification} isLoggedIn={isLoggedIn} />
+      <HeaderMobile title={title} notification={notification} isLoggedIn={isLoggedIn} />
     </header>
   )
 }
