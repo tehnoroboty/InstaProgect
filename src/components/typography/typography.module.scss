@@ -1,0 +1,63 @@
+@mixin text-style($size, $weight, $line) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line;
+  margin: 0;
+}
+
+.typography {
+  color: var(--light-900);
+}
+
+.Large {
+  @include text-style(26px, 600, 36px);
+}
+
+.h1 {
+  @include text-style(20px, 700, 36px);
+}
+
+.h2 {
+  @include text-style(18px, 700, 24px);
+}
+
+.h3 {
+  @include text-style(16px, 600, 24px);
+}
+
+.link {
+  text-decoration: underline;
+  color: var(--primary-500);
+  cursor: pointer;
+}
+
+.small {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.medium {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.large {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.regular {
+  font-weight: 400;
+}
+
+.medium {
+  font-weight: 500;
+}
+
+.semi-bold {
+  font-weight: 600;
+}
+
+.bold {
+  font-weight: 700;
+}
