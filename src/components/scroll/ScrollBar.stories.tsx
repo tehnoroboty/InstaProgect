@@ -1,10 +1,51 @@
-// @flow
-import * as React from 'react'
-import s from './scrollBar.module.scss'
+import type { Meta, StoryObj } from '@storybook/react'
+import { ScrollBar } from '@/src/components/scroll/ScrollBar'
 
-type Props = {
-  children: React.ReactNode
-}
-export const ScrollBar: React.FC<Props> = ({ children }) => {
-  return <div className={s.container}>{children}</div>
+const meta = {
+  argTypes: {},
+  component: ScrollBar,
+  tags: ['autodocs'],
+  title: 'Components/ScrollBar',
+} satisfies Meta<typeof ScrollBar>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Primary: Story = {
+  args: {
+    children: (
+      <>
+        <p>This is a long piece of content.</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>This is a long piece of content.</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+        <p>Keep adding more paragraphs...</p>
+      </>
+    ),
+  },
 }

@@ -1,12 +1,16 @@
 // @flow
 'use client'
 import * as React from 'react'
-import s from './recaptcha.module.scss'
-import Recaptchalogo from '@/src/assets/componentsIcons/Recaptchalogo'
 import { useState } from 'react'
 
+import Recaptchalogo from '@/src/assets/componentsIcons/Recaptchalogo'
+
+import s from './recaptcha.module.scss'
+
+type RecaptchaType = 'error' | 'loading' | 'unchecked' | 'verified'
+
 export const Recaptcha = () => {
-  const [status, setStatus] = useState<'unchecked' | 'loading' | 'verified' | 'error'>('unchecked')
+  const [status, setStatus] = useState<RecaptchaType>('unchecked')
 
   const onChangeHendler = () => {
     setStatus('loading')
@@ -18,7 +22,7 @@ export const Recaptcha = () => {
       case 'unchecked':
       case 'error':
         return (
-          <input id={'recaptcha'} onChange={onChangeHendler} className={s.input} type="checkbox" />
+          <input className={s.input} id="recaptcha" onChange={onChangeHendler} type="checkbox" />
         )
       case 'loading':
         return (
@@ -38,11 +42,11 @@ export const Recaptcha = () => {
       <div className={s.container}>
         <div className={s.checkbox}>
           {renderStatus()}
-          <label htmlFor={'recaptcha'} className={s.label}>
+          <label  className={s.label} htmlFor={'recaptcha'}>
             I’m not a robot
           </label>
         </div>
-        <Recaptchalogo width={60} height={60} viewBox={'-2 0 24 24'} />
+        <Recaptchalogo height={60} viewBox={'-2 0 24 24'} width={60} />
       </div>
       {status === 'error' ? (
         <span className={s.textError}>Please verify that you are not a robot</span>
