@@ -9,39 +9,24 @@ export type Props = {
   errorMessage?: string
 } & ComponentPropsWithoutRef<'textarea'>
 
-export const TextArea = ({ disabled = false, errorMessage, ...rest }: Props) => {
+export const TextArea = ({ className, disabled = false, errorMessage, ...rest }: Props) => {
   const [text, setText] = useState('')
-  const [isActive, setIsActive] = useState(false)
 
   const textAreaChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.currentTarget.value)
   }
 
-  const textAreaBlurHandler = () => {
-    if (text.trim()) {
-      setIsActive(true)
-
-      return
-    }
-    setIsActive(false)
-  }
-
-  const textAreaFocusHandler = () => {
-    setIsActive(false)
-  }
-
-  const textareaClass = `${s.textArea} ${text.trim() !== '' && isActive ? s.isActive : ''} ${errorMessage ? s.isError : ''}`
+  const textareaClass = `${s.textArea} ${errorMessage ? s.isError : ''}`
 
   return (
-    <div className={`${s.container}`}>
+    <div className={`${s.container} ${className}`}>
       <label className={s.label}>
         Text-area
         <textarea
+          {...rest}
           className={textareaClass}
           disabled={disabled}
-          onBlur={textAreaBlurHandler}
           onChange={textAreaChangeHandler}
-          onFocus={textAreaFocusHandler}
           placeholder={'Text-area'}
           value={text}
         />

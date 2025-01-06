@@ -36,16 +36,16 @@
     color: var(--light-100);
   }
   &:focus {
-    border: 2px solid var(--primary-700);
+    outline: 2px solid var(--primary-700);
   }
   &:disabled::placeholder {
     color: var(--dark-100);
   }
 
-  &.isActive {
-    color: var(--light-100);
-    border: 2px solid var(--light-100);
-  }
+//   &.isActive {
+//     color: var(--light-100);
+//     outline: 2px solid var(--light-100);
+//   }
   &.isError {
     border: 2px solid var(--danger-500);
   }
