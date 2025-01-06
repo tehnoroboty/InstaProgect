@@ -5,10 +5,8 @@ import { useState } from 'react'
 import s from './dropdown-notification.module.scss'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { ScrollBar } from '@/src/components/scroll/ScrollBar'
-import {
-  NotificationActive,
-  NotificationOutline,
-} from '@/src/components/header/dropdown-notification/index'
+
+import { Fillbell, Outlinebell } from '@/src/assets/componentsIcons/index'
 
 const placeholderNotifications: Notification[] = [
   {
@@ -95,9 +93,9 @@ export const DropdownNotification = () => {
       <DropdownMenu.Trigger asChild>
         <button className={s.buttonIcon} aria-label="Customise options">
           {open ? (
-            <NotificationActive width={25} height={25} />
+            <Fillbell className={s.icon} width={24} height={24} />
           ) : (
-            <NotificationOutline width={24} height={24} />
+            <Outlinebell width={24} height={24} />
           )}
           {hasNotification ? (
             <span className={s.notificationBadge}>{filteredNotifications}</span>
