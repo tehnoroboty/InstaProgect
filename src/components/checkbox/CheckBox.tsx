@@ -9,8 +9,12 @@ export type Props = {
 export const CheckBox = ({ className, label, ...rest }: Props) => {
   return (
     <div className={`${s.container}`}>
-      <input className={`${s.checkbox}`} type={'checkbox'} {...rest} />
-      {label ? <span className={`${s.label}`}>{label}</span> : null}
+      <input className={`${s.checkbox}`} id={'checkboxId'} type={'checkbox'} {...rest} />
+      {label ? (
+        <label  className={`${s.label}`} htmlFor={'checkboxId'}>
+          {label}
+        </label>
+      ) : null}
     </div>
   )
 }
