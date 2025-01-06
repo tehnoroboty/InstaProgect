@@ -3,17 +3,18 @@ import { Input, InputProps } from '@/src/components/input/Input'
 import { ChangeEvent, useState } from 'react'
 import s from './Input.module.scss'
 
-const meta: Meta<typeof Input> = {
-  component: Input,
-  tags: ['autodocs'],
+const meta = {
   argTypes: {
     disabled: { control: 'boolean' },
   },
+  component: Input,
+  tags: ['autodocs'],
+  title: 'Components/Input',
   args: {
     id: 'forInput',
     error: '',
   },
-}
+} satisfies Meta<typeof Input>
 
 export default meta
 type Story = StoryObj<typeof Input>
