@@ -1,4 +1,8 @@
-export const SelectIconUk = () => {
+type Props = {
+  className?: string
+}
+
+export const SelectIconUk = ({ className }: Props) => {
   return (
     <svg
       width="20"
@@ -7,6 +11,7 @@ export const SelectIconUk = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
+      className={className}
     >
       <rect width="20" height="20" fill="url(#pattern0_25086_11601)" />
       <defs>

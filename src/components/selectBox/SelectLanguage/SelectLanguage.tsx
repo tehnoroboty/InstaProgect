@@ -26,9 +26,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
   const getIconByValue = (value: string) => {
     switch (value) {
       case 'united-kingdom':
-        return <SelectIconUk />
+        return <SelectIconUk className={styles.IconLanguage} />
       case 'russia':
-        return <SelectIconRu />
+        return <SelectIconRu className={styles.IconLanguage} />
       default:
         return null
     }
@@ -40,7 +40,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
         <Select.Value aria-label={value}>
           <div className={styles.ValueTitleLang}>
             {getIconByValue(value)}
-            {values.find(item => item.value === value)?.valueTitle}
+            <div className={styles.TitleLang}>
+              {values.find(item => item.value === value)?.valueTitle}
+            </div>
           </div>
         </Select.Value>
 
@@ -62,7 +64,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
                 <SelectItem key={item.value} value={item.value}>
                   <div className={styles.ItemContent}>
                     {getIconByValue(item.value)}
-                    {item.valueTitle}
+                    <div className={styles.ItemTitle}>{item.valueTitle}</div>
                   </div>
                 </SelectItem>
               ))}

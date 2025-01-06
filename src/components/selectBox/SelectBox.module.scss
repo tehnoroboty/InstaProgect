@@ -15,15 +15,11 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &.TriggerLanguage {
-    width: 163px;
-    color: var(--light-100);
-  }
-
-  &:hover {
-    border: 1px solid var(--light-900);
-    border-radius: 2px;
-    color: var(--light-900);
+  @media (hover: hover) {
+    &:hover {
+      border: 1px solid var(--light-900);
+      color: var(--light-900);
+    }
   }
 
   &:focus {
@@ -49,6 +45,11 @@
   }
 }
 
+.TriggerLanguage {
+  width: 163px;
+  color: var(--light-100);
+}
+
 .TriggerLabel {
   color: var(--light-100);
 }
@@ -71,8 +72,10 @@
   border-radius: 0 0 2px 2px;
   cursor: pointer;
 
-  &:hover {
-    color: var(--light-900);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--light-900);
+    }
   }
 }
 
@@ -109,4 +112,41 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+@media (max-width: 479.98px) {
+  .TriggerLanguage {
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+  }
+
+  .Icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ValueTitleLang {
+    margin-right: 2px;
+  }
+
+  .IconLanguage {
+    width: 24px;
+    height: 24px;
+  }
+
+  .TitleLang {
+    display: none;
+  }
+
+  .Content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ItemTitle {
+    display: none;
+  }
 }
