@@ -1,4 +1,4 @@
-.Trigger {
+.trigger {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
@@ -45,24 +45,24 @@
   }
 }
 
-.TriggerLanguage {
+.triggerLanguage {
   width: 163px;
   color: var(--light-100);
 }
 
-.TriggerLabel {
+.triggerLabel {
   color: var(--light-100);
 }
 
-.Icon {
+.icon {
   transition: transform 0.2s ease-in-out;
 }
 
-[data-state='open'] .Icon {
+[data-state='open'] .icon {
   transform: rotate(180deg);
 }
 
-.Content {
+.content {
   overflow: hidden;
   width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
@@ -79,7 +79,7 @@
   }
 }
 
-.Item {
+.item {
   font-size: 16px;
   line-height: 24px;
   display: flex;
@@ -94,59 +94,59 @@
     color: var(--primary-500);
   }
 
-  .ItemContent {
+  .itemContent {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 }
 
-.Label {
+.label {
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
   color: var(--light-900);
 }
 
-.ValueTitleLang {
+.valueTitleLang {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 @media (max-width: 479.98px) {
-  .TriggerLanguage {
+  .triggerLanguage {
     width: auto;
     height: auto;
     padding: 0;
     border: none;
   }
 
-  .Icon {
+  .icon {
     width: 16px;
     height: 16px;
   }
 
-  .ValueTitleLang {
+  .valueTitleLang {
     margin-right: 2px;
   }
 
-  .IconLanguage {
+  .iconLanguage {
     width: 24px;
     height: 24px;
   }
 
-  .TitleLang {
+  .titleLang {
     display: none;
   }
 
-  .Content {
+  .content {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .ItemTitle {
+  .itemTitle {
     display: none;
   }
 }

@@ -30,16 +30,16 @@ export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...re
   return (
     <Select.Root>
       <Select.Group>
-        {label && <Select.Label className={styles.Label}>{label}</Select.Label>}
+        {label && <Select.Label className={styles.label}>{label}</Select.Label>}
         <Select.Trigger
-          className={`${styles.Trigger} ${label && styles.TriggerLabel}`}
+          className={`${styles.trigger} ${label && styles.triggerLabel}`}
           {...rest}
           aria-label={placeholder}
           style={{ width }}
         >
           <Select.Value placeholder={placeholder} />
           <Select.Icon asChild>
-            <SelectIcon className={styles.Icon} />
+            <SelectIcon className={styles.icon} />
           </Select.Icon>
         </Select.Trigger>
       </Select.Group>
@@ -47,7 +47,7 @@ export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...re
       <Select.Portal>
         <Select.Content
           avoidCollisions
-          className={styles.Content}
+          className={styles.content}
           position={'popper'}
           sideOffset={-1}
         >
