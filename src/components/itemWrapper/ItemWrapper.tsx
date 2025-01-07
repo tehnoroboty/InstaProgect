@@ -1,25 +1,27 @@
 import React from 'react'
+
 import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
 import Link from 'next/link'
+
 import s from './itemWrapper.module.scss'
 
 type DropdownMenuItemWithLinkProps = {
-  href: string
-  title: React.ReactNode
   Icon: React.ElementType
+  href: string
   onClick?: () => void
+  title: React.ReactNode
 }
 
-export const ItemWrapper = ({ href, title, Icon, onClick }: DropdownMenuItemWithLinkProps) => {
+export const ItemWrapper = ({ Icon, href, onClick, title }: DropdownMenuItemWithLinkProps) => {
   return (
     <DropdownMenuMob.Item>
       {onClick ? (
-        <button type={'button'} className={s.item}>
+        <button className={s.item} type={'button'}>
           <Icon className={s.icon} />
           <span className={s.itemTitle}>{title}</span>
         </button>
       ) : (
-        <Link href={href} className={s.item}>
+        <Link className={s.item} href={href}>
           <Icon className={s.icon} />
           <span className={s.itemTitle}>{title}</span>
         </Link>

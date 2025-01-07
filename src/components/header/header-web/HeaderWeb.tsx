@@ -1,18 +1,22 @@
 // @flow
 import * as React from 'react'
-import s from './headerWeb.module.scss'
-import { Button } from '../../button/Button'
+
 import { DropdownNotification } from '@/src/components/header/dropdown-notification/DropdownNotification'
 import { SelectLanguage } from '@/src/components/selectBox/SelectLanguage/SelectLanguage'
 
+import s from './headerWeb.module.scss'
+
+import { Button } from '../../button/Button'
+
 export type Props = {
-  title: string
-  notification?: boolean
   isLoggedIn?: boolean
+  notification?: boolean
+  title: string
 }
 
 export const HeaderWeb = (props: Props) => {
-  const { title, isLoggedIn, notification } = props
+  const { isLoggedIn, notification, title } = props
+
   return (
     <div className={s.container}>
       <h1 className={s.title}>{title}</h1>

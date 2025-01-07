@@ -1,9 +1,11 @@
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId, useState } from 'react'
-import s from './Input.module.scss'
+
 import Close from '@/src/assets/componentsIcons/CloseOutline'
-import Search from '@/src/assets/componentsIcons/SearchOutline'
-import Eye from '@/src/assets/componentsIcons/EyeOutline'
 import EyeOff from '@/src/assets/componentsIcons/EyeOffOutline'
+import Eye from '@/src/assets/componentsIcons/EyeOutline'
+import Search from '@/src/assets/componentsIcons/SearchOutline'
+
+import s from './Input.module.scss'
 
 export type InputProps = {
   error?: string
@@ -11,7 +13,7 @@ export type InputProps = {
 } & ComponentPropsWithoutRef<'input'>
 
 const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
-  const { disabled = false, id, value, onClear, className, type, error, ...rest } = props
+  const { className, disabled = false, error, id, onClear, type, value, ...rest } = props
 
   const generatedId = useId()
   const finalId = id ?? generatedId
@@ -28,25 +30,26 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
+
   return (
     <div className={s.container}>
       <div className={`${s.group} ${disabled ? s.disabled : ''}`.trim()}>
         <input
-          id={finalId}
-          value={value}
-          type={inputType}
-          disabled={disabled}
           className={`${s.input} ${className} ${error ? s.error : ''} ${type === InputType.searchType ? s.searchPadding : ''} ${
             type === InputType.passwordType ? s.passwordPadding : ''
           } ${className || ''}`.trim()}
+          disabled={disabled}
+          id={finalId}
           ref={ref}
+          type={inputType}
+          value={value}
           {...rest}
         />
 
         {type === InputType.searchType && value && (
           <Close
-            onClick={onClear}
             className={`${s.clear} ${disabled ? s.disabledIcon : ''}`.trim()}
+            onClick={onClear}
           />
         )}
 
@@ -56,15 +59,15 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
 
         {type === InputType.passwordType && isPasswordVisible && (
           <Eye
-            onClick={togglePasswordVisibility}
             className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`.trim()}
+            onClick={togglePasswordVisibility}
           />
         )}
 
         {type === InputType.passwordType && !isPasswordVisible && (
           <EyeOff
-            onClick={togglePasswordVisibility}
             className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`.trim()}
+            onClick={togglePasswordVisibility}
           />
         )}
       </div>
@@ -72,6 +75,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
     </div>
   )
 })
+
 Input.displayName = 'Input'
 
 export { Input }

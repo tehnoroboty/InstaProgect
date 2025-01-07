@@ -1,15 +1,17 @@
 'use client'
 import React, { useState } from 'react'
-import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
-import s from './dropdownMenu.module.scss'
+
 import {
+  BookmarkOutline,
   LogOutOutline,
   MoreHorizontalOutline,
   SettingsOutline,
-  BookmarkOutline,
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons/index'
 import { ItemWrapper } from '@/src/components/itemWrapper/ItemWrapper'
+import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
+
+import s from './dropdownMenu.module.scss'
 
 export const DropdownMenuMobile = () => {
   const [open, setOpen] = useState(false)
@@ -21,7 +23,7 @@ export const DropdownMenuMobile = () => {
   return (
     <DropdownMenuMob.Root onOpenChange={handleOpenChange}>
       <DropdownMenuMob.Trigger asChild>
-        <button className={s.iconButton} aria-label="Customise options">
+        <button aria-label={'Customise options'} className={s.iconButton}>
           <MoreHorizontalOutline
             className={open ? s.iconActive : s.icon}
             height={24}
@@ -31,11 +33,11 @@ export const DropdownMenuMobile = () => {
       </DropdownMenuMob.Trigger>
 
       <DropdownMenuMob.Portal>
-        <DropdownMenuMob.Content className={s.content} align={'end'} sideOffset={7}>
-          <ItemWrapper href={''} Icon={SettingsOutline} title={'Profile Settings'} />
-          <ItemWrapper href={''} Icon={TrendingUpOutline} title={'Statistics'} />
-          <ItemWrapper href={''} Icon={BookmarkOutline} title={'Favorites'} />
-          <ItemWrapper href={''} Icon={LogOutOutline} title={'Log Out'} onClick={() => {}} />
+        <DropdownMenuMob.Content align={'end'} className={s.content} sideOffset={7}>
+          <ItemWrapper Icon={SettingsOutline} href={''} title={'Profile Settings'} />
+          <ItemWrapper Icon={TrendingUpOutline} href={''} title={'Statistics'} />
+          <ItemWrapper Icon={BookmarkOutline} href={''} title={'Favorites'} />
+          <ItemWrapper Icon={LogOutOutline} href={''} onClick={() => {}} title={'Log Out'} />
         </DropdownMenuMob.Content>
       </DropdownMenuMob.Portal>
     </DropdownMenuMob.Root>

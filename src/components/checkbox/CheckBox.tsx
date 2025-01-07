@@ -11,7 +11,7 @@ export const CheckBox = ({ className, label, ...rest }: Props) => {
     <div className={`${s.container}`}>
       <input className={`${s.checkbox}`} id={'checkboxId'} type={'checkbox'} {...rest} />
       {label ? (
-        <label  className={`${s.label}`} htmlFor={'checkboxId'}>
+        <label className={`${s.label}`} htmlFor={'checkboxId'}>
           {label}
         </label>
       ) : null}

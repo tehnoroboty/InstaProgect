@@ -22,7 +22,12 @@ export const Recaptcha = () => {
       case 'unchecked':
       case 'error':
         return (
-          <input className={s.input} id="recaptcha" onChange={onChangeHendler} type="checkbox" />
+          <input
+            className={s.input}
+            id={'recaptcha'}
+            onChange={onChangeHendler}
+            type={'checkbox'}
+          />
         )
       case 'loading':
         return (
@@ -42,7 +47,7 @@ export const Recaptcha = () => {
       <div className={s.container}>
         <div className={s.checkbox}>
           {renderStatus()}
-          <label  className={s.label} htmlFor={'recaptcha'}>
+          <label className={s.label} htmlFor={'recaptcha'}>
             I’m not a robot
           </label>
         </div>
