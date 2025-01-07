@@ -1,11 +1,41 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { Typography } from '@/src/components/typography/Typography'
+import { Simulate } from 'react-dom/test-utils'
+
+import input = Simulate.input
 
 const meta = {
   argTypes: {
+    lineHeights: {
+      control: { type: 'radio' },
+      lineHeights: ['s', 'm', 'xl'],
+    },
     option: {
       control: { type: 'radio' },
-      options: ['Large', 'h1', 'h2', 'h3', 'text', 'link'],
+      options: [
+        'Large',
+        'h1',
+        'h2',
+        'h3',
+        'regular_text16',
+        'bold_text16',
+        'regular_text14',
+        'medium_text14',
+        'bold_text14',
+        'small_text',
+        'semi-bold_small_text',
+        'regular_link',
+        'small_link',
+      ],
+    },
+    size: {
+      control: { type: 'radio' },
+      size: ['xs', 's', 'm', 'l', 'xl', 'xxl'],
+    },
+    weight: {
+      control: { type: 'radio' },
+      weight: ['regular', 'medium', 'semi-bold', 'bold'],
     },
   },
   component: Typography,
@@ -50,63 +80,48 @@ export const H3: Story = {
 export const Regular_text16: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'large',
-    weight: 'regular',
+    option: 'regular_text16',
   },
 }
-
 export const Bold_text16: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'large',
-    weight: 'bold',
+    option: 'bold_text16',
   },
 }
 
 export const Regular_text14: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'medium',
-    weight: 'regular',
+    option: 'regular_text14',
   },
 }
-
+//
 export const Medium_text14: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'medium',
-    weight: 'medium',
+    option: 'medium_text14',
   },
 }
 
 export const Bold_text14: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'medium',
-    weight: 'bold',
+    option: 'bold_text14',
   },
 }
 
 export const Small_text: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'small',
-    weight: 'regular',
+    option: 'small_text',
   },
 }
 
 export const Semi_bold_small_text: Story = {
   args: {
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'text',
-    size: 'small',
-    weight: 'semi-bold',
+    option: 'semi-bold_small_text',
   },
 }
 
@@ -114,9 +129,7 @@ export const Regular_link: Story = {
   args: {
     as: 'a',
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'link',
-    size: 'medium',
-    weight: 'regular',
+    option: 'regular_link',
   },
 }
 
@@ -124,8 +137,17 @@ export const Small_link: Story = {
   args: {
     as: 'a',
     children: 'Carosserie Test Zürich Stauffacherstrasse 31 8004 Zürich, ZH, CH',
-    option: 'link',
-    size: 'small',
-    weight: 'regular',
+    option: 'small_link',
   },
+}
+
+export const Label = {
+  render: () => (
+    <>
+      <Typography as={'label'} htmlFor={'username'} option={'regular_text14'}>
+        Click me
+      </Typography>
+      <input id={'username'} type={'checkbox'} />
+    </>
+  ),
 }
