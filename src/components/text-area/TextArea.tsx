@@ -1,22 +1,16 @@
-'use client'
-
-import { ChangeEvent, ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
 import s from './textArea.module.scss'
 
 export type Props = {
-  disabled?: boolean
-  errorMessage?: string
+  error?: string
+  onClear?: () => void
 } & ComponentPropsWithoutRef<'textarea'>
 
-export const TextArea = ({ className, disabled = false, errorMessage, ...rest }: Props) => {
-  const [text, setText] = useState('')
+export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) => {
+  const { disabled = false, id, value, onClear, className, error, ...rest } = props
 
-  const textAreaChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.currentTarget.value)
-  }
-
-  const textareaClass = `${s.textArea} ${errorMessage ? s.isError : ''}`
+  const textareaClass = `${s.textArea} ${error ? s.isError : ''}`
 
   return (
     <div className={`${s.container} ${className}`}>
@@ -24,14 +18,16 @@ export const TextArea = ({ className, disabled = false, errorMessage, ...rest }:
         Text-area
         <textarea
           {...rest}
+          ref={ref}
           className={textareaClass}
           disabled={disabled}
-          onChange={textAreaChangeHandler}
           placeholder={'Text-area'}
-          value={text}
+          value={value}
         />
       </label>
-      {errorMessage && <span className={s.errorText}>{errorMessage}</span>}
+      {error && <span className={s.errorText}>{error}</span>}
     </div>
   )
-}
+})
+
+TextArea.displayName = 'TextArea'
