@@ -9,8 +9,10 @@ export type Props = {
 export const RadioBtn = ({ className, label, ...rest }: Props) => {
   return (
     <div className={`${s.container}`}>
-      <input className={`${s.radiobtn}`} type={'radio'} {...rest} />
-      <span className={`${s.label}`}>{label}</span>
+      <input className={`${s.radiobtn}`} id={'radioId'} type={'radio'} {...rest} />
+      <label className={`${s.label}`} htmlFor={'radioId'}>
+        {label}
+      </label>
     </div>
   )
 }

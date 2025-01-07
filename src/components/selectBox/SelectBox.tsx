@@ -1,8 +1,11 @@
 import { ComponentPropsWithoutRef } from 'react'
+
 import * as Select from '@radix-ui/react-select'
+
 import styles from './SelectBox.module.scss'
-import { SelectItem } from './SelectItem'
+
 import { SelectIcon } from './SelectIcon'
+import { SelectItem } from './SelectItem'
 
 type Values = {
   value: string
@@ -10,12 +13,12 @@ type Values = {
 }
 
 type Props = {
-  placeholder: string
   label?: string
+  placeholder: string
   width?: number | string
 } & ComponentPropsWithoutRef<'button'>
 
-export const SelectBox = ({ placeholder = 'Select', label, width = '100%', ...rest }: Props) => {
+export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...rest }: Props) => {
   const values: Values[] = [
     { value: 'value1', valueTitle: 'Value-1' },
     { value: 'value2', valueTitle: 'Value-2' },
@@ -43,9 +46,9 @@ export const SelectBox = ({ placeholder = 'Select', label, width = '100%', ...re
 
       <Select.Portal>
         <Select.Content
+          avoidCollisions
           className={styles.Content}
           position={'popper'}
-          avoidCollisions={true}
           sideOffset={-1}
         >
           <Select.Viewport>

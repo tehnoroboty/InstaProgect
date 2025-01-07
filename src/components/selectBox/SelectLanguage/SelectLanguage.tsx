@@ -1,12 +1,15 @@
 'use client'
 
 import { ComponentPropsWithoutRef, useState } from 'react'
+
 import * as Select from '@radix-ui/react-select'
+
 import styles from '../SelectBox.module.scss'
-import { SelectItem } from '../SelectItem'
+
 import { SelectIcon } from '../SelectIcon'
-import { SelectIconUk } from './SelectIconUk'
+import { SelectItem } from '../SelectItem'
 import { SelectIconRu } from './SelectIconRu'
+import { SelectIconUk } from './SelectIconUk'
 
 type Values = {
   value: string
@@ -35,7 +38,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
   }
 
   return (
-    <Select.Root value={value} onValueChange={setValue}>
+    <Select.Root onValueChange={setValue} value={value}>
       <Select.Trigger className={`${styles.Trigger} ${styles.TriggerLanguage}`} {...rest}>
         <Select.Value aria-label={value}>
           <div className={styles.ValueTitleLang}>
@@ -53,9 +56,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
 
       <Select.Portal>
         <Select.Content
+          avoidCollisions
           className={styles.Content}
           position={'popper'}
-          avoidCollisions={true}
           sideOffset={-1}
         >
           <Select.Viewport>

@@ -8,10 +8,21 @@
   font-weight: 600;
   padding: 6px 24px;
   border-radius: 2px;
+  transition: all 0.3s ease;
 
   &:focus-visible {
     outline: 2px solid var(--color-info-500);
   }
+}
+
+a.primary:visited,
+a.secondary:visited {
+  color: var(--light-100);
+}
+
+a.bordered:visited,
+a.transparent:visited {
+  color: var(--primary-500);
 }
 
 .primary {

@@ -1,21 +1,23 @@
 // @flow
 import * as React from 'react'
 import { ComponentPropsWithoutRef } from 'react'
+
+import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
+
 import s from './header.module.scss'
-import { HeaderWeb } from './header-web/HeaderWeb'
 
 export type Props = {
-  title: string
-  notification?: boolean
   isLoggedIn?: boolean
+  notification?: boolean
+  title: string
 } & ComponentPropsWithoutRef<'header'>
 
 export const Header = (props: Props) => {
-  const { title, notification, isLoggedIn, ...rest } = props
+  const { isLoggedIn, notification, title, ...rest } = props
 
   return (
     <header {...rest} className={s.header}>
-      <HeaderWeb title={title} notification={notification} isLoggedIn={isLoggedIn} />
+      <HeaderMobile isLoggedIn={isLoggedIn} notification={notification} title={title} />
     </header>
   )
 }
