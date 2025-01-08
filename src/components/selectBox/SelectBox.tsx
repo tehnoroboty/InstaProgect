@@ -1,8 +1,11 @@
 import { ComponentPropsWithoutRef } from 'react'
+
 import * as Select from '@radix-ui/react-select'
+
 import styles from './SelectBox.module.scss'
-import { SelectItem } from './SelectItem'
+
 import { SelectIcon } from './SelectIcon'
+import { SelectItem } from './SelectItem'
 
 type Values = {
   value: string
@@ -10,12 +13,12 @@ type Values = {
 }
 
 type Props = {
-  placeholder: string
   label?: string
+  placeholder: string
   width?: number | string
 } & ComponentPropsWithoutRef<'button'>
 
-export const SelectBox = ({ placeholder = 'Select', label, width = '100%', ...rest }: Props) => {
+export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...rest }: Props) => {
   const values: Values[] = [
     { value: 'value1', valueTitle: 'Value-1' },
     { value: 'value2', valueTitle: 'Value-2' },
@@ -27,25 +30,25 @@ export const SelectBox = ({ placeholder = 'Select', label, width = '100%', ...re
   return (
     <Select.Root>
       <Select.Group>
-        {label && <Select.Label className={styles.Label}>{label}</Select.Label>}
+        {label && <Select.Label className={styles.label}>{label}</Select.Label>}
         <Select.Trigger
-          className={`${styles.Trigger} ${label && styles.TriggerLabel}`}
+          className={`${styles.trigger} ${label && styles.triggerLabel}`}
           {...rest}
           aria-label={placeholder}
           style={{ width }}
         >
           <Select.Value placeholder={placeholder} />
           <Select.Icon asChild>
-            <SelectIcon className={styles.Icon} />
+            <SelectIcon className={styles.icon} />
           </Select.Icon>
         </Select.Trigger>
       </Select.Group>
 
       <Select.Portal>
         <Select.Content
-          className={styles.Content}
+          avoidCollisions
+          className={styles.content}
           position={'popper'}
-          avoidCollisions={true}
           sideOffset={-1}
         >
           <Select.Viewport>
