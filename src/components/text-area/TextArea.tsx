@@ -2,12 +2,12 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
 import s from './textArea.module.scss'
 
-export type Props = {
+export type TextAreaProps = {
   error?: string
   onClear?: () => void
 } & ComponentPropsWithoutRef<'textarea'>
 
-export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) => {
+export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props, ref) => {
   const { className, disabled = false, error, id, onClear, value, ...rest } = props
 
   const textareaClass = `${s.textArea} ${error ? s.isError : ''}`
@@ -18,10 +18,10 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) =
         Text-area
         <textarea
           {...rest}
-          ref={ref}
           className={textareaClass}
           disabled={disabled}
           placeholder={'Text-area'}
+          ref={ref}
           value={value}
         />
       </label>
