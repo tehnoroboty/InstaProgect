@@ -18,10 +18,10 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) =
         Text-area
         <textarea
           {...rest}
+          ref={ref}
           className={textareaClass}
           disabled={disabled}
           placeholder={'Text-area'}
-          ref={ref}
           value={value}
         />
       </label>
