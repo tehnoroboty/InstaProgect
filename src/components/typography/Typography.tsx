@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 
 import s from './typography.module.scss'
 
-export const availableOptions = [
+const availableOptions = [
   'Large',
   'h1',
   'h2',
@@ -18,9 +18,9 @@ export const availableOptions = [
   'small_link',
 ] as const
 
-export type OptionType = (typeof availableOptions)[number]
+type OptionType = (typeof availableOptions)[number]
 
-export type Props<T extends ElementType = 'p'> = {
+type Props<T extends ElementType = 'p'> = {
   as?: T
   children: ReactNode
   lineHeights?: 'm' | 's' | 'xl'
@@ -40,16 +40,7 @@ export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
     ...rest
   } = props
 
-  const styles =
-    s[option] +
-    ' ' +
-    `${weight ? s['font-weight-' + weight] : ''}` +
-    ' ' +
-    `${size ? s['font-size-' + size] : ''}` +
-    ' ' +
-    `${lineHeights ? s['line-heights' + lineHeights] : ''}` +
-    ' ' +
-    `${className || ''}`
+  const styles = `${s[option]} ${weight ? s['font-weight-' + weight] : ''} ${size ? s['font-size-' + size] : ''} ${lineHeights ? s['line-heights' + lineHeights] : ''} ${className || ''}`
 
   return <Component className={styles} {...rest} />
 }

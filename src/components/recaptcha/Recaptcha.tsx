@@ -43,7 +43,7 @@ export const Recaptcha = () => {
   }
 
   return (
-    <div className={`${status === 'error' ? s.error : ''}`}>
+    <div className={status === 'error' ? s.error : ''}>
       <div className={s.container}>
         <div className={s.checkbox}>
           {renderStatus()}

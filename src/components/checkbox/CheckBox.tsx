@@ -1,20 +1,22 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
 import s from './checkBox.module.scss'
 
-export type Props = {
+type Props = {
   label?: string
 } & ComponentPropsWithoutRef<'input'>
 
-export const CheckBox = ({ className, label, ...rest }: Props) => {
-  return (
-    <div className={`${s.container}`}>
-      <input className={`${s.checkbox}`} id={'checkboxId'} type={'checkbox'} {...rest} />
-      {label ? (
-        <label className={`${s.label}`} htmlFor={'checkboxId'}>
-          {label}
-        </label>
-      ) : null}
-    </div>
-  )
-}
+export const CheckBox = forwardRef<ElementRef<'input'>, Props>(
+  ({ className, label, ...rest }, ref) => {
+    return (
+      <div className={`${s.container} ${className}`}>
+        <input className={s.checkbox} id={'checkboxId'} ref={ref} type={'checkbox'} {...rest} />
+        {label && (
+          <label className={s.label} htmlFor={'checkboxId'}>
+            {label}
+          </label>
+        )}
+      </div>
+    )
+  }
+)

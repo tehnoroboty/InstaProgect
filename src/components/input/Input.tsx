@@ -7,7 +7,7 @@ import Search from '@/src/assets/componentsIcons/SearchOutline'
 
 import s from './Input.module.scss'
 
-export type InputProps = {
+type InputProps = {
   error?: string
   onClear?: () => void
 } & ComponentPropsWithoutRef<'input'>

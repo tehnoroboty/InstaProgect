@@ -5,7 +5,7 @@ import s from './headerMobile.module.scss'
 
 import { DropdownMenuMobile } from './dropdown-menu/DropdownMenu'
 
-export type Props = {
+type Props = {
   isLoggedIn?: boolean
   notification?: boolean
   title: string
