@@ -1,19 +1,20 @@
-import { Meta, StoryObj } from '@storybook/react'
-import { Input, InputProps } from '@/src/components/input/Input'
 import { ChangeEvent, useState } from 'react'
+
+import { Input, InputProps } from '@/src/components/input/Input'
+import { Meta, StoryObj } from '@storybook/react'
+
 import s from './Input.module.scss'
 
 const meta = {
   argTypes: {
     disabled: { control: 'boolean' },
   },
+  args: {
+    id: 'forInput',
+  },
   component: Input,
   tags: ['autodocs'],
   title: 'Components/Input',
-  args: {
-    id: 'forInput',
-    error: '',
-  },
 } satisfies Meta<typeof Input>
 
 export default meta
@@ -30,15 +31,15 @@ const InputWrapper = (props: InputProps) => {
     setValue('')
   }
 
-  return <Input {...props} value={value} onClear={onClear} onChange={onChange} />
+  return <Input {...props} onChange={onChange} onClear={onClear} value={value} />
 }
 
 export const InputWithLabel: Story = {
   render: args => {
     return (
       <>
-        <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-          <p className={'s.regular16'}>Text input</p>
+        <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+          <p className={'s.regula r14'}>Text input</p>
         </label>
         <InputWrapper {...args} />
       </>
@@ -57,8 +58,8 @@ export const InputError: Story = {
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Text input with error</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Text input with error</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -72,8 +73,8 @@ export const InputDisabled: Story = {
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Text input disabled</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Text input disabled</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -87,8 +88,8 @@ export const SearchInputWithLabel: Story = {
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Search</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Search</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -105,14 +106,14 @@ export const SearchInputWithoutLabel: Story = {
 
 export const SearchInputError: Story = {
   args: {
-    type: 'search',
     error: 'Error',
+    type: 'search',
   },
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Search and error</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Search and error</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -121,14 +122,14 @@ export const SearchInputError: Story = {
 
 export const SearchInputDisabled: Story = {
   args: {
-    type: 'search',
     disabled: true,
+    type: 'search',
   },
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Search input disabled</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Search input disabled</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -142,8 +143,8 @@ export const PasswordInputWithLabel: Story = {
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Password</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Password</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -160,14 +161,14 @@ export const PasswordInputWithoutLabel: Story = {
 
 export const PasswordInputError: Story = {
   args: {
-    type: 'password',
     error: 'Error',
+    type: 'password',
   },
 
   render: args => (
     <>
-      <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Password Error</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        <p className={'s.regular14'}>Password Error</p>
       </label>
       <InputWrapper {...args} />
     </>
@@ -176,14 +177,14 @@ export const PasswordInputError: Story = {
 
 export const PasswordInputDisabled: Story = {
   args: {
-    type: 'password',
     disabled: true,
+    type: 'password',
   },
 
   render: args => (
     <>
-      <label htmlFor="textfield" className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-        <p className={'s.regular16'}>Text input</p>
+      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={'textfield'}>
+        <p className={'s.regular14'}>Text input</p>
       </label>
       <InputWrapper {...args} />
     </>
