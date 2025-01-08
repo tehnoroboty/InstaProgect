@@ -8,7 +8,7 @@ export type Props = {
 } & ComponentPropsWithoutRef<'textarea'>
 
 export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) => {
-  const { disabled = false, id, value, onClear, className, error, ...rest } = props
+  const { className, disabled = false, error, id, onClear, value, ...rest } = props
 
   const textareaClass = `${s.textArea} ${error ? s.isError : ''}`
 
@@ -18,10 +18,10 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, Props>((props, ref) =
         Text-area
         <textarea
           {...rest}
-          ref={ref}
           className={textareaClass}
           disabled={disabled}
           placeholder={'Text-area'}
+          ref={ref}
           value={value}
         />
       </label>

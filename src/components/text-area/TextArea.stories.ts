@@ -20,6 +20,6 @@ export const Default: Story = {
 
 export const Error: Story = {
   args: {
-    errorMessage: 'Text Error',
+    error: 'Text Error',
   },
 }
