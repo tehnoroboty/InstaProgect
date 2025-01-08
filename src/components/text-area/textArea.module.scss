@@ -27,7 +27,7 @@
   box-shadow: none;
   min-height: 84px;
   background-color: var(--dark-500);
-  color: var(--light-100);
+  color: var(--dark-100);
 
   &::placeholder {
     color: var(--light-900);
@@ -37,6 +37,7 @@
   }
   &:focus {
     outline: 2px solid var(--primary-700);
+    color: var(--light-100);
   }
   &:disabled::placeholder {
     color: var(--dark-100);
