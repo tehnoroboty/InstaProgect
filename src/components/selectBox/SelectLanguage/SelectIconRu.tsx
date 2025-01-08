@@ -1,6 +1,11 @@
-export const SelectIconRu = () => {
+type Props = {
+  className?: string
+}
+
+export const SelectIconRu = ({ className }: Props) => {
   return (
     <svg
+      className={className}
       fill={'none'}
       height={'20'}
       viewBox={'0 0 20 20'}

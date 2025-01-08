@@ -29,9 +29,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
   const getIconByValue = (value: string) => {
     switch (value) {
       case 'united-kingdom':
-        return <SelectIconUk />
+        return <SelectIconUk className={styles.iconLanguage} />
       case 'russia':
-        return <SelectIconRu />
+        return <SelectIconRu className={styles.iconLanguage} />
       default:
         return null
     }
@@ -39,23 +39,25 @@ export const SelectLanguage = ({ ...rest }: Props) => {
 
   return (
     <Select.Root onValueChange={setValue} value={value}>
-      <Select.Trigger className={`${styles.Trigger} ${styles.TriggerLanguage}`} {...rest}>
+      <Select.Trigger className={`${styles.trigger} ${styles.triggerLanguage}`} {...rest}>
         <Select.Value aria-label={value}>
-          <div className={styles.ValueTitleLang}>
+          <div className={styles.valueTitleLang}>
             {getIconByValue(value)}
-            {values.find(item => item.value === value)?.valueTitle}
+            <div className={styles.titleLang}>
+              {values.find(item => item.value === value)?.valueTitle}
+            </div>
           </div>
         </Select.Value>
 
         <Select.Icon asChild>
-          <SelectIcon className={styles.Icon} />
+          <SelectIcon className={styles.icon} />
         </Select.Icon>
       </Select.Trigger>
 
       <Select.Portal>
         <Select.Content
           avoidCollisions
-          className={styles.Content}
+          className={styles.content}
           position={'popper'}
           sideOffset={-1}
         >
@@ -63,9 +65,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
             <Select.Group>
               {values.map(item => (
                 <SelectItem key={item.value} value={item.value}>
-                  <div className={styles.ItemContent}>
+                  <div className={styles.itemContent}>
                     {getIconByValue(item.value)}
-                    {item.valueTitle}
+                    <div className={styles.itemTitle}>{item.valueTitle}</div>
                   </div>
                 </SelectItem>
               ))}
