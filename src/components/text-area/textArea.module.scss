@@ -1,6 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
+
+  & .errorText {
+    color: var(--danger-500);
+  }
 }
 
 .label {
@@ -39,12 +43,8 @@
   &:disabled::placeholder {
     color: var(--dark-100);
   }
-
-  &.isError {
-    border: 2px solid var(--danger-500);
-  }
 }
 
-.errorText {
-  color: var(--danger-500);
+.isError:not(textArea:disabled) {
+  border: 2px solid var(--danger-500);
 }

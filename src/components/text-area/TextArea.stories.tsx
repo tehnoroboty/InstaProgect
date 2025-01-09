@@ -14,34 +14,34 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const TextAreaWrapper = (props: TextAreaProps) => {
-  const [value, setValue] = useState('')
+// const TextAreaWrapper = (props: TextAreaProps) => {
+//   const [value, setValue] = useState('')
 
-  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value)
-  }
+//   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+//     setValue(e.target.value)
+//   }
 
-  const onClear = () => {
-    setValue('')
-  }
+//   const onClear = () => {
+//     setValue('')
+//   }
 
-  return <TextArea {...props} onChange={onChange} onClear={onClear} value={value} />
-}
+//   return <TextArea {...props} onChange={onChange} onClear={onClear} value={value} />
+// }
 
 export const Default: Story = {
   render: args => {
-    return <TextAreaWrapper {...args} />
+    return <TextArea />
   },
 }
 
-// export const Default: Story = {
-//   args: {
-//     disabled: false,
-//   },
-// }
+export const Disabled: Story = {
+  args: {
+    disabled: false,
+  },
+}
 
-// export const Error: Story = {
-//   args: {
-//     error: 'Text Error',
-//   },
-// }
+export const Error: Story = {
+  args: {
+    error: 'Text Error',
+  },
+}
