@@ -17,8 +17,8 @@
 
 .disabled {
   pointer-events: none;
-  //color: var(--dark-100);
-  color: var(--danger-900);
+  color: var(--dark-100);
+  //color: var(--danger-900);
 }
 
 .regular14 {
@@ -39,30 +39,30 @@
   line-height: 24px;
   color: var(--light-900);
 
-  &:hover:not(:disabled) {
+  &:hover {
     border-color: var(--light-900);
     color: var(--light-900);
   }
 
-  &:active:not(:disabled) {
+  &:active {
     border-color: var(--light-100);
     background-color: var(--dark-500);
     color: var(--light-100);
   }
-  &:focus:not(:disabled) {
+  &:focus {
     outline: 1px solid var(--primary-500);
     border: 1px solid var(--primary-500);
     color: var(--light-100);
   }
 
-  &.error {
-    border-color: var(--danger-500);
-  }
-
-  &.disabled {
+  &:disabled {
     color: var(--dark-100);
     cursor: not-allowed;
     border-color: var(--dark-100);
+  }
+
+  &.error {
+    border-color: var(--danger-500);
   }
 
   &[type='search']::-webkit-search-cancel-button {
@@ -76,6 +76,10 @@
 
 .passwordPadding {
   padding-right: 35px;
+}
+
+.placeholder {
+  color: var(--light-900);
 }
 
 .clear,

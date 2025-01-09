@@ -1,10 +1,11 @@
 import { ChangeEvent, useState } from 'react'
 
-import { Input, InputProps } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './Input.module.scss'
+
+import { Input, InputProps } from './Input'
 
 const meta = {
   argTypes: {
@@ -12,6 +13,8 @@ const meta = {
   },
   args: {
     id: 'forInput',
+    label: '',
+    placeholder: 'Enter text',
   },
   component: Input,
   tags: ['autodocs'],
@@ -36,12 +39,12 @@ const InputWrapper = (props: InputProps) => {
 }
 
 export const InputWithLabel: Story = {
+  args: {
+    label: 'Text input',
+  },
   render: args => {
     return (
       <>
-        <Typography as={'label'} htmlFor={args.id}>
-          Text input
-        </Typography>
         <InputWrapper {...args} />
       </>
     )
@@ -54,14 +57,12 @@ export const InputWithoutLabel: Story = {
 
 export const InputError: Story = {
   args: {
-    error: 'Error',
+    error: 'Error message',
+    label: 'Text input with error',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        Text input with error
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -69,14 +70,12 @@ export const InputError: Story = {
 
 export const InputDisabled: Story = {
   args: {
-    disabled: true,
+    // disabled: true,
+    label: 'Text input disabled',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        Text input disabled
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -84,13 +83,11 @@ export const InputDisabled: Story = {
 
 export const SearchInputWithLabel: Story = {
   args: {
+    label: 'Search',
     type: 'search',
   },
   render: args => (
     <>
-      <Typography as={'label'} htmlFor={args.id}>
-        Search
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -106,14 +103,12 @@ export const SearchInputWithoutLabel: Story = {
 export const SearchInputError: Story = {
   args: {
     error: 'Error',
+    label: 'Search and error',
     type: 'search',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} htmlFor={args.id}>
-        Search and error
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -122,14 +117,12 @@ export const SearchInputError: Story = {
 export const SearchInputDisabled: Story = {
   args: {
     disabled: true,
+    label: 'Search input disabled',
     type: 'search',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        Search input disabled
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -137,14 +130,12 @@ export const SearchInputDisabled: Story = {
 
 export const PasswordInputWithLabel: Story = {
   args: {
+    label: 'Password',
     type: 'password',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} htmlFor={args.id}>
-        Password
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -161,14 +152,13 @@ export const PasswordInputWithoutLabel: Story = {
 export const PasswordInputError: Story = {
   args: {
     error: 'Error',
+    label: 'Password Error',
+    placeholder: undefined,
     type: 'password',
   },
 
   render: args => (
     <>
-      <Typography as={'label'} htmlFor={args.id}>
-        Password Error
-      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -177,6 +167,8 @@ export const PasswordInputError: Story = {
 export const PasswordInputDisabled: Story = {
   args: {
     disabled: true,
+    label: 'Password input disabled',
+    placeholder: '',
     type: 'password',
   },
 
