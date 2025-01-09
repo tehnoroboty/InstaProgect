@@ -24,6 +24,7 @@ type Props<T extends ElementType = 'p'> = {
   as?: T
   children: ReactNode
   disable?: boolean
+  disableClassName?: string
   lineHeights?: 'm' | 's' | 'xl'
   option?: OptionType
   size?: 'l' | 'm' | 's' | 'xl' | 'xs' | 'xxl'
@@ -35,6 +36,7 @@ export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
     as: Component = 'p',
     className,
     disable,
+    disableClassName,
     lineHeights,
     option = 'regular_text14',
     size,
@@ -42,7 +44,7 @@ export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
     ...rest
   } = props
 
-  const styles = `${s[option]} ${weight ? s['font-weight-' + weight] : ''} ${size ? s['font-size-' + size] : ''} ${lineHeights ? s['line-heights' + lineHeights] : ''} ${disable ? s.labelDisable : ''} ${className || ''}`
+  const styles = `${s[option]} ${weight ? s['font-weight-' + weight] : ''} ${size ? s['font-size-' + size] : ''} ${lineHeights ? s['line-heights' + lineHeights] : ''} ${disable ? s.labelDisable : ''} ${disableClassName || ''} ${className || ''}`
 
   return <Component className={styles} {...rest} />
 }

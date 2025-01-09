@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Typography } from '@/src/components/typography/Typography'
 
+import s from './typography.module.scss'
+
 const meta = {
   argTypes: {
     lineHeights: {
@@ -153,6 +155,23 @@ export const DisabledLabel = {
   render: () => (
     <>
       <Typography as={'label'} disable htmlFor={'username'} option={'regular_text14'}>
+        Click me
+      </Typography>
+      <input id={'username'} type={'checkbox'} />
+    </>
+  ),
+}
+
+export const LabelWithCustomDisabledClass = {
+  render: () => (
+    <>
+      <Typography
+        as={'label'}
+        disable
+        disableClassName={`${s.customDisabledClass}`}
+        htmlFor={'username'}
+        option={'regular_text14'}
+      >
         Click me
       </Typography>
       <input id={'username'} type={'checkbox'} />
