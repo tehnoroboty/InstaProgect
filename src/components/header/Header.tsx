@@ -1,21 +1,43 @@
 // @flow
+'use client'
 import * as React from 'react'
-import { ComponentPropsWithoutRef } from 'react'
-import s from './header.module.scss'
-import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
-export type Props = {
-  title: string
-  notification?: boolean
+import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
+import { HeaderWeb } from '@/src/components/header/header-web/HeaderWeb'
+
+import s from './header.module.scss'
+
+type Props = {
   isLoggedIn?: boolean
+  notification?: boolean
+  title: string
 } & ComponentPropsWithoutRef<'header'>
 
 export const Header = (props: Props) => {
-  const { title, notification, isLoggedIn, ...rest } = props
+  const { isLoggedIn, notification, title, ...rest } = props
+  const [isMobile, setIsMobile] = useState<boolean>(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   return (
     <header {...rest} className={s.header}>
-      <HeaderMobile title={title} notification={notification} isLoggedIn={isLoggedIn} />
+      {isMobile ? (
+        <HeaderMobile title={title} />
+      ) : (
+        <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
+      )}
     </header>
   )
 }

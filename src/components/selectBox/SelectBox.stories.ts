@@ -19,23 +19,23 @@ export const Default: Story = {
 
 export const Label: Story = {
   args: {
-    placeholder: 'Value',
     label: 'Some label',
+    placeholder: 'Value',
   },
 }
 
 export const SetWidth: Story = {
   args: {
-    placeholder: 'Value',
     label: 'Some label',
+    placeholder: 'Value',
     width: 210,
   },
 }
 
 export const IsDisabled: Story = {
   args: {
-    placeholder: 'Value',
-    label: 'Some label',
     disabled: true,
+    label: 'Some label',
+    placeholder: 'Value',
   },
 }

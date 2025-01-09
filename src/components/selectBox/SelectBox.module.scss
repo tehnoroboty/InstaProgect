@@ -1,4 +1,4 @@
-.Trigger {
+.trigger {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
@@ -15,15 +15,11 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &.TriggerLanguage {
-    width: 163px;
-    color: var(--light-100);
-  }
-
-  &:hover {
-    border: 1px solid var(--light-900);
-    border-radius: 2px;
-    color: var(--light-900);
+  @media (hover: hover) {
+    &:hover {
+      border: 1px solid var(--light-900);
+      color: var(--light-900);
+    }
   }
 
   &:focus {
@@ -49,19 +45,24 @@
   }
 }
 
-.TriggerLabel {
+.triggerLanguage {
+  width: 163px;
   color: var(--light-100);
 }
 
-.Icon {
+.triggerLabel {
+  color: var(--light-100);
+}
+
+.icon {
   transition: transform 0.2s ease-in-out;
 }
 
-[data-state='open'] .Icon {
+[data-state='open'] .icon {
   transform: rotate(180deg);
 }
 
-.Content {
+.content {
   overflow: hidden;
   width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
@@ -71,12 +72,14 @@
   border-radius: 0 0 2px 2px;
   cursor: pointer;
 
-  &:hover {
-    color: var(--light-900);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--light-900);
+    }
   }
 }
 
-.Item {
+.item {
   font-size: 16px;
   line-height: 24px;
   display: flex;
@@ -91,22 +94,59 @@
     color: var(--primary-500);
   }
 
-  .ItemContent {
+  .itemContent {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 }
 
-.Label {
+.label {
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
   color: var(--light-900);
 }
 
-.ValueTitleLang {
+.valueTitleLang {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+@media (max-width: 479.98px) {
+  .triggerLanguage {
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .valueTitleLang {
+    margin-right: 2px;
+  }
+
+  .iconLanguage {
+    width: 24px;
+    height: 24px;
+  }
+
+  .titleLang {
+    display: none;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .itemTitle {
+    display: none;
+  }
 }

@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react'
+import { PropsWithChildren } from 'react'
+
 import s from './scrollBar.module.scss'
 
-type Props = {
-  children: React.ReactNode
-}
-export const ScrollBar: React.FC<Props> = ({ children }) => {
+export const ScrollBar = ({ children }: PropsWithChildren) => {
   return <div className={s.container}>{children}</div>
 }
