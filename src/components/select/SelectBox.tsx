@@ -15,10 +15,10 @@ type Values = {
 type Props = {
   label?: string
   placeholder: string
-  width?: number | string
+  size?: 'small' | 'medium' | 'large'
 } & ComponentPropsWithoutRef<'button'>
 
-export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...rest }: Props) => {
+export const SelectBox = ({ label, placeholder = 'Select', size, ...rest }: Props) => {
   const values: Values[] = [
     { value: 'value1', valueTitle: 'Value-1' },
     { value: 'value2', valueTitle: 'Value-2' },
@@ -32,10 +32,9 @@ export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...re
       <Select.Group>
         {label && <Select.Label className={styles.label}>{label}</Select.Label>}
         <Select.Trigger
-          className={`${styles.trigger} ${label && styles.triggerLabel}`}
+          className={`${styles.trigger} ${size ? styles[size] : ''} ${label && styles.triggerLabel}`}
           {...rest}
           aria-label={placeholder}
-          style={{ width }}
         >
           <Select.Value placeholder={placeholder} />
           <Select.Icon asChild>

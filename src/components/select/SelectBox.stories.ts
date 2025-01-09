@@ -24,11 +24,11 @@ export const Label: Story = {
   },
 }
 
-export const SetWidth: Story = {
+export const LabelSize: Story = {
   args: {
     label: 'Some label',
     placeholder: 'Value',
-    width: 210,
+    size: 'medium',
   },
 }
 
