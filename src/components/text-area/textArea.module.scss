@@ -4,14 +4,11 @@
 }
 
 .label {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
   display: flex;
   flex-direction: column;
   color: var(--light-900);
 
-  &:has(> textarea:disabled) {
+  &:has(+ textarea:disabled) {
     color: var(--dark-100);
   }
 }
@@ -49,8 +46,5 @@
 }
 
 .errorText {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
   color: var(--danger-500);
 }

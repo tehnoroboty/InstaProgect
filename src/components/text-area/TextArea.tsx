@@ -2,6 +2,8 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
 import s from './textArea.module.scss'
 
+import { Typography } from '../typography/Typography'
+
 export type TextAreaProps = {
   error?: string
   label?: string
@@ -27,9 +29,9 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
   return (
     <div className={`${s.container} ${className}`}>
       {label && (
-        <label className={s.label} htmlFor={'textarea'}>
+        <Typography as={'label'} className={s.label} htmlFor={'textarea'} option={'regular_text14'}>
           {label}
-        </label>
+        </Typography>
       )}
       <textarea
         {...rest}
@@ -41,7 +43,11 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
         value={value}
       />
 
-      {error && <span className={s.errorText}>{error}</span>}
+      {error && (
+        <Typography className={s.errorText} option={'regular_text14'}>
+          {error}
+        </Typography>
+      )}
     </div>
   )
 })

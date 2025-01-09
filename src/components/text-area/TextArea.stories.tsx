@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from 'react'
 import { TextArea, TextAreaProps } from '@/src/components/text-area/TextArea'
 
 const meta = {
-  argTypes: {},
+  argTypes: { disabled: { control: 'boolean' } },
   component: TextArea,
   tags: ['autodocs'],
   title: 'Components/TextArea',
@@ -14,10 +14,10 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const InputWrapper = (props: TextAreaProps) => {
+const TextAreaWrapper = (props: TextAreaProps) => {
   const [value, setValue] = useState('')
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value)
   }
 
@@ -25,19 +25,12 @@ const InputWrapper = (props: TextAreaProps) => {
     setValue('')
   }
 
-  return <TextArea {...props} value={value} onClear={onClear} onChange={onChange} />
+  return <TextArea {...props} onChange={onChange} onClear={onClear} value={value} />
 }
 
-export const InputWithLabel: Story = {
+export const Default: Story = {
   render: args => {
-    return (
-      <>
-        <label htmlFor={args.id} className={`${s.label} ${args.disabled ? s.disabled : ''}`}>
-          <p className={'s.regular16'}>Text input</p>
-        </label>
-        <InputWrapper {...args} />
-      </>
-    )
+    return <TextAreaWrapper {...args} />
   },
 }
 
@@ -52,5 +45,3 @@ export const InputWithLabel: Story = {
 //     error: 'Text Error',
 //   },
 // }
-
-
