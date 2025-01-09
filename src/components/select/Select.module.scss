@@ -115,12 +115,16 @@
   gap: 12px;
 }
 
-.iconLanguage {
+.iconFlag {
   width: 20px;
   height: 20px;
 }
 
 @media (max-width: 479.98px) {
+  .trigger {
+    width: 100% !important;
+  }
+
   .triggerLanguage {
     width: auto;
     height: auto;
@@ -128,7 +132,7 @@
     border: none;
   }
 
-  .icon {
+  .iconSmall {
     width: 16px;
     height: 16px;
   }
@@ -137,7 +141,7 @@
     margin-right: 2px;
   }
 
-  .iconLanguage {
+  .iconFlag {
     width: 24px;
     height: 24px;
   }

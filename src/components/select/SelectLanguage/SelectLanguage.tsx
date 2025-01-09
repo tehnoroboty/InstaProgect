@@ -29,9 +29,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
   const getIconByValue = (value: string) => {
     switch (value) {
       case 'united-kingdom':
-        return <FlagUK className={styles.iconLanguage} />
+        return <FlagUK className={styles.iconFlag} />
       case 'russia':
-        return <FlagRu className={styles.iconLanguage} />
+        return <FlagRu className={styles.iconFlag} />
       default:
         return null
     }
@@ -50,7 +50,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
         </Select.Value>
 
         <Select.Icon asChild>
-          <Arrow className={styles.icon} />
+          <Arrow className={`${styles.icon} ${styles.iconSmall}`} />
         </Select.Icon>
       </Select.Trigger>
 
