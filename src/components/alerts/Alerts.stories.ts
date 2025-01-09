@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { Alerts } from '@/src/components/alerts/Alerts'
 
 const meta = {
@@ -11,6 +12,10 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {
-  args: {},
+export const SuccessAlert: Story = {
+  args: { type: 'success' },
+}
+
+export const ErrorAlert: Story = {
+  args: { type: 'error' },
 }
