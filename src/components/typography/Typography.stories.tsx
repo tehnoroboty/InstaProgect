@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Typography } from '@/src/components/typography/Typography'
 import { Simulate } from 'react-dom/test-utils'
+import { boolean } from 'zod'
 
 import input = Simulate.input
 
@@ -145,6 +146,17 @@ export const Label = {
   render: () => (
     <>
       <Typography as={'label'} htmlFor={'username'} option={'regular_text14'}>
+        Click me
+      </Typography>
+      <input id={'username'} type={'checkbox'} />
+    </>
+  ),
+}
+
+export const DisabledLabel = {
+  render: () => (
+    <>
+      <Typography as={'label'} disable htmlFor={'username'} option={'regular_text14'}>
         Click me
       </Typography>
       <input id={'username'} type={'checkbox'} />

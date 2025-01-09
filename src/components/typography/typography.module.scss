@@ -4,7 +4,7 @@
   font-size: $fontSize;
   font-weight: $fontWeight;
   line-height: $lineHeight;
-  color: var(--light-900);
+  color: var(--light-100);
 }
 
 .Large {
@@ -127,4 +127,13 @@
 
 .line-heights-xl {
   line-height: var(--line-height-xl);
+}
+
+.labelDisabled {
+  cursor: default;
+  color: var(--light-900);
+}
+
+.label:disabled {
+  color: red;
 }
