@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react'
 
 import { Input, InputProps } from '@/src/components/input/Input'
+import { Typography } from '@/src/components/typography/Typography'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './Input.module.scss'
@@ -38,9 +39,9 @@ export const InputWithLabel: Story = {
   render: args => {
     return (
       <>
-        <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-          <p className={'s.regula r14'}>Text input</p>
-        </label>
+        <Typography as={'label'} htmlFor={args.id}>
+          Text input
+        </Typography>
         <InputWrapper {...args} />
       </>
     )
@@ -58,9 +59,9 @@ export const InputError: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Text input with error</p>
-      </label>
+      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        Text input with error
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -73,9 +74,9 @@ export const InputDisabled: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Text input disabled</p>
-      </label>
+      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        Text input disabled
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -85,12 +86,11 @@ export const SearchInputWithLabel: Story = {
   args: {
     type: 'search',
   },
-
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Search</p>
-      </label>
+      <Typography as={'label'} htmlFor={args.id}>
+        Search
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -100,7 +100,6 @@ export const SearchInputWithoutLabel: Story = {
   args: {
     type: 'search',
   },
-
   render: args => <InputWrapper {...args} />,
 }
 
@@ -112,9 +111,9 @@ export const SearchInputError: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Search and error</p>
-      </label>
+      <Typography as={'label'} htmlFor={args.id}>
+        Search and error
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -128,9 +127,9 @@ export const SearchInputDisabled: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Search input disabled</p>
-      </label>
+      <Typography as={'label'} className={`${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
+        Search input disabled
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -143,9 +142,9 @@ export const PasswordInputWithLabel: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Password</p>
-      </label>
+      <Typography as={'label'} htmlFor={args.id}>
+        Password
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -167,9 +166,9 @@ export const PasswordInputError: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={args.id}>
-        <p className={'s.regular14'}>Password Error</p>
-      </label>
+      <Typography as={'label'} htmlFor={args.id}>
+        Password Error
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),
@@ -186,6 +185,13 @@ export const PasswordInputDisabled: Story = {
       <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={'textfield'}>
         <p className={'s.regular14'}>Text input</p>
       </label>
+      <Typography
+        as={'label'}
+        className={`${args.disabled ? s.disabled : ''}`}
+        htmlFor={'textField'}
+      >
+        Password input disabled
+      </Typography>
       <InputWrapper {...args} />
     </>
   ),

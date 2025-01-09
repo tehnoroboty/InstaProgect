@@ -33,11 +33,11 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
 
   return (
     <div className={s.container}>
-      <div className={`${s.group} ${disabled ? s.disabled : ''}`.trim()}>
+      <div className={`${s.group} ${disabled ? s.disabled : ''}`}>
         <input
           className={`${s.input} ${className} ${error ? s.error : ''} ${type === InputType.searchType ? s.searchPadding : ''} ${
             type === InputType.passwordType ? s.passwordPadding : ''
-          } ${className || ''}`.trim()}
+          } ${className || ''}`}
           disabled={disabled}
           id={finalId}
           ref={ref}
@@ -47,31 +47,28 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
         />
 
         {type === InputType.searchType && value && (
-          <Close
-            className={`${s.clear} ${disabled ? s.disabledIcon : ''} `.trim()}
-            onClick={onClear}
-          />
+          <Close className={`${s.clear} ${disabled ? s.disabledIcon : ''}`} onClick={onClear} />
         )}
 
         {type === InputType.searchType && (
-          <Search className={`${s.searchIcon} ${disabled ? s.disabledIcon : ''}`.trim()} />
+          <Search className={`${s.searchIcon} ${disabled ? s.disabledIcon : ''}`} />
         )}
 
         {type === InputType.passwordType && isPasswordVisible && (
           <Eye
-            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`.trim()}
+            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`}
             onClick={togglePasswordVisibility}
           />
         )}
 
         {type === InputType.passwordType && !isPasswordVisible && (
           <EyeOff
-            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`.trim()}
+            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`}
             onClick={togglePasswordVisibility}
           />
         )}
       </div>
-      {error && <div className={s.errorMessage}>{error}</div>}
+      {error && <p className={s.errorMessage}>{error}</p>}
     </div>
   )
 })
