@@ -4,12 +4,12 @@ import { ComponentPropsWithoutRef, useState } from 'react'
 
 import * as Select from '@radix-ui/react-select'
 
-import styles from '../SelectBox.module.scss'
+import styles from '@/src/components/select/Select.module.scss'
 
-import { SelectIcon } from '../SelectIcon'
-import { SelectItem } from '../SelectItem'
-import { SelectIconRu } from './SelectIconRu'
-import { SelectIconUk } from './SelectIconUk'
+import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
+import { SelectItem } from '@/src/components/select/SelectItem'
+import FlagRu from '@/src/assets/componentsIcons/Flagrussia'
+import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
 
 type Values = {
   value: string
@@ -29,9 +29,9 @@ export const SelectLanguage = ({ ...rest }: Props) => {
   const getIconByValue = (value: string) => {
     switch (value) {
       case 'united-kingdom':
-        return <SelectIconUk className={styles.iconLanguage} />
+        return <FlagUK className={styles.iconLanguage} />
       case 'russia':
-        return <SelectIconRu className={styles.iconLanguage} />
+        return <FlagRu className={styles.iconLanguage} />
       default:
         return null
     }
@@ -50,7 +50,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
         </Select.Value>
 
         <Select.Icon asChild>
-          <SelectIcon className={styles.icon} />
+          <Arrow className={styles.icon} />
         </Select.Icon>
       </Select.Trigger>
 

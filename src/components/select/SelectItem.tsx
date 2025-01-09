@@ -3,7 +3,7 @@ import React, { ComponentPropsWithRef, ForwardedRef } from 'react'
 import * as Select from '@radix-ui/react-select'
 import classnames from 'classnames'
 
-import styles from './SelectBox.module.scss'
+import styles from './Select.module.scss'
 
 type SelectItemProps = {
   className?: string

@@ -55,6 +55,7 @@
 }
 
 .icon {
+  color: var(--light-100);
   transition: transform 0.2s ease-in-out;
 }
 
@@ -112,6 +113,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.iconLanguage {
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 479.98px) {

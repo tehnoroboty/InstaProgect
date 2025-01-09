@@ -2,10 +2,10 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import * as Select from '@radix-ui/react-select'
 
-import styles from './SelectBox.module.scss'
+import styles from './Select.module.scss'
 
-import { SelectIcon } from './SelectIcon'
 import { SelectItem } from './SelectItem'
+import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
 
 type Values = {
   value: string
@@ -39,7 +39,7 @@ export const SelectBox = ({ label, placeholder = 'Select', width = '100%', ...re
         >
           <Select.Value placeholder={placeholder} />
           <Select.Icon asChild>
-            <SelectIcon className={styles.icon} />
+            <Arrow className={styles.icon} />
           </Select.Icon>
         </Select.Trigger>
       </Select.Group>
