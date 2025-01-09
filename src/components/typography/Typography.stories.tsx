@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { Typography } from '@/src/components/typography/Typography'
-import { Simulate } from 'react-dom/test-utils'
-import { boolean } from 'zod'
-
-import input = Simulate.input
 
 const meta = {
   argTypes: {
