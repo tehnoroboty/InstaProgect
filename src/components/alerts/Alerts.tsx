@@ -24,7 +24,7 @@ export const Alerts = ({ message, type = 'success', ...rest }: Props) => {
     <div className={s.alertsWrapper}>
       {type === 'error' && <Typography option={'bold_text16'}>Error</Typography>}
       <Typography option={'regular_text16'}>{text}</Typography>
-      <Button variant={'transparent'}>
+      <Button className={s.close} variant={'transparent'}>
         <span></span>
         <span></span>
       </Button>
