@@ -35,8 +35,8 @@ export const Default: Story = {
 }
 
 export const Disabled: Story = {
-  args: {
-    disabled: false,
+  render: args => {
+    return <TextArea disabled />
   },
 }
 
