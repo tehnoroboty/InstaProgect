@@ -1,11 +1,20 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type {Meta, StoryObj} from '@storybook/react'
 
-import { SelectBox } from './SelectBox'
+import {SelectBox} from './SelectBox'
 
 const meta = {
   component: SelectBox,
   tags: ['autodocs'],
   title: 'Components/SelectBox',
+  args: {
+    options: [
+      { value: 'value1', valueTitle: 'Value-1' },
+      { value: 'value2', valueTitle: 'Value-2' },
+      { value: 'value3', valueTitle: 'Value-3' },
+      { value: 'value4', valueTitle: 'Value-4' },
+      { value: 'value5', valueTitle: 'Value-5' },
+    ]
+  }
 } satisfies Meta<typeof SelectBox>
 
 export default meta
@@ -24,11 +33,11 @@ export const Label: Story = {
   },
 }
 
-export const SetWidth: Story = {
+export const LabelSize: Story = {
   args: {
     label: 'Some label',
     placeholder: 'Value',
-    width: 210,
+    size: 'medium',
   },
 }
 
