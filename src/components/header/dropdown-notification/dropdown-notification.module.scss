@@ -42,6 +42,10 @@
   color: var(--light-100);
   padding-left: 10px;
 }
+.items {
+  height: 350px;
+  overflow-y: auto;
+}
 .notification {
   display: flex;
   flex-wrap: wrap;
