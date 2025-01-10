@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from 'react'
 
-import { Typography } from '@/src/components/typography/Typography'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './Input.module.scss'
@@ -174,17 +173,7 @@ export const PasswordInputDisabled: Story = {
 
   render: args => (
     <>
-      <label className={`${s.label} ${args.disabled ? s.disabled : ''}`} htmlFor={'textfield'}>
-        <p className={'s.regular14'}>Text input</p>
-      </label>
-      <Typography
-        as={'label'}
-        className={`${args.disabled ? s.disabled : ''}`}
-        htmlFor={'textField'}
-      >
-        Password input disabled
-      </Typography>
-      <InputWrapper {...args} />
+      <InputWrapper {...args} className={s.customWidth} />
     </>
   ),
 }
