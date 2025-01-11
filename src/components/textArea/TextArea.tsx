@@ -34,7 +34,7 @@ import { Typography } from '../typography/Typography'
  * // С отключенным состоянием
  * <TextArea label="Комментарий" placeholder="Введите комментарий" disabled/>
  */
-export type TextAreaProps = {
+type TextAreaProps = {
   error?: string
   label?: string
   onClear?: () => void
@@ -59,7 +59,7 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
   return (
     <div className={`${s.container} ${className}`}>
       {label && (
-        <Typography as={'label'} className={s.label} htmlFor={'textarea'} option={'regular_text14'}>
+        <Typography as={'label'} className={s.label} htmlFor={'textarea'}>
           {label}
         </Typography>
       )}
@@ -73,11 +73,7 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
         value={value}
       />
 
-      {error && !disabled && (
-        <Typography className={s.errorText} option={'regular_text14'}>
-          {error}
-        </Typography>
-      )}
+      {error && !disabled && <Typography className={s.errorText}>{error}</Typography>}
     </div>
   )
 })
