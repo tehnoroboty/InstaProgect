@@ -9,7 +9,6 @@ import { Typography } from '@/src/components/typography/Typography'
 import s from './Input.module.scss'
 
 export type InputProps = {
-  className?: string
   error?: string
   label?: string
   onClear?: () => void
@@ -94,7 +93,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
           />
         )}
       </div>
-      {error && <Typography className={s.errorMessage}>{error}</Typography>}
+      {error && !disabled && <Typography className={s.errorMessage}>{error}</Typography>}
     </div>
   )
 })
