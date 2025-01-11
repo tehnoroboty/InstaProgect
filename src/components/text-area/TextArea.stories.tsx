@@ -29,9 +29,7 @@ type Story = StoryObj<typeof meta>
 // }
 
 export const Default: Story = {
-  render: args => {
-    return <TextArea />
-  },
+  args: {},
 }
 
 export const Disabled: Story = {

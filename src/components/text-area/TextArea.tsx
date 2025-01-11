@@ -34,7 +34,6 @@ import { Typography } from '../typography/Typography'
  * // С отключенным состоянием
  * <TextArea label="Комментарий" placeholder="Введите комментарий" disabled/>
  */
-
 export type TextAreaProps = {
   error?: string
   label?: string
