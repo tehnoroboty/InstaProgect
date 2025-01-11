@@ -34,10 +34,15 @@ import { Typography } from '../typography/Typography'
  * // С отключенным состоянием
  * <TextArea label="Комментарий" placeholder="Введите комментарий" disabled/>
  */
+
 type TextAreaProps = {
+  /** Сообщение об ошибке, отображаемое под полем ввода.*/
   error?: string
+  /** Текст метки (label) для поля ввода.*/
   label?: string
+  /** Функция-обработчик для очистки поля ввода.*/
   onClear?: () => void
+  /** Текст-подсказка, отображаемый в поле ввода, когда оно пусто. */
   placeholder?: string
 } & ComponentPropsWithoutRef<'textarea'>
 
