@@ -34,7 +34,7 @@ export const Header = (props: Props) => {
   return (
     <header {...rest} className={s.header}>
       {isMobile ? (
-        <HeaderMobile title={title} />
+        <HeaderMobile isLoggedIn={isLoggedIn} title={title} />
       ) : (
         <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
       )}

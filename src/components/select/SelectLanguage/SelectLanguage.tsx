@@ -2,16 +2,14 @@
 
 import { ComponentPropsWithoutRef, useState } from 'react'
 
+import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
+import FlagRu from '@/src/assets/componentsIcons/Flagrussia'
+import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
+import { Options } from '@/src/components/select/SelectBox'
+import { SelectItem } from '@/src/components/select/SelectItem'
 import * as Select from '@radix-ui/react-select'
 
 import styles from '@/src/components/select/Select.module.scss'
-
-import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
-import { SelectItem } from '@/src/components/select/SelectItem'
-import FlagRu from '@/src/assets/componentsIcons/Flagrussia'
-import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
-import {Options} from "@/src/components/select/SelectBox";
-
 
 type Props = ComponentPropsWithoutRef<'button'>
 

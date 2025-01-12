@@ -1,4 +1,5 @@
 import { Ref, type SVGProps, forwardRef, memo } from 'react'
+
 const SvgMessageCircleOutline = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
   <svg
     fill={'none'}
@@ -8,7 +9,7 @@ const SvgMessageCircleOutline = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVG
     xmlns={'http://www.w3.org/2000/svg'}
     {...props}
   >
-    <g clipPath={'url(#message-circle-outline_svg__a)'} fill={'#000'}>
+    <g clipPath={'url(#message-circle-outline_svg__a)'} fill={'currentColor'}>
       <path
         d={
           'M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M16 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M8 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2'
