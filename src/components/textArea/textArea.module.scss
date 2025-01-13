@@ -8,10 +8,7 @@
 }
 
 .label {
-  display: flex;
-  flex-direction: column;
-  color: var(--light-900);
-
+  
   &:has(+ textarea:disabled) {
     color: var(--dark-100);
   }
@@ -47,5 +44,4 @@
 
 .isError:not(textArea:disabled) {
   border: 2px solid var(--danger-500);
-  color: var(--light-100);
 }
