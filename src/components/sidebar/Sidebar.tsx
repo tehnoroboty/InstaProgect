@@ -63,6 +63,8 @@ const menuItems: MenuItemsType = {
   usersActions: [{ icon: LogOutOutline, title: 'Log Out' }],
 }
 
+//types
+
 type MenuItemsType = {
   additional: MenuItemType[]
   mainActions: MenuItemType[]
