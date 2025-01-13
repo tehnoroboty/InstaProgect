@@ -13,25 +13,12 @@ export type Options = {
 }
 
 type Props = {
-  /**
-   * The text of the label for the select. If omitted, the label is not displayed.
-   */
   label?: string
-  /**
-   * An array of options to choose from. Each option must contain a 'value' and a 'value Title' (displayed text).
-   */
   options: Options[]
-  /**
-   * The text that is displayed if nothing is selected.
-   */
   placeholder: string
-  /**
-   * The size of the select. It can be 'large', 'medium' or 'small'. Affects the width of the select.
-   */
   size?: 'large' | 'medium' | 'small'
 } & ComponentPropsWithoutRef<'button'>
 
-/** Ui kit SelectBox component */
 export const SelectBox = ({ label, options, placeholder = 'Select', size, ...rest }: Props) => {
   return (
     <Select.Root>

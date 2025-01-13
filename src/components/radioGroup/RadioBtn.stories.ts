@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { RadioBtn } from '@/src/components/radioGroup/RadioBtn'
 
 const meta = {
@@ -17,8 +18,8 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   args: {
+    checked: true,
     disabled: false,
     label: 'text',
-    checked: true,
   },
 }

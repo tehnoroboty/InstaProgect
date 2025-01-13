@@ -12,7 +12,7 @@ import * as Select from '@radix-ui/react-select'
 import styles from '@/src/components/select/Select.module.scss'
 
 type Props = ComponentPropsWithoutRef<'button'>
-/** Ui kit SelectLanguage component */
+
 export const SelectLanguage = ({ ...rest }: Props) => {
   const options: Options[] = [
     { value: 'united-kingdom', valueTitle: 'English' },
