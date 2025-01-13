@@ -23,7 +23,7 @@ import s from './sidebar.module.scss'
 const Sidebar = () => {
   return (
     <aside className={s.sidebar}>
-      <div className={s.container}>
+      <nav className={s.container}>
         {menuItems.mainActions && (
           <MenuSection className={s.menuItems} items={menuItems.mainActions} />
         )}
@@ -36,7 +36,7 @@ const Sidebar = () => {
             items={menuItems.usersActions}
           />
         )}
-      </div>
+      </nav>
     </aside>
   )
 }
