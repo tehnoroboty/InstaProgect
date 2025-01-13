@@ -1,11 +1,8 @@
-import type {Meta, StoryObj} from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
-import {SelectBox} from './SelectBox'
+import { SelectBox } from './SelectBox'
 
 const meta = {
-  component: SelectBox,
-  tags: ['autodocs'],
-  title: 'Components/SelectBox',
   args: {
     options: [
       { value: 'value1', valueTitle: 'Value-1' },
@@ -13,8 +10,11 @@ const meta = {
       { value: 'value3', valueTitle: 'Value-3' },
       { value: 'value4', valueTitle: 'Value-4' },
       { value: 'value5', valueTitle: 'Value-5' },
-    ]
-  }
+    ],
+  },
+  component: SelectBox,
+  tags: ['autodocs'],
+  title: 'Components/SelectBox',
 } satisfies Meta<typeof SelectBox>
 
 export default meta
