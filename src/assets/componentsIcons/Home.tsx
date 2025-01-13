@@ -1,5 +1,4 @@
 import { Ref, type SVGProps, forwardRef, memo } from 'react'
-
 const SvgHome = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
   <svg
     fill={'none'}
@@ -9,7 +8,7 @@ const SvgHome = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
     xmlns={'http://www.w3.org/2000/svg'}
     {...props}
   >
-    <g clipPath={'url(#home_svg__a)'} fill={'currentColor'}>
+    <g clipPath={'url(#home_svg__a)'} fill={'#000'}>
       <path d={'M14 14h-4v7h4z'} />
       <path
         d={
