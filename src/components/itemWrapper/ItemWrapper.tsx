@@ -1,31 +1,52 @@
+'use client'
+
 import React from 'react'
 
-import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
 
+import { Button } from '../button/Button'
+
 type DropdownMenuItemWithLinkProps = {
-  Icon: React.ElementType
-  href: string
-  onClick?: () => void
-  title: React.ReactNode
+    Icon: React.ElementType
+    IconActive?: React.ElementType
+    href?: string
+    onClick?: () => void
+    title: React.ReactNode
 }
 
-export const ItemWrapper = ({ Icon, href, onClick, title }: DropdownMenuItemWithLinkProps) => {
-  return (
-    <DropdownMenuMob.Item>
-      {onClick ? (
-        <button className={s.item} type={'button'}>
-          <Icon className={s.icon} />
-          <span className={s.itemTitle}>{title}</span>
-        </button>
-      ) : (
-        <Link className={s.item} href={href}>
-          <Icon className={s.icon} />
-          <span className={s.itemTitle}>{title}</span>
-        </Link>
-      )}
-    </DropdownMenuMob.Item>
-  )
+export const ItemWrapper = ({
+                                Icon,
+                                IconActive,
+                                href,
+                                onClick,
+                                title,
+                            }: DropdownMenuItemWithLinkProps) => {
+    const pathname = usePathname()
+    const isActive = href === pathname
+    const CurrentIcon = isActive ? IconActive || Icon : Icon
+
+    const onClickHandler = () => {
+        if (onClick) {
+            onClick()
+        }
+    }
+
+    return (
+        <>
+            {href ? (
+                <Link className={`${s.item} ${isActive ? s.active : ''}`} href={href}>
+                    <CurrentIcon className={s.icon} />
+                    <span className={`${s.itemTitle} ${isActive ? s.active : ''}`}>{title}</span>
+                </Link>
+            ) : (
+                <Button className={s.item} onClick={onClickHandler} type={'button'} variant={'transparent'}>
+                    <CurrentIcon className={s.icon} />
+                    <span className={s.itemTitle}>{title}</span>
+                </Button>
+            )}
+        </>
+    )
 }
