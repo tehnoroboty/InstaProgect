@@ -1,20 +1,24 @@
 .container {
   display: flex;
-  width: 100%;
   align-items: center;
   justify-content: space-between;
+
+  width: 100%;
   margin: 0 60px;
 }
+
 .headerActions {
   display: flex;
   gap: 48px;
 }
+
 .buttons {
   display: flex;
   gap: 24px;
 }
+
 .title {
-  font-weight: 600;
   font-size: 26px;
+  font-weight: 600;
   color: var(--light-100);
 }
