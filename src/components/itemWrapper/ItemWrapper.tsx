@@ -8,6 +8,8 @@ import { usePathname } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
 
+import { Button } from '../button/Button'
+
 type DropdownMenuItemWithLinkProps = {
   Icon: React.ElementType
   IconActive?: React.ElementType
@@ -36,7 +38,12 @@ export const ItemWrapper = ({
   return (
     <>
       {href ? (
-        <Link className={`${s.item} ${isActive ? s.active : ''}`} href={href}>
+        <Button
+          as={'a'}
+          className={`${s.item}  ${isActive ? s.active : ''}`}
+          href={href}
+          variant={'transparent'}
+        >
           <CurrentIcon className={s.icon} />
           <Typography
             className={`${s.itemTitle} ${isActive ? s.active : ''}`}
@@ -44,14 +51,14 @@ export const ItemWrapper = ({
           >
             {title}
           </Typography>
-        </Link>
+        </Button>
       ) : (
-        <button className={s.item} onClick={onClickHandler} type={'button'}>
+        <Button className={s.item} onClick={onClickHandler} type={'button'} variant={'transparent'}>
           <CurrentIcon className={s.icon} />
           <Typography className={s.itemTitle} option={'bold_text14'}>
             {title}
           </Typography>
-        </button>
+        </Button>
       )}
     </>
   )

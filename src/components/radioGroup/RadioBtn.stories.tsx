@@ -1,45 +1,46 @@
-// RadioBtn.stories.tsx
 import React, { useState } from 'react'
+
 import { RadioBtn } from './RadioBtn'
 
 export default {
-    title: 'Components/RadioBtn',
-    component: RadioBtn,
+  component: RadioBtn,
+  title: 'Components/RadioBtn',
 }
 
 export const Default = () => {
-    const [selectedValue, setSelectedValue] = useState<string>('')
+  const [selectedValue, setSelectedValue] = useState<string>('')
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedValue(e.target.value)
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedValue(e.target.value)
+  }
 
-    return (
-        <div>
-            <RadioBtn
-                label="Option 1"
-    name="group1"
-    value="option1"
-    checked={selectedValue === 'option1'}
-    onChange={handleChange}
-    />
-    <RadioBtn
-    label="Option 2"
-    name="group1"
-    value="option2"
-    checked={selectedValue === 'option2'}
-    onChange={handleChange}
-    />
-    <RadioBtn
-    label="Option 3"
-    name="group1"
-    value="option3"
-    checked={selectedValue === 'option3'}
-    onChange={handleChange}
-    />
+  return (
     <div>
-    <strong>Selected Value:</strong> {selectedValue}
+      <RadioBtn
+        checked={selectedValue === 'option1'}
+        disabled
+        label={'Option 1'}
+        name={'group1'}
+        onChange={handleChange}
+        value={'option1'}
+      />
+      <RadioBtn
+        checked={selectedValue === 'option2'}
+        label={'Option 2'}
+        name={'group1'}
+        onChange={handleChange}
+        value={'option2'}
+      />
+      <RadioBtn
+        checked={selectedValue === 'option3'}
+        label={'Option 3'}
+        name={'group1'}
+        onChange={handleChange}
+        value={'option3'}
+      />
+      <div>
+        <span>Selected Value: {selectedValue}</span>
+      </div>
     </div>
-    </div>
-)
+  )
 }

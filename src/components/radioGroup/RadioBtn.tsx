@@ -1,19 +1,33 @@
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
+import { Typography } from '@/src/components/typography/Typography'
+import { v1 } from 'uuid'
+
 import s from './radioBtn.module.scss'
 
 type Props = {
   label: string
+  name: string
 } & ComponentPropsWithoutRef<'input'>
 
 export const RadioBtn = forwardRef<ElementRef<'input'>, Props>(
-  ({ className, label, ...rest }, ref) => {
+  ({ className, disabled = false, label, name, ...rest }, ref) => {
+    const id = v1()
+
     return (
-      <div className={s.container}>
-        <input className={s.radiobtn} id={'radioId'} ref={ref} type={'radio'} {...rest} />
-        <label className={s.label} htmlFor={'radioId'}>
+      <div className={`${s.container} ${className}`}>
+        <input
+          className={s.radiobtn}
+          disabled={disabled}
+          id={id}
+          name={name}
+          ref={ref}
+          type={'radio'}
+          {...rest}
+        />
+        <Typography as={'label'} className={s.label} htmlFor={id} option={'bold_text14'}>
           {label}
-        </label>
+        </Typography>
       </div>
     )
   }
