@@ -8,6 +8,7 @@ import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
 import { Options } from '@/src/components/select/SelectBox'
 import { SelectItem } from '@/src/components/select/SelectItem'
 import * as Select from '@radix-ui/react-select'
+import clsx from 'clsx'
 
 import styles from '@/src/components/select/Select.module.scss'
 
@@ -34,7 +35,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
 
   return (
     <Select.Root onValueChange={setValue} value={value}>
-      <Select.Trigger className={`${styles.trigger} ${styles.triggerLanguage}`} {...rest}>
+      <Select.Trigger className={clsx(styles.trigger, styles.triggerLanguage)} {...rest}>
         <Select.Value aria-label={value}>
           <div className={styles.valueTitleLang}>
             {getIconByValue(value)}
@@ -45,7 +46,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
         </Select.Value>
 
         <Select.Icon asChild>
-          <Arrow className={`${styles.icon} ${styles.iconSmall}`} />
+          <Arrow className={clsx(styles.icon, styles.iconSmall)} />
         </Select.Icon>
       </Select.Trigger>
 

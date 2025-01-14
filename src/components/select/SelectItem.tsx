@@ -1,6 +1,7 @@
 import React, { ComponentPropsWithRef, ForwardedRef } from 'react'
 
 import * as Select from '@radix-ui/react-select'
+import clsx from 'clsx'
 
 import styles from './Select.module.scss'
 
@@ -14,7 +15,7 @@ export const SelectItem = React.forwardRef(
     forwardedRef: ForwardedRef<HTMLDivElement>
   ) => {
     return (
-      <Select.Item className={`${styles.item} ${className}`} {...props} ref={forwardedRef}>
+      <Select.Item className={clsx(styles.item, className)} {...props} ref={forwardedRef}>
         <Select.ItemText>{children}</Select.ItemText>
       </Select.Item>
     )
