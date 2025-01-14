@@ -19,7 +19,7 @@ const availableOptions = [
 ] as const
 
 type OptionType = (typeof availableOptions)[number]
-/**Typography component for rendering text with various styles.*/
+
 type Props<T extends ElementType> = {
   /** as - The HTML element to render (e.g., 'h1', 'h2', 'p').*/
   as?: T
@@ -39,6 +39,9 @@ type Props<T extends ElementType> = {
   weight?: 'bold' | 'medium' | 'regular' | 'semi-bold'
 } & ComponentPropsWithoutRef<T>
 
+/**
+ * Typography component for rendering text with various styles.
+ */
 export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
   const {
     as: Component = 'p',
