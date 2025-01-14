@@ -21,6 +21,9 @@ const availableOptions = [
 type OptionType = (typeof availableOptions)[number]
 
 type Props<T extends ElementType> = {
+  /**
+   * The HTML element to render (e.g., 'h1', 'h2', 'p'). @Default 'p'
+   * */
   as?: T
   children: ReactNode
   disabled?: boolean
@@ -30,6 +33,31 @@ type Props<T extends ElementType> = {
   size?: 'l' | 'm' | 's' | 'xl' | 'xs' | 'xxl'
   weight?: 'bold' | 'medium' | 'regular' | 'semi-bold'
 } & ComponentPropsWithoutRef<T>
+
+/**
+ * Typography component for rendering text with various styles.
+ *
+ * @template T - The type of the HTML element to render. Defaults to 'p'.
+ *
+ * @param {T} [props.as='p'] - The HTML element to render (e.g., 'h1', 'h2', 'p').
+ *
+ * @param {ReactNode} props.children - The content to be displayed inside the component.
+ *
+ * @param {boolean} [props.disabled=false] - If true, applies disabled styles.
+ *
+ * @param {string} [props.disabledClassName] - Additional class name to apply when disabled.
+ *
+ * @param {'s' | 'm' | 'xl'} [props.lineHeights] - The line height option.
+ *
+ * @param {OptionType} [props.option='regular_text14'] - The typography style option.
+ *
+ * @param {'l' | 'm' | 's' | 'xl' | 'xs' | 'xxl'} [props.size] - The size of the text.
+ *
+ * @param {'bold' | 'medium' | 'regular' | 'semi-bold'} [props.weight] - The font weight.
+ *
+ *
+ * @returns {React.JSX.Element} The rendered Typography component.
+ */
 
 export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
   const {
