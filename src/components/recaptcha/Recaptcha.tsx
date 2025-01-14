@@ -15,7 +15,7 @@ type ErrorType = 'expired' | 'notVerified' | null
 
 export const Recaptcha = () => {
   const [status, setStatus] = useState<RecaptchaType>('error')
-  const [errorType, setErrorType] = useState<ErrorType>('expired')
+  const [errorType, setErrorType] = useState<ErrorType>(null)
 
   const onChangeHendler = () => {
     setStatus('loading')
