@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
 import * as Select from '@radix-ui/react-select'
+import clsx from 'clsx'
 
 import styles from './Select.module.scss'
 
@@ -38,7 +39,7 @@ export const SelectBox = ({ label, options, placeholder = 'Select', size, ...res
       <Select.Group>
         {label && <Select.Label className={styles.label}>{label}</Select.Label>}
         <Select.Trigger
-          className={`${styles.trigger} ${size ? styles[size] : ''} ${label && styles.triggerLabel}`}
+          className={clsx(styles.trigger, size && styles[size], label && styles.triggerLabel)}
           {...rest}
           aria-label={placeholder}
         >

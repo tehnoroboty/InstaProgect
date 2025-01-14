@@ -17,6 +17,7 @@ import {
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons/index'
 import { MenuSection } from '@/src/components/sidebar/menuSection/MenuSection'
+import clsx from 'clsx'
 
 import s from './sidebar.module.scss'
 
@@ -32,7 +33,7 @@ const Sidebar = () => {
         )}
         {menuItems.usersActions && (
           <MenuSection
-            className={`${s.menuItems} ${s.userActions} `}
+            className={clsx(s.menuItems, s.userActions)}
             items={menuItems.usersActions}
           />
         )}

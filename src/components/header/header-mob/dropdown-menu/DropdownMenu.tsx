@@ -10,6 +10,7 @@ import {
 } from '@/src/assets/componentsIcons/index'
 import { ItemWrapper } from '@/src/components/itemWrapper/ItemWrapper'
 import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
+import clsx from 'clsx'
 
 import s from './dropdownMenu.module.scss'
 
@@ -25,7 +26,7 @@ export const DropdownMenuMobile = () => {
       <DropdownMenuMob.Trigger asChild>
         <button aria-label={'Customise options'} className={s.iconButton} type={'button'}>
           <MoreHorizontalOutline
-            className={open ? s.iconActive : s.icon}
+            className={clsx(s.icon, { [s.iconActive]: open })}
             height={24}
             viewBox={`1 3 20 20`}
           />

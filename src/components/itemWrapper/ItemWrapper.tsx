@@ -3,6 +3,7 @@
 import React from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -40,13 +41,13 @@ export const ItemWrapper = ({
       {href ? (
         <Button
           as={'a'}
-          className={`${s.item}  ${isActive ? s.active : ''}`}
+          className={clsx(s.item, { [s.active]: isActive })}
           href={href}
           variant={'transparent'}
         >
           <CurrentIcon className={s.icon} />
           <Typography
-            className={`${s.itemTitle} ${isActive ? s.active : ''}`}
+            className={clsx(s.itemTitle, { [s.active]: isActive })}
             option={'bold_text14'}
           >
             {title}

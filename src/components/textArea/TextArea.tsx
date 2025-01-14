@@ -1,5 +1,7 @@
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
+import clsx from 'clsx'
+
 import s from './textArea.module.scss'
 
 import { Typography } from '../typography/Typography'
@@ -59,10 +61,10 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
     ...rest
   } = props
 
-  const textareaClass = `${s.textArea} ${error ? s.isError : ''}`
+  const textareaClass = clsx(s.textArea, { [s.isError]: error })
 
   return (
-    <div className={`${s.container} ${className}`}>
+    <div className={clsx(s.container, className)}>
       {label && (
         <Typography as={'label'} className={s.label} htmlFor={'textarea'}>
           {label}
