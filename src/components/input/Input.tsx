@@ -5,6 +5,7 @@ import EyeOff from '@/src/assets/componentsIcons/EyeOffOutline'
 import Eye from '@/src/assets/componentsIcons/EyeOutline'
 import Search from '@/src/assets/componentsIcons/SearchOutline'
 import { Typography } from '@/src/components/typography/Typography'
+import clsx from 'clsx'
 
 import s from './Input.module.scss'
 
@@ -46,22 +47,26 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
   }
 
   return (
-    <div className={`${s.container} ${className}`}>
+    <div className={clsx(s.container, className)}>
       {label && (
         <Typography
           as={'label'}
-          className={`${s.label} ${disabled ? s.disabled : ''}`}
+          className={clsx(s.label, { [s.disabled]: disabled })}
           disabled={disabled}
           htmlFor={finalId}
         >
           {label}
         </Typography>
       )}
-      <div className={`${s.group} ${disabled ? s.disabled : ''}`}>
+      <div className={clsx(s.group, { [s.disabled]: disabled })}>
         <input
-          className={`${s.input} ${placeholder ? s.placeholder : ''} ${error ? s.error : ''} ${type === InputType.searchType ? s.searchPadding : ''} ${
-            type === InputType.passwordType ? s.passwordPadding : ''
-          }`}
+          className={clsx(
+            s.input,
+            { [s.placeholder]: placeholder },
+            { [s.error]: error },
+            { [s.searchPadding]: type === InputType.searchType },
+            { [s.passwordPadding]: type === InputType.passwordType }
+          )}
           disabled={disabled}
           id={finalId}
           placeholder={placeholder}
@@ -72,23 +77,23 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
         />
 
         {type === InputType.searchType && value && (
-          <Close className={`${s.clear} ${disabled ? s.disabledIcon : ''}`} onClick={onClear} />
+          <Close className={clsx(s.clear, { [s.disabledIcon]: disabled })} onClick={onClear} />
         )}
 
         {type === InputType.searchType && (
-          <Search className={`${s.searchIcon} ${disabled ? s.disabledIcon : ''}`} />
+          <Search className={clsx(s.searchIcon, { [s.disabledIcon]: disabled })} />
         )}
 
         {type === InputType.passwordType && isPasswordVisible && (
           <Eye
-            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`}
+            className={clsx(s.eyeIcon, { [s.disabledIcon]: disabled })}
             onClick={togglePasswordVisibility}
           />
         )}
 
         {type === InputType.passwordType && !isPasswordVisible && (
           <EyeOff
-            className={`${s.eyeIcon} ${disabled ? s.disabledIcon : ''}`}
+            className={clsx(s.eyeIcon, { [s.disabledIcon]: disabled })}
             onClick={togglePasswordVisibility}
           />
         )}

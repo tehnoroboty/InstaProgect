@@ -1,5 +1,7 @@
 import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 
+import clsx from 'clsx'
+
 import s from './typography.module.scss'
 
 const availableOptions = [
@@ -44,7 +46,15 @@ export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
     ...rest
   } = props
 
-  const styles = `${s[option]} ${weight ? s['font-weight-' + weight] : ''} ${size ? s['font-size-' + size] : ''} ${lineHeights ? s['line-heights' + lineHeights] : ''} ${disabled ? s.labelDisabled : ''} ${disabledClassName || ''} ${className || ''}`
+  const styles = clsx(
+    s[option],
+    weight && s[`font-weight-${weight}`],
+    size && s[`font-size-${size}`],
+    lineHeights && s[`line-heights${lineHeights}`],
+    disabled && s.labelDisabled,
+    disabledClassName,
+    className
+  )
 
   return <Component className={styles} {...rest} />
 }

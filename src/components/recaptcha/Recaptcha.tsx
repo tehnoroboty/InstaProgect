@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useState } from 'react'
 
 import Recaptchalogo from '@/src/assets/componentsIcons/Recaptchalogo'
+import clsx from 'clsx'
 
 import s from './recaptcha.module.scss'
 
@@ -43,7 +44,7 @@ export const Recaptcha = () => {
   }
 
   return (
-    <div className={status === 'error' ? s.error : ''}>
+    <div className={clsx({ [s.error]: status === 'error' })}>
       <div className={s.container}>
         <div className={s.checkbox}>
           {renderStatus()}
