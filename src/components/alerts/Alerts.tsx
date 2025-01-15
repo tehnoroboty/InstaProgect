@@ -1,36 +1,107 @@
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
+import clsx from 'clsx'
 
 import s from './alerts.module.scss'
 
 type Props = {
+  autoClose?: boolean
   className?: string
   closable?: boolean
+  delay?: number
   id?: string
   message?: string
   position?: 'fixed' | 'static'
   type?: 'error' | 'info' | 'success' | 'warning'
 }
 
+/**
+ * Alerts component to display various types of alerts.
+ *
+ * @component
+ *
+ * @param {Object} props - Component properties.
+ *
+ * @param {number} [props.delay=5000] - Delay before automatically closing the alert.
+ *
+ * @param {boolean} [props.autoClose=false] - Whether the alert should close automatically after the delay.
+ *
+ * @param {string} [props.className] - Additional class names for the alert.
+ *
+ * @param {boolean} [props.closable=true] - Indicates if the alert can be closed by the user.
+ *
+ * @param {string} [props.message] - The message to be displayed in the alert.
+ *
+ * @param {'fixed' | 'static'} [props.position='fixed'] - Positioning of the alert, can be 'fixed' or 'static'.
+ *
+ * @param {'error' | 'info' | 'success' | 'warning'} [props.type='success'] - Type of the alert, affecting its styling.
+ *
+ *
+ * @example
+ * // Usage of Alerts component
+ * <Alerts
+ *   message="This is an informational message."
+ *   type="info"
+ *   autoClose={true}
+ *   delay={3000}
+ *   closable={true}
+ * />
+ */
+
 export const Alerts = ({
+  autoClose = false,
   className,
+  closable = true,
+  delay = 5000,
   message,
   position = 'fixed',
   type = 'success',
   ...rest
 }: Props) => {
-  let text = message
+  const [isOpen, setIsOpen] = useState(true)
+  const alertRef = useRef<HTMLDivElement>(null)
 
-  if (!message) {
-    text = type === 'error' ? 'Server is not available' : 'Your settings are saved'
-  }
+  const closeAlerts = () => setIsOpen(false)
 
-  const classNames = `${s.alertsWrapper} ${position === 'fixed' ? s.positionFixed : ''}  ${type === 'error' ? s.typeError : ''} ${type === 'success' ? s.typeSuccess : ''} ${className || ''}`
+  useEffect(() => {
+    if (autoClose) {
+      const timeout = setTimeout(closeAlerts, delay)
 
-  const component = (
-    <div className={classNames}>
+      return () => clearTimeout(timeout)
+    }
+  }, [autoClose, delay])
+
+  useEffect(() => {
+    if (position === 'fixed') {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (alertRef.current && !alertRef.current.contains(event.target as Node)) {
+          closeAlerts()
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [position])
+
+  const text = message || (type === 'error' ? 'Server is not available' : 'Your settings are saved')
+
+  const classNames = clsx(
+    s.alertsWrapper,
+    position === 'fixed' && s.positionFixed,
+    position === 'static' && s.positionStatic,
+    s[`type${type.charAt(0).toUpperCase() + type.slice(1)}`],
+    className || ''
+  )
+
+  const component = isOpen && (
+    <div aria-live={'polite'} className={classNames} ref={alertRef} {...rest}>
       <div className={s.message}>
         {type === 'error' && (
           <Typography className={s.text} option={'bold_text16'}>
@@ -41,9 +112,11 @@ export const Alerts = ({
           {text}
         </Typography>
       </div>
-      <Button className={s.close} variant={'transparent'}>
-        <span></span>
-      </Button>
+      {closable && (
+        <Button className={s.close} onClick={closeAlerts} variant={'transparent'}>
+          <span></span>
+        </Button>
+      )}
     </div>
   )
 

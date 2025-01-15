@@ -19,9 +19,20 @@
 
 .close {
   position: relative;
+
   width: 24px;
   height: 24px;
   padding: 5px;
+
+  border:none;
+
+  &::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
 
   &::before,
   &::after {
@@ -36,20 +47,16 @@
 
     background-color: var(--light-100);
   }
-
-  &::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  &::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
 }
 
 .positionFixed {
   position: fixed;
   bottom: 24px;
   left: 175px;
+}
+
+.positionStatic{
+  justify-content: center;
 }
 
 .typeSuccess {

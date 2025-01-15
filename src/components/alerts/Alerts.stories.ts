@@ -19,3 +19,7 @@ export const SuccessAlert: Story = {
 export const ErrorAlert: Story = {
   args: { type: 'error' },
 }
+
+export const FixedAlert: Story = {
+  args: { closable: false, position: 'static', type: 'error' },
+}
