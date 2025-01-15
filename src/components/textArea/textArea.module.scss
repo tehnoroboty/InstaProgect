@@ -1,17 +1,15 @@
 .container {
   display: flex;
   flex-direction: column;
+
+  & .errorText {
+    color: var(--danger-500);
+  }
 }
 
 .label {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-  display: flex;
-  flex-direction: column;
-  color: var(--light-900);
-
-  &:has(> textarea:disabled) {
+  
+  &:has(+ textarea:disabled) {
     color: var(--dark-100);
   }
 }
@@ -27,7 +25,7 @@
   box-shadow: none;
   min-height: 84px;
   background-color: var(--dark-500);
-  color: var(--light-100);
+  color: var(--dark-100);
 
   &::placeholder {
     color: var(--light-900);
@@ -37,23 +35,13 @@
   }
   &:focus {
     outline: 2px solid var(--primary-700);
+    color: var(--light-100);
   }
   &:disabled::placeholder {
     color: var(--dark-100);
   }
-
-//   &.isActive {
-//     color: var(--light-100);
-//     outline: 2px solid var(--light-100);
-//   }
-  &.isError {
-    border: 2px solid var(--danger-500);
-  }
 }
 
-.errorText {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-  color: var(--danger-500);
+.isError:not(textArea:disabled) {
+  border: 2px solid var(--danger-500);
 }

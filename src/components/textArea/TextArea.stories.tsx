@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { TextArea } from '@/src/components/text-area/TextArea'
+import { TextArea } from '@/src/components/textArea/TextArea'
 
 const meta = {
-  argTypes: {},
+  argTypes: { disabled: { control: 'boolean' } },
   component: TextArea,
   tags: ['autodocs'],
   title: 'Components/TextArea',
@@ -13,13 +13,17 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
+  args: {},
+}
+
+export const Disabled: Story = {
   args: {
-    disabled: false,
+    disabled: true,
   },
 }
 
 export const Error: Story = {
   args: {
-    errorMessage: 'Text Error',
+    error: 'Text Error',
   },
 }

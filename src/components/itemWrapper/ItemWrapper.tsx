@@ -1,31 +1,59 @@
+'use client'
+
 import React from 'react'
 
-import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
+import { Typography } from '@/src/components/typography/Typography'
+import clsx from 'clsx'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
 
 type DropdownMenuItemWithLinkProps = {
   Icon: React.ElementType
-  href: string
+  IconActive?: React.ElementType
+  href?: string
   onClick?: () => void
   title: React.ReactNode
 }
 
-export const ItemWrapper = ({ Icon, href, onClick, title }: DropdownMenuItemWithLinkProps) => {
+export const ItemWrapper = ({
+  Icon,
+  IconActive,
+  href,
+  onClick,
+  title,
+}: DropdownMenuItemWithLinkProps) => {
+  const pathname = usePathname()
+  const isActive = href === pathname
+  const CurrentIcon = isActive ? IconActive || Icon : Icon
+
+  const onClickHandler = () => {
+    if (onClick) {
+      onClick()
+    }
+  }
+
   return (
-    <DropdownMenuMob.Item>
-      {onClick ? (
-        <button className={s.item} type={'button'}>
-          <Icon className={s.icon} />
-          <span className={s.itemTitle}>{title}</span>
-        </button>
-      ) : (
-        <Link className={s.item} href={href}>
-          <Icon className={s.icon} />
-          <span className={s.itemTitle}>{title}</span>
+    <>
+      {href ? (
+        <Link className={clsx(s.item, { [s.active]: isActive })} href={href}>
+          <CurrentIcon className={s.icon} />
+          <Typography
+            className={clsx(s.itemTitle, { [s.active]: isActive })}
+            option={'bold_text14'}
+          >
+            {title}
+          </Typography>
         </Link>
+      ) : (
+        <button className={s.item} onClick={onClickHandler} type={'button'}>
+          <CurrentIcon className={s.icon} />
+          <Typography className={s.itemTitle} option={'bold_text14'}>
+            {title}
+          </Typography>
+        </button>
       )}
-    </DropdownMenuMob.Item>
+    </>
   )
 }

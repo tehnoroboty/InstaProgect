@@ -2,36 +2,32 @@
 
 import { ComponentPropsWithoutRef, useState } from 'react'
 
+import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
+import FlagRu from '@/src/assets/componentsIcons/Flagrussia'
+import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
+import { Options } from '@/src/components/select/SelectBox'
+import { SelectItem } from '@/src/components/select/SelectItem'
 import * as Select from '@radix-ui/react-select'
+import clsx from 'clsx'
 
-import styles from '../SelectBox.module.scss'
-
-import { SelectIcon } from '../SelectIcon'
-import { SelectItem } from '../SelectItem'
-import { SelectIconRu } from './SelectIconRu'
-import { SelectIconUk } from './SelectIconUk'
-
-type Values = {
-  value: string
-  valueTitle: string
-}
+import styles from '@/src/components/select/Select.module.scss'
 
 type Props = ComponentPropsWithoutRef<'button'>
-
+/** Ui kit SelectLanguage component */
 export const SelectLanguage = ({ ...rest }: Props) => {
-  const values: Values[] = [
+  const options: Options[] = [
     { value: 'united-kingdom', valueTitle: 'English' },
     { value: 'russia', valueTitle: 'Russian' },
   ]
 
-  const [value, setValue] = useState(values[0].value)
+  const [value, setValue] = useState(options[0].value)
 
   const getIconByValue = (value: string) => {
     switch (value) {
       case 'united-kingdom':
-        return <SelectIconUk className={styles.iconLanguage} />
+        return <FlagUK className={styles.iconFlag} />
       case 'russia':
-        return <SelectIconRu className={styles.iconLanguage} />
+        return <FlagRu className={styles.iconFlag} />
       default:
         return null
     }
@@ -39,18 +35,18 @@ export const SelectLanguage = ({ ...rest }: Props) => {
 
   return (
     <Select.Root onValueChange={setValue} value={value}>
-      <Select.Trigger className={`${styles.trigger} ${styles.triggerLanguage}`} {...rest}>
+      <Select.Trigger className={clsx(styles.trigger, styles.triggerLanguage)} {...rest}>
         <Select.Value aria-label={value}>
           <div className={styles.valueTitleLang}>
             {getIconByValue(value)}
             <div className={styles.titleLang}>
-              {values.find(item => item.value === value)?.valueTitle}
+              {options.find(item => item.value === value)?.valueTitle}
             </div>
           </div>
         </Select.Value>
 
         <Select.Icon asChild>
-          <SelectIcon className={styles.icon} />
+          <Arrow className={clsx(styles.icon, styles.iconSmall)} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -63,7 +59,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
         >
           <Select.Viewport>
             <Select.Group>
-              {values.map(item => (
+              {options.map(item => (
                 <SelectItem key={item.value} value={item.value}>
                   <div className={styles.itemContent}>
                     {getIconByValue(item.value)}

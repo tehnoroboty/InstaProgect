@@ -2,7 +2,7 @@
 import * as React from 'react'
 
 import { DropdownNotification } from '@/src/components/header/dropdown-notification/DropdownNotification'
-import { SelectLanguage } from '@/src/components/selectBox/SelectLanguage/SelectLanguage'
+import { SelectLanguage } from '@/src/components/select/SelectLanguage/SelectLanguage'
 
 import s from './headerWeb.module.scss'
 

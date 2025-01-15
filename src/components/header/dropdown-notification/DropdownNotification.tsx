@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useState } from 'react'
 
 import { Fillbell, Outlinebell } from '@/src/assets/componentsIcons/index'
-import { ScrollBar } from '@/src/components/scroll/ScrollBar'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdown-notification.module.scss'
@@ -92,7 +91,7 @@ export const DropdownNotification = () => {
   return (
     <DropdownMenu.Root onOpenChange={handleOpenChange}>
       <DropdownMenu.Trigger asChild>
-        <button aria-label={'Customise options'} className={s.buttonIcon}>
+        <button className={s.buttonIcon} type={'button'}>
           {open ? (
             <Fillbell className={s.icon} height={24} width={24} />
           ) : (
@@ -113,15 +112,13 @@ export const DropdownNotification = () => {
               <h3 className={s.notificationTitle}>{'Уведомлений пока нет'}</h3>
             </DropdownMenu.Item>
           ) : (
-            <DropdownMenu.Item>
-              <ScrollBar>
-                {notifications.map(notification => (
-                  <>
-                    <NotificationItem key={notification.id} notification={notification} />
-                    <DropdownMenu.Separator className={s.separator} />
-                  </>
-                ))}
-              </ScrollBar>
+            <DropdownMenu.Item className={s.items}>
+              {notifications.map(notification => (
+                <>
+                  <NotificationItem key={notification.id} notification={notification} />
+                  <DropdownMenu.Separator className={s.separator} />
+                </>
+              ))}
             </DropdownMenu.Item>
           )}
         </DropdownMenu.Content>
