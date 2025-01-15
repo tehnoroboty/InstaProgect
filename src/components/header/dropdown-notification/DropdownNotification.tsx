@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useState } from 'react'
 
 import { Fillbell, Outlinebell } from '@/src/assets/componentsIcons/index'
+import { Typography } from '@/src/components/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdown-notification.module.scss'
@@ -13,31 +14,31 @@ const placeholderNotifications: Notification[] = [
     createdAt: '20.00 Sutturday',
     id: '1',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
     id: '1',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
     id: '1',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
     id: '1',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
     id: '1',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
@@ -61,13 +62,13 @@ const placeholderNotifications: Notification[] = [
     createdAt: '20.00 Sutturday',
     id: '5',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
   {
     createdAt: '20.00 Sutturday',
     id: '6',
     isRead: false,
-    message: 'Новое Следующий платеж у вас спишется через 1 день',
+    message: ' Следующий платеж у вас спишется через 1 день',
   },
 ]
 
@@ -97,9 +98,11 @@ export const DropdownNotification = () => {
           ) : (
             <Outlinebell height={24} width={24} />
           )}
-          {hasNotification ? (
-            <span className={s.notificationBadge}>{filteredNotifications}</span>
-          ) : null}
+          {hasNotification && (
+            <Typography as={'span'} className={s.notificationBadge} option={'small_text'}>
+              {filteredNotifications}
+            </Typography>
+          )}
         </button>
       </DropdownMenu.Trigger>
 
@@ -109,7 +112,9 @@ export const DropdownNotification = () => {
           <DropdownMenu.Separator className={s.separator} />
           {!hasNotification ? (
             <DropdownMenu.Item>
-              <h3 className={s.notificationTitle}>{'Уведомлений пока нет'}</h3>
+              <Typography as={'h3'} option={'h3'}>
+                {'Уведомлений пока нет'}
+              </Typography>
             </DropdownMenu.Item>
           ) : (
             <DropdownMenu.Item className={s.items}>
@@ -136,10 +141,18 @@ const NotificationItem = ({ notification }: PropsNotification) => {
 
   return (
     <DropdownMenu.Item className={s.notification}>
-      <h3 className={s.notificationTitle}>{'Новое уведомление!'}</h3>
-      {!isRead ? <span className={s.notificationStatus}>Новое</span> : null}
-      <p className={s.notificationMessages}>{message}</p>
-      <span className={s.notificationTime}>{createdAt}</span>
+      <Typography as={'h3'} option={'h3'}>
+        {'Новое уведомление!'}
+      </Typography>
+      {!isRead && (
+        <Typography as={'span'} className={s.notificationStatus} option={'small_text'}>
+          Новое
+        </Typography>
+      )}
+      <Typography className={s.notificationMessages}>{message}</Typography>
+      <Typography as={'span'} className={s.notificationTime} option={'small_text'}>
+        {createdAt}
+      </Typography>
     </DropdownMenu.Item>
   )
 }

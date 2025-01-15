@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { Recaptcha } from '@/src/components/recaptcha/Recaptcha'
 
 const meta = {
@@ -12,6 +13,6 @@ type Story = StoryObj<typeof meta>
 
 export const Primory: Story = {
   args: {
-    disabled: false,
+    error: true,
   },
 }
