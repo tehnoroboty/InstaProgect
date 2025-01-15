@@ -1,7 +1,6 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
-import { v1 } from 'uuid'
 
 import s from './radioBtn.module.scss'
 
@@ -12,7 +11,7 @@ type Props = {
 
 export const RadioBtn = forwardRef<ElementRef<'input'>, Props>(
   ({ className, disabled = false, label, name, ...rest }, ref) => {
-    const id = v1()
+    const id = useId()
 
     return (
       <div className={`${s.container} ${className}`}>

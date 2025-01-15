@@ -1,7 +1,6 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
-import { v1 } from 'uuid'
 import clsx from 'clsx'
 
 import s from './checkBox.module.scss'
@@ -12,10 +11,9 @@ type Props = {
 
 export const CheckBox = forwardRef<ElementRef<'input'>, Props>(
   ({ className, disabled = false, label, ...rest }, ref) => {
-    const id = v1()
+    const id = useId()
 
     return (
-
       <div className={clsx(s.container, className)}>
         <input
           className={s.checkbox}
