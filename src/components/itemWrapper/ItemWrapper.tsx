@@ -39,20 +39,21 @@ export const ItemWrapper = ({
   return (
     <>
       {href ? (
-        <Button
-          as={'a'}
-          className={clsx(s.item, { [s.active]: isActive })}
-          href={href}
-          variant={'transparent'}
-        >
-          <CurrentIcon className={s.icon} />
-          <Typography
-            className={clsx(s.itemTitle, { [s.active]: isActive })}
-            option={'bold_text14'}
+        <Link href={href} passHref>
+          <Button
+            as={'span'}
+            className={clsx(s.item, { [s.active]: isActive })}
+            variant={'transparent'}
           >
-            {title}
-          </Typography>
-        </Button>
+            <CurrentIcon className={s.icon} />
+            <Typography
+              className={clsx(s.itemTitle, { [s.active]: isActive })}
+              option={'bold_text14'}
+            >
+              {title}
+            </Typography>
+          </Button>
+        </Link>
       ) : (
         <Button className={s.item} onClick={onClickHandler} type={'button'} variant={'transparent'}>
           <CurrentIcon className={s.icon} />

@@ -1,5 +1,5 @@
 .container {
-    position: relative;
+  position: relative;
 
   display: flex;
   flex-wrap: wrap;
@@ -14,7 +14,7 @@
   border: 1px solid var(--dark-300);
   border-radius: 2px;
 
- .errorTextBox {
+  .errorTextBox {
     position: absolute;
     top: 2px;
     width: 70%;
@@ -102,7 +102,6 @@
     border-left: 3px solid var(--success-500);
   }
 }
-
 
 
 .error {

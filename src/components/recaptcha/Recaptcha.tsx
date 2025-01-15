@@ -7,14 +7,13 @@ import Recaptchalogo from '@/src/assets/componentsIcons/Recaptchalogo'
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
 
-
 import s from './recaptcha.module.scss'
 
 type RecaptchaType = 'error' | 'loading' | 'unchecked' | 'verified'
 type ErrorType = 'expired' | 'notVerified' | null
 
 export const Recaptcha = () => {
-  const [status, setStatus] = useState<RecaptchaType>('error')
+  const [status, setStatus] = useState<RecaptchaType>('unchecked')
   const [errorType, setErrorType] = useState<ErrorType>(null)
 
   const onChangeHendler = () => {
