@@ -1,77 +1,102 @@
 .container {
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 11px;
+  align-items: center;
+
+  padding: 7px 0;
 }
+
 .label {
-  color: var(--light-100);
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
+  color: var(--light-100);
   text-align: left;
   text-transform: capitalize;
 }
+
 .radiobtn {
   all: unset;
+
   cursor: pointer;
+
+  position: relative;
+
   box-sizing: border-box;
-  background: transparent;
-  border: 2px solid var(--light-100);
   width: 20px;
   height: 20px;
+
+  background: transparent;
+  border: 2px solid var(--light-100);
   border-radius: 50px;
-  position: relative;
 
   &::after {
     content: '';
+
     position: absolute;
+    z-index: -1;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
+
     width: 36px;
     height: 36px;
+
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
   }
-  &:hover::after {
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    top: 3.5px;
+    left: 3.5px;
+
+    width: 9px;
+    height: 9px;
+
+    opacity: 0;
+    background-color: var(--light-100);
+    border-radius: 50%;
+
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover:not(:disabled)::after {
     background-color: var(--dark-300);
   }
-  &:active::after {
+
+  &:active:not(:disabled)::after {
     background-color: var(--dark-100);
   }
-  &:focus::after {
+
+  &:focus:not(:disabled)::after {
     background-color: var(--dark-500);
   }
+
   &:disabled {
     border-color: var(--light-900);
   }
+
   &:checked {
     border: 2px solid var(--light-100);
   }
+
   &:disabled:checked {
     background: transparent;
     border: 2px solid var(--light-900);
   }
-  &::before {
-    content: '';
-    position: absolute;
-    top: 3.5px;
-    left: 3.5px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    opacity: 0;
-    background-color: var(--light-100);
-    transition: opacity 0.3s ease;
-  }
+
   &:disabled::before {
     background-color: var(--light-900);
   }
+
   &:checked::before {
     opacity: 1;
   }
 }
+
 .radiobtn:disabled + .label {
   color: var(--light-900);
 }

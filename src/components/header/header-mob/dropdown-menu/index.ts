@@ -1,5 +1,0 @@
-export { default as MoreIcon } from '@/src/assets/icons/more-horizontal-outline.svg'
-export { default as SettingsIcon } from '@/src/assets/icons/settings-outline.svg'
-export { default as StatisticsIcon } from '@/src/assets/icons/trending-up-outline.svg'
-export { default as BookmarkIcon } from '@/src/assets/icons/bookmark-outline.svg'
-export { default as Logout } from '@/src/assets/icons/log-out-outline.svg'
