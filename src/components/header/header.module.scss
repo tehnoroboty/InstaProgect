@@ -1,11 +1,14 @@
 .header {
-  background: var(--dark-700);
-  display: flex;
-  border-bottom: 1px solid var(--dark-300);
   position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+
   width: 100%;
   height: 60px;
-  top: 0;
-  left: 0;
-  right: 0;
+
+  background: var(--dark-700);
+  border-bottom: 1px solid var(--dark-300);
 }

@@ -5,6 +5,7 @@ import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
 import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
 import { HeaderWeb } from '@/src/components/header/header-web/HeaderWeb'
+import useMobile from '@/src/hooks/useMobile'
 
 import s from './header.module.scss'
 
@@ -16,20 +17,7 @@ type Props = {
 
 export const Header = (props: Props) => {
   const { isLoggedIn, notification, title, ...rest } = props
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  const isMobile = useMobile()
 
   return (
     <header {...rest} className={s.header}>
