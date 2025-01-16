@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '../button/Button'
 import s from './dialog.module.scss'
 import { mockData, mockText } from './mock'
+import { Typography } from '@/src/components/typography/Typography'
 
 const meta = {
   argTypes: {},
@@ -38,15 +39,15 @@ const DialogWrapper = (props: DialogProps) => {
         </div>
       </div>
       <Dialog open={showDialog} onClose={closeModalHandler} modalTitle={mockData[0].modalTitle}>
-        {mockData[0].modalDescription}
-        <div>
-          {/*Будем использовать обычные кнопки*/}
-          {/*<button onClick={onClose}>Yes</button>*/}
-          {/*<Button onClick={onClose}>Yes</Button>*/}
-          <Button onClick={closeModalHandler}>Yes</Button>
-          <Button onClick={closeModalHandler} variant={'secondary'}>
-            No
+        <div className={s.boxDiscription}>
+          <div className={s.image}></div>
+          <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
+        </div>
+        <div className={s.boxButton}>
+          <Button onClick={closeModalHandler} variant={'bordered'}>
+            Yes
           </Button>
+          <Button onClick={closeModalHandler}>No</Button>
         </div>
       </Dialog>
       <div className={s.lorem}>{mockText}</div>
@@ -54,7 +55,7 @@ const DialogWrapper = (props: DialogProps) => {
   )
 }
 
-export const Default: Story = {
+export const DeleteFollowing: Story = {
   render: args => <DialogWrapper {...args} />,
 }
 

@@ -97,7 +97,7 @@ export const Dialog = ({
       <Portal>
         <Overlay className={s.overlay} />
         <Content className={clsx(s.content, s[size], className)}>
-          <Title asChild>
+          <Title className={s.title} asChild>
             <Typography as={'h1'} option={'h1'}>
               {modalTitle}
             </Typography>

@@ -2,9 +2,8 @@ import { Ref, type SVGProps, forwardRef, memo } from 'react'
 const SvgCloseOutline = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
   <svg
     fill={'none'}
-    height={24}
+    viewBox={'0 0 24 24 '}
     ref={ref}
-    width={24}
     xmlns={'http://www.w3.org/2000/svg'}
     {...props}
   >

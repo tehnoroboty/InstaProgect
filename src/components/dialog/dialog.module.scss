@@ -19,9 +19,9 @@
   /*
   max-height: 240px;
   */
-  padding: 24px;
+  padding: 12px 24px 36px;
 
-  color:var(--light-100);
+  color: var(--light-100);
 
 
   background: var(--dark-300);
@@ -48,8 +48,8 @@
   all: unset;
 
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 16px;
+  right: 22px;
 
   opacity: 0.7;
 
@@ -68,22 +68,44 @@
   }
 }
 
-
+.icon {
+  width: 28px;
+  height: 28px;
+}
 
 .title {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.2;
+  margin-bottom: 11px;
+}
+
+.boxDiscription {
+  display: flex;
+  margin-bottom: 42px;
+}
+
+.image{
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+
+  background: greenyellow;
+  border-radius: 100%;
+}
+
+.boxButton{
+  display: flex;
+  column-gap: 24px;
+  justify-content: flex-end;
 }
 
 
-.description {
-  font-size: 14px;
-  color: #8F8F97;
-}
+.lineHr {
+  width: calc(100% + 48px);
+  height: 1px;
+  margin-right: -24px;
+  margin-left: -24px;
 
-.lineHr{
   background: var(--dark-100);
+  border: 0;
 }
 
 .headerWrapper {
@@ -111,7 +133,7 @@
   margin: 0 auto;
 }
 
-.lorem{
+.lorem {
   margin-top: 80px;
   color: var(--light-100);
 }
