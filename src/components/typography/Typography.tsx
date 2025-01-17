@@ -23,16 +23,27 @@ const availableOptions = [
 type OptionType = (typeof availableOptions)[number]
 
 type Props<T extends ElementType> = {
+  /** as - The HTML element to render (e.g., 'h1', 'h2', 'p').*/
   as?: T
+  /** Children - The content to be displayed inside the component.*/
   children: ReactNode
+  /** disabled - If true, applies disabled styles.*/
   disabled?: boolean
+  /** disabledClassName - Additional class name to apply when disabled.*/
   disabledClassName?: string
+  /** lineHeights - The line height option.*/
   lineHeights?: 'm' | 's' | 'xl'
+  /** option - The typography style option.*/
   option?: OptionType
+  /** size - The size of the text.*/
   size?: 'l' | 'm' | 's' | 'xl' | 'xs' | 'xxl'
+  /** weight - The font weight.*/
   weight?: 'bold' | 'medium' | 'regular' | 'semi-bold'
 } & ComponentPropsWithoutRef<T>
 
+/**
+ * Typography component for rendering text with various styles.
+ */
 export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
   const {
     as: Component = 'p',
