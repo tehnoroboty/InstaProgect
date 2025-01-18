@@ -13,6 +13,9 @@ type Story = StoryObj<typeof meta>
 
 export const Primory: Story = {
   args: {
-    error: true,
+    onChangeValue: (value: null | string) => {
+      // eslint-disable-next-line no-console
+      console.log('Recaptcha value changed:', value)
+    },
   },
 }
