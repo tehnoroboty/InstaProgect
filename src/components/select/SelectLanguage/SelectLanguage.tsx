@@ -61,7 +61,7 @@ export const SelectLanguage = ({ ...rest }: Props) => {
             <Select.Group>
               {options.map(item => (
                 <SelectItem key={item.value} value={item.value}>
-                  <div className={styles.itemContent}>
+                  <div className={styles.itemLanguageContent}>
                     {getIconByValue(item.value)}
                     <div className={styles.itemTitle}>{item.valueTitle}</div>
                   </div>
