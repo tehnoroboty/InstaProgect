@@ -12,10 +12,11 @@ import clsx from 'clsx'
 import s from './recaptcha.module.scss'
 
 type Props = {
+  className?: string
   onChangeValue: (value: null | string) => void
 }
 
-export const Recaptcha = ({ onChangeValue }: Props) => {
+export const Recaptcha = ({ className, onChangeValue }: Props) => {
   const [error, setError] = useState<null | string>(null)
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
 
@@ -31,7 +32,7 @@ export const Recaptcha = ({ onChangeValue }: Props) => {
   }
 
   return (
-    <div className={clsx(s.recaptchaWrapper, { [s.error]: error })}>
+    <div className={clsx(s.recaptchaWrapper, className, { [s.error]: error })}>
       <ReCAPTCHA
         hl={'en'}
         onChange={onChangeHandler}
