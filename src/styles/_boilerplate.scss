@@ -24,8 +24,16 @@ option {
   color: inherit;
 }
 
+a{
+  text-decoration: none;
+}
+
 a:visited {
   color: inherit;
+}
+
+a:focus-visible{
+  outline: none;
 }
 
 body {

@@ -63,10 +63,6 @@
     transition: opacity 0.3s ease;
   }
 
-  &:hover:not(:disabled)::after {
-    background-color: var(--dark-300);
-  }
-
   &:active:not(:disabled)::after {
     background-color: var(--dark-100);
   }
@@ -94,6 +90,12 @@
 
   &:checked::before {
     opacity: 1;
+  }
+
+  @media (hover:hover) {
+    &:hover:not(:disabled)::after {
+      background-color: var(--dark-300);
+    }
   }
 }
 

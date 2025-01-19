@@ -12,6 +12,7 @@ import { Typography } from '@/src/components/typography/Typography'
 
 import s from './headerMobile.module.scss'
 
+import { SelectLanguage } from '../../select/SelectLanguage/SelectLanguage'
 import { DropdownMenuMobile } from './dropdown-menu/DropdownMenu'
 
 type Props = {
@@ -29,7 +30,7 @@ export const HeaderMobile = (props: Props) => {
         {title}
       </Typography>
       <div className={s.headerActions}>
-        <select></select>
+        <SelectLanguage />
         {isLoggedIn && <DropdownMenuMobile items={menuDropdown} />}
       </div>
     </div>

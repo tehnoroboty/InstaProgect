@@ -6,8 +6,7 @@
 
   overflow-y: auto;
 
-
-  width: 220px;
+  width: max(220px,20%);
   height: 100vh;
 
   background-color: var(--dark-700);
@@ -21,7 +20,7 @@
   align-items: center;
 
   width: 100%;
-  padding-top: 72px;
+  padding: 72px 0;
 }
 
 .userActions {

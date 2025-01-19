@@ -36,12 +36,8 @@ export const MenuMobile = ({ items }: Props) => {
 
         return (
           <Link href={item.href} key={index} passHref>
-            <Button
-              as={'span'}
-              className={clsx(s.item, { [s.active]: isActive })}
-              variant={'transparent'}
-            >
-              <CurrentIcon className={s.icon} />
+            <Button as={'span'} className={s.item} variant={'transparent'}>
+              <CurrentIcon className={clsx(s.icon, { [s.active]: isActive })} />
             </Button>
           </Link>
         )
