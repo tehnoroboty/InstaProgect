@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { Header } from '@/src/components/header/Header'
-import { boolean } from 'zod'
 
 const meta = {
   argTypes: {

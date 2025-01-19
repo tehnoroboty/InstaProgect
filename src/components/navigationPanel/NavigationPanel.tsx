@@ -1,5 +1,6 @@
+// @flow
 'use client'
-import React from 'react'
+import * as React from 'react'
 
 import {
   Bookmark,
@@ -15,36 +16,20 @@ import {
   PlusSquareOutline,
   SearchOutline,
   TrendingUpOutline,
-} from '@/src/assets/componentsIcons/index'
-import { MenuSection } from '@/src/components/sidebar/menuSection/MenuSection'
-import clsx from 'clsx'
+} from '@/src/assets/componentsIcons'
+import { MenuMobile } from '@/src/components/navigationPanel/menuMobile/MenuMobile'
+import Sidebar from '@/src/components/navigationPanel/sidebar/Sidebar'
+import useMobile from '@/src/hooks/useMobile'
 
-import s from './sidebar.module.scss'
+export const NavigationPanel = () => {
+  const isMobile = useMobile()
 
-const Sidebar = () => {
   return (
-    <aside className={s.sidebar}>
-      <nav className={s.container}>
-        {menuItems.mainActions && (
-          <MenuSection className={s.menuItems} items={menuItems.mainActions} />
-        )}
-        {menuItems.additional && (
-          <MenuSection className={s.menuItems} items={menuItems.additional} />
-        )}
-        {menuItems.usersActions && (
-          <MenuSection
-            className={clsx(s.menuItems, s.userActions)}
-            items={menuItems.usersActions}
-          />
-        )}
-      </nav>
-    </aside>
+    <>{isMobile ? <MenuMobile items={menuItems.mainActions} /> : <Sidebar items={menuItems} />}</>
   )
 }
 
-export default Sidebar
-
-const menuItems: MenuItemsType = {
+export const menuItems: MenuItemsType = {
   additional: [
     { href: '/statistics', icon: TrendingUpOutline, title: 'Statistics' },
     { href: '/favorites', icon: BookmarkOutline, iconActive: Bookmark, title: 'Favorites' },
@@ -66,7 +51,7 @@ const menuItems: MenuItemsType = {
 
 //types
 
-type MenuItemsType = {
+export type MenuItemsType = {
   additional: MenuItemType[]
   mainActions: MenuItemType[]
   usersActions: MenuItemType[]

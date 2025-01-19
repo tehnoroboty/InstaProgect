@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { ItemWrapper } from '@/src/components/itemWrapper/ItemWrapper'
-import { MenuItemType } from '@/src/components/sidebar/Sidebar'
+import { MenuItemType } from '@/src/components/navigationPanel/NavigationPanel'
 
 type Props = {
   className?: string
