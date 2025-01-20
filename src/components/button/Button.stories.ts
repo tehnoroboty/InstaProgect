@@ -51,9 +51,18 @@ export const TransparentButton: Story = {
 
 export const AsLink: Story = {
   args: {
-    variant: 'primary',
-    children: 'Link that looks like a button',
     as: 'a',
+    children: 'Link that looks like a button',
     href: 'https://www.google.ru/?hl=ru',
+    variant: 'primary',
+  },
+}
+
+export const FullWidth: Story = {
+  args: {
+    children: 'Full Width Primary Button',
+    disabled: false,
+    fullWidth: true,
+    variant: 'primary',
   },
 }
