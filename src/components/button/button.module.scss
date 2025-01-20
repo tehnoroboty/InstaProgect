@@ -15,7 +15,7 @@
   transition: all 0.3s ease;
 
   &:focus-visible {
-    outline: 2px solid var(--color-info-500);
+    outline: 2px solid var(--primary-500);
   }
 }
 
@@ -121,4 +121,9 @@ a.transparent:visited {
   &:disabled {
     color: var(--primary-900);
   }
+}
+
+
+.fullWidth {
+  width: 100%;
 }
