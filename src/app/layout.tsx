@@ -1,11 +1,15 @@
 import React from 'react'
 
+import { NavigationPanel } from '@/src/components/navigationPanel/NavigationPanel'
+import { StoreWrapper } from '@/src/store/StoreWrapper'
 import { Metadata } from 'next'
 
 import '../styles/index.scss'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource-variable/inter'
+
+import { Header } from '../components/header/Header'
 
 export const metadata: Metadata = {
   icons: {
@@ -24,7 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={'en'}>
-      <body>{children}</body>
+      <body>
+        <StoreWrapper>
+          <Header title={'Momenttify'} />
+          <main>{children}</main>
+        </StoreWrapper>
+      </body>
     </html>
   )
 }
