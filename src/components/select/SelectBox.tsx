@@ -25,49 +25,65 @@ type Props = {
   /**
    * The text that is displayed if nothing is selected.
    */
-  placeholder: string
+  placeholder?: string
   /**
-   * The size of the select. It can be 'large', 'medium' or 'small'. Affects the width of the select.
+   * The size of the select. It can be 'large = 358px', 'medium = 330px' or 'small = 234px'. Affects the width of the select.
    */
   size?: 'large' | 'medium' | 'small'
 } & ComponentPropsWithoutRef<'button'>
 
 /** Ui kit SelectBox component */
-export const SelectBox = ({ label, options, placeholder = 'Select', size, ...rest }: Props) => {
-  return (
-    <Select.Root>
-      <Select.Group>
-        {label && <Select.Label className={styles.label}>{label}</Select.Label>}
-        <Select.Trigger
-          className={clsx(styles.trigger, size && styles[size], label && styles.triggerLabel)}
-          {...rest}
-          aria-label={placeholder}
-        >
-          <Select.Value placeholder={placeholder} />
-          <Select.Icon asChild>
-            <Arrow className={styles.icon} />
-          </Select.Icon>
-        </Select.Trigger>
-      </Select.Group>
+export const SelectBox = ({
+  className,
+  label,
+  options,
+  placeholder = options.length > 0 ? options[0].value : 'Select',
+  size,
+  ...rest
+}: Props) => {
+  const isPagination = options.every(option => !isNaN(Number(option.value)))
 
-      <Select.Portal>
-        <Select.Content
-          avoidCollisions
-          className={styles.content}
-          position={'popper'}
-          sideOffset={-1}
-        >
-          <Select.Viewport>
-            <Select.Group>
-              {options.map(item => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.valueTitle}
-                </SelectItem>
-              ))}
-            </Select.Group>
-          </Select.Viewport>
-        </Select.Content>
-      </Select.Portal>
-    </Select.Root>
+  const renderOptions = (options: Options[]) =>
+    options.map(item => (
+      <SelectItem isPagination={isPagination} key={item.value} value={item.value}>
+        {item.valueTitle}
+      </SelectItem>
+    ))
+
+  return (
+    <div className={clsx(size && styles[size], className)}>
+      <Select.Root>
+        <Select.Group>
+          {label && <Select.Label className={styles.label}>{label}</Select.Label>}
+          <Select.Trigger
+            className={clsx(
+              styles.trigger,
+              label && styles.triggerLabel,
+              isPagination && styles.numbers
+            )}
+            {...rest}
+            aria-label={placeholder}
+          >
+            <Select.Value placeholder={placeholder} />
+            <Select.Icon asChild>
+              <Arrow className={clsx(styles.icon, isPagination && styles.iconSmall)} />
+            </Select.Icon>
+          </Select.Trigger>
+        </Select.Group>
+
+        <Select.Portal>
+          <Select.Content
+            avoidCollisions
+            className={styles.content}
+            position={'popper'}
+            sideOffset={-1}
+          >
+            <Select.Viewport>
+              <Select.Group>{renderOptions(options)}</Select.Group>
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
+    </div>
   )
 }

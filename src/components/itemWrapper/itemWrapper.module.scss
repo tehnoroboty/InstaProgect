@@ -1,19 +1,9 @@
-a {
-  all: unset;
-}
 
-.itemTitle {
-  color: var(--light-100);
-}
-
-
-.icon {
+.itemTitle,.icon {
   color: var(--light-100);
 }
 
 .item {
-  cursor: pointer;
-
   display: flex;
   gap: 12px;
   align-items: center;
@@ -21,24 +11,23 @@ a {
   padding: 5px 0;
 
   color: var(--light-100);
-  text-decoration: none;
-
-  background-color: transparent;
-  border: none;
-
-  &:hover .itemTitle,
-  &:hover .icon {
-    color: var(--primary-100);
-  }
 
   &:active .itemTitle,
   &:active .icon {
     color: var(--primary-500);
   }
 
-  &:focus-visible {
-    border: 1px solid var(--primary-700);
+  &:focus-visible{
+    outline: 1px solid var(--primary-500);
   }
+
+@media (hover:hover) {
+  &:hover .itemTitle,
+  &:hover .icon {
+    color: var(--primary-100);
+  }
+}
+
 }
 
 .active {

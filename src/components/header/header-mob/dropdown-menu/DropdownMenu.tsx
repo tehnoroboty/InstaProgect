@@ -9,12 +9,17 @@ import {
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons/index'
 import { ItemWrapper } from '@/src/components/itemWrapper/ItemWrapper'
+import { MenuItemType } from '@/src/components/navigationPanel/NavigationPanel'
 import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
 
 import s from './dropdownMenu.module.scss'
 
-export const DropdownMenuMobile = () => {
+type Props = {
+  items: MenuItemType[]
+}
+
+export const DropdownMenuMobile = ({ items }: Props) => {
   const [open, setOpen] = useState(false)
 
   const handleOpenChange = (open: boolean) => {
@@ -23,7 +28,7 @@ export const DropdownMenuMobile = () => {
 
   return (
     <DropdownMenuMob.Root onOpenChange={handleOpenChange}>
-      <DropdownMenuMob.Trigger asChild>
+      <DropdownMenuMob.Trigger asChild className={s.trigger}>
         <button aria-label={'Customise options'} className={s.iconButton} type={'button'}>
           <MoreHorizontalOutline
             className={clsx(s.icon, { [s.iconActive]: open })}
@@ -35,18 +40,13 @@ export const DropdownMenuMobile = () => {
 
       <DropdownMenuMob.Portal>
         <DropdownMenuMob.Content align={'end'} className={s.content} sideOffset={7}>
-          <DropdownMenuMob.Item>
-            <ItemWrapper Icon={SettingsOutline} href={''} title={'Profile Settings'} />
-          </DropdownMenuMob.Item>
-          <DropdownMenuMob.Item>
-            <ItemWrapper Icon={TrendingUpOutline} href={''} title={'Statistics'} />
-          </DropdownMenuMob.Item>
-          <DropdownMenuMob.Item>
-            <ItemWrapper Icon={BookmarkOutline} href={''} title={'Favorites'} />
-          </DropdownMenuMob.Item>
-          <DropdownMenuMob.Item>
-            <ItemWrapper Icon={LogOutOutline} href={''} onClick={() => {}} title={'Log Out'} />
-          </DropdownMenuMob.Item>
+          {items.map((item: MenuItemType, index) =>
+            item.href ? (
+              <ItemWrapper Icon={item.icon} href={item.href} key={index} title={item.title} />
+            ) : (
+              <ItemWrapper Icon={item.icon} key={index} onClick={() => {}} title={item.title} />
+            )
+          )}
         </DropdownMenuMob.Content>
       </DropdownMenuMob.Portal>
     </DropdownMenuMob.Root>

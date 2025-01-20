@@ -48,3 +48,13 @@ export const IsDisabled: Story = {
     placeholder: 'Value',
   },
 }
+
+export const isPagination: Story = {
+  args: {
+    options: [
+      { value: '10', valueTitle: '10' },
+      { value: '20', valueTitle: '20' },
+      { value: '30', valueTitle: '30' },
+    ],
+  },
+}

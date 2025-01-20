@@ -1,77 +1,48 @@
 // @flow
 'use client'
 import * as React from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+/* eslint-disable import/no-named-as-default */
+import ReCAPTCHA from 'react-google-recaptcha'
 
-import Recaptchalogo from '@/src/assets/componentsIcons/Recaptchalogo'
 import { Typography } from '@/src/components/typography/Typography'
+import { getSiteKey } from '@/src/utils/recaptchaGetKey'
 import clsx from 'clsx'
 
 import s from './recaptcha.module.scss'
 
-type RecaptchaType = 'error' | 'loading' | 'unchecked' | 'verified'
-type ErrorType = 'expired' | 'notVerified' | null
+type Props = {
+  className?: string
+  onChangeValue: (value: null | string) => void
+}
 
-export const Recaptcha = () => {
-  const [status, setStatus] = useState<RecaptchaType>('unchecked')
-  const [errorType, setErrorType] = useState<ErrorType>(null)
+export const Recaptcha = ({ className, onChangeValue }: Props) => {
+  const [error, setError] = useState<null | string>(null)
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null)
 
-  const onChangeHendler = () => {
-    setStatus('loading')
-    setTimeout(() => setStatus('verified'), 2000)
-  }
+  const siteKey = getSiteKey()
 
-  const renderStatus = () => {
-    switch (status) {
-      case 'unchecked':
-      case 'error':
-        return (
-          <input
-            className={s.input}
-            id={'recaptcha'}
-            onChange={onChangeHendler}
-            type={'checkbox'}
-          />
-        )
-      case 'loading':
-        return (
-          <div className={s.loadingContainer}>
-            <div className={s.loaderCircle}></div>
-          </div>
-        )
-      case 'verified':
-        return <div className={s.greenCheck}></div>
-      default:
-        return null
+  const onChangeHandler = (value: null | string) => {
+    if (!value) {
+      setError('Please verify that you are not a robot')
+    } else {
+      setError(null)
     }
+    onChangeValue(value)
   }
 
   return (
-    <div className={clsx({ [s.error]: status === 'error' })}>
-      <div className={s.container}>
-        <div className={s.checkbox}>
-          {status === 'error' && errorType === 'expired' && (
-            <div className={s.errorTextBox}>
-              <Typography as={'span'} className={s.textError} option={'small_text'}>
-                Verifiction expired. Check the checkbox again.
-              </Typography>
-            </div>
-          )}
-          {renderStatus()}
-          <Typography
-            as={'label'}
-            className={s.label}
-            htmlFor={'recaptcha'}
-            option={'semi-bold_small_text'}
-          >
-            I’m not a robot
-          </Typography>
-        </div>
-        <Recaptchalogo height={60} viewBox={'-2 0 24 24'} width={60} />
-      </div>
-      {status === 'error' && errorType === 'notVerified' && (
+    <div className={clsx(s.recaptchaWrapper, className, { [s.error]: error })}>
+      <ReCAPTCHA
+        hl={'en'}
+        onChange={onChangeHandler}
+        ref={recaptchaRef}
+        sitekey={siteKey}
+        theme={'dark'}
+      />
+      {error && (
         <Typography as={'span'} className={s.textError} option={'small_text'}>
-          Please verify that you are not a robot
+          {error}
         </Typography>
       )}
     </div>

@@ -4,6 +4,7 @@ import { RadioBtn } from './RadioBtn'
 
 export default {
   component: RadioBtn,
+  tags: ['autodocs'],
   title: 'Components/RadioBtn',
 }
 

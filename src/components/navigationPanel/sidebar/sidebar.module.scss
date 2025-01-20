@@ -1,10 +1,12 @@
 .sidebar {
   position: fixed;
   z-index: 999;
-  top: 0;
+  top: 60px;
   left: 0;
 
-  width: 220px;
+  overflow-y: auto;
+
+  width: max(220px,20%);
   height: 100vh;
 
   background-color: var(--dark-700);
@@ -18,7 +20,7 @@
   align-items: center;
 
   width: 100%;
-  padding-top: 72px;
+  padding: 72px 0;
 }
 
 .userActions {

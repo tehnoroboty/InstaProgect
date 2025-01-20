@@ -113,9 +113,7 @@ export const Alerts = ({
         </Typography>
       </div>
       {closable && (
-        <Button className={s.close} onClick={closeAlerts} variant={'transparent'}>
-          <span></span>
-        </Button>
+        <Button className={s.close} onClick={closeAlerts} variant={'transparent'}></Button>
       )}
     </div>
   )
