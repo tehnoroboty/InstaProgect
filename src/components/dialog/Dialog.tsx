@@ -7,13 +7,10 @@ import clsx from 'clsx'
 
 import s from './dialog.module.scss'
 
-type DialogSize = 'lg' | 'md' | 'sm'
-
 export type DialogProps = {
   modalTitle: string
   onClose: () => void
   open: boolean
-  size?: DialogSize
 } & ComponentPropsWithoutRef<'div'>
 
 export const Dialog = ({
@@ -22,15 +19,13 @@ export const Dialog = ({
   modalTitle,
   onClose,
   open,
-  size = 'md',
   ...rest
 }: DialogProps) => {
   return (
     <Root onOpenChange={onClose} open={open} {...rest}>
-      <div className={s.Test}></div>
       <Portal>
         <Overlay className={s.overlay} />
-        <Content className={clsx(s.content, s[size], className)}>
+        <Content className={clsx(s.content, className)}>
           <Title asChild className={s.title}>
             <Typography as={'h1'} option={'h1'}>
               {modalTitle}
@@ -39,8 +34,8 @@ export const Dialog = ({
           <hr className={s.lineHr} />
           {children}
           <Close asChild>
-            <button aria-label={'Close'} className={s.IconButton}>
-              <CloseOutline className={clsx(s.icon)} />
+            <button aria-label={'Close'} className={s.IconButton} type={'button'}>
+              <CloseOutline className={s.icon} />
             </button>
           </Close>
         </Content>

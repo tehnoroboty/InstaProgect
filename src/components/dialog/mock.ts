@@ -1,43 +1,8 @@
 export const mockData = [
   {
     id: 1,
-    modalTitle: 'Delete Following',
     modalDescription: 'Do you really want to delete a Following “URLProfiele”?',
-  },
-  {
-    id: 2,
-    modalTitle: 'Your subscription expires in 7 days',
-    modalDescription: 'Two hours ago',
-  },
-  {
-    id: 3,
-    modalTitle: 'Your next payment will be debited in 3 days',
-    modalDescription: 'Three hours ago',
-  },
-  {
-    id: 4,
-    modalTitle: 'Your subscription expires in 5 days',
-    modalDescription: 'One day ago',
-  },
-  {
-    id: 5,
-    modalTitle: 'Your next payment will be debited in 1 day',
-    modalDescription: 'One hour ago',
-  },
-  {
-    id: 6,
-    modalTitle: 'Your subscription expires in 7 days',
-    modalDescription: 'Two hours ago',
-  },
-  {
-    id: 7,
-    modalTitle: 'Your next payment will be debited in 3 days',
-    modalDescription: 'Three hours ago',
-  },
-  {
-    id: 8,
-    modalTitle: 'Your subscription expires in 5 days',
-    modalDescription: 'One day ago',
+    modalTitle: 'Delete Following',
   },
 ]
 export const mockText =
