@@ -11,5 +11,5 @@ export const initializeStore = () => {
 }
 
 type StoreType = ReturnType<typeof initializeStore>
-export type RootState = StoreType['getState']
+export type RootState = ReturnType<StoreType['getState']>
 export type AppDispatch = StoreType['dispatch']
