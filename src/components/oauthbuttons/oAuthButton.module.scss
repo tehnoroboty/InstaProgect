@@ -2,13 +2,7 @@
   display: flex;
 }
 
-.gitHub {
-  & path {
-    fill: #fff;
-  }
-}
-
-button {
+.button {
   background-color: transparent;
   padding: 6px;
   margin: 0;
@@ -19,8 +13,10 @@ button {
   justify-content: center;
   align-items: center;
 
-  &:hover svg {
-    opacity: 0.8;
+  @media (hover: hover) {
+    &:hover svg {
+      opacity: 0.8;
+    }
   }
 
   &:focus-visible {

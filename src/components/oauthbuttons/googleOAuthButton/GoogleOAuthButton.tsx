@@ -1,0 +1,30 @@
+'use client'
+
+import { ComponentPropsWithoutRef } from 'react'
+
+import Google from '@/src/assets/componentsIcons/GoogleSvgrepoCom1'
+
+import { getClientId } from '@/src/utils/googleClientId'
+
+type Props = {
+  className?: string
+} & ComponentPropsWithoutRef<'button'>
+
+export const GoogleOAuthButton = (props: Props) => {
+  const { className } = props
+
+  const login = () => {
+    const clientId = getClientId()
+    const REDIRECT_URL = 'http://localhost:3000/'
+    const scope = 'email profile'
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${scope}`
+
+    window.location.assign(authUrl)
+  }
+
+  return (
+    <button className={className} onClick={login} type={'button'}>
+      <Google height={36} viewBox={'0 0 24 24'} width={36} />
+    </button>
+  )
+}
