@@ -1,0 +1,20 @@
+export type PasswordRecoveryType = {
+  baseUrl: string
+  email: string
+  recaptcha: string
+}
+export type CreateNewPasswordRecoveryType = {
+  newPassword: string
+  recoveryCode: string
+}
+
+export type ErrorDataType = {
+  error: string
+  messages: [{ field: string; message: string }]
+  statusCode: number
+}
+
+export type CustomerError = {
+  data: ErrorDataType
+  status: number
+}
