@@ -13,9 +13,8 @@ type Props = {
 export const GitHubOAuthButton = (props: Props) => {
   const { className } = props
 
-  const login = ()=> {
+  const login = () => {
     window.location.assign('https://inctagram.work/api/v1/auth/github/login')
-    
   }
 
   return (
