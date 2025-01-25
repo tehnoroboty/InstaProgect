@@ -1,3 +1,5 @@
+'use client'
+
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId, useState } from 'react'
 
 import Close from '@/src/assets/componentsIcons/CloseOutline'
