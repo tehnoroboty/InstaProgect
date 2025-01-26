@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent } from 'react'
+import { useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from '@/src/components/button/Button'
@@ -16,6 +16,7 @@ import s from './registration.module.scss'
 
 const schema = z
   .object({
+    checkbox: z.boolean(),
     email: z
       .string()
       .min(1, 'Email is required')
@@ -58,13 +59,17 @@ const schema = z
 type FormType = z.infer<typeof schema>
 
 export default function ForgotPasswordPage() {
+  const ref = useRef<HTMLInputElement>(null)
   const {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
     trigger,
+    watch,
   } = useForm<FormType>({
     defaultValues: {
+      checkbox: false,
       email: '',
       password: '',
       passwordConfirmation: '',
@@ -73,7 +78,27 @@ export default function ForgotPasswordPage() {
     resolver: zodResolver(schema),
   })
 
-  const onSubmit: SubmitHandler<FormType> = data => {}
+  const onChangeHandler = () => {
+    if (ref.current) {
+      const value = ref.current.checked
+
+      setValue('checkbox', value)
+    }
+  }
+
+  const disabledButton =
+    !watch('email') ||
+    !watch('username') ||
+    !watch('password') ||
+    !watch('passwordConfirmation') ||
+    !watch('checkbox') ||
+    Object.keys(errors).length > 0
+
+  const onSubmit: SubmitHandler<FormType> = data => {
+    const { email, password, username } = data
+
+    console.log(data)
+  }
 
   return (
     <div className={s.container}>
@@ -132,8 +157,10 @@ export default function ForgotPasswordPage() {
               </>
             }
             labelProps={{ className: s.label }}
+            onChange={onChangeHandler}
+            ref={ref}
           />
-          <Button fullWidth variant={'primary'}>
+          <Button disabled={disabledButton} fullWidth variant={'primary'}>
             {'Sing Up'}
           </Button>
         </form>
