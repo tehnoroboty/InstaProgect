@@ -73,6 +73,17 @@ body {
     scrollbar-color: var(--light-900) var(--dark-300);
   }
 
+  .main-layout{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    & main{
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+  }
+
   // line-height: ;
   // color: ;
   // background-color:;
