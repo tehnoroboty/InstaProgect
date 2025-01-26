@@ -37,7 +37,7 @@ const schema = z
 
 type FormType = z.infer<typeof schema>
 
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { Dialog } from '@/src/components/dialog/Dialog'
 import { useCreateNewPasswordMutation } from '@/src/store/services/authApi'
@@ -52,10 +52,13 @@ export default function CreateNewPasswordPage() {
   const err = error as CustomerError
   const router = useRouter()
   const {
+    clearErrors,
     formState: { errors },
     handleSubmit,
     register,
     reset,
+    setValue,
+    trigger,
   } = useForm<FormType>({
     defaultValues: {
       newPassword: '',
@@ -64,6 +67,15 @@ export default function CreateNewPasswordPage() {
     mode: 'onSubmit',
     resolver: zodResolver(schema),
   })
+
+  const onChangeNewPassword = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setValue('newPassword', value)
+    if (value) {
+      clearErrors('newPassword')
+    }
+  }
 
   const onSubmit: SubmitHandler<FormType> = data => {
     createNewPassword({
@@ -86,14 +98,17 @@ export default function CreateNewPasswordPage() {
         <Typography as={'h1'} option={'h1'}>
           {'Forgot Password'}
         </Typography>
-        <form className={s.content} onSubmit={handleSubmit(onSubmit)}>
+        <form className={s.content} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={s.inputs}>
             <Input
               label={'New password'}
               placeholder={'сreate new password...'}
               type={'password'}
-              {...register('newPassword')}
+              {...register('newPassword', {
+                onBlur: () => trigger('newPassword'),
+              })}
               error={errors.newPassword && errors.newPassword.message}
+              onChange={onChangeNewPassword}
             />
             <Input
               label={'Password confirmation'}

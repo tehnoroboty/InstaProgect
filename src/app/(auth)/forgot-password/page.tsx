@@ -45,6 +45,7 @@ export default function ForgotPasswordPage() {
     register,
     reset,
     setValue,
+    trigger,
     watch,
   } = useForm<FormType>({
     defaultValues: {
@@ -112,12 +113,14 @@ export default function ForgotPasswordPage() {
         <Typography as={'h1'} option={'h1'}>
           {'Forgot Password'}
         </Typography>
-        <form className={s.content} onSubmit={handleSubmit(onSubmit)}>
+        <form className={s.content} noValidate onSubmit={handleSubmit(onSubmit)}>
           <Input
             label={'Email'}
             placeholder={'Email'}
             type={'email'}
-            {...register('email')}
+            {...register('email', {
+              onBlur: () => trigger('email'),
+            })}
             error={(serverError && serverError) || (errors.email && errors.email.message)}
             onChange={onChangeEmail}
           />
