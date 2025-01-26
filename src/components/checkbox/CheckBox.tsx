@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, ReactNode, forwardRef, useId } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
@@ -6,11 +6,12 @@ import clsx from 'clsx'
 import s from './checkBox.module.scss'
 
 type Props = {
-  label?: string
+  label?: ReactNode
+  labelProps?: ComponentPropsWithoutRef<'label'>
 } & ComponentPropsWithoutRef<'input'>
 
 export const CheckBox = forwardRef<ElementRef<'input'>, Props>(
-  ({ className, disabled = false, label, ...rest }, ref) => {
+  ({ className, disabled = false, label, labelProps, ...rest }, ref) => {
     const id = useId()
 
     return (
@@ -24,7 +25,7 @@ export const CheckBox = forwardRef<ElementRef<'input'>, Props>(
           {...rest}
         />
         {label && (
-          <Typography as={'label'} className={s.label} htmlFor={id}>
+          <Typography as={'label'} className={clsx(s.label, labelProps?.className)} htmlFor={id}>
             {label}
           </Typography>
         )}

@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang={'en'}>
       <body>
         <StoreWrapper>
-          <Header title={'Momenttify'} />
+          <Header isLoggedIn title={'Momenttify'} />
           <main>{children}</main>
         </StoreWrapper>
       </body>
