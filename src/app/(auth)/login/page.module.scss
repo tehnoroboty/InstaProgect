@@ -1,11 +1,15 @@
-.card {
+.wrapper{
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 
-  box-sizing: border-box;
-  max-width: 378px;
-  margin: 100px auto;
+  width: 100%;
+  min-height: calc(100lvh - 60px);
+}
+
+
+.card {
+  margin: 0 auto;
   padding: 24px
 }
 

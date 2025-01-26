@@ -9,7 +9,7 @@ import s from './page.module.scss'
 
 export default function LoginPage() {
   return (
-    <div style={{ color: 'red' }}>
+    <div className={s.wrapper}>
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           Sign In
