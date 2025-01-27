@@ -7,6 +7,7 @@ import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { CheckBox } from '@/src/components/checkbox/CheckBox'
 import { Input } from '@/src/components/input/Input'
+import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -106,8 +107,10 @@ export default function ForgotPasswordPage() {
         <Typography as={'h1'} option={'h1'}>
           {'Sign Up'}
         </Typography>
+        <OAuthButtons className={s.oauthBtns} />
         <form className={s.contentForm} onSubmit={handleSubmit(onSubmit)}>
           <Input
+            className={s.input}
             label={'Username'}
             placeholder={'Username'}
             type={'text'}
