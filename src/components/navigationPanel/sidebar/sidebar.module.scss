@@ -1,14 +1,6 @@
 .sidebar {
-  position: fixed;
-  z-index: 999;
-  top: 60px;
-  left: 0;
-
   overflow-y: auto;
-
   width: max(220px,20%);
-  height: 100vh;
-
   background-color: var(--dark-700);
   border-right: 1px solid var(--dark-300);
 }
