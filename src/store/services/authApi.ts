@@ -27,7 +27,7 @@ export const authApi = createApi({
           }
         },
       }),
-      registration: builder.mutation<any, RegistrationType>({
+      registration: builder.mutation<void, RegistrationType>({
         query: payload => ({
           body: payload,
           method: 'POST',

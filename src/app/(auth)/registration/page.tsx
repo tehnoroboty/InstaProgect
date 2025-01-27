@@ -9,8 +9,10 @@ import { CheckBox } from '@/src/components/checkbox/CheckBox'
 import { Input } from '@/src/components/input/Input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
+import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
 import s from './registration.module.scss'
@@ -65,6 +67,7 @@ export default function RegistrationPage() {
     formState: { errors },
     handleSubmit,
     register,
+    reset,
     setValue,
     trigger,
     watch,
@@ -95,10 +98,27 @@ export default function RegistrationPage() {
     !watch('checkbox') ||
     Object.keys(errors).length > 0
 
-  const onSubmit: SubmitHandler<FormType> = data => {
-    const { email, password, username } = data
+  const [registration, { error, isLoading }] = useRegistrationMutation()
+  const router = useRouter()
 
-    console.log(data)
+  const onSubmit: SubmitHandler<FormType> = async data => {
+    //const { email, password, username: userName } = data
+
+    try {
+      const response = await registration({
+        baseUrl: 'http://localhost:3000',
+        email: data.email,
+        password: data.password,
+        userName: data.username,
+      }).unwrap()
+
+      // Перенаправляем пользователя на страницу входа
+      router.push('/login')
+    } catch (err) {
+      console.error('Registration failed:', err)
+    } finally {
+      reset()
+    }
   }
 
   return (
