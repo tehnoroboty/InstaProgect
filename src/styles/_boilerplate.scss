@@ -57,8 +57,8 @@ body {
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--dark-300);
     border-radius: 3px;
+    background-color: var(--dark-300);
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -79,7 +79,6 @@ body {
     height: 100vh;
 
     & main{
-      overflow-y: auto;
       flex-grow: 1;
     }
   }
