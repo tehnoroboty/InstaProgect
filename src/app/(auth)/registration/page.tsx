@@ -59,7 +59,7 @@ const schema = z
 
 type FormType = z.infer<typeof schema>
 
-export default function ForgotPasswordPage() {
+export default function RegistrationPage() {
   const ref = useRef<HTMLInputElement>(null)
   const {
     formState: { errors },
