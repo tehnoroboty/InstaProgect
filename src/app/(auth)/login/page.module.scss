@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,13 +26,11 @@
   min-width: 136px;
   height: 36px;
   margin-bottom: 24px;
-
   border: 1px solid #4c4c4c;
 }
 
 .boxInputs {
   width: 100%;
-  margin-bottom: 36px;
 }
 
 .input {
@@ -43,28 +41,29 @@
   }
 }
 
+.forgotPassword {
+  display: flex;
+  justify-content: flex-end;
+
+  padding-right: 0;
+
+  font-size: 14px;
+  color: var(--light-900);
+}
 
 .boxLinks {
   display: flex;
   flex-direction: column;
   width: 100%;
-  text-align: right;
-
-  .forgotPassword {
-    all: unset;
-    margin-bottom: 24px;
-    font-size: 14px;
-    color: var(--light-900);
-  }
-
 }
 
 .singIn {
+  margin-top: 24px;
   margin-bottom: 18px;
 }
 
 .text {
   margin-bottom: 6px;
-text-align: center;
+  text-align: center;
 }
 

@@ -7,16 +7,50 @@ import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { Typography } from '@/src/components/typography/Typography'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import s from './page.module.scss'
 
-type FormValues = {
-  email: string
-  password: string
-}
+const LoginSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Invalid email address')
+    .regex(
+      /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
+      'The email must match the format example@example.com'
+    ),
+  password: z
+    .string()
+    .min(6, 'Min 6 characters long')
+    .max(20, 'Max 20 characters long')
+    .regex(
+      new RegExp(
+        /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
+      ),
+      'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
+    )
+    .nonempty('Enter password'),
+})
+
+type FormValues = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
-  const { handleSubmit, register } = useForm<FormValues>()
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+    setValue,
+    trigger,
+    watch,
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: zodResolver(LoginSchema),
+  })
 
   const onSubmit = handleSubmit(data => {
     console.log(data)
@@ -32,14 +66,21 @@ export default function LoginPage() {
           <div>Google</div>
           <div>Github</div>
         </div>
-        <form onSubmit={onSubmit}>
-          <Input className={s.input} label={'Email'} {...register('email')} />
+        <form className={s.boxInputs} onSubmit={onSubmit}>
+          <Input
+            className={s.input}
+            label={'Email'}
+            placeholder={'Epam@epam.com'}
+            {...register('email')}
+            error={errors.email && errors.email.message}
+          />
           <Input
             className={s.input}
             label={'Password'}
             placeholder={'**********'}
             type={'password'}
             {...register('password')}
+            error={errors.password && errors.password.message}
           />
           <Button as={'a'} className={s.forgotPassword} href={'#'} variant={'transparent'}>
             Forgot Password
@@ -48,28 +89,13 @@ export default function LoginPage() {
             Sing in
           </Button>
         </form>
-        {/*<div className={s.boxInputs}>*/}
-        {/*  <Input className={s.input} label={'Email'} placeholder={'Epam@epam.com'} />*/}
-        {/*  <Input*/}
-        {/*    className={s.input}*/}
-        {/*    label={'Password'}*/}
-        {/*    placeholder={'**********'}*/}
-        {/*    type={'password'}*/}
-        {/*  />*/}
-        {/*</div>*/}
         <div className={s.boxLinks}>
-          {/*<Button as={'a'} className={s.forgotPassword} href={'#'} variant={'transparent'}>*/}
-          {/*  Forgot Password*/}
-          {/*</Button>*/}
-          {/*<Button className={s.singIn} fullWidth variant={'primary'}>*/}
-          {/*  Sing in*/}
-          {/*</Button>*/}
-          {/*<Typography className={s.text} option={'regular_text16'}>*/}
-          {/*  Don’t have an account?*/}
-          {/*</Typography>*/}
-          {/*<Button className={s.singUp} variant={'transparent'}>*/}
-          {/*  {'Sing up'}*/}
-          {/*</Button>*/}
+          <Typography className={s.text} option={'regular_text16'}>
+            Don’t have an account?
+          </Typography>
+          <Button className={s.singUp} variant={'transparent'}>
+            {'Sing up'}
+          </Button>
         </div>
       </Card>
     </div>
