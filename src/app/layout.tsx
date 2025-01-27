@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { NavigationPanel } from '@/src/components/navigationPanel/NavigationPanel'
 import { StoreWrapper } from '@/src/store/StoreWrapper'
 import { Metadata } from 'next'
 
