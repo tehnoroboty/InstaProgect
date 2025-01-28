@@ -1,13 +1,15 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { Alerts } from '@/src/components/alerts/Alerts'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
+import { useLoginMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -18,6 +20,7 @@ const LoginSchema = z.object({
     .string()
     .min(1, 'Email is required')
     .email('Invalid email address')
+    .trim()
     .regex(
       /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
       'The email must match the format example@example.com'
@@ -27,6 +30,7 @@ const LoginSchema = z.object({
     .string()
     .min(6, 'Min 6 characters long')
     .max(20, 'Max 20 characters long')
+    .trim()
     .regex(
       new RegExp(
         /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
@@ -39,6 +43,9 @@ const LoginSchema = z.object({
 type FormValues = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
+  const [login] = useLoginMutation()
+  const [error, setError] = useState<null | string>(null)
+
   const {
     formState: { errors },
     handleSubmit,
@@ -53,6 +60,17 @@ export default function LoginPage() {
 
   const onSubmit = handleSubmit(data => {
     console.log(data)
+    login(data)
+      .unwrap()
+      .then(response => {
+        console.log('then')
+      })
+      .catch((e: any) => {
+        const err = e.data.messages
+
+        setError(err)
+        console.log('err', err)
+      })
   })
 
   return (
@@ -94,6 +112,7 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
+      {error && <Alerts autoClose delay={3000} message={error} type={'error'} />}
     </div>
   )
 }

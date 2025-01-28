@@ -1,3 +1,4 @@
+import { baseApi } from '@/src/store/services/baseApi'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type ExchangeGoogleCodeForTokenResponse = {
@@ -10,11 +11,11 @@ type ArgsPostGoogleOAuth = {
   redirectUrl: string
 }
 
-export const authApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
-  endpoints: builder => {
+//https://inctagram.work/api/v1/auth/login
+export const authApi = baseApi.injectEndpoints({
+  endpoints: build => {
     return {
-      exchangeGoogleCodeForToken: builder.mutation<
+      exchangeGoogleCodeForToken: build.mutation<
         ExchangeGoogleCodeForTokenResponse,
         ArgsPostGoogleOAuth
       >({
@@ -26,9 +27,15 @@ export const authApi = createApi({
           }
         },
       }),
+      login: build.mutation<any, any>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/login',
+        }),
+      }),
     }
   },
-  reducerPath: 'authApi',
 })
 
-export const { useExchangeGoogleCodeForTokenMutation } = authApi
+export const { useExchangeGoogleCodeForTokenMutation, useLoginMutation } = authApi
