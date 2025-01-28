@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from '@/src/components/button/Button'
@@ -12,7 +12,6 @@ import { Typography } from '@/src/components/typography/Typography'
 import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
 import s from './registration.module.scss'
@@ -98,12 +97,11 @@ export default function RegistrationPage() {
     !watch('checkbox') ||
     Object.keys(errors).length > 0
 
-  const [registration, { error, isLoading }] = useRegistrationMutation()
-  const router = useRouter()
+  const [registration, { error, isLoading, isSuccess }] = useRegistrationMutation()
+  const [submittedEmail, setSubmittedEmail] = useState('')
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const onSubmit: SubmitHandler<FormType> = async data => {
-    //const { email, password, username: userName } = data
-
     try {
       const response = await registration({
         baseUrl: 'http://localhost:3000',
@@ -112,8 +110,8 @@ export default function RegistrationPage() {
         userName: data.username,
       }).unwrap()
 
-      // Перенаправляем пользователя на страницу входа
-      router.push('/login')
+      setSubmittedEmail(data.email) // Сохраняем email перед отправкой
+      setShowSuccessMessage(true)
     } catch (err) {
       console.error('Registration failed:', err)
     } finally {
@@ -121,81 +119,100 @@ export default function RegistrationPage() {
     }
   }
 
+  // Функция для закрытия сообщения
+  const handleCloseMessage = () => {
+    setShowSuccessMessage(false)
+  }
+
   return (
     <div className={s.container}>
-      <Card className={s.card}>
-        <Typography as={'h1'} option={'h1'}>
-          {'Sign Up'}
-        </Typography>
-        <OAuthButtons className={s.oauthBtns} />
-        <form className={s.contentForm} onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            className={s.input}
-            label={'Username'}
-            placeholder={'Username'}
-            type={'text'}
-            {...register('username', {
-              onBlur: () => trigger('username'),
-            })}
-            error={errors.username && errors.username.message}
-          />
-          <Input
-            label={'Email'}
-            placeholder={'Email'}
-            type={'email'}
-            {...register('email', {
-              onBlur: () => trigger('email'),
-            })}
-            error={errors.email && errors.email.message}
-          />
-          <Input
-            label={'Password'}
-            placeholder={'сreate new password...'}
-            type={'password'}
-            {...register('password', {
-              onBlur: () => trigger('password'),
-            })}
-            error={errors.password && errors.password.message}
-          />
-          <Input
-            label={'Password confirmation'}
-            placeholder={'confirm your password...'}
-            type={'password'}
-            {...register('passwordConfirmation', {
-              onBlur: () => trigger('passwordConfirmation'),
-            })}
-            error={errors.passwordConfirmation && errors.passwordConfirmation.message}
-          />
-          <CheckBox
-            label={
-              <>
-                {'I agree to the '}
-                <Link className={s.link} href={'/terms-of-service'}>
-                  {' Terms  of  Service '}
-                </Link>
-                {' and '}
-                <Link className={s.link} href={'/privacy-policy'}>
-                  {' Privacy Policy '}
-                </Link>
-              </>
-            }
-            labelProps={{ className: s.label }}
-            onChange={onChangeHandler}
-            ref={ref}
-          />
-          <Button disabled={disabledButton} fullWidth variant={'primary'}>
-            {'Sing Up'}
-          </Button>
-        </form>
-        <div className={s.content}>
-          <Typography as={'span'} className={s.text} option={'regular_text16'}>
-            {'Do you have an account?'}
+      {showSuccessMessage ? (
+        <Card className={s.card}>
+          <Typography as={'h1'} option={'h1'}>
+            Email sent
           </Typography>
-          <Button as={Link} fullWidth href={'/login'} variant={'transparent'}>
-            {'Sing In'}
+          <Typography option={'regular_text16'}>
+            We have sent a link to confirm your email to {submittedEmail}
+          </Typography>
+          <Button onClick={handleCloseMessage} variant={'primary'}>
+            OK
           </Button>
-        </div>
-      </Card>
+        </Card>
+      ) : (
+        <Card className={s.card}>
+          <Typography as={'h1'} option={'h1'}>
+            {'Sign Up'}
+          </Typography>
+          <OAuthButtons className={s.oauthBtns} />
+          <form className={s.contentForm} onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              className={s.input}
+              label={'Username'}
+              placeholder={'Username'}
+              type={'text'}
+              {...register('username', {
+                onBlur: () => trigger('username'),
+              })}
+              error={errors.username && errors.username.message}
+            />
+            <Input
+              label={'Email'}
+              placeholder={'Email'}
+              type={'email'}
+              {...register('email', {
+                onBlur: () => trigger('email'),
+              })}
+              error={errors.email && errors.email.message}
+            />
+            <Input
+              label={'Password'}
+              placeholder={'сreate new password...'}
+              type={'password'}
+              {...register('password', {
+                onBlur: () => trigger('password'),
+              })}
+              error={errors.password && errors.password.message}
+            />
+            <Input
+              label={'Password confirmation'}
+              placeholder={'confirm your password...'}
+              type={'password'}
+              {...register('passwordConfirmation', {
+                onBlur: () => trigger('passwordConfirmation'),
+              })}
+              error={errors.passwordConfirmation && errors.passwordConfirmation.message}
+            />
+            <CheckBox
+              label={
+                <>
+                  {'I agree to the '}
+                  <Link className={s.link} href={'/terms-of-service'}>
+                    {' Terms  of  Service '}
+                  </Link>
+                  {' and '}
+                  <Link className={s.link} href={'/privacy-policy'}>
+                    {' Privacy Policy '}
+                  </Link>
+                </>
+              }
+              labelProps={{ className: s.label }}
+              onChange={onChangeHandler}
+              ref={ref}
+            />
+            <Button disabled={disabledButton} fullWidth variant={'primary'}>
+              {'Sing Up'}
+            </Button>
+          </form>
+          <div className={s.content}>
+            <Typography as={'span'} className={s.text} option={'regular_text16'}>
+              {'Do you have an account?'}
+            </Typography>
+            <Button as={Link} fullWidth href={'/login'} variant={'transparent'}>
+              {'Sing In'}
+            </Button>
+          </div>
+        </Card>
+      )}
     </div>
   )
 }
