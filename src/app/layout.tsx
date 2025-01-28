@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { NavigationPanel } from '@/src/components/navigationPanel/NavigationPanel'
 import { StoreWrapper } from '@/src/store/StoreWrapper'
 import { Metadata } from 'next'
 
@@ -30,8 +29,10 @@ export default function RootLayout({
     <html lang={'en'}>
       <body>
         <StoreWrapper>
-          <Header title={'Momenttify'} />
-          <main>{children}</main>
+          <div className={'main-layout'}>
+            <Header isLoggedIn title={'Momenttify'} />
+            <main>{children}</main>
+          </div>
         </StoreWrapper>
       </body>
     </html>
