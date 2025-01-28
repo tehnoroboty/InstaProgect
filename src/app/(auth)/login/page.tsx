@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
+import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -20,7 +21,8 @@ const LoginSchema = z.object({
     .regex(
       /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
       'The email must match the format example@example.com'
-    ),
+    )
+    .nonempty('Enter email'),
   password: z
     .string()
     .min(6, 'Min 6 characters long')
@@ -41,9 +43,6 @@ export default function LoginPage() {
     formState: { errors },
     handleSubmit,
     register,
-    setValue,
-    trigger,
-    watch,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -62,10 +61,7 @@ export default function LoginPage() {
         <Typography className={s.title} option={'h1'}>
           Sign In
         </Typography>
-        <div className={s.boxButtons}>
-          <div>Google</div>
-          <div>Github</div>
-        </div>
+        <OAuthButtons className={s.boxButtons} />
         <form className={s.boxInputs} onSubmit={onSubmit}>
           <Input
             className={s.input}
