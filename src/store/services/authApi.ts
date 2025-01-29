@@ -34,9 +34,20 @@ export const authApi = createApi({
           url: 'auth/registration',
         }),
       }),
+      registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
+        query: payload => ({
+          body: payload,
+          method: 'POST',
+          url: 'auth/registration-confirmation',
+        }),
+      }),
     }
   },
   reducerPath: 'authApi',
 })
 
-export const { useExchangeGoogleCodeForTokenMutation, useRegistrationMutation } = authApi
+export const {
+  useExchangeGoogleCodeForTokenMutation,
+  useRegistrationConfirmationMutation,
+  useRegistrationMutation,
+} = authApi
