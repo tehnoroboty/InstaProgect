@@ -57,6 +57,7 @@ export default function CreateNewPasswordPage() {
     handleSubmit,
     register,
     reset,
+    setError,
     setValue,
     trigger,
   } = useForm<FormType>({
@@ -77,19 +78,24 @@ export default function CreateNewPasswordPage() {
     }
   }
 
-  const onSubmit: SubmitHandler<FormType> = data => {
-    createNewPassword({
-      newPassword: data.newPassword,
-      recoveryCode: '123456', // узнать как получить
-    })
-      .unwrap()
-      .then(res => {
-        // удалить потом все активные сессии
-        router.push('/login')
-      })
-      .catch(() => {
-        reset()
-      })
+  const onSubmit: SubmitHandler<FormType> = async data => {
+    try {
+      createNewPassword({
+        newPassword: data.newPassword,
+        recoveryCode: '123456', // узнать как получить
+      }).unwrap()
+      // удалить потом все активные сессии
+      router.push('/login')
+    } catch (error) {
+      const typedError = error as { data: { messages: { field: string; message: string }[] } }
+
+      if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
+        setError('newPassword', { message: typedError.data.messages[0].message, type: 'manual' })
+      } else {
+        setError('newPassword', { message: 'Server error', type: 'manual' })
+      }
+      reset()
+    }
   }
 
   return (

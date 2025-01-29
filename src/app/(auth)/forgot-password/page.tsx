@@ -76,28 +76,27 @@ export default function ForgotPasswordPage() {
     }
   }
 
-  const onSubmit: SubmitHandler<FormType> = data => {
-    passwordRecovery({
-      baseUrl: 'http://localhost:3000',
-      email: data.email,
-      recaptcha: data.recaptcha,
-    })
-      .unwrap()
-      .then(() => {
-        setIsModalOpen(true)
-        setServerError(null)
-        clearErrors(['email', 'recaptcha'])
-        setFormSubmit(true)
-      })
-      .catch(error => {
-        const typedError = error as { data: { messages: { field: string; message: string }[] } }
+  const onSubmit: SubmitHandler<FormType> = async data => {
+    try {
+      await passwordRecovery({
+        baseUrl: 'http://localhost:3000',
+        email: data.email,
+        recaptcha: data.recaptcha,
+      }).unwrap()
 
-        if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
-          setServerError(typedError.data.messages[0].message)
-        } else {
-          setServerError("User with this email doesn't exist")
-        }
-      })
+      setIsModalOpen(true)
+      setServerError(null)
+      clearErrors(['email', 'recaptcha'])
+      setFormSubmit(true)
+    } catch (error) {
+      const typedError = error as { data: { messages: { field: string; message: string }[] } }
+
+      if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
+        setServerError(typedError.data.messages[0].message)
+      } else {
+        setServerError("User with this email doesn't exist")
+      }
+    }
   }
 
   const handleResendLink = () => {
