@@ -1,3 +1,4 @@
+import { FormValues } from '@/src/app/(auth)/login/page'
 import { baseApi } from '@/src/store/services/baseApi'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
@@ -27,7 +28,7 @@ export const authApi = baseApi.injectEndpoints({
           }
         },
       }),
-      login: build.mutation<any, any>({
+      login: build.mutation<{ accessToken: string }, FormValues>({
         query: body => ({
           body,
           method: 'POST',

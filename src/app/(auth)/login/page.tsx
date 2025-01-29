@@ -44,7 +44,7 @@ const LoginSchema = z.object({
     .nonempty('Enter password'),
 })
 
-type FormValues = z.infer<typeof LoginSchema>
+export type FormValues = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
   const [login] = useLoginMutation()
@@ -76,10 +76,10 @@ export default function LoginPage() {
         router.push('/home')
       })
       .catch((e: any) => {
-        const err = e.data.messages
+        const err = e
 
-        setError(err)
-        console.log('err', err)
+        console.log(err)
+        // setError(err)
       })
   })
 
