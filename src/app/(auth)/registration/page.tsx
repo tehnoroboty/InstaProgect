@@ -29,6 +29,7 @@ const schema = z
       ),
     password: z
       .string()
+      .nonempty('Enter password')
       .min(6, 'Min 6 characters long')
       .max(20, 'Max 20 characters long')
       .regex(
@@ -36,11 +37,11 @@ const schema = z
           /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
         ),
         'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
-      )
-      .nonempty('Enter password'),
+      ),
     passwordConfirmation: z.string().nonempty('Confirm your password'),
     username: z
       .string()
+      .nonempty('Enter username')
       .min(6, 'Min 6 characters long')
       .max(30, 'Max characters long')
       .nonempty('Enter username')
