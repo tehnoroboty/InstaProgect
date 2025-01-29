@@ -101,21 +101,28 @@ export default function RegistrationPage() {
   const [submittedEmail, setSubmittedEmail] = useState('')
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
-  const onSubmit: SubmitHandler<FormType> = async data => {
+  const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
-      const response = await registration({
+      // Формируем данные для отправки, исключая ненужные поля
+      const registrationData = {
         baseUrl: 'http://localhost:3000',
-        email: data.email,
-        password: data.password,
-        userName: data.username,
-      }).unwrap()
+        email: formData.email,
+        password: formData.password,
+        userName: formData.username,
+      }
 
-      setSubmittedEmail(data.email) // Сохраняем email перед отправкой
+      // Отправляем запрос на сервер
+      await registration(registrationData).unwrap()
+
+      // Очищаем форму
+      reset()
+
+      // Сохраняем email перед отправкой
+      setSubmittedEmail(formData.email)
+
       setShowSuccessMessage(true)
     } catch (err) {
       console.error('Registration failed:', err)
-    } finally {
-      reset()
     }
   }
 
@@ -129,7 +136,7 @@ export default function RegistrationPage() {
       {showSuccessMessage ? (
         <Card className={s.card}>
           <Typography as={'h1'} option={'h1'}>
-            Email sent
+            {'Email sent'}
           </Typography>
           <Typography option={'regular_text16'}>
             We have sent a link to confirm your email to {submittedEmail}
