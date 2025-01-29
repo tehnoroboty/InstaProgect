@@ -28,15 +28,15 @@ export const authApi = createApi({
         },
       }),
       registration: builder.mutation<void, RegistrationType>({
-        query: payload => ({
-          body: payload,
+        query: body => ({
+          body,
           method: 'POST',
           url: 'auth/registration',
         }),
       }),
       registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
-        query: payload => ({
-          body: payload,
+        query: body => ({
+          body,
           method: 'POST',
           url: 'auth/registration-confirmation',
         }),
