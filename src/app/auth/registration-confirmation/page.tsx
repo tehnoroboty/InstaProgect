@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import s from './email-confirmed.module.scss'
 
-export default function EmailConfirmedPage() {
+export default function RegistrationСonfirmationPage() {
   return (
     <div className={s.container}>
       <Typography as={'h1'} option={'h1'}>
