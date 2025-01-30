@@ -105,7 +105,6 @@ export default function RegistrationPage() {
 
   const [registration] = useRegistrationMutation()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const [currentEmail, setCurrentEmail] = useState('')
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -119,11 +118,6 @@ export default function RegistrationPage() {
 
       // Отправляем запрос на сервер
       await registration(registrationData).unwrap()
-
-      // Сохраняем email перед сбросом
-      setCurrentEmail(formData.email)
-      // Очищаем форму
-      reset()
 
       setShowSuccessMessage(true)
     } catch (err) {
@@ -143,6 +137,7 @@ export default function RegistrationPage() {
   // Функция для закрытия сообщения
   const handleCloseMessage = () => {
     setShowSuccessMessage(false)
+    reset()
   }
 
   return (
@@ -157,7 +152,7 @@ export default function RegistrationPage() {
           </div>
           <div className={s.cardTextContainer}>
             <Typography className={s.cardText} option={'regular_text16'}>
-              {`We have sent a link to confirm your email to ${currentEmail}`}
+              {`We have sent a link to confirm your email to ${getValues('email')}`}
             </Typography>
             <Button className={s.cardButton} onClick={handleCloseMessage} variant={'primary'}>
               OK
