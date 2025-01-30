@@ -14,8 +14,7 @@ export const GoogleOAuthButton = (props: Props) => {
 
   const login = () => {
     const clientId = getClientId()
-    const baseUrl = window.location.origin
-    const REDIRECT_URL = `${baseUrl}/google`
+    const REDIRECT_URL = `http://localhost:3000/google`
     const scope = 'email profile'
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${scope}`
 
