@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { ApiError } from '@/src/app/auth/registration-confirmation/page'
+import Close from '@/src/assets/componentsIcons/CloseOutline'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { CheckBox } from '@/src/components/checkbox/CheckBox'
@@ -12,6 +13,7 @@ import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
 import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { z } from 'zod'
 
@@ -103,6 +105,7 @@ export default function RegistrationPage() {
 
   const [registration] = useRegistrationMutation()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [currentEmail, setCurrentEmail] = useState('')
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -117,6 +120,8 @@ export default function RegistrationPage() {
       // Отправляем запрос на сервер
       await registration(registrationData).unwrap()
 
+      // Сохраняем email перед сбросом
+      setCurrentEmail(formData.email)
       // Очищаем форму
       reset()
 
@@ -143,16 +148,21 @@ export default function RegistrationPage() {
   return (
     <div className={s.container}>
       {showSuccessMessage ? (
-        <Card className={s.card}>
-          <Typography as={'h1'} option={'h1'}>
-            {'Email sent'}
-          </Typography>
-          <Typography option={'regular_text16'}>
-            {`We have sent a link to confirm your email to ${getValues('email')}`}
-          </Typography>
-          <Button onClick={handleCloseMessage} variant={'primary'}>
-            OK
-          </Button>
+        <Card className={clsx(s.card, s.cardEmailSent)}>
+          <div className={s.cardTitle}>
+            <Typography as={'h1'} option={'h1'}>
+              {'Email sent'}
+            </Typography>
+            <Close className={s.iconClose} onClick={handleCloseMessage} />
+          </div>
+          <div className={s.cardTextContainer}>
+            <Typography className={s.cardText} option={'regular_text16'}>
+              {`We have sent a link to confirm your email to ${currentEmail}`}
+            </Typography>
+            <Button className={s.cardButton} onClick={handleCloseMessage} variant={'primary'}>
+              OK
+            </Button>
+          </div>
         </Card>
       ) : (
         <Card className={s.card}>
