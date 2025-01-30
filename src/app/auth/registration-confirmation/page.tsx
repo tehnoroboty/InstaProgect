@@ -1,18 +1,35 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
 import { useRegistrationConfirmationMutation } from '@/src/store/services/authApi'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './email-confirmed.module.scss'
 
+type ApiError = {
+  data: ErrorResponse
+  status: number
+}
+
+type ErrorResponse = {
+  error: string
+  messages: [
+    {
+      field: string
+      message: string
+    },
+  ]
+  statusCode: number
+}
+
 export default function RegistrationСonfirmationPage() {
   const searchParams = useSearchParams()
-  const [confirmRegistration] = useRegistrationConfirmationMutation()
+  const router = useRouter()
+  const [confirmRegistration, { isLoading, isSuccess }] = useRegistrationConfirmationMutation()
 
   useEffect(() => {
     const confirmEmail = async () => {
@@ -20,9 +37,16 @@ export default function RegistrationСonfirmationPage() {
         // Получаем параметры через useSearchParams
         const code = searchParams.get('code') as string
 
-        console.log(code)
         await confirmRegistration({ confirmationCode: code }).unwrap()
-      } catch (err) {}
+      } catch (err) {
+        const error = err as ApiError
+        const errorMessage = error.data?.messages[0]?.message
+
+        // Проверяем сообщение об ошибке и выполняем перенаправление при необходимости
+        if (errorMessage === 'Confirmation code is invalid') {
+          router.push('/registration-email-resending')
+        }
+      }
     }
 
     confirmEmail()
