@@ -20,7 +20,7 @@ const GooglePage = () => {
       router.push('/login')
     } else {
       //если код пришел делаем POST запрос за токеном
-      exchangeGoogleCodeForToken({ code, redirectUrl: '/home' })
+      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/home' })
 
       //сохроняем токен
     }
