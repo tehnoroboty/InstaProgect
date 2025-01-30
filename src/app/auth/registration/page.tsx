@@ -65,6 +65,7 @@ export default function RegistrationPage() {
   const ref = useRef<HTMLInputElement>(null)
   const {
     formState: { errors },
+    getValues,
     handleSubmit,
     register,
     reset,
@@ -98,8 +99,7 @@ export default function RegistrationPage() {
     !watch('checkbox') ||
     Object.keys(errors).length > 0
 
-  const [registration, { error, isLoading, isSuccess }] = useRegistrationMutation()
-  const [submittedEmail, setSubmittedEmail] = useState('')
+  const [registration] = useRegistrationMutation()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
@@ -117,9 +117,6 @@ export default function RegistrationPage() {
 
       // Очищаем форму
       reset()
-
-      // Сохраняем email перед отправкой
-      setSubmittedEmail(formData.email)
 
       setShowSuccessMessage(true)
     } catch (err) {
@@ -140,7 +137,7 @@ export default function RegistrationPage() {
             {'Email sent'}
           </Typography>
           <Typography option={'regular_text16'}>
-            We have sent a link to confirm your email to {submittedEmail}
+            {`We have sent a link to confirm your email to ${getValues('email')}`}
           </Typography>
           <Button onClick={handleCloseMessage} variant={'primary'}>
             OK
