@@ -10,12 +10,12 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './email-confirmed.module.scss'
 
-type ApiError = {
+export type ApiError = {
   data: ErrorResponse
   status: number
 }
 
-type ErrorResponse = {
+export type ErrorResponse = {
   error: string
   messages: [
     {

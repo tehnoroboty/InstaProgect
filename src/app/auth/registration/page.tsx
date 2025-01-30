@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { ApiError } from '@/src/app/auth/registration-confirmation/page'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { CheckBox } from '@/src/components/checkbox/CheckBox'
@@ -69,6 +70,7 @@ export default function RegistrationPage() {
     handleSubmit,
     register,
     reset,
+    setError,
     setValue,
     trigger,
     watch,
@@ -120,6 +122,15 @@ export default function RegistrationPage() {
 
       setShowSuccessMessage(true)
     } catch (err) {
+      const error = err as ApiError
+      const errorMessage = error.data?.messages[0]
+
+      if (errorMessage?.field === 'userName') {
+        setError('username', { message: errorMessage.message, type: 'manual' })
+      }
+      if (errorMessage?.field === 'email') {
+        setError('email', { message: errorMessage.message, type: 'manual' })
+      }
       console.error('Registration failed:', err)
     }
   }
@@ -158,7 +169,7 @@ export default function RegistrationPage() {
               {...register('username', {
                 onBlur: () => trigger('username'),
               })}
-              error={errors.username && errors.username.message}
+              error={errors.username?.message}
             />
             <Input
               label={'Email'}
@@ -167,7 +178,7 @@ export default function RegistrationPage() {
               {...register('email', {
                 onBlur: () => trigger('email'),
               })}
-              error={errors.email && errors.email.message}
+              error={errors.email?.message}
             />
             <Input
               label={'Password'}
