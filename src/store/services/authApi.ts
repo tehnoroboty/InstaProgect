@@ -1,4 +1,9 @@
-import { CreateNewPasswordRecoveryType, PasswordRecoveryType } from '@/src/store/services/types'
+import {
+  CreateNewPasswordRecoveryType,
+  PasswordRecoveryType,
+  RecoveryCodeResponse,
+  RecoveryCodeType,
+} from '@/src/store/services/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -18,8 +23,19 @@ export const authApi = createApi({
         url: 'auth/password-recovery',
       }),
     }),
+    recoveryCode: builder.mutation<RecoveryCodeResponse, RecoveryCodeType>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: 'auth/check-recovery-code',
+      }),
+    }),
   }),
   reducerPath: 'authApi',
 })
 
-export const { useCreateNewPasswordMutation, usePasswordRecoveryMutation } = authApi
+export const {
+  useCreateNewPasswordMutation,
+  usePasswordRecoveryMutation,
+  useRecoveryCodeMutation,
+} = authApi

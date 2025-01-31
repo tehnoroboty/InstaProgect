@@ -40,17 +40,38 @@ type FormType = z.infer<typeof schema>
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { Dialog } from '@/src/components/dialog/Dialog'
-import { useCreateNewPasswordMutation } from '@/src/store/services/authApi'
+import { useCreateNewPasswordMutation, useRecoveryCodeMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './createNewPasswordPage.module.scss'
 
 export default function CreateNewPasswordPage() {
-  const [createNewPassword, { error, isError }] = useCreateNewPasswordMutation()
+  const [createNewPassword, { error, isError, isLoading, isSuccess }] =
+    useCreateNewPasswordMutation()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
   const err = error as CustomerError
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [recoveryCode] = useRecoveryCodeMutation()
+  const code = searchParams.get('code') as string
+
+  useEffect(() => {
+    const confirmCode = async () => {
+      try {
+        await recoveryCode({ recoveryCode: code }).unwrap()
+      } catch (err) {
+        const error = err as CustomerError
+        const errorMessage = error.data?.messages[0]
+
+        if (errorMessage?.field === 'code') {
+          router.push('/auth/forgot-password')
+        }
+      }
+    }
+
+    confirmCode()
+  }, [searchParams])
   const {
     clearErrors,
     formState: { errors },
@@ -80,12 +101,13 @@ export default function CreateNewPasswordPage() {
 
   const onSubmit: SubmitHandler<FormType> = async data => {
     try {
-      createNewPassword({
+      const res = createNewPassword({
         newPassword: data.newPassword,
-        recoveryCode: '123456', // узнать как получить
+        recoveryCode: code,
       }).unwrap()
+
+      reset()
       // удалить потом все активные сессии
-      router.push('/login')
     } catch (error) {
       const typedError = error as { data: { messages: { field: string; message: string }[] } }
 
@@ -95,6 +117,13 @@ export default function CreateNewPasswordPage() {
         setError('newPassword', { message: 'Server error', type: 'manual' })
       }
       reset()
+    }
+  }
+
+  const onCloseModalHandler = () => {
+    setIsModalOpen(false)
+    if (isSuccess) {
+      router.push('/auth/login')
     }
   }
 
@@ -127,32 +156,31 @@ export default function CreateNewPasswordPage() {
           <Typography as={'span'} className={s.text}>
             {'Your password must be between 6 and 20 characters'}
           </Typography>
-          <Button fullWidth variant={'primary'}>
+          <Button disabled={isLoading} fullWidth variant={'primary'}>
             {'Create new password'}
           </Button>
         </form>
       </Card>
-      {isError && (
-        <Dialog
-          className={s.modal}
-          modalTitle={`Error ${err.status}`}
-          onClose={() => setIsModalOpen(false)}
-          open={isModalOpen}
-        >
-          <div className={s.contentModal}>
-            <Typography as={'span'} option={'regular_text16'}>
-              {err.data.messages[0].message}
-            </Typography>
-            <Button
-              className={s.btnModal}
-              onClick={() => setIsModalOpen(false)}
-              variant={'primary'}
-            >
-              {'OK'}
-            </Button>
-          </div>
-        </Dialog>
-      )}
+      {isError ||
+        (isSuccess && (
+          <Dialog
+            className={s.modal}
+            modalTitle={isError ? `Error ${err.status}` : 'Password Successfully Changed'}
+            onClose={onCloseModalHandler}
+            open={isModalOpen}
+          >
+            <div className={s.contentModal}>
+              <Typography as={'span'} option={'regular_text16'}>
+                {isError
+                  ? err.data.messages[0].message
+                  : 'Your password has been successfully updated. You can now log in with your new password.'}
+              </Typography>
+              <Button className={s.btnModal} onClick={onCloseModalHandler} variant={'primary'}>
+                {'OK'}
+              </Button>
+            </div>
+          </Dialog>
+        ))}
     </div>
   )
 }

@@ -33,7 +33,7 @@ type FormType = z.infer<typeof schema>
 export default function ForgotPasswordPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [formSubmit, setFormSubmit] = useState<boolean>(false)
-  const [passwordRecovery] = usePasswordRecoveryMutation()
+  const [passwordRecovery, { isLoading }] = usePasswordRecoveryMutation()
   const [recaptchaError, setRecaptchaError] = useState<null | string>(null)
   const [serverError, setServerError] = useState<null | string>(null)
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
@@ -104,7 +104,8 @@ export default function ForgotPasswordPage() {
     setFormSubmit(false)
   }
 
-  const isButtonDisabled = !watch('email') || !watch('recaptcha') || recaptchaError !== null
+  const isButtonDisabled =
+    !watch('email') || !watch('recaptcha') || recaptchaError !== null || isLoading
 
   return (
     <div className={s.container}>

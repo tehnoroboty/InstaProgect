@@ -18,3 +18,11 @@ export type CustomerError = {
   data: ErrorDataType
   status: number
 }
+
+export type RecoveryCodeType = {
+  recoveryCode: string
+}
+
+export type RecoveryCodeResponse = {
+  email: string
+}
