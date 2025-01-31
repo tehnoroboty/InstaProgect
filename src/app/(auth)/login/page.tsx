@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Alerts } from '@/src/components/alerts/Alerts'
 import { Button } from '@/src/components/button/Button'
@@ -10,9 +10,8 @@ import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
-import { AppDispatch } from '@/src/store/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
@@ -52,8 +51,13 @@ export default function LoginPage() {
   const router = useRouter()
   const dispatch = useDispatch()
 
+  const isApiError = (error: unknown): error is { data: { messages: string }; status: number } => {
+    return typeof error === 'object' && error != null && 'status' in error
+  }
+
   const {
     formState: { errors },
+    getValues,
     handleSubmit,
     register,
   } = useForm<FormValues>({
@@ -65,21 +69,28 @@ export default function LoginPage() {
   })
 
   const onSubmit = handleSubmit(data => {
-    console.log(data)
     login(data)
       .unwrap()
       .then(res => {
-        console.log('then', res)
-
         dispatch(setIsLoggedIn({ isLoggedIn: true }))
         localStorage.setItem('sn-token', res.accessToken)
         router.push('/home')
       })
-      .catch((e: any) => {
-        const err = e
+      .catch((err: unknown) => {
+        if (isApiError(err)) {
+          const { data, status } = err
 
-        console.log(err)
-        // setError(err)
+          if (status === 400) {
+            setError(data.messages)
+          }
+          if (status === 401) {
+            setError('You are unauthorized')
+          }
+          if (status === 429) {
+            debugger
+            setError('More than 5 attempts from one IP-address during 10 seconds')
+          }
+        }
       })
   })
 
@@ -108,7 +119,8 @@ export default function LoginPage() {
             placeholder={'**********'}
             type={'password'}
             {...register('password')}
-            error={errors.password && errors.password.message}
+            // error={(errors.password && errors.password.message) || error}
+            error={error ?? ''}
           />
           <Button as={'a'} className={s.forgotPassword} href={'#'} variant={'transparent'}>
             Forgot Password
@@ -126,7 +138,6 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
-      {error && <Alerts autoClose delay={3000} message={error} type={'error'} />}
     </div>
   )
 }

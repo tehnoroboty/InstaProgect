@@ -6,7 +6,7 @@ const useMobile = (breakpoint: number = 768): boolean => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= breakpoint)
+      setIsMobile(false)
     }
 
     handleResize()

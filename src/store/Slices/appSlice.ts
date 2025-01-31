@@ -15,10 +15,11 @@ export const appSlice = createSlice({
     }),
   }),
   selectors: {
+    selectAppError: state => state.error,
     selectIsLoggedIn: state => state.isLoggedIn,
   },
 })
 
 export const { setAppError, setIsLoggedIn } = appSlice.actions
-export const { selectIsLoggedIn } = appSlice.selectors
+export const { selectAppError, selectIsLoggedIn } = appSlice.selectors
 export const appReducer = appSlice.reducer
