@@ -111,23 +111,21 @@ export default function LoginPage() {
             error={errors.password && errors.password.message}
           />
           <div className={s.forgotPassword}>
-            <Link className={s.link} href={'/auth/forgot-password'}>
+            <Link className={s.link} href={'/forgot-password'}>
               <Typography className={s.linkText} option={'regular_text14'}>
                 Forgot Password
               </Typography>
             </Link>
           </div>
-          <Link href={'/auth/home'} passHref>
-            <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
-              Sing in
-            </Button>
-          </Link>
+          <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
+            Sing in
+          </Button>
         </form>
         <div className={s.boxLinks}>
           <Typography className={s.text} option={'regular_text16'}>
             Don’t have an account?
           </Typography>
-          <Link href={'/auth/forgot-password'} passHref>
+          <Link href={'/registration'} passHref>
             <Button className={s.singUp} fullWidth variant={'transparent'}>
               Sing up
             </Button>
