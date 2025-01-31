@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
@@ -29,7 +29,7 @@ export type ErrorResponse = {
 export default function RegistrationСonfirmationPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [confirmRegistration, { isLoading, isSuccess }] = useRegistrationConfirmationMutation()
+  const [confirmRegistration] = useRegistrationConfirmationMutation()
 
   useEffect(() => {
     const confirmEmail = async () => {
