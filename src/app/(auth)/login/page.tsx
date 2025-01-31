@@ -14,6 +14,8 @@ import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { AppDispatch } from '@/src/store/store'
 import { zodResolver } from '@hookform/resolvers/zod'
+import clsx from 'clsx'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
@@ -110,9 +112,14 @@ export default function LoginPage() {
             {...register('password')}
             error={errors.password && errors.password.message}
           />
-          <Button as={'a'} className={s.forgotPassword} href={'#'} variant={'transparent'}>
-            Forgot Password
-          </Button>
+          <div className={s.forgotPassword}>
+            <Link className={s.link} href={'/auth/forgot-password'}>
+              <Typography className={s.linkText} option={'regular_text14'}>
+                Forgot Password
+              </Typography>
+            </Link>
+          </div>
+
           <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
             Sing in
           </Button>
@@ -121,8 +128,10 @@ export default function LoginPage() {
           <Typography className={s.text} option={'regular_text16'}>
             Don’t have an account?
           </Typography>
-          <Button className={s.singUp} variant={'transparent'}>
-            {'Sing up'}
+          <Button variant={'transparent'}>
+            <Link className={s.singUp} href={'/auth/forgot-password'}>
+              Sing up
+            </Link>
           </Button>
         </div>
       </Card>
