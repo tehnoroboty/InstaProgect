@@ -12,9 +12,7 @@ import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
 import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
-import { AppDispatch } from '@/src/store/store'
 import { zodResolver } from '@hookform/resolvers/zod'
-import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
@@ -119,20 +117,21 @@ export default function LoginPage() {
               </Typography>
             </Link>
           </div>
-
-          <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
-            Sing in
-          </Button>
+          <Link href={'/auth/home'} passHref>
+            <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
+              Sing in
+            </Button>
+          </Link>
         </form>
         <div className={s.boxLinks}>
           <Typography className={s.text} option={'regular_text16'}>
             Don’t have an account?
           </Typography>
-          <Button variant={'transparent'}>
-            <Link className={s.singUp} href={'/auth/forgot-password'}>
+          <Link href={'/auth/forgot-password'} passHref>
+            <Button className={s.singUp} fullWidth variant={'transparent'}>
               Sing up
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </Card>
       {error && <Alerts autoClose delay={3000} message={error} type={'error'} />}
