@@ -125,11 +125,15 @@ export default function LoginPage() {
           <Typography className={s.text} option={'regular_text16'}>
             Don’t have an account?
           </Typography>
-          <Link href={'/registration'} passHref>
-            <Button className={s.singUp} fullWidth variant={'transparent'}>
-              Sing up
-            </Button>
-          </Link>
+          <Button
+            as={Link}
+            className={s.singUp}
+            fullWidth
+            href={'/auth/registration'}
+            variant={'transparent'}
+          >
+            Sing up
+          </Button>
         </div>
       </Card>
       {error && <Alerts autoClose delay={3000} message={error} type={'error'} />}
