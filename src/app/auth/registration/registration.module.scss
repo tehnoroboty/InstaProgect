@@ -60,42 +60,25 @@
   gap: 60px;
 }
 
-.cardEmailSent {
-  gap: 0;
+.modalEmailSent {
   max-width: 378px;
-  padding: 12px 0 36px;
-  background-color: var(--Dark-300, #333);
+
+  & hr {
+    margin-bottom: 0;
+  }
 }
 
-.cardTitle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  width: 100%;
-  padding: 0 24px 11px;
-
-  border-bottom: 1px solid var(--dark-100);
-}
-
-.iconClose {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-}
-
-.cardTextContainer {
+.modalContent {
   display: flex;
   flex-direction: column;
+  gap: 18px;
+}
+
+.modalText {
   margin-top: 30px;
-  padding: 0 24px;
 }
 
-.cardText {
-  margin-bottom: 18px;
-}
-
-.cardButton {
+.modalButton {
   align-self: end;
   padding: 6px 36px;
   line-height: 150%;
