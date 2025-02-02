@@ -1,3 +1,4 @@
+import { RegistrationType } from '@/src/store/services/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type ExchangeGoogleCodeForTokenResponse = {
@@ -26,9 +27,27 @@ export const authApi = createApi({
           }
         },
       }),
+      registration: builder.mutation<void, RegistrationType>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration',
+        }),
+      }),
+      registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration-confirmation',
+        }),
+      }),
     }
   },
   reducerPath: 'authApi',
 })
 
-export const { useExchangeGoogleCodeForTokenMutation } = authApi
+export const {
+  useExchangeGoogleCodeForTokenMutation,
+  useRegistrationConfirmationMutation,
+  useRegistrationMutation,
+} = authApi
