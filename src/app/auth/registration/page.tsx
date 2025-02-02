@@ -204,11 +204,11 @@ export default function RegistrationPage() {
             label={
               <>
                 {'I agree to the '}
-                <Link className={s.link} href={'/terms-of-service'}>
+                <Link className={s.link} href={'/auth/terms-of-service'}>
                   {' Terms  of  Service '}
                 </Link>
                 {' and '}
-                <Link className={s.link} href={'/privacy-policy'}>
+                <Link className={s.link} href={'/auth/privacy-policy'}>
                   {' Privacy Policy '}
                 </Link>
               </>
@@ -225,7 +225,7 @@ export default function RegistrationPage() {
           <Typography as={'span'} className={s.text} option={'regular_text16'}>
             {'Do you have an account?'}
           </Typography>
-          <Button as={Link} fullWidth href={'/login'} variant={'transparent'}>
+          <Button as={Link} fullWidth href={'/auth/login'} variant={'transparent'}>
             {'Sing In'}
           </Button>
         </div>

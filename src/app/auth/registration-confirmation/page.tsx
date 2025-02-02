@@ -60,7 +60,7 @@ export default function RegistrationСonfirmationPage() {
       <Typography as={'h2'} option={'regular_text16'}>
         {'Your email has been confirmed'}
       </Typography>
-      <Button as={Link} href={'/login'} variant={'primary'}>
+      <Button as={Link} href={'/auth/login'} variant={'primary'}>
         {'Sing In'}
       </Button>
       <Image alt={''} height={300} src={'/image/bro.svg'} width={432} />
