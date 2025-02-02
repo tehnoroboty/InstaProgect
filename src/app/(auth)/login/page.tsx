@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { Alerts } from '@/src/components/alerts/Alerts'
@@ -18,6 +18,17 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
 import s from './page.module.scss'
+
+export type ApiError = {
+  data: ErrorResponse
+  status: number
+}
+
+export type ErrorResponse = {
+  error: string
+  messages: string
+  statusCode: number
+}
 
 const LoginSchema = z.object({
   email: z
@@ -44,7 +55,7 @@ const LoginSchema = z.object({
     .nonempty('Enter password'),
 })
 
-export type FormValues = z.infer<typeof LoginSchema>
+export type FormType = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
   const [login] = useLoginMutation()
@@ -56,7 +67,8 @@ export default function LoginPage() {
     formState: { errors },
     handleSubmit,
     register,
-  } = useForm<FormValues>({
+    watch,
+  } = useForm<FormType>({
     defaultValues: {
       email: '',
       password: '',
@@ -64,24 +76,23 @@ export default function LoginPage() {
     resolver: zodResolver(LoginSchema),
   })
 
-  const onSubmit = handleSubmit(data => {
-    console.log(data)
-    login(data)
-      .unwrap()
-      .then(res => {
-        console.log('then', res)
+  const disabledButton = !watch('email') || !watch('password') || Object.keys(errors).length > 0
 
-        dispatch(setIsLoggedIn({ isLoggedIn: true }))
-        localStorage.setItem('sn-token', res.accessToken)
-        router.push('/home')
-      })
-      .catch((e: any) => {
-        const err = e
+  const onSubmit: SubmitHandler<FormType> = async formData => {
+    try {
+      console.log(formData)
+      const res = await login(formData).unwrap()
 
-        console.log(err)
-        // setError(err)
-      })
-  })
+      console.log('then', res)
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      localStorage.setItem('sn-token', res.accessToken)
+      router.push('/home')
+    } catch (err) {
+      const error = err as ApiError
+      const errorMessage = error.data?.messages
+    }
+    console.error('Registration failed:', errors.root)
+  }
 
   return (
     <div className={s.wrapper}>
@@ -94,7 +105,7 @@ export default function LoginPage() {
           pass: qwQW12!
         </Typography>
         <OAuthButtons className={s.boxButtons} />
-        <form className={s.boxInputs} onSubmit={onSubmit}>
+        <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
           <Input
             className={s.input}
             label={'Email'}
@@ -117,7 +128,13 @@ export default function LoginPage() {
               </Typography>
             </Link>
           </div>
-          <Button className={s.singIn} fullWidth type={'submit'} variant={'primary'}>
+          <Button
+            className={s.singIn}
+            disabled={disabledButton}
+            fullWidth
+            type={'submit'}
+            variant={'primary'}
+          >
             Sing in
           </Button>
         </form>
