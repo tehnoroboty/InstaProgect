@@ -116,7 +116,7 @@ export default function LoginPage() {
     <div className={s.wrapper}>
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
-          Sign In
+          {'Sign In'}
           {/*
           <br />
           e-mail: tehnoroboty@gmail.com
@@ -147,7 +147,7 @@ export default function LoginPage() {
           <div className={s.forgotPassword}>
             <Link className={s.link} href={'/auth/forgot-password'}>
               <Typography className={s.linkText} option={'regular_text14'}>
-                Forgot Password
+                {'Forgot Password'}
               </Typography>
             </Link>
           </div>
@@ -158,12 +158,12 @@ export default function LoginPage() {
             type={'submit'}
             variant={'primary'}
           >
-            Sing in
+            {'Sing in'}
           </Button>
         </form>
         <div className={s.boxLinks}>
           <Typography className={s.text} option={'regular_text16'}>
-            Don’t have an account?
+            {'Don’t have an account?'}
           </Typography>
           <Button
             as={Link}
@@ -172,7 +172,7 @@ export default function LoginPage() {
             href={'/auth/registration'}
             variant={'transparent'}
           >
-            Sing up
+            {'Sing up'}
           </Button>
         </div>
       </Card>
