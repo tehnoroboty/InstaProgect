@@ -2,8 +2,9 @@ import {
   CreateNewPasswordRecoveryType,
   PasswordRecoveryType,
   RecoveryCodeResponse,
-  RecoveryCodeType,
+  RecoveryCodeType, RegistrationType 
 } from '@/src/store/services/types'
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type ExchangeGoogleCodeForTokenResponse = {
@@ -33,6 +34,27 @@ export const authApi = createApi({
         url: 'auth/password-recovery',
       }),
     }),
+    registration: builder.mutation<void, RegistrationType>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration',
+        }),
+      }),
+    registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration-confirmation',
+        }),
+      }),
+    recoveryCode: builder.mutation<RecoveryCodeResponse, RecoveryCodeType>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: 'auth/check-recovery-code',
+      }),
+    }),
      exchangeGoogleCodeForToken: builder.mutation<
         ExchangeGoogleCodeForTokenResponse,
         ArgsPostGoogleOAuth
@@ -45,20 +67,16 @@ export const authApi = createApi({
           }
         },
       }),
-    recoveryCode: builder.mutation<RecoveryCodeResponse, RecoveryCodeType>({
-      query: data => ({
-        body: data,
-        method: 'POST',
-        url: 'auth/check-recovery-code',
-      }),
+      
     }),
-  }),
   reducerPath: 'authApi',
 })
 
 export const {
   useCreateNewPasswordMutation,
   usePasswordRecoveryMutation,
-  useRecoveryCodeMutation,useExchangeGoogleCodeForTokenMutation 
+  useRecoveryCodeMutation,useExchangeGoogleCodeForTokenMutation,useExchangeGoogleCodeForTokenMutation,
+  useRegistrationConfirmationMutation,
+  useRegistrationMutation,
 } = authApi
 

@@ -26,3 +26,8 @@ export type RecoveryCodeType = {
 export type RecoveryCodeResponse = {
   email: string
 }
+export type RegistrationType = {
+  baseUrl: string
+  email: string
+  password: string
+  userName: string
