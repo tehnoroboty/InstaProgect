@@ -1,22 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import {
+  ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
+  ExchangeGoogleCodeForTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
   RegistrationType,
 } from './types'
-
-type ExchangeGoogleCodeForTokenResponse = {
-  accessToken: string
-  email: string
-}
-
-type ArgsPostGoogleOAuth = {
-  code: string
-  redirectUrl: string
-}
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),

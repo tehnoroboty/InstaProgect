@@ -32,3 +32,13 @@ export type RegistrationType = {
   password: string
   userName: string
 }
+
+export type ExchangeGoogleCodeForTokenResponse = {
+  accessToken: string
+  email: string
+}
+
+export type ArgsPostGoogleOAuth = {
+  code: string
+  redirectUrl: string
+}
