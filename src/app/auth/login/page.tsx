@@ -117,10 +117,12 @@ export default function LoginPage() {
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           Sign In
+          {/*
           <br />
           e-mail: tehnoroboty@gmail.com
           <br />
           pass: qwQW12!
+*/}
         </Typography>
         <OAuthButtons className={s.boxButtons} />
         <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
@@ -142,9 +144,6 @@ export default function LoginPage() {
               (errors.password && errors.password.message)
             }
           />
-          {errorObj?.statusCode !== 400 && (
-            <Typography className={s.errorMessage}>{errorObj?.messages}</Typography>
-          )}
           <div className={s.forgotPassword}>
             <Link className={s.link} href={'/auth/forgot-password'}>
               <Typography className={s.linkText} option={'regular_text14'}>
