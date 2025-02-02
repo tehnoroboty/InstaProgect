@@ -1,4 +1,10 @@
-import { RegistrationType } from '@/src/store/services/types'
+import {
+  CreateNewPasswordRecoveryType,
+  PasswordRecoveryType,
+  RecoveryCodeResponse,
+  RecoveryCodeType, RegistrationType 
+} from '@/src/store/services/types'
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type ExchangeGoogleCodeForTokenResponse = {
@@ -13,9 +19,43 @@ type ArgsPostGoogleOAuth = {
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
-  endpoints: builder => {
-    return {
-      exchangeGoogleCodeForToken: builder.mutation<
+  endpoints: builder => ({
+    createNewPassword: builder.mutation<void, CreateNewPasswordRecoveryType>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: 'auth/new-password',
+      }),
+    }),
+    passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: 'auth/password-recovery',
+      }),
+    }),
+    registration: builder.mutation<void, RegistrationType>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration',
+        }),
+      }),
+    registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
+        query: body => ({
+          body,
+          method: 'POST',
+          url: 'auth/registration-confirmation',
+        }),
+      }),
+    recoveryCode: builder.mutation<RecoveryCodeResponse, RecoveryCodeType>({
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: 'auth/check-recovery-code',
+      }),
+    }),
+     exchangeGoogleCodeForToken: builder.mutation<
         ExchangeGoogleCodeForTokenResponse,
         ArgsPostGoogleOAuth
       >({
@@ -27,27 +67,16 @@ export const authApi = createApi({
           }
         },
       }),
-      registration: builder.mutation<void, RegistrationType>({
-        query: body => ({
-          body,
-          method: 'POST',
-          url: 'auth/registration',
-        }),
-      }),
-      registrationConfirmation: builder.mutation<void, { confirmationCode: string }>({
-        query: body => ({
-          body,
-          method: 'POST',
-          url: 'auth/registration-confirmation',
-        }),
-      }),
-    }
-  },
+      
+    }),
   reducerPath: 'authApi',
 })
 
 export const {
-  useExchangeGoogleCodeForTokenMutation,
+  useCreateNewPasswordMutation,
+  usePasswordRecoveryMutation,
+  useRecoveryCodeMutation,useExchangeGoogleCodeForTokenMutation,useExchangeGoogleCodeForTokenMutation,
   useRegistrationConfirmationMutation,
   useRegistrationMutation,
 } = authApi
+
