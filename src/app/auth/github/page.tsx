@@ -11,16 +11,13 @@ const GitHubPage = () => {
   const accessToken = searchParams.get('accessToken')
   const email = searchParams.get('email')
 
-  console.log('accessToken:', accessToken)
-  console.log('Email:', email)
-
   useEffect(() => {
     if (accessToken) {
+      localStorage.setItem('sn-token', accessToken)
       router.push('/home')
-
-      return
+    } else {
+      router.push('/auth/login')
     }
-    router.push('/login')
   }, [])
 
   return (

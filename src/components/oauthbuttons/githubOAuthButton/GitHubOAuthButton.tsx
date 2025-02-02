@@ -11,14 +11,16 @@ type Props = {
 } & ComponentPropsWithoutRef<'button'>
 
 export const GitHubOAuthButton = (props: Props) => {
-  const { className } = props
+  const { className, ...rest } = props
 
   const login = () => {
-    window.location.assign('https://inctagram.work/api/v1/auth/github/login')
+    window.location.assign(
+      `https://inctagram.work/api/v1/auth/github/login?redirect_url=http://localhost:3000/auth/`
+    )
   }
 
   return (
-    <button className={className} onClick={login} type={'button'}>
+    <button className={className} onClick={login} type={'button'} {...rest}>
       <GitHub className={s.gitHub} height={36} viewBox={'0 0 24 24'} width={36} />
     </button>
   )
