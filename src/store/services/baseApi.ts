@@ -1,4 +1,5 @@
 import { setAppError } from '@/src/store/Slices/appSlice'
+import { handleError } from '@/src/utils/handleError'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const baseApi = createApi({
@@ -10,6 +11,8 @@ export const baseApi = createApi({
         headers.set('Authorization', `Bearer ${localStorage.getItem('sn-token')}`)
       },
     })(args, api, extraOptions)
+
+    handleError(api, result)
 
     return result
   },
