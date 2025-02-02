@@ -1,7 +1,6 @@
 // @flow
-'use client'
 import * as React from 'react'
-import { useRef, useState } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 /* eslint-disable import/no-named-as-default */
 import ReCAPTCHA from 'react-google-recaptcha'
 
@@ -13,26 +12,29 @@ import s from './recaptcha.module.scss'
 
 type Props = {
   className?: string
+  isError?: null | string
   onChangeValue: (value: null | string) => void
 }
 
-export const Recaptcha = ({ className, onChangeValue }: Props) => {
-  const [error, setError] = useState<null | string>(null)
+export const Recaptcha = forwardRef(({ className, isError, onChangeValue }: Props, ref) => {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
 
   const siteKey = getSiteKey()
 
   const onChangeHandler = (value: null | string) => {
-    if (!value) {
-      setError('Please verify that you are not a robot')
-    } else {
-      setError(null)
-    }
     onChangeValue(value)
   }
 
+  useImperativeHandle(ref, () => ({
+    reset() {
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
+    },
+  }))
+
   return (
-    <div className={clsx(s.recaptchaWrapper, className, { [s.error]: error })}>
+    <div className={clsx(s.recaptchaWrapper, className, { [s.error]: isError })}>
       <ReCAPTCHA
         hl={'en'}
         onChange={onChangeHandler}
@@ -40,11 +42,11 @@ export const Recaptcha = ({ className, onChangeValue }: Props) => {
         sitekey={siteKey}
         theme={'dark'}
       />
-      {error && (
+      {isError && (
         <Typography as={'span'} className={s.textError} option={'small_text'}>
-          {error}
+          {isError}
         </Typography>
       )}
     </div>
   )
-}
+})
