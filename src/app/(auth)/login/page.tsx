@@ -1,22 +1,27 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { Alerts } from '@/src/components/alerts/Alerts'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 
 import s from './page.module.scss'
+
+export type LoginError = {
+  error: string
+  messages: string
+  statusCode: number
+}
 
 const LoginSchema = z.object({
   email: z
@@ -47,7 +52,8 @@ export type FormValues = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
   const [login] = useLoginMutation()
-  const [error, setError] = useState<null | string>(null)
+
+  const [error, setError] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
 
@@ -57,7 +63,6 @@ export default function LoginPage() {
 
   const {
     formState: { errors },
-    getValues,
     handleSubmit,
     register,
   } = useForm<FormValues>({
@@ -76,19 +81,22 @@ export default function LoginPage() {
         localStorage.setItem('sn-token', res.accessToken)
         router.push('/home')
       })
-      .catch((err: unknown) => {
+      .catch((err: { data: LoginError; status: number }) => {
         if (isApiError(err)) {
           const { data, status } = err
 
           if (status === 400) {
-            setError(data.messages)
+            setError(data)
           }
           if (status === 401) {
-            setError('You are unauthorized')
+            setError({ error: '', messages: 'Unauthorized', statusCode: 401 })
           }
           if (status === 429) {
-            debugger
-            setError('More than 5 attempts from one IP-address during 10 seconds')
+            setError({
+              error: '',
+              messages: 'More than 5 attempts from one IP-address during 10 seconds',
+              statusCode: 429,
+            })
           }
         }
       })
@@ -111,7 +119,7 @@ export default function LoginPage() {
             label={'Email'}
             placeholder={'Epam@epam.com'}
             {...register('email')}
-            error={errors.email && errors.email.message}
+            error={(error?.statusCode === 400 ? ' ' : '') || (errors.email && errors.email.message)}
           />
           <Input
             className={s.input}
@@ -119,9 +127,14 @@ export default function LoginPage() {
             placeholder={'**********'}
             type={'password'}
             {...register('password')}
-            // error={(errors.password && errors.password.message) || error}
-            error={error ?? ''}
+            error={
+              (error?.statusCode === 400 ? error.messages : '') ||
+              (errors.password && errors.password.message)
+            }
           />
+          {error?.statusCode !== 400 && (
+            <Typography className={s.errorMessage}>{error?.messages}</Typography>
+          )}
           <Button as={'a'} className={s.forgotPassword} href={'#'} variant={'transparent'}>
             Forgot Password
           </Button>
