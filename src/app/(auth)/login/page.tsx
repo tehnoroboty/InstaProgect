@@ -19,12 +19,7 @@ import { z } from 'zod'
 
 import s from './page.module.scss'
 
-export type ApiError = {
-  data: ErrorResponse
-  status: number
-}
-
-export type ErrorResponse = {
+export type LoginError = {
   error: string
   messages: string
   statusCode: number
@@ -59,9 +54,14 @@ export type FormType = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
   const [login] = useLoginMutation()
-  const [error, setError] = useState<null | string>(null)
+
+  const [error, setError] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
+
+  const isApiError = (error: unknown): error is { data: { messages: string }; status: number } => {
+    return typeof error === 'object' && error != null && 'status' in error
+  }
 
   const {
     formState: { errors },
@@ -80,16 +80,31 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
-      console.log(formData)
       const res = await login(formData).unwrap()
 
-      console.log('then', res)
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
       localStorage.setItem('sn-token', res.accessToken)
       router.push('/home')
     } catch (err) {
-      const error = err as ApiError
-      const errorMessage = error.data?.messages
+      if (isApiError(err)) {
+        const { data, status } = err
+
+        if (status === 400) {
+          console.log(data)
+          debugger
+          setError(data)
+        }
+        if (status === 401) {
+          setError({ error: '', messages: 'Unauthorized', statusCode: 401 })
+        }
+        if (status === 429) {
+          setError({
+            error: '',
+            messages: 'More than 5 attempts from one IP-address during 10 seconds',
+            statusCode: 429,
+          })
+        }
+      }
     }
     console.error('Registration failed:', errors.root)
   }
@@ -153,7 +168,6 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
-      {error && <Alerts autoClose delay={3000} message={error} type={'error'} />}
     </div>
   )
 }
