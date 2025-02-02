@@ -1,6 +1,5 @@
-import { FormValues } from '@/src/app/(auth)/login/page'
+import { FormType } from '@/src/app/auth/login/page'
 import { baseApi } from '@/src/store/services/baseApi'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import {
   CreateNewPasswordRecoveryType,
@@ -20,8 +19,7 @@ type ArgsPostGoogleOAuth = {
   redirectUrl: string
 }
 
-export const authApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
+export const authApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     createNewPassword: builder.mutation<void, CreateNewPasswordRecoveryType>({
       query: data => ({
@@ -42,36 +40,19 @@ export const authApi = createApi({
         }
       },
     }),
+    login: builder.mutation<{ accessToken: string }, FormType>({
+      query: body => ({
+        body,
+        method: 'POST',
+        url: 'auth/login',
+      }),
+    }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
       query: data => ({
         body: data,
         method: 'POST',
         url: 'auth/password-recovery',
-//https://inctagram.work/api/v1/auth/login
-export const authApi = baseApi.injectEndpoints({
-  endpoints: build => {
-    return {
-      exchangeGoogleCodeForToken: build.mutation<
-        ExchangeGoogleCodeForTokenResponse,
-        ArgsPostGoogleOAuth
-      >({
-        query: body => {
-          return {
-            body,
-            method: 'POST',
-            url: 'auth/google/login',
-          }
-        },
       }),
-      login: build.mutation<{ accessToken: string }, FormValues>({
-        query: body => ({
-          body,
-          method: 'POST',
-          url: 'auth/login',
-        }),
-      }),
-    }
-  },
     }),
     recoveryCode: builder.mutation<RecoveryCodeResponse, RecoveryCodeType>({
       query: data => ({
@@ -95,15 +76,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
   }),
-  reducerPath: 'authApi',
 })
 
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
+  useLoginMutation,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,
   useRegistrationMutation,
 } = authApi
-export const { useExchangeGoogleCodeForTokenMutation, useLoginMutation } = authApi

@@ -11,6 +11,7 @@ type Props = {
   autoClose?: boolean
   className?: string
   closable?: boolean
+  closeFn?: () => void
   delay?: number
   id?: string
   message?: string
@@ -55,6 +56,7 @@ export const Alerts = ({
   autoClose = false,
   className,
   closable = true,
+  closeFn = () => {},
   delay = 5000,
   message,
   position = 'fixed',
@@ -64,7 +66,10 @@ export const Alerts = ({
   const [isOpen, setIsOpen] = useState(true)
   const alertRef = useRef<HTMLDivElement>(null)
 
-  const closeAlerts = () => setIsOpen(false)
+  const closeAlerts = () => {
+    closeFn()
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     if (autoClose) {

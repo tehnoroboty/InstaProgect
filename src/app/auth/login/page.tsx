@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Alerts } from '@/src/components/alerts/Alerts'
 import { Button } from '@/src/components/button/Button'
@@ -10,7 +10,7 @@ import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -20,9 +20,9 @@ import { z } from 'zod'
 import s from './page.module.scss'
 
 export type LoginError = {
-  error: string
+  error?: string
   messages: string
-  statusCode: number
+  statusCode?: number
 }
 
 const LoginSchema = z.object({
@@ -53,9 +53,11 @@ const LoginSchema = z.object({
 export type FormType = z.infer<typeof LoginSchema>
 
 export default function LoginPage() {
+  const errorApi = useSelector(selectAppError)
+
   const [login] = useLoginMutation()
 
-  const [error, setError] = useState<LoginError | null>(null)
+  const [errorObj, setErrorObj] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
 
@@ -76,7 +78,19 @@ export default function LoginPage() {
     resolver: zodResolver(LoginSchema),
   })
 
-  const disabledButton = !watch('email') || !watch('password') || Object.keys(errors).length > 0
+  const email = watch('email')
+  const password = watch('password')
+
+  useEffect(() => {
+    if (errorApi) {
+      dispatch(setAppError({ error: null }))
+    }
+    if (errorObj) {
+      setErrorObj(null)
+    }
+  }, [email, password, dispatch])
+
+  const disabledButton = !email || !password || Object.keys(errors).length > 0
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -90,19 +104,8 @@ export default function LoginPage() {
         const { data, status } = err
 
         if (status === 400) {
-          console.log(data)
-          debugger
-          setError(data)
-        }
-        if (status === 401) {
-          setError({ error: '', messages: 'Unauthorized', statusCode: 401 })
-        }
-        if (status === 429) {
-          setError({
-            error: '',
-            messages: 'More than 5 attempts from one IP-address during 10 seconds',
-            statusCode: 429,
-          })
+          setErrorObj(data)
+          dispatch(setAppError({ error: data.messages }))
         }
       }
     }
@@ -134,10 +137,16 @@ export default function LoginPage() {
             placeholder={'**********'}
             type={'password'}
             {...register('password')}
-            error={errors.password && errors.password.message}
+            error={
+              (errorObj?.statusCode === 400 ? errorObj.messages : '') ||
+              (errors.password && errors.password.message)
+            }
           />
+          {errorObj?.statusCode !== 400 && (
+            <Typography className={s.errorMessage}>{errorObj?.messages}</Typography>
+          )}
           <div className={s.forgotPassword}>
-            <Link className={s.link} href={'/forgot-password'}>
+            <Link className={s.link} href={'/auth/forgot-password'}>
               <Typography className={s.linkText} option={'regular_text14'}>
                 Forgot Password
               </Typography>
@@ -168,6 +177,7 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
+      {errorApi && <Alerts autoClose delay={3000} message={errorApi} type={'error'} />}
     </div>
   )
 }
