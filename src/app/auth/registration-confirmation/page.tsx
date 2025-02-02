@@ -44,7 +44,7 @@ export default function RegistrationСonfirmationPage() {
 
         // Проверяем сообщение об ошибке и выполняем перенаправление при необходимости
         if (errorMessage === 'Confirmation code is invalid') {
-          router.push('/registration-email-resending')
+          router.push('/auth/registration-email-resending')
         }
       }
     }
