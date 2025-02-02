@@ -25,7 +25,7 @@ export const handleError = (
         break
 
       case 429:
-        error = 'More than 5 attempts from one IP-address during 10 seconds'
+        error = '429 More than 5 attempts from one IP-address during 10 seconds'
         break
 
       case 500:
