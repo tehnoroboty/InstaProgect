@@ -1,4 +1,3 @@
-import { setAppError } from '@/src/store/Slices/appSlice'
 import { handleError } from '@/src/utils/handleError'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
