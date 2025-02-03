@@ -1,11 +1,16 @@
 'use client'
 
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { Alerts } from '@/src/components/alerts/Alerts'
 import { Typography } from '@/src/components/typography/Typography'
+import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { useLogoutMutation } from '@/src/store/services/authApi'
+import { baseApi } from '@/src/store/services/baseApi'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
 
@@ -30,9 +35,23 @@ export const ItemWrapper = ({
   const isActive = href === pathname
   const CurrentIcon = isActive ? IconActive || Icon : Icon
 
-  const onClickHandler = () => {
-    if (onClick) {
-      onClick()
+  const [logout] = useLogoutMutation()
+  const dispatch = useDispatch()
+  const errorApi = useSelector(selectAppError)
+  const route = useRouter()
+
+  const onClickHandler = async () => {
+    try {
+      const res = await logout().unwrap()
+
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      localStorage.removeItem('sn-token')
+      route.push('/auth/login')
+      if (onClick) {
+        onClick()
+      }
+    } catch (err: unknown) {
+      console.log(err)
     }
   }
 
@@ -56,6 +75,17 @@ export const ItemWrapper = ({
             {title}
           </Typography>
         </Button>
+      )}
+      {errorApi && (
+        <Alerts
+          autoClose
+          closeFn={() => {
+            dispatch(setAppError({ error: null }))
+          }}
+          delay={3000}
+          message={errorApi}
+          type={'error'}
+        />
       )}
     </>
   )

@@ -1,5 +1,5 @@
 import { FormType } from '@/src/app/auth/login/page'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { baseApi } from '@/src/store/services/baseApi'
 
 import {
   ArgsPostGoogleOAuth,
@@ -11,8 +11,7 @@ import {
   RegistrationType,
 } from './types'
 
-export const authApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
+export const authApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     createNewPassword: builder.mutation<void, CreateNewPasswordRecoveryType>({
       query: data => ({
@@ -38,6 +37,12 @@ export const authApi = createApi({
         body,
         method: 'POST',
         url: 'auth/login',
+      }),
+    }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        method: 'POST',
+        url: 'auth/logout',
       }),
     }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
@@ -75,6 +80,7 @@ export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
   useLoginMutation,
+  useLogoutMutation,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,
