@@ -2,20 +2,20 @@
 import { useEffect, useState } from 'react'
 
 const useMobile = (breakpoint: number = 768): boolean => {
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= breakpoint)
+  const [isMobile, setIsMobile] = useState<boolean>(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
         setIsMobile(window.innerWidth <= breakpoint)
       }
+    }
 
-      handleResize()
-      window.addEventListener('resize', handleResize)
+    handleResize() // Инициализация значения при первом рендере
+    window.addEventListener('resize', handleResize)
 
-      return () => {
-        window.removeEventListener('resize', handleResize)
-      }
+    return () => {
+      window.removeEventListener('resize', handleResize)
     }
   }, [breakpoint])
 
