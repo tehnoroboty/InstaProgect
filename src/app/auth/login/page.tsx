@@ -117,12 +117,10 @@ export default function LoginPage() {
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           {'Sign In'}
-          {/*
           <br />
           e-mail: tehnoroboty@gmail.com
           <br />
           pass: qwQW12!
-*/}
         </Typography>
         <OAuthButtons className={s.boxButtons} />
         <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
@@ -176,7 +174,17 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
-      {errorApi && <Alerts autoClose delay={3000} message={errorApi} type={'error'} />}
+      {errorApi && (
+        <Alerts
+          autoClose
+          closeFn={() => {
+            dispatch(setAppError({ error: null }))
+          }}
+          delay={3000}
+          message={errorApi}
+          type={'error'}
+        />
+      )}
     </div>
   )
 }

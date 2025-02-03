@@ -1,5 +1,5 @@
 import { FormType } from '@/src/app/auth/login/page'
-import { baseApi } from '@/src/store/services/baseApi'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import {
   ArgsPostGoogleOAuth,
