@@ -10,11 +10,11 @@ type Props = {
 } & ComponentPropsWithoutRef<'button'>
 
 export const GoogleOAuthButton = (props: Props) => {
-  const { className } = props
+  const { className, ...rest } = props
 
   const login = () => {
     const clientId = getClientId()
-    const REDIRECT_URL = `http://localhost:3000/google`
+    const REDIRECT_URL = 'http://localhost:3000/google'
     const scope = 'email profile'
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${scope}`
 
@@ -22,7 +22,7 @@ export const GoogleOAuthButton = (props: Props) => {
   }
 
   return (
-    <button className={className} onClick={login} type={'button'}>
+    <button className={className} onClick={login} type={'button'} {...rest}>
       <Google height={36} viewBox={'0 0 24 24'} width={36} />
     </button>
   )

@@ -2,24 +2,17 @@ import { FormType } from '@/src/app/auth/login/page'
 import { baseApi } from '@/src/store/services/baseApi'
 
 import {
+  ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
+  ExchangeGoogleCodeForTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
   RegistrationType,
 } from './types'
 
-type ExchangeGoogleCodeForTokenResponse = {
-  accessToken: string
-  email: string
-}
-
-type ArgsPostGoogleOAuth = {
-  code: string
-  redirectUrl: string
-}
-
-export const authApi = baseApi.injectEndpoints({
+export const authApi = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
   endpoints: builder => ({
     createNewPassword: builder.mutation<void, CreateNewPasswordRecoveryType>({
       query: data => ({
