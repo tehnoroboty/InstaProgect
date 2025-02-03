@@ -11,8 +11,7 @@ import {
   RegistrationType,
 } from './types'
 
-export const authApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
+export const authApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     createNewPassword: builder.mutation<void, CreateNewPasswordRecoveryType>({
       query: data => ({
