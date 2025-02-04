@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+'use client'
+
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { Button } from '@/src/components/button/Button'
@@ -56,7 +58,7 @@ export const Alerts = ({
   autoClose = false,
   className,
   closable = true,
-  closeFn = () => {},
+  closeFn,
   delay = 5000,
   message,
   position = 'fixed',
@@ -66,10 +68,12 @@ export const Alerts = ({
   const [isOpen, setIsOpen] = useState(true)
   const alertRef = useRef<HTMLDivElement>(null)
 
-  const closeAlerts = () => {
-    closeFn()
+  const closeAlerts = useCallback(() => {
+    if (closeFn) {
+      closeFn()
+    }
     setIsOpen(false)
-  }
+  }, [closeFn])
 
   useEffect(() => {
     if (autoClose) {
@@ -77,7 +81,7 @@ export const Alerts = ({
 
       return () => clearTimeout(timeout)
     }
-  }, [autoClose, delay])
+  }, [autoClose, closeAlerts, delay])
 
   useEffect(() => {
     if (position === 'fixed') {
@@ -93,7 +97,7 @@ export const Alerts = ({
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [position])
+  }, [closeAlerts, position])
 
   const text = message || (type === 'error' ? 'Server is not available' : 'Your settings are saved')
 
