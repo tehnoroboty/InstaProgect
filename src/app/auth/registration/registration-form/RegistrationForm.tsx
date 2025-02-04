@@ -19,6 +19,7 @@ export const RegistrationForm = () => {
     getValues,
     handleCloseMessage,
     handleSubmit,
+    isLoading,
     onChangeHandler,
     onSubmit,
     ref,
@@ -105,7 +106,7 @@ export const RegistrationForm = () => {
             onChange={onChangeHandler}
             ref={ref}
           />
-          <Button disabled={disabledButton} fullWidth variant={'primary'}>
+          <Button disabled={disabledButton || isLoading} fullWidth variant={'primary'}>
             {'Sing Up'}
           </Button>
         </form>

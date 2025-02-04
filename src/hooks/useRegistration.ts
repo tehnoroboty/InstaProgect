@@ -92,9 +92,8 @@ export const useRegistration = () => {
     !watch('checkbox') ||
     Object.keys(errors).length > 0
 
-  const [registration] = useRegistrationMutation()
+  const [registration, { isLoading }] = useRegistrationMutation()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       // Формируем данные для отправки, исключая ненужные поля
@@ -135,6 +134,7 @@ export const useRegistration = () => {
     getValues,
     handleCloseMessage,
     handleSubmit,
+    isLoading,
     onChangeHandler,
     onSubmit,
     ref,
