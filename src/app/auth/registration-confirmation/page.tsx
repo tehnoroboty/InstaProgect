@@ -4,27 +4,12 @@ import { useEffect } from 'react'
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
 import { useRegistrationConfirmationMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './email-confirmed.module.scss'
-
-export type ApiError = {
-  data: ErrorResponse
-  status: number
-}
-
-export type ErrorResponse = {
-  error: string
-  messages: [
-    {
-      field: string
-      message: string
-    },
-  ]
-  statusCode: number
-}
 
 export default function RegistrationСonfirmationPage() {
   const searchParams = useSearchParams()
@@ -39,7 +24,7 @@ export default function RegistrationСonfirmationPage() {
 
         await confirmRegistration({ confirmationCode: code }).unwrap()
       } catch (err) {
-        const error = err as ApiError
+        const error = err as CustomerError
         const errorMessage = error.data?.messages[0]?.message
 
         // Проверяем сообщение об ошибке и выполняем перенаправление при необходимости
