@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 
+import { useLazyGettingAccessThroughGithubQuery } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const GitHubPage = () => {
@@ -10,6 +11,7 @@ const GitHubPage = () => {
 
   const accessToken = searchParams.get('accessToken')
   const email = searchParams.get('email')
+  const [triger, { error }] = useLazyGettingAccessThroughGithubQuery()
 
   useEffect(() => {
     if (accessToken) {

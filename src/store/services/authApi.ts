@@ -4,7 +4,7 @@ import { baseApi } from './baseApi'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
-  ExchangeGoogleCodeForTokenResponse,
+  OAuthTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
@@ -20,16 +20,20 @@ export const authApi = baseApi.injectEndpoints({
         url: 'auth/new-password',
       }),
     }),
-    exchangeGoogleCodeForToken: builder.mutation<
-      ExchangeGoogleCodeForTokenResponse,
-      ArgsPostGoogleOAuth
-    >({
+    exchangeGoogleCodeForToken: builder.mutation<OAuthTokenResponse, ArgsPostGoogleOAuth>({
       query: body => {
         return {
           body,
           method: 'POST',
           url: 'auth/google/login',
         }
+      },
+    }),
+    gettingAccessThroughGithub: builder.query<OAuthTokenResponse, { redirect_url: string }>({
+      query: params => {
+        const queryString = new URLSearchParams(params)
+
+        return `auth/github/login?${queryString}`
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
@@ -73,6 +77,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
+  useLazyGettingAccessThroughGithubQuery,
   useLoginMutation,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
