@@ -3,8 +3,8 @@
 import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { ApiError } from '@/src/app/auth/registration-confirmation/page'
 import { useRegistrationMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -110,7 +110,7 @@ export const useRegistration = () => {
 
       setShowSuccessMessage(true)
     } catch (err) {
-      const error = err as ApiError
+      const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
       if (errorMessage?.field === 'userName') {
