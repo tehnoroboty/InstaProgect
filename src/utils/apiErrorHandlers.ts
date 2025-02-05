@@ -13,3 +13,9 @@ export const isLogoutApiError = (
     'error' in error
   )
 }
+
+export const isLoginApiError = (
+  error: unknown
+): error is { data: { messages: string }; status: number } => {
+  return typeof error === 'object' && error != null && 'status' in error
+}

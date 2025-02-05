@@ -12,6 +12,7 @@ import { Typography } from '@/src/components/typography/Typography'
 import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { LoginError } from '@/src/store/services/types'
+import { isLoginApiError } from '@/src/utils/apiErrorHandlers'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -28,10 +29,6 @@ export default function Signin() {
   const [errorObj, setErrorObj] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
-
-  const isApiError = (error: unknown): error is { data: { messages: string }; status: number } => {
-    return typeof error === 'object' && error != null && 'status' in error
-  }
 
   const {
     formState: { errors },
@@ -68,7 +65,7 @@ export default function Signin() {
       localStorage.setItem('sn-token', res.accessToken)
       router.push('/home')
     } catch (err) {
-      if (isApiError(err)) {
+      if (isLoginApiError(err)) {
         const { data, status } = err
 
         if (status === 400) {
