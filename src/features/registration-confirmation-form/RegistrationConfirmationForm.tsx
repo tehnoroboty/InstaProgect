@@ -5,7 +5,7 @@ import { useRegistrationConfirmation } from '@/src/hooks/useRegistrationConfirma
 import Image from 'next/image'
 import Link from 'next/link'
 
-import s from '@/src/app/auth/registration-confirmation/registration-confirmation-form/email-confirmed.module.scss'
+import s from '@/src/features/registration-confirmation-form/email-confirmed.module.scss'
 
 export const RegistrationConfirmationForm = () => {
   useRegistrationConfirmation()

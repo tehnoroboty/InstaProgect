@@ -1,5 +1,5 @@
 'use client'
-import { RegistrationConfirmationForm } from '@/src/app/auth/registration-confirmation/registration-confirmation-form/RegistrationConfirmationForm'
+import { RegistrationConfirmationForm } from '@/src/features/registration-confirmation-form/RegistrationConfirmationForm'
 
 export default function RegistrationConfirmationPage() {
   return <RegistrationConfirmationForm />
