@@ -5,6 +5,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '@/src/components/button/Button'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
+import { useRegistrationEmailResendingMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { z } from 'zod'
@@ -30,6 +32,8 @@ export default function LinkExpiredPage() {
     formState: { errors },
     handleSubmit,
     register,
+    reset,
+    setError,
     setValue,
     trigger,
     watch,
@@ -48,8 +52,25 @@ export default function LinkExpiredPage() {
       clearErrors('email')
     }
   }
+  const [registrationEmailResending] = useRegistrationEmailResendingMutation()
 
-  const onSubmit: SubmitHandler<FormType> = data => {}
+  const onSubmit: SubmitHandler<FormType> = async formData => {
+    try {
+      const registrationEmailResendingData = {
+        baseUrl: 'http://localhost:3000',
+        email: formData.email,
+      }
+
+      await registrationEmailResending(registrationEmailResendingData).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage = error.data?.messages[0]
+
+      if (errorMessage?.field === 'email') {
+        setError('email', { message: errorMessage.message, type: 'manual' })
+      }
+    }
+  }
 
   return (
     <div className={s.container}>

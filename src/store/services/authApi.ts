@@ -8,6 +8,7 @@ import {
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
+  RegistrationEmailResending,
   RegistrationType,
 } from './types'
 
@@ -67,6 +68,13 @@ export const authApi = baseApi.injectEndpoints({
         url: 'auth/registration-confirmation',
       }),
     }),
+    registrationEmailResending: builder.mutation<void, RegistrationEmailResending>({
+      query: body => ({
+        body,
+        method: 'POST',
+        url: 'auth/registration-email-resending',
+      }),
+    }),
   }),
 })
 
@@ -77,5 +85,6 @@ export const {
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,
+  useRegistrationEmailResendingMutation,
   useRegistrationMutation,
 } = authApi

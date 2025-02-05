@@ -42,3 +42,8 @@ export type ArgsPostGoogleOAuth = {
   code: string
   redirectUrl: string
 }
+
+export type RegistrationEmailResending = {
+  baseUrl: string
+  email: string
+}
