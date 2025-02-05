@@ -96,7 +96,6 @@ export const useRegistration = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
-      // Формируем данные для отправки, исключая ненужные поля
       const registrationData = {
         baseUrl: 'http://localhost:3000',
         email: formData.email,
@@ -104,7 +103,6 @@ export const useRegistration = () => {
         userName: formData.username,
       }
 
-      // Отправляем запрос на сервер
       await registration(registrationData).unwrap()
 
       setShowSuccessMessage(true)
@@ -118,11 +116,9 @@ export const useRegistration = () => {
       if (errorMessage?.field === 'email') {
         setError('email', { message: errorMessage.message, type: 'manual' })
       }
-      console.error('Registration failed:', errors.root)
     }
   }
 
-  // Функция для закрытия сообщения
   const handleCloseMessage = () => {
     setShowSuccessMessage(false)
     reset()
