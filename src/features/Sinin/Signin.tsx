@@ -23,7 +23,7 @@ import { FormType, LoginSchema } from './validators'
 export default function Signin() {
   const errorApi = useSelector(selectAppError)
 
-  const [login, isLoading] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
 
   const [errorObj, setErrorObj] = useState<LoginError | null>(null)
   const router = useRouter()
