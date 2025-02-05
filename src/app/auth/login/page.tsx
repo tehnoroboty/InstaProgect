@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Alerts } from '@/src/components/alerts/Alerts'
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
@@ -174,17 +173,6 @@ export default function LoginPage() {
           </Button>
         </div>
       </Card>
-      {errorApi && (
-        <Alerts
-          autoClose
-          closeFn={() => {
-            dispatch(setAppError({ error: null }))
-          }}
-          delay={3000}
-          message={errorApi}
-          type={'error'}
-        />
-      )}
     </div>
   )
 }
