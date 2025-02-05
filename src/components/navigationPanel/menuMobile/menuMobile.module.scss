@@ -5,9 +5,9 @@
 
   width: 100%;
   height: 60px;
+  border-top: 1px solid var(--dark-300);
 
 background-color: var(--dark-500);
-  border-top: 1px solid var(--dark-300);
 }
 
 .icon {
@@ -26,4 +26,10 @@ background-color: var(--dark-500);
 
 .active {
   color: var(--primary-500);
+}
+
+@media  (width >= 768.5px) {
+  .container{
+    display: none;
+  }
 }
