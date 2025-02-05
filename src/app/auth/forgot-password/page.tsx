@@ -1,6 +1,6 @@
 'use client'
 
-import ForgotPasswordCard from '@/src/components/forgotPassword/ForgotPasswordCard'
+import ForgotPasswordCard from '@/src/features/forgotPassword/ForgotPasswordCard'
 
 export default function ForgotPasswordPage() {
   return <ForgotPasswordCard />
