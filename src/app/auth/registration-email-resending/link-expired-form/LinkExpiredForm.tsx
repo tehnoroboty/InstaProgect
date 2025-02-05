@@ -1,9 +1,9 @@
 'use client'
-import { useRegistrationEmailResending } from '@/src/app/auth/registration-email-resending/useRegistrationEmailResending'
 import { Button } from '@/src/components/button/Button'
 import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
+import { useRegistrationEmailResending } from '@/src/hooks/useRegistrationEmailResending'
 import Image from 'next/image'
 
 import s from './link-expired.module.scss'

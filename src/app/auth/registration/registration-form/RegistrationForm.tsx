@@ -10,7 +10,7 @@ import { Typography } from '@/src/components/typography/Typography'
 import { useRegistration } from '@/src/hooks/useRegistration'
 import Link from 'next/link'
 
-import s from '@/src/app/auth/registration/registration.module.scss'
+import s from '@/src/app/auth/registration/registration-form/registration.module.scss'
 
 export const RegistrationForm = () => {
   const {
