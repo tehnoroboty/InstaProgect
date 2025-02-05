@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap:19px;
+  gap: 19px;
   align-items: center;
   justify-content: center;
 
@@ -9,38 +9,62 @@
   height: 100%;
   padding: 24px;
 
-  & .input{
-    width: max(229px,4%);
+  & .input {
+    width: max(229px, 4%);
   }
 
-  & span{
+  & span {
     width: 294px;
     text-align: center;
   }
 
-  & h1{
+  & h1 {
     text-align: center;
   }
 
-  & button{
+  & button {
     width: 229px;
     height: 36px;
     text-align: center;
   }
 
-  & img{
+  & img {
     width: 100%;
     max-width: 430px;
     height: auto;
 
-    @media (width >= 425px) and (width <= 1024px){
+    @media (width >= 425px) and (width <= 1024px) {
       max-width: 350px;
     }
   }
 }
 
-.form{
+.form {
   display: flex;
   flex-direction: column;
-  gap:24px;
+  gap: 24px;
+}
+
+.modalEmailSent {
+  max-width: 378px;
+
+  & hr {
+    margin-bottom: 0;
+  }
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.modalText {
+  margin-top: 30px;
+}
+
+.modalButton {
+  align-self: end;
+  padding: 6px 36px;
+  line-height: 150%;
 }

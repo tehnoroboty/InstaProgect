@@ -1,8 +1,9 @@
 'use client'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from '@/src/components/button/Button'
+import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
 import { useRegistrationEmailResendingMutation } from '@/src/store/services/authApi'
@@ -30,6 +31,7 @@ export default function LinkExpiredPage() {
   const {
     clearErrors,
     formState: { errors },
+    getValues,
     handleSubmit,
     register,
     reset,
@@ -52,7 +54,8 @@ export default function LinkExpiredPage() {
       clearErrors('email')
     }
   }
-  const [registrationEmailResending] = useRegistrationEmailResendingMutation()
+  const [registrationEmailResending, { isLoading }] = useRegistrationEmailResendingMutation()
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -62,6 +65,8 @@ export default function LinkExpiredPage() {
       }
 
       await registrationEmailResending(registrationEmailResendingData).unwrap()
+
+      setShowSuccessMessage(true)
     } catch (err) {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
@@ -72,8 +77,29 @@ export default function LinkExpiredPage() {
     }
   }
 
+  const handleCloseMessage = () => {
+    setShowSuccessMessage(false)
+    reset()
+  }
+
   return (
     <div className={s.container}>
+      <Dialog
+        className={s.modalEmailSent}
+        modalTitle={'Email sent'}
+        onClose={handleCloseMessage}
+        open={showSuccessMessage}
+      >
+        <div className={s.modalContent}>
+          <Typography as={'p'} className={s.modalText} option={'regular_text16'}>
+            {`We have sent a link to confirm your email to ${getValues('email')}`}
+          </Typography>
+          <Button className={s.modalButton} onClick={handleCloseMessage} variant={'primary'}>
+            {'OK'}
+          </Button>
+        </div>
+      </Dialog>
+
       <Typography as={'h1'} option={'h1'}>
         {'Email verification link expired'}
       </Typography>
@@ -88,7 +114,7 @@ export default function LinkExpiredPage() {
           {...register('email', { onBlur: () => trigger('email'), onChange: onChangeHandler })}
           error={errors.email && errors.email.message}
         />
-        <Button disabled={!watch('email')} variant={'primary'}>
+        <Button disabled={!watch('email') || isLoading} variant={'primary'}>
           {'Resend verification link'}
         </Button>
       </form>
