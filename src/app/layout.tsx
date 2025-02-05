@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CommonAlert } from '@/src/components/alerts/CommonAlert'
 import { StoreWrapper } from '@/src/store/StoreWrapper'
 import { Metadata } from 'next'
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             <Header isLoggedIn title={'Momenttify'} />
             <main>{children}</main>
           </div>
+          <CommonAlert />
         </StoreWrapper>
       </body>
     </html>
