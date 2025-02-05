@@ -7,7 +7,7 @@ import { Alerts } from '@/src/components/alerts/Alerts'
 import { Typography } from '@/src/components/typography/Typography'
 import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLogoutMutation } from '@/src/store/services/authApi'
-import { baseApi } from '@/src/store/services/baseApi'
+import { isLogoutApiError } from '@/src/utils/apiErrorHandlers'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -42,8 +42,7 @@ export const ItemWrapper = ({
 
   const onClickHandler = async () => {
     try {
-      const res = await logout().unwrap()
-
+      await logout().unwrap()
       dispatch(setIsLoggedIn({ isLoggedIn: false }))
       localStorage.removeItem('sn-token')
       route.push('/auth/login')
@@ -51,7 +50,13 @@ export const ItemWrapper = ({
         onClick()
       }
     } catch (err: unknown) {
-      console.log(err)
+      if (isLogoutApiError(err)) {
+        const { error, statusCode: status } = err
+
+        if (status === 401) {
+          dispatch(setAppError({ error }))
+        }
+      }
     }
   }
 
