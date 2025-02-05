@@ -1,11 +1,10 @@
 'use client'
 
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { Alerts } from '@/src/components/alerts/Alerts'
 import { Typography } from '@/src/components/typography/Typography'
-import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLogoutMutation } from '@/src/store/services/authApi'
 import { isLogoutApiError } from '@/src/utils/apiErrorHandlers'
 import clsx from 'clsx'
@@ -37,7 +36,6 @@ export const ItemWrapper = ({
 
   const [logout] = useLogoutMutation()
   const dispatch = useDispatch()
-  const errorApi = useSelector(selectAppError)
   const route = useRouter()
 
   const onClickHandler = async () => {
@@ -80,17 +78,6 @@ export const ItemWrapper = ({
             {title}
           </Typography>
         </Button>
-      )}
-      {errorApi && (
-        <Alerts
-          autoClose
-          closeFn={() => {
-            dispatch(setAppError({ error: null }))
-          }}
-          delay={3000}
-          message={errorApi}
-          type={'error'}
-        />
       )}
     </>
   )
