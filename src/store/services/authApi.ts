@@ -31,9 +31,12 @@ export const authApi = baseApi.injectEndpoints({
     }),
     gettingAccessThroughGithub: builder.query<OAuthTokenResponse, { redirect_url: string }>({
       query: params => {
-        const queryString = new URLSearchParams(params)
+        // const queryString = new URLSearchParams(params)
 
-        return `auth/github/login?${queryString}`
+        return {
+          params,
+          url: 'auth/github/login',
+        }
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
