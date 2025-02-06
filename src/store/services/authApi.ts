@@ -1,6 +1,6 @@
-import { FormType } from '@/src/app/auth/login/page'
+import { FormType } from '@/src/features/Sinin/validators'
+import { baseApi } from '@/src/store/services/baseApi'
 
-import { baseApi } from './baseApi'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -38,6 +38,12 @@ export const authApi = baseApi.injectEndpoints({
         body,
         method: 'POST',
         url: 'auth/login',
+      }),
+    }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        method: 'POST',
+        url: 'auth/logout',
       }),
     }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
@@ -82,6 +88,7 @@ export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
   useLoginMutation,
+  useLogoutMutation,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,

@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { Alerts } from '@/src/components/alerts/Alerts'
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Alerts } from '@/src/components/alerts/Alerts'
 
 const GooglePage = () => {
   const searchParams = useSearchParams()
@@ -12,7 +14,7 @@ const GooglePage = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const [exchangeGoogleCodeForToken, { data, error }] = useExchangeGoogleCodeForTokenMutation()
-
+  const dispatch = useDispatch()
   // console.log(error)
 
   useEffect(() => {
@@ -21,11 +23,12 @@ const GooglePage = () => {
     if (!code) {
       router.push('/auth/login')
     } else {
-      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000' })
+      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/' })
         .unwrap()
         .catch(err => {
-          console.log(err.data.messages[0].message)
-          setErrorMessage(err.data.messages[0].message)
+          // console.log(err.data.messages[0].message)
+          // setErrorMessage(err.data.messages[0].message)
+          dispatch(setAppError({ error: err.data.messages[0].message }))
         })
     }
   }, [])

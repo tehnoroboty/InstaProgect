@@ -43,6 +43,12 @@ export type ArgsPostGoogleOAuth = {
   redirectUrl: string
 }
 
+export type LoginError = {
+  error?: string
+  messages: string
+  statusCode?: number
+}
+
 export type RegistrationEmailResending = {
   baseUrl: string
   email: string
