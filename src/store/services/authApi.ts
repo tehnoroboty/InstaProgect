@@ -29,16 +29,6 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
-    gettingAccessThroughGithub: builder.query<OAuthTokenResponse, { redirect_url: string }>({
-      query: params => {
-        // const queryString = new URLSearchParams(params)
-
-        return {
-          params,
-          url: 'auth/github/login',
-        }
-      },
-    }),
     login: builder.mutation<{ accessToken: string }, FormType>({
       query: body => ({
         body,
@@ -80,7 +70,6 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
-  useLazyGettingAccessThroughGithubQuery,
   useLoginMutation,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
