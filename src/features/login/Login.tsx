@@ -26,6 +26,8 @@ export default function Login() {
 
   const [login, { isLoading }] = useLoginMutation()
 
+  console.log('Is Loading:', isLoading)
+
   const [errorObj, setErrorObj] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
@@ -55,7 +57,7 @@ export default function Login() {
     }
   }, [email, password, dispatch])
 
-  const disabledButton = !email || !password || Object.keys(errors).length > 0
+  const disabledButton = isLoading || !email || !password || Object.keys(errors).length > 0
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -117,7 +119,7 @@ export default function Login() {
           </div>
           <Button
             className={s.singIn}
-            disabled={disabledButton || isLoading}
+            disabled={disabledButton}
             fullWidth
             type={'submit'}
             variant={'primary'}

@@ -37,7 +37,7 @@ export const ItemWrapper = ({
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-  const [logout] = useLogoutMutation()
+  const [logout, { isLoading }] = useLogoutMutation()
 
   const dispatch = useDispatch()
   const route = useRouter()
@@ -66,7 +66,8 @@ export const ItemWrapper = ({
     }
   }
 
-  //${email}
+  const disabledButton = isLoading
+
   return (
     <>
       {href ? (
@@ -99,7 +100,12 @@ export const ItemWrapper = ({
             {`Are you really want to log out of your account email?`}
           </Typography>
           <div className={s.modalActions}>
-            <Button className={s.btnModal} onClick={onLogoutConfirm} variant={'secondary'}>
+            <Button
+              className={s.btnModal}
+              disabled={disabledButton}
+              onClick={onLogoutConfirm}
+              variant={'secondary'}
+            >
               {'Yes'}
             </Button>
             <Button
