@@ -1,77 +1,7 @@
 'use client'
-import { ChangeEvent } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { Button } from '@/src/components/button/Button'
-import { Input } from '@/src/components/input/Input'
-import { Typography } from '@/src/components/typography/Typography'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import { z } from 'zod'
-
-import s from './link-expired.module.scss'
-
-const schema = z.object({
-  email: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Invalid email address')
-    .regex(
-      /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-      'The email must match the format example@example.com'
-    ),
-})
-
-type FormType = z.infer<typeof schema>
+import { LinkExpiredForm } from '@/src/features/link-expired-form/LinkExpiredForm'
 
 export default function LinkExpiredPage() {
-  const {
-    clearErrors,
-    formState: { errors },
-    handleSubmit,
-    register,
-    setValue,
-    trigger,
-    watch,
-  } = useForm<FormType>({
-    defaultValues: {
-      email: '',
-    },
-    resolver: zodResolver(schema),
-  })
-
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-
-    setValue('email', value)
-    if (value) {
-      clearErrors('email')
-    }
-  }
-
-  const onSubmit: SubmitHandler<FormType> = data => {}
-
-  return (
-    <div className={s.container}>
-      <Typography as={'h1'} option={'h1'}>
-        {'Email verification link expired'}
-      </Typography>
-      <Typography as={'span'} option={'regular_text14'}>
-        {'Looks like the verification link has expired. Not to worry, we can send the link again'}
-      </Typography>
-      <form className={s.form} noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          className={s.input}
-          label={'Email'}
-          placeholder={'email@example.com'}
-          {...register('email', { onBlur: () => trigger('email'), onChange: onChangeHandler })}
-          error={errors.email && errors.email.message}
-        />
-        <Button disabled={!watch('email')} variant={'primary'}>
-          {'Resend verification link'}
-        </Button>
-      </form>
-      <Image alt={''} height={320} src={'/image/rafiki.svg'} width={430} />
-    </div>
-  )
+  return <LinkExpiredForm />
 }

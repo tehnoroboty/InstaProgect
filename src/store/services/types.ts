@@ -48,3 +48,8 @@ export type LoginError = {
   messages: string
   statusCode?: number
 }
+
+export type RegistrationEmailResending = {
+  baseUrl: string
+  email: string
+}
