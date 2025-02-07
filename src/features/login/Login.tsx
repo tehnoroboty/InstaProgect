@@ -71,10 +71,11 @@ export default function Login() {
         if (status === 400) {
           setErrorObj(data)
           dispatch(setAppError({ error: data.messages }))
+        } else {
+          console.error('Login failed:', err) // Логируем ошибку напрямую
         }
       }
     }
-    console.error('Registration failed:', errors.root)
   }
 
   return (

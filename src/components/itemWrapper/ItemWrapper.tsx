@@ -1,11 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
+import { Dialog } from '@/src/components/dialog/Dialog'
 import { Typography } from '@/src/components/typography/Typography'
 import { setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLogoutMutation } from '@/src/store/services/authApi'
+import { useLoginMutation, useLogoutMutation } from '@/src/store/services/authApi'
 import { isLogoutApiError } from '@/src/utils/apiErrorHandlers'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -34,11 +35,18 @@ export const ItemWrapper = ({
   const isActive = href === pathname
   const CurrentIcon = isActive ? IconActive || Icon : Icon
 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
   const [logout] = useLogoutMutation()
+
   const dispatch = useDispatch()
   const route = useRouter()
 
-  const onClickHandler = async () => {
+  const onClickHandler = () => {
+    setIsModalOpen(true)
+  }
+
+  const onLogoutConfirm = async () => {
     try {
       await logout().unwrap()
       dispatch(setIsLoggedIn({ isLoggedIn: false }))
@@ -58,6 +66,7 @@ export const ItemWrapper = ({
     }
   }
 
+  //${email}
   return (
     <>
       {href ? (
@@ -79,6 +88,30 @@ export const ItemWrapper = ({
           </Typography>
         </Button>
       )}
+      <Dialog
+        className={s.modal}
+        modalTitle={'Log Out'}
+        onClose={() => setIsModalOpen(false)}
+        open={isModalOpen}
+      >
+        <div className={s.contentModal}>
+          <Typography as={'span'} option={'regular_text16'}>
+            {`Are you really want to log out of your account email?`}
+          </Typography>
+          <div className={s.modalActions}>
+            <Button className={s.btnModal} onClick={onLogoutConfirm} variant={'secondary'}>
+              {'Yes'}
+            </Button>
+            <Button
+              className={s.btnModal}
+              onClick={() => setIsModalOpen(false)}
+              variant={'primary'}
+            >
+              {'No'}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </>
   )
 }
