@@ -1,11 +1,15 @@
 'use client'
 
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Typography } from '@/src/components/typography/Typography'
+import { setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { useLogoutMutation } from '@/src/store/services/authApi'
+import { isLogoutApiError } from '@/src/utils/apiErrorHandlers'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
 
@@ -30,9 +34,27 @@ export const ItemWrapper = ({
   const isActive = href === pathname
   const CurrentIcon = isActive ? IconActive || Icon : Icon
 
-  const onClickHandler = () => {
-    if (onClick) {
-      onClick()
+  const [logout] = useLogoutMutation()
+  const dispatch = useDispatch()
+  const route = useRouter()
+
+  const onClickHandler = async () => {
+    try {
+      await logout().unwrap()
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      localStorage.removeItem('sn-token')
+      route.push('/auth/login')
+      if (onClick) {
+        onClick()
+      }
+    } catch (err: unknown) {
+      if (isLogoutApiError(err)) {
+        const { error, statusCode: status } = err
+
+        if (status === 401) {
+          dispatch(setAppError({ error }))
+        }
+      }
     }
   }
 
