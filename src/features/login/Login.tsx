@@ -17,11 +17,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import s from './Signin.module.scss'
+import s from './Login.module.scss'
 
 import { FormType, LoginSchema } from './validators'
 
-export default function Signin() {
+export default function Login() {
   const errorApi = useSelector(selectAppError)
 
   const [login, { isLoading }] = useLoginMutation()
@@ -121,7 +121,7 @@ export default function Signin() {
             type={'submit'}
             variant={'primary'}
           >
-            {'Sing in'}
+            {'Sign in'}
           </Button>
         </form>
         <div className={s.boxLinks}>
@@ -135,7 +135,7 @@ export default function Signin() {
             href={'/auth/registration'}
             variant={'transparent'}
           >
-            {'Sing up'}
+            {'Sign up'}
           </Button>
         </div>
       </Card>
