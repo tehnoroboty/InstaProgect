@@ -4,10 +4,11 @@ import { baseApi } from '@/src/store/services/baseApi'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
-  ExchangeGoogleCodeForTokenResponse,
+  OAuthTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
+  RegistrationEmailResending,
   RegistrationType,
 } from './types'
 
@@ -20,10 +21,7 @@ export const authApi = baseApi.injectEndpoints({
         url: 'auth/new-password',
       }),
     }),
-    exchangeGoogleCodeForToken: builder.mutation<
-      ExchangeGoogleCodeForTokenResponse,
-      ArgsPostGoogleOAuth
-    >({
+    exchangeGoogleCodeForToken: builder.mutation<OAuthTokenResponse, ArgsPostGoogleOAuth>({
       query: body => {
         return {
           body,
@@ -73,6 +71,13 @@ export const authApi = baseApi.injectEndpoints({
         url: 'auth/registration-confirmation',
       }),
     }),
+    registrationEmailResending: builder.mutation<void, RegistrationEmailResending>({
+      query: body => ({
+        body,
+        method: 'POST',
+        url: 'auth/registration-email-resending',
+      }),
+    }),
   }),
 })
 
@@ -84,5 +89,6 @@ export const {
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,
+  useRegistrationEmailResendingMutation,
   useRegistrationMutation,
 } = authApi

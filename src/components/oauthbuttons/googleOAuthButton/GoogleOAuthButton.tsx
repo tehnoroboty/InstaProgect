@@ -7,12 +7,14 @@ import { getClientId } from '@/src/utils/googleClientId'
 
 type Props = {
   className?: string
+  setDisabledButton: (value: boolean) => void
 } & ComponentPropsWithoutRef<'button'>
 
 export const GoogleOAuthButton = (props: Props) => {
-  const { className, ...rest } = props
+  const { className, setDisabledButton, ...rest } = props
 
   const login = () => {
+    setDisabledButton(true)
     const clientId = getClientId()
     const REDIRECT_URL = 'http://localhost:3000/auth/google'
     const scope = 'email profile'

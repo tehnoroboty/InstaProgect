@@ -8,12 +8,14 @@ import s from './gitHubOAuthButton.module.scss'
 
 type Props = {
   className?: string
+  setDisabledButton: (value: boolean) => void
 } & ComponentPropsWithoutRef<'button'>
 
 export const GitHubOAuthButton = (props: Props) => {
-  const { className, ...rest } = props
+  const { className, setDisabledButton, ...rest } = props
 
   const login = () => {
+    setDisabledButton(true)
     window.location.assign(
       `https://inctagram.work/api/v1/auth/github/login?redirect_url=http://localhost:3000/auth/`
     )

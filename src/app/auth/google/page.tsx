@@ -11,11 +11,9 @@ import PropagateLoader from 'react-spinners/PropagateLoader'
 const GooglePage = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState('')
+  const dispatch = useDispatch()
 
   const [exchangeGoogleCodeForToken, { data, error }] = useExchangeGoogleCodeForTokenMutation()
-  const dispatch = useDispatch()
-  // console.log(error)
 
   useEffect(() => {
     const code = searchParams.get('code')
@@ -26,8 +24,6 @@ const GooglePage = () => {
       exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/google' })
         .unwrap()
         .catch(err => {
-          // console.log(err.data.messages[0].message)
-          // setErrorMessage(err.data.messages[0].message)
           dispatch(setAppError({ error: err.data.messages[0].message }))
         })
     }

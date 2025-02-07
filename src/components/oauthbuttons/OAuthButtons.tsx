@@ -1,4 +1,6 @@
-import { ComponentPropsWithoutRef } from 'react'
+'use client'
+
+import { ComponentPropsWithoutRef, useState } from 'react'
 
 import clsx from 'clsx'
 
@@ -15,11 +17,21 @@ type Props = {
 export const OAuthButtons = (props: Props) => {
   const { className, disabled = false, ...rest } = props
 
+  const [disabledButton, setDisabledButton] = useState(disabled)
+
   return (
     <div className={clsx(s.container, className)} {...rest}>
-      <GoogleOAuthButton className={s.button} disabled={disabled} />
+      <GoogleOAuthButton
+        className={s.button}
+        disabled={disabledButton}
+        setDisabledButton={setDisabledButton}
+      />
 
-      <GitHubOAuthButton className={s.button} disabled={disabled} />
+      <GitHubOAuthButton
+        className={s.button}
+        disabled={disabledButton}
+        setDisabledButton={setDisabledButton}
+      />
     </div>
   )
 }
