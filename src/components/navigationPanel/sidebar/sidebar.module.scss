@@ -1,8 +1,8 @@
 .sidebar {
   overflow-y: auto;
   width: max(220px,20%);
-  background-color: var(--dark-700);
   border-right: 1px solid var(--dark-300);
+  background-color: var(--dark-700);
 }
 
 .container {
@@ -17,4 +17,11 @@
 
 .userActions {
   margin-top: 120px;
+}
+
+
+@media  (width <=  768px) {
+  .container{
+    display: none;
+  }
 }

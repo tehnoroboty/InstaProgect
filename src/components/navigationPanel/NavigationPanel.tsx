@@ -19,13 +19,13 @@ import {
 } from '@/src/assets/componentsIcons'
 import { MenuMobile } from '@/src/components/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/components/navigationPanel/sidebar/Sidebar'
-import useMobile from '@/src/hooks/useMobile'
 
 export const NavigationPanel = () => {
-  const isMobile = useMobile()
-
   return (
-    <>{isMobile ? <MenuMobile items={menuItems.mainActions} /> : <Sidebar items={menuItems} />}</>
+    <>
+      <MenuMobile items={menuItems.mainActions} />
+      <Sidebar items={menuItems} />
+    </>
   )
 }
 

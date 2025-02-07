@@ -13,3 +13,10 @@
   gap: 24px;
   align-items: center;
 }
+
+@media  (width >= 768.5px) {
+  .container{
+    display: none;
+  }
+}
+
