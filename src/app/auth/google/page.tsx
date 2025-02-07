@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Alerts } from '@/src/components/alerts/Alerts'
 import { setAppError } from '@/src/store/Slices/appSlice'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -11,11 +10,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 const GooglePage = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState('')
+  const dispatch = useDispatch()
 
   const [exchangeGoogleCodeForToken, { data, error }] = useExchangeGoogleCodeForTokenMutation()
-  const dispatch = useDispatch()
-  // console.log(error)
 
   useEffect(() => {
     const code = searchParams.get('code')
@@ -23,11 +20,9 @@ const GooglePage = () => {
     if (!code) {
       router.push('/auth/login')
     } else {
-      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/' })
+      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/google' })
         .unwrap()
         .catch(err => {
-          // console.log(err.data.messages[0].message)
-          // setErrorMessage(err.data.messages[0].message)
           dispatch(setAppError({ error: err.data.messages[0].message }))
         })
     }
@@ -35,7 +30,7 @@ const GooglePage = () => {
 
   useEffect(() => {
     if (error) {
-      // router.push('/auth/registration')
+      router.push('/auth/registration')
     } else {
       if (data) {
         localStorage.setItem('sn-token', data.accessToken)
@@ -45,20 +40,17 @@ const GooglePage = () => {
   }, [error, data])
 
   return (
-    <>
-      <h1
-        style={{
-          alignItems: 'center',
-          color: '#ffffff',
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-        }}
-      >
-        Loading...
-      </h1>
-      {errorMessage && <Alerts message={errorMessage} type={'error'} />}
-    </>
+    <h1
+      style={{
+        alignItems: 'center',
+        color: '#ffffff',
+        display: 'flex',
+        height: '100vh',
+        justifyContent: 'center',
+      }}
+    >
+      Loading...
+    </h1>
   )
 }
 

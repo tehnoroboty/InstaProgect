@@ -16,7 +16,7 @@ const GitHubPage = () => {
       localStorage.setItem('sn-token', accessToken)
       router.push('/home')
     } else {
-      router.push('/auth/login')
+      router.push('/auth/registration')
     }
   }, [])
 

@@ -4,7 +4,7 @@ import { baseApi } from '@/src/store/services/baseApi'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
-  ExchangeGoogleCodeForTokenResponse,
+  OAuthTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
   RecoveryCodeType,
@@ -21,10 +21,7 @@ export const authApi = baseApi.injectEndpoints({
         url: 'auth/new-password',
       }),
     }),
-    exchangeGoogleCodeForToken: builder.mutation<
-      ExchangeGoogleCodeForTokenResponse,
-      ArgsPostGoogleOAuth
-    >({
+    exchangeGoogleCodeForToken: builder.mutation<OAuthTokenResponse, ArgsPostGoogleOAuth>({
       query: body => {
         return {
           body,

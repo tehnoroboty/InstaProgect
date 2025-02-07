@@ -33,7 +33,7 @@ export type RegistrationType = {
   userName: string
 }
 
-export type ExchangeGoogleCodeForTokenResponse = {
+export type OAuthTokenResponse = {
   accessToken: string
   email: string
 }
