@@ -2,6 +2,7 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
@@ -9,7 +10,9 @@ import { Dialog } from '@/src/components/dialog/Dialog'
 import { Input } from '@/src/components/input/Input'
 import { Recaptcha } from '@/src/components/recaptcha/Recaptcha'
 import { Typography } from '@/src/components/typography/Typography'
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { usePasswordRecoveryMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { z } from 'zod'
@@ -37,6 +40,7 @@ export default function ForgotPasswordCard() {
   const [recaptchaError, setRecaptchaError] = useState<null | string>(null)
   const [serverError, setServerError] = useState<null | string>(null)
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
+  const dispatch = useDispatch()
   const {
     clearErrors,
     formState: { errors },
@@ -88,13 +92,15 @@ export default function ForgotPasswordCard() {
       setServerError(null)
       clearErrors(['email', 'recaptcha'])
       setFormSubmit(true)
-    } catch (error) {
-      const typedError = error as { data: { messages: { field: string; message: string }[] } }
+    } catch (err) {
+      const { data, status } = err as CustomerError
 
-      if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
-        setServerError(typedError.data.messages[0].message)
+      if (status === 400) {
+        setServerError(data.messages[0].message)
+        dispatch(setAppError({ error: data.messages[0].message }))
       } else {
         setServerError("User with this email doesn't exist")
+        dispatch(setAppError({ error: "User with this email doesn't exist" }))
       }
     }
   }
@@ -134,7 +140,8 @@ export default function ForgotPasswordCard() {
           ) : (
             <div className={s.alternativeContent}>
               <Typography as={'span'}>
-                {'The link has been sent by email.If you don’t receive an email send link again'}
+                {'The link has been sent by email. If you don’t receive an' +
+                  ' email send link again'}
               </Typography>
               <Button fullWidth onClick={handleResendLink} variant={'primary'}>
                 {'Send Link Again'}
@@ -142,7 +149,7 @@ export default function ForgotPasswordCard() {
             </div>
           )}
         </form>
-        <Button as={Link} className={s.link} fullWidth href={'/login'} variant={'transparent'}>
+        <Button as={Link} className={s.link} fullWidth href={'/auth/login'} variant={'transparent'}>
           {'Back to Sing In'}
         </Button>
         {!formSubmit && (

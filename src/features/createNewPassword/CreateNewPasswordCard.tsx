@@ -40,6 +40,7 @@ type FormType = z.infer<typeof schema>
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { Dialog } from '@/src/components/dialog/Dialog'
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { useCreateNewPasswordMutation, useRecoveryCodeMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { useRouter, useSearchParams } from 'next/navigation'
