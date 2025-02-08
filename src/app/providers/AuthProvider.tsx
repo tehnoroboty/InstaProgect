@@ -3,7 +3,7 @@ import type { MeResponse } from '@/src/store/services/types'
 import { type ReactNode, createContext, useContext } from 'react'
 
 import { useMeQuery } from '@/src/store/services/authApi'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 type AuthContextType = {
   isLoading: boolean
@@ -19,10 +19,17 @@ export const useAuth = () => useContext(AuthContext)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
+  const pathname = usePathname()
   const { data: user, isError, isFetching } = useMeQuery()
 
-  if (!isFetching && isError) {
+  const protectedRoutes = ['/home']
+
+  if (!isFetching && !user && protectedRoutes.includes(pathname)) {
     router.push('/auth/login')
+  }
+
+  if (!isFetching && user && pathname === '/auth/login') {
+    router.push('/home')
   }
 
   return (
