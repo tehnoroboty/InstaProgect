@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { setAppError } from '@/src/store/Slices/appSlice'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
+import PropagateLoader from 'react-spinners/PropagateLoader'
 
 const GooglePage = () => {
   const searchParams = useSearchParams()
@@ -20,7 +21,7 @@ const GooglePage = () => {
     if (!code) {
       router.push('/auth/login')
     } else {
-      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/google' })
+      exchangeGoogleCodeForToken({ code, redirectUrl: 'https://momenttify.store/auth/google' })
         .unwrap()
         .catch(err => {
           dispatch(setAppError({ error: err.data.messages[0].message }))
@@ -40,17 +41,17 @@ const GooglePage = () => {
   }, [error, data])
 
   return (
-    <h1
-      style={{
+    <PropagateLoader
+      color={'#ffffff'}
+      cssOverride={{
         alignItems: 'center',
         color: '#ffffff',
         display: 'flex',
-        height: '100vh',
+        height: '100%',
         justifyContent: 'center',
       }}
-    >
-      Loading...
-    </h1>
+      size={20}
+    />
   )
 }
 
