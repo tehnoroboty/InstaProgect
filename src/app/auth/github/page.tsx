@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import PulseLoader from 'react-spinners/PulseLoader'
+import PropagateLoader from 'react-spinners/PropagateLoader'
 
 const GitHubPage = () => {
   const searchParams = useSearchParams()
@@ -15,25 +15,14 @@ const GitHubPage = () => {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem('sn-token', accessToken)
-      // router.push('/home')
+      router.push('/home')
     } else {
       router.push('/auth/registration')
     }
   }, [])
 
   return (
-    // <h1
-    //   style={{
-    //     alignItems: 'center',
-    //     color: '#ffffff',
-    //     display: 'flex',
-    //     height: '100vh',
-    //     justifyContent: 'center',
-    //   }}
-    // >
-    //   Loading...
-    // </h1>
-    <PulseLoader
+    <PropagateLoader
       color={'#ffffff'}
       cssOverride={{
         alignItems: 'center',
@@ -42,7 +31,7 @@ const GitHubPage = () => {
         height: '100%',
         justifyContent: 'center',
       }}
-      margin={10}
+      // margin={10}
       size={25}
     />
   )

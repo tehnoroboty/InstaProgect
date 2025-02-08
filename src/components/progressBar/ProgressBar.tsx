@@ -2,28 +2,39 @@
 
 import { useEffect } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { authApi } from '@/src/store/services/authApi'
+import { baseApi } from '@/src/store/services/baseApi'
+import { usePathname } from 'next/navigation'
 import NProgress from 'nprogress'
 
-const Loader = () => {
-  const router = useRouter()
+import 'nprogress/nprogress.css'
+
+export const ProgressBar = () => {
+  const pathname = usePathname()
+  const [exchangeGoogleCodeForToken] = authApi.endpoints.exchangeGoogleCodeForToken.useMutation()
 
   useEffect(() => {
+    NProgress.configure({
+      easing: 'ease',
+      minimum: 0.1,
+      showSpinner: false,
+      speed: 800,
+      trickleSpeed: 800,
+    })
     const handleStart = () => NProgress.start()
     const handleComplete = () => NProgress.done()
 
-    router.events.on('routeChangeStart', handleStart)
-    router.events.on('routeChangeComplete', handleComplete)
-    router.events.on('routeChangeError', handleComplete)
+    handleStart()
+    handleComplete()
 
     return () => {
-      router.events.off('routeChangeStart', handleStart)
-      router.events.off('routeChangeComplete', handleComplete)
-      router.events.off('routeChangeError', handleComplete)
+      NProgress.remove()
     }
-  }, [router])
+  }, [pathname])
+
+  useEffect(() => {
+    console.log(useQueryResult)
+  }, [])
 
   return null
 }
-
-export default Loader

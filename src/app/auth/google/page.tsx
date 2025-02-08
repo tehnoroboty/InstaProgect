@@ -50,8 +50,7 @@ const GooglePage = () => {
         height: '100%',
         justifyContent: 'center',
       }}
-      // margin={10}
-      size={25}
+      size={20}
     />
   )
 }

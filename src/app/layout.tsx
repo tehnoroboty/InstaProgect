@@ -10,6 +10,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource-variable/inter'
 
 import { Header } from '../components/header/Header'
+import { ProgressBar } from '../components/progressBar/ProgressBar'
 
 export const metadata: Metadata = {
   icons: {
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang={'en'}>
       <body>
+        <ProgressBar />
         <StoreWrapper>
           <div className={'main-layout'}>
             <Header isLoggedIn title={'Momenttify'} />
