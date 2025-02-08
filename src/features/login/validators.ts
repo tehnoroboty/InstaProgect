@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const LoginSchema = z.object({
+export const schema = z.object({
   email: z
     .string()
     .min(1, 'Email is required')
@@ -25,4 +25,4 @@ export const LoginSchema = z.object({
     .nonempty('Enter password'),
 })
 
-export type FormType = z.infer<typeof LoginSchema>
+export type FormType = z.infer<typeof schema>

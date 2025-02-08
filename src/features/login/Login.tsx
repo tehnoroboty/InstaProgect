@@ -1,84 +1,19 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
 
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLoginMutation } from '@/src/store/services/authApi'
-import { LoginError } from '@/src/store/services/types'
-import { isLoginApiError } from '@/src/utils/apiErrorHandlers'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useLogin } from '@/src/features/login/hooks/useLogin'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 import s from './Login.module.scss'
 
-import { FormType, LoginSchema } from './validators'
-
 export default function Login() {
-  const errorApi = useSelector(selectAppError)
-
-  const [login, { isLoading }] = useLoginMutation()
-
-  console.log('Is Loading:', isLoading)
-
-  const [errorObj, setErrorObj] = useState<LoginError | null>(null)
-  const router = useRouter()
-  const dispatch = useDispatch()
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-    watch,
-  } = useForm<FormType>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-    resolver: zodResolver(LoginSchema),
-  })
-
-  const email = watch('email')
-  const password = watch('password')
-
-  useEffect(() => {
-    if (errorApi) {
-      dispatch(setAppError({ error: null }))
-    }
-    if (errorObj) {
-      setErrorObj(null)
-    }
-  }, [email, password, dispatch])
-
-  const disabledButton = isLoading || !email || !password || Object.keys(errors).length > 0
-
-  const onSubmit: SubmitHandler<FormType> = async formData => {
-    try {
-      const res = await login(formData).unwrap()
-
-      dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      localStorage.setItem('sn-token', res.accessToken)
-      router.push('/home')
-    } catch (err) {
-      if (isLoginApiError(err)) {
-        const { data, status } = err
-
-        if (status === 400) {
-          setErrorObj(data)
-          dispatch(setAppError({ error: data.messages }))
-        } else {
-          console.error('Login failed:', err) // Логируем ошибку напрямую
-        }
-      }
-    }
-  }
+  const { disabledButton, errorObj, errors, handleSubmit, onSubmit, register } = useLogin()
 
   return (
     <div className={s.wrapper}>

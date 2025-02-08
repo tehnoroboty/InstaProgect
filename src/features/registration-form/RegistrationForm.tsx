@@ -7,7 +7,7 @@ import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { useRegistration } from '@/src/hooks/useRegistration'
+import { useRegistrationForm } from '@/src/features/registration-form/hooks/useRegistrationForm'
 import Link from 'next/link'
 
 import s from '@/src/features/registration-form/registration.module.scss'
@@ -26,7 +26,7 @@ export const RegistrationForm = () => {
     register,
     showSuccessMessage,
     trigger,
-  } = useRegistration()
+  } = useRegistrationForm()
 
   return (
     <div className={s.container}>

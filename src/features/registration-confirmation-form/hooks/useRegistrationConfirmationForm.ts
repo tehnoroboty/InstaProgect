@@ -1,11 +1,10 @@
-'use client'
 import { useEffect } from 'react'
 
 import { useRegistrationConfirmationMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export const useRegistrationConfirmation = () => {
+export const useRegistrationConfirmationForm = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [confirmRegistration] = useRegistrationConfirmationMutation()
