@@ -67,7 +67,7 @@ export const useRegistrationForm = () => {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
-      dispatch(setAppError({ error: errorMessage.message }))
+      dispatch(setAppError({ error: null }))
       if (errorMessage?.field === 'userName') {
         setError('username', { message: errorMessage.message, type: 'manual' })
       }
