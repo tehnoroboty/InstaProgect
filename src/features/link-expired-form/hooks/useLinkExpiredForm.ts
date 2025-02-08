@@ -40,7 +40,7 @@ export const useLinkExpiredForm = () => {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationEmailResendingData = {
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: formData.email,
       }
 

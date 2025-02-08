@@ -60,7 +60,7 @@ export const useForgotPasswordCard = () => {
   const onSubmit: SubmitHandler<FormType> = async data => {
     try {
       await passwordRecovery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: data.email,
         recaptcha: data.recaptcha,
       }).unwrap()
