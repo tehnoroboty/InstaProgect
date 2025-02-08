@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import PropagateLoader from 'react-spinners/PropagateLoader'
 
 const GitHubPage = () => {
   const searchParams = useSearchParams()
@@ -21,17 +22,17 @@ const GitHubPage = () => {
   }, [])
 
   return (
-    <h1
-      style={{
+    <PropagateLoader
+      color={'#ffffff'}
+      cssOverride={{
         alignItems: 'center',
         color: '#ffffff',
         display: 'flex',
-        height: '100vh',
+        height: '100%',
         justifyContent: 'center',
       }}
-    >
-      Loading...
-    </h1>
+      size={25}
+    />
   )
 }
 

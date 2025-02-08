@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { setAppError } from '@/src/store/Slices/appSlice'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
+import PropagateLoader from 'react-spinners/PropagateLoader'
 
 const GooglePage = () => {
   const searchParams = useSearchParams()
@@ -40,17 +41,17 @@ const GooglePage = () => {
   }, [error, data])
 
   return (
-    <h1
-      style={{
+    <PropagateLoader
+      color={'#ffffff'}
+      cssOverride={{
         alignItems: 'center',
         color: '#ffffff',
         display: 'flex',
-        height: '100vh',
+        height: '100%',
         justifyContent: 'center',
       }}
-    >
-      Loading...
-    </h1>
+      size={20}
+    />
   )
 }
 
