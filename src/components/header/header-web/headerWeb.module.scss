@@ -15,14 +15,10 @@
 .buttons {
   display: flex;
   gap: 24px;
-
 }
 
-@media  (width <=  768px) {
-  .container{
+@media (width <= 768px) {
+  .container {
     display: none;
   }
 }
-
-
-

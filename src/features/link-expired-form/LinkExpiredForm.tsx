@@ -3,7 +3,7 @@ import { Button } from '@/src/components/button/Button'
 import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
-import { useRegistrationEmailResending } from '@/src/hooks/useRegistrationEmailResending'
+import { useLinkExpiredForm } from '@/src/features/link-expired-form/hooks/useLinkExpiredForm'
 import Image from 'next/image'
 
 import s from './link-expired.module.scss'
@@ -21,7 +21,7 @@ export const LinkExpiredForm = () => {
     showSuccessMessage,
     trigger,
     watch,
-  } = useRegistrationEmailResending()
+  } = useLinkExpiredForm()
 
   return (
     <div className={s.container}>

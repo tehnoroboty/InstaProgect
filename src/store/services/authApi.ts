@@ -1,4 +1,4 @@
-import { FormType } from '@/src/features/Sinin/validators'
+import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/store/services/baseApi'
 
 import {

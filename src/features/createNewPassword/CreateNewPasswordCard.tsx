@@ -1,132 +1,29 @@
 'use client'
-import { SubmitHandler, useForm } from 'react-hook-form'
-
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
+import { Dialog } from '@/src/components/dialog/Dialog'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-const schema = z
-  .object({
-    newPassword: z
-      .string()
-      .nonempty('Enter password')
-      .min(6, 'Min 6 characters long')
-      .max(20, 'Max 20 characters long')
-      .regex(
-        new RegExp(
-          /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
-        ),
-        'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
-      ),
-    passwordConfirmation: z.string().nonempty('Confirm your password'),
-  })
-  .superRefine((data, ctx) => {
-    if (data.newPassword !== data.passwordConfirmation) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Passwords do not match',
-        path: ['passwordConfirmation'],
-      })
-    }
-
-    return data
-  })
-
-type FormType = z.infer<typeof schema>
-
-import { ChangeEvent, useEffect, useState } from 'react'
-
-import { Dialog } from '@/src/components/dialog/Dialog'
-import { setAppError } from '@/src/store/Slices/appSlice'
-import { useCreateNewPasswordMutation, useRecoveryCodeMutation } from '@/src/store/services/authApi'
-import { CustomerError } from '@/src/store/services/types'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './createNewPasswordPage.module.scss'
 
+import { useCreateNewPassword } from './hooks/useCreateNewPassword'
+
 export default function CreateNewPasswordCard() {
-  const [createNewPassword, { error, isError, isLoading, isSuccess }] =
-    useCreateNewPasswordMutation()
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
-  const err = error as CustomerError
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [recoveryCode] = useRecoveryCodeMutation()
-  const code = searchParams.get('code') as string
-
-  useEffect(() => {
-    const confirmCode = async () => {
-      try {
-        await recoveryCode({ recoveryCode: code }).unwrap()
-      } catch (err) {
-        const error = err as CustomerError
-        const errorMessage = error.data?.messages[0]
-
-        if (errorMessage?.field === 'code') {
-          router.push('/auth/forgot-password')
-        }
-      }
-    }
-
-    confirmCode()
-  }, [searchParams])
   const {
-    clearErrors,
-    formState: { errors },
+    err,
+    errors,
     handleSubmit,
+    isError,
+    isLoading,
+    isModalOpen,
+    isSuccess,
+    onChangeNewPassword,
+    onCloseModalHandler,
+    onSubmit,
     register,
-    reset,
-    setError,
-    setValue,
     trigger,
-  } = useForm<FormType>({
-    defaultValues: {
-      newPassword: '',
-      passwordConfirmation: '',
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(schema),
-  })
-
-  const onChangeNewPassword = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-
-    setValue('newPassword', value)
-    if (value) {
-      clearErrors('newPassword')
-    }
-  }
-
-  const onSubmit: SubmitHandler<FormType> = async data => {
-    try {
-      const res = createNewPassword({
-        newPassword: data.newPassword,
-        recoveryCode: code,
-      }).unwrap()
-
-      reset()
-      // удалить потом все активные сессии
-    } catch (error) {
-      const typedError = error as { data: { messages: { field: string; message: string }[] } }
-
-      if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
-        setError('newPassword', { message: typedError.data.messages[0].message, type: 'manual' })
-      } else {
-        setError('newPassword', { message: 'Server error', type: 'manual' })
-      }
-      reset()
-    }
-  }
-
-  const onCloseModalHandler = () => {
-    setIsModalOpen(false)
-    if (isSuccess) {
-      router.push('/auth/login')
-    }
-  }
+  } = useCreateNewPassword()
 
   return (
     <div className={s.container}>
