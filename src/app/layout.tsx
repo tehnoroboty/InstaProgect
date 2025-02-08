@@ -30,10 +30,10 @@ export default function RootLayout({
   return (
     <html lang={'en'}>
       <body>
-        <ProgressBar />
         <StoreWrapper>
           <div className={'main-layout'}>
             <Header isLoggedIn title={'Momenttify'} />
+            <ProgressBar />
             <main>{children}</main>
           </div>
           <CommonAlert />

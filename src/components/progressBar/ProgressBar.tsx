@@ -1,40 +1,47 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { authApi } from '@/src/store/services/authApi'
-import { baseApi } from '@/src/store/services/baseApi'
-import { usePathname } from 'next/navigation'
+import { RootState } from '@/src/store/store'
 import NProgress from 'nprogress'
 
 import 'nprogress/nprogress.css'
 
 export const ProgressBar = () => {
-  const pathname = usePathname()
-  const [exchangeGoogleCodeForToken] = authApi.endpoints.exchangeGoogleCodeForToken.useMutation()
+  const mutationRequest = useSelector((state: RootState) => state.inctagramApi.mutations)
+  const queryRequest = useSelector((state: RootState) => state.inctagramApi.queries)
 
-  useEffect(() => {
-    NProgress.configure({
-      easing: 'ease',
-      minimum: 0.1,
-      showSpinner: false,
-      speed: 800,
-      trickleSpeed: 800,
-    })
-    const handleStart = () => NProgress.start()
-    const handleComplete = () => NProgress.done()
+  NProgress.configure({
+    easing: 'ease',
+    minimum: 0.1,
+    showSpinner: false,
+    speed: 500,
+    trickleSpeed: 800,
+  })
 
-    handleStart()
-    handleComplete()
+  const handleStart = () => NProgress.start()
+  const handleComplete = () => NProgress.done()
+
+  useLayoutEffect(() => {
+    const requestStatus =
+      Object.values(mutationRequest)[0]?.status || Object.values(queryRequest)[0]?.status
+
+    if (requestStatus) {
+      if (requestStatus === 'pending') {
+        handleStart()
+      } else {
+        handleComplete()
+      }
+    } else {
+      handleStart()
+      handleComplete()
+    }
 
     return () => {
       NProgress.remove()
     }
-  }, [pathname])
-
-  useEffect(() => {
-    console.log(useQueryResult)
-  }, [])
+  }, [mutationRequest, queryRequest])
 
   return null
 }
