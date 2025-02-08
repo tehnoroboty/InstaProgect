@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { ClientWrapper } from '@/src/app/providers/ClientWrapper'
 import { CommonAlert } from '@/src/components/alerts/CommonAlert'
 import { StoreWrapper } from '@/src/store/StoreWrapper'
 import { Metadata } from 'next'
@@ -30,11 +31,13 @@ export default function RootLayout({
     <html lang={'en'}>
       <body>
         <StoreWrapper>
-          <div className={'main-layout'}>
-            <Header isLoggedIn title={'Momenttify'} />
-            <main>{children}</main>
-          </div>
-          <CommonAlert />
+          <ClientWrapper>
+            <div className={'main-layout'}>
+              <Header isLoggedIn title={'Momenttify'} />
+              <main>{children}</main>
+            </div>
+            <CommonAlert />
+          </ClientWrapper>
         </StoreWrapper>
       </body>
     </html>

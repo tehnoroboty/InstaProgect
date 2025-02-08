@@ -53,3 +53,10 @@ export type RegistrationEmailResending = {
   baseUrl: string
   email: string
 }
+
+export type MeResponse = {
+  email: string
+  isBlocked: boolean
+  userId: number
+  userName: string
+}

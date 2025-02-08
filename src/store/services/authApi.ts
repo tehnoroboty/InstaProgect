@@ -4,6 +4,7 @@ import { baseApi } from '@/src/store/services/baseApi'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
+  type MeResponse,
   OAuthTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
@@ -42,6 +43,9 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
         url: 'auth/logout',
       }),
+    }),
+    me: builder.query<MeResponse, void>({
+      query: () => 'auth/me',
     }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
       query: data => ({
@@ -86,6 +90,7 @@ export const {
   useExchangeGoogleCodeForTokenMutation,
   useLoginMutation,
   useLogoutMutation,
+  useMeQuery,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,
