@@ -31,7 +31,6 @@ const GitHubPage = () => {
         height: '100%',
         justifyContent: 'center',
       }}
-      // margin={10}
       size={25}
     />
   )
