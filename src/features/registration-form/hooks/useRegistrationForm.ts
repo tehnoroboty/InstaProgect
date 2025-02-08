@@ -1,29 +1,15 @@
-'use client'
-
-import { ChangeEvent, useState } from 'react'
+import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { useRegistrationEmailResendingMutation } from '@/src/store/services/authApi'
+import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
-export const useRegistrationEmailResending = () => {
-  const schema = z.object({
-    email: z
-      .string()
-      .min(1, 'Email is required')
-      .email('Invalid email address')
-      .regex(
-        /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-        'The email must match the format example@example.com'
-      ),
-  })
+import { FormType, schema } from '../validators'
 
-  type FormType = z.infer<typeof schema>
-
+export const useRegistrationForm = () => {
+  const ref = useRef<HTMLInputElement>(null)
   const {
-    clearErrors,
     formState: { errors },
     getValues,
     handleSubmit,
@@ -35,36 +21,52 @@ export const useRegistrationEmailResending = () => {
     watch,
   } = useForm<FormType>({
     defaultValues: {
+      checkbox: false,
       email: '',
+      password: '',
+      passwordConfirmation: '',
+      username: '',
     },
     resolver: zodResolver(schema),
   })
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
+  const onChangeHandler = () => {
+    if (ref.current) {
+      const value = ref.current.checked
 
-    setValue('email', value)
-    if (value) {
-      clearErrors('email')
+      setValue('checkbox', value)
     }
   }
-  const [registrationEmailResending, { isLoading }] = useRegistrationEmailResendingMutation()
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
+  const disabledButton =
+    !watch('email') ||
+    !watch('username') ||
+    !watch('password') ||
+    !watch('passwordConfirmation') ||
+    !watch('checkbox') ||
+    Object.keys(errors).length > 0
+
+  const [registration, { isLoading }] = useRegistrationMutation()
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
-      const registrationEmailResendingData = {
+      const registrationData = {
         baseUrl: 'http://localhost:3000',
         email: formData.email,
+        password: formData.password,
+        userName: formData.username,
       }
 
-      await registrationEmailResending(registrationEmailResendingData).unwrap()
+      await registration(registrationData).unwrap()
 
       setShowSuccessMessage(true)
     } catch (err) {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
+      if (errorMessage?.field === 'userName') {
+        setError('username', { message: errorMessage.message, type: 'manual' })
+      }
       if (errorMessage?.field === 'email') {
         setError('email', { message: errorMessage.message, type: 'manual' })
       }
@@ -77,6 +79,7 @@ export const useRegistrationEmailResending = () => {
   }
 
   return {
+    disabledButton,
     errors,
     getValues,
     handleCloseMessage,
@@ -84,9 +87,9 @@ export const useRegistrationEmailResending = () => {
     isLoading,
     onChangeHandler,
     onSubmit,
+    ref,
     register,
     showSuccessMessage,
     trigger,
-    watch,
   }
 }

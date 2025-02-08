@@ -1,5 +1,5 @@
-import Signin from '@/src/features/Sinin/Signin'
+import Login from '@/src/features/login/Login'
 
 export default function LoginPage() {
-  return <Signin />
+  return <Login />
 }
