@@ -57,7 +57,8 @@ export default function ForgotPasswordCard() {
           ) : (
             <div className={s.alternativeContent}>
               <Typography as={'span'}>
-                {'The link has been sent by email.If you don’t receive an email send link again'}
+                {'The link has been sent by email. If you don’t receive an' +
+                  ' email send link again'}
               </Typography>
               <Button fullWidth onClick={handleResendLink} variant={'primary'}>
                 {'Send Link Again'}
@@ -65,7 +66,7 @@ export default function ForgotPasswordCard() {
             </div>
           )}
         </form>
-        <Button as={Link} className={s.link} fullWidth href={'/login'} variant={'transparent'}>
+        <Button as={Link} className={s.link} fullWidth href={'/auth/login'} variant={'transparent'}>
           {'Back to Sing In'}
         </Button>
         {!formSubmit && (

@@ -1,8 +1,11 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { usePasswordRecoveryMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { FormType, schema } from '../validators'
@@ -13,6 +16,7 @@ export const useForgotPasswordCard = () => {
   const [passwordRecovery, { isLoading }] = usePasswordRecoveryMutation()
   const [recaptchaError, setRecaptchaError] = useState<null | string>(null)
   const [serverError, setServerError] = useState<null | string>(null)
+  const dispatch = useDispatch()
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
   const {
     clearErrors,
@@ -66,8 +70,9 @@ export const useForgotPasswordCard = () => {
       clearErrors(['email', 'recaptcha'])
       setFormSubmit(true)
     } catch (error) {
-      const typedError = error as { data: { messages: { field: string; message: string }[] } }
+      const typedError = error as CustomerError
 
+      dispatch(setAppError({ error: null }))
       if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
         setServerError(typedError.data.messages[0].message)
       } else {

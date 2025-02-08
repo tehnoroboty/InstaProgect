@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -47,6 +49,7 @@ export const useRegistrationForm = () => {
     Object.keys(errors).length > 0
 
   const [registration, { isLoading }] = useRegistrationMutation()
+  const dispatch = useDispatch()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -64,6 +67,7 @@ export const useRegistrationForm = () => {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
+      dispatch(setAppError({ error: errorMessage.message }))
       if (errorMessage?.field === 'userName') {
         setError('username', { message: errorMessage.message, type: 'manual' })
       }
