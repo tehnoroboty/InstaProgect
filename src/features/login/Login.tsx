@@ -10,7 +10,7 @@ import { Typography } from '@/src/components/typography/Typography'
 import { useLogin } from '@/src/features/login/hooks/useLogin'
 import Link from 'next/link'
 
-import s from './Login.module.scss'
+import s from './login.module.scss'
 
 export default function Login() {
   const { disabledButton, errorObj, errors, handleSubmit, onSubmit, register } = useLogin()
