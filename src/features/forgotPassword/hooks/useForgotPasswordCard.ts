@@ -21,19 +21,19 @@ export const useForgotPasswordCard = () => {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
   const {
     clearErrors,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
     handleSubmit,
     register,
     reset,
     setValue,
     trigger,
-    watch,
   } = useForm<FormType>({
     defaultValues: {
       email: '',
       recaptcha: '',
     },
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
 
@@ -61,7 +61,7 @@ export const useForgotPasswordCard = () => {
   const onSubmit: SubmitHandler<FormType> = async data => {
     try {
       await passwordRecovery({
-        baseUrl: 'https://momenttify.store',
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
         email: data.email,
         recaptcha: data.recaptcha,
       }).unwrap()
@@ -73,7 +73,6 @@ export const useForgotPasswordCard = () => {
     } catch (error) {
       const typedError = error as CustomerError
 
-      dispatch(setAppError({ error: null }))
       if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
         setServerError(typedError.data.messages[0].message)
       } else {
@@ -87,8 +86,7 @@ export const useForgotPasswordCard = () => {
     setFormSubmit(false)
   }
 
-  const isButtonDisabled =
-    !watch('email') || !watch('recaptcha') || recaptchaError !== null || isLoading
+  const isButtonDisabled = !isValid || recaptchaError !== null || isLoading
 
   return {
     errors,

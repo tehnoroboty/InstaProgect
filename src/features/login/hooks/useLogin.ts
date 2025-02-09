@@ -1,51 +1,34 @@
-import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { selectAppError, setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLoginMutation, useRegistrationConfirmationMutation } from '@/src/store/services/authApi'
-import { CustomerError, LoginError } from '@/src/store/services/types'
-import { isLoginApiError } from '@/src/utils/apiErrorHandlers'
+import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { useLoginMutation } from '@/src/store/services/authApi'
+import { LoginError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { FormType, schema } from '../validators'
 
 export const useLogin = () => {
-  const errorApi = useSelector(selectAppError)
-
   const [login, { isLoading }] = useLoginMutation()
 
-  const [errorObj, setErrorObj] = useState<LoginError | null>(null)
   const router = useRouter()
   const dispatch = useDispatch()
 
   const {
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     register,
-    watch,
+    setError,
   } = useForm<FormType>({
     defaultValues: {
       email: '',
       password: '',
     },
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
-
-  const email = watch('email')
-  const password = watch('password')
-
-  useEffect(() => {
-    if (errorApi) {
-      dispatch(setAppError({ error: null }))
-    }
-    if (errorObj) {
-      setErrorObj(null)
-    }
-  }, [email, password, dispatch])
-
-  const disabledButton = isLoading || !email || !password || Object.keys(errors).length > 0
+  const disabledButton = isLoading || !isValid || Object.keys(errors).length > 0
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -55,17 +38,11 @@ export const useLogin = () => {
       localStorage.setItem('sn-token', res.accessToken)
       router.push('/home')
     } catch (err) {
-      if (isLoginApiError(err)) {
-        const { data, status } = err
+      const { data, status } = err as LoginError
 
-        if (status === 400) {
-          setErrorObj(data)
-          dispatch(setAppError({ error: data.messages }))
-        }
-      }
+      setError('password', { message: data.messages, type: 'manual' })
     }
-    console.error('Registration failed:', errors.root)
   }
 
-  return { disabledButton, errorObj, errors, handleSubmit, onSubmit, register }
+  return { disabledButton, errors, handleSubmit, onSubmit, register }
 }
