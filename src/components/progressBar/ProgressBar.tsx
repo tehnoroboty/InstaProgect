@@ -9,8 +9,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 export const ProgressBar = () => {
-  const mutationRequest = useSelector((state: RootState) => state.inctagramApi.mutations)
-  const queryRequest = useSelector((state: RootState) => state.inctagramApi.queries)
+  const status = useSelector((state: RootState) => state.app.status)
 
   NProgress.configure({
     easing: 'ease',
@@ -24,24 +23,16 @@ export const ProgressBar = () => {
   const handleComplete = () => NProgress.done()
 
   useLayoutEffect(() => {
-    const requestStatus =
-      Object.values(mutationRequest)[0]?.status || Object.values(queryRequest)[0]?.status
-
-    if (requestStatus) {
-      if (requestStatus === 'pending') {
-        handleStart()
-      } else {
-        handleComplete()
-      }
-    } else {
+    if (status === 'loading') {
       handleStart()
+    } else {
       handleComplete()
     }
 
     return () => {
       NProgress.remove()
     }
-  }, [mutationRequest, queryRequest])
+  }, [status])
 
   return null
 }
