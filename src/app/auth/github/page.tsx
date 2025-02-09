@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import PropagateLoader from 'react-spinners/PropagateLoader'
@@ -36,4 +36,10 @@ const GitHubPage = () => {
   )
 }
 
-export default GitHubPage
+export default function SuspenseWrapper() {
+  return (
+    <Suspense>
+      <GitHubPage />
+    </Suspense>
+  )
+}

@@ -1,4 +1,5 @@
 import { ChangeEvent, useRef, useState } from 'react'
+/* eslint-disable import/no-named-as-default */
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
