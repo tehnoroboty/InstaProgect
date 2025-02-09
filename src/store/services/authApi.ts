@@ -1,6 +1,7 @@
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/store/services/baseApi'
 
+import { setAppError } from '../Slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -22,6 +23,17 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     exchangeGoogleCodeForToken: builder.mutation<OAuthTokenResponse, ArgsPostGoogleOAuth>({
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const res = await queryFulfilled
+
+          localStorage.setItem('sn-token', res.data.accessToken)
+        } catch (error) {
+          const errorResponse = error as { error: { data: { messages: [{ message: string }] } } }
+
+          dispatch(setAppError({ error: errorResponse.error.data.messages[0].message }))
+        }
+      },
       query: body => {
         return {
           body,
