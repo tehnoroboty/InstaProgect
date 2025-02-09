@@ -2,8 +2,10 @@
 
 import { useEffect } from 'react'
 
+import { Loader } from '@/src/components/loader/Loader'
 import { useRouter, useSearchParams } from 'next/navigation'
-import PropagateLoader from 'react-spinners/PropagateLoader'
+
+import s from './githubOAuth.module.scss'
 
 const GitHubPage = () => {
   const searchParams = useSearchParams()
@@ -22,17 +24,9 @@ const GitHubPage = () => {
   }, [])
 
   return (
-    <PropagateLoader
-      color={'#ffffff'}
-      cssOverride={{
-        alignItems: 'center',
-        color: '#ffffff',
-        display: 'flex',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-      size={25}
-    />
+    <div className={s.container}>
+      <Loader />
+    </div>
   )
 }
 

@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
+import { Loader } from '@/src/components/loader/Loader'
 import { setAppError } from '@/src/store/Slices/appSlice'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
-import PropagateLoader from 'react-spinners/PropagateLoader'
+
+import s from './googleOAuth.module.scss'
 
 const GooglePage = () => {
   const searchParams = useSearchParams()
@@ -14,44 +16,40 @@ const GooglePage = () => {
   const dispatch = useDispatch()
 
   const [exchangeGoogleCodeForToken, { data, error }] = useExchangeGoogleCodeForTokenMutation()
+  const code = searchParams.get('code')
 
   useEffect(() => {
-    const code = searchParams.get('code')
-
     if (!code) {
       router.push('/auth/login')
-    } else {
-      exchangeGoogleCodeForToken({ code, redirectUrl: 'http://localhost:3000/auth/google' })
-        .unwrap()
-        .catch(err => {
-          dispatch(setAppError({ error: err.data.messages[0].message }))
-        })
-    }
-  }, [])
 
-  useEffect(() => {
-    if (error) {
-      router.push('/auth/registration')
-    } else {
-      if (data) {
-        localStorage.setItem('sn-token', data.accessToken)
+      return
+    }
+
+    const fetchData = async () => {
+      try {
+        const result = await exchangeGoogleCodeForToken({
+          code,
+          redirectUrl: 'http://localhost:3000/auth/google',
+        }).unwrap()
+
+        localStorage.setItem('sn-token', result.accessToken)
         router.push('/home')
+      } catch (err) {
+        const error = err as { data: { messages: [{ message: string }] } }
+
+        dispatch(setAppError({ error: error.data.messages[0].message }))
+
+        router.push('/auth/registration')
       }
     }
-  }, [error, data])
+
+    fetchData()
+  }, [code])
 
   return (
-    <PropagateLoader
-      color={'#ffffff'}
-      cssOverride={{
-        alignItems: 'center',
-        color: '#ffffff',
-        display: 'flex',
-        height: '100%',
-        justifyContent: 'center',
-      }}
-      size={20}
-    />
+    <div className={s.container}>
+      <Loader />
+    </div>
   )
 }
 

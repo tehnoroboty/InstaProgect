@@ -14,6 +14,8 @@ export const GoogleOAuthButton = (props: Props) => {
   const { className, setDisabledButton, ...rest } = props
 
   const login = () => {
+    console.log(2222)
+
     setDisabledButton(true)
     const clientId = getClientId()
     const REDIRECT_URL = 'http://localhost:3000/auth/google'
