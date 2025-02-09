@@ -10,7 +10,7 @@ export const handleError = (
   api: BaseQueryApi,
   result: QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>
 ) => {
-  let error = 'Some error occurred'
+  let error = null
 
   if (result.error) {
     switch (result.error.status) {
@@ -33,9 +33,11 @@ export const handleError = (
         break
 
       default:
-        error = JSON.stringify(result.error)
+        error = null
         break
     }
-    api.dispatch(setAppError({ error }))
+    if (error) {
+      api.dispatch(setAppError({ error }))
+    }
   }
 }

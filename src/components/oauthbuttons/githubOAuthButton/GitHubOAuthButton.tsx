@@ -17,7 +17,7 @@ export const GitHubOAuthButton = (props: Props) => {
   const login = () => {
     setDisabledButton(true)
     window.location.assign(
-      `https://inctagram.work/api/v1/auth/github/login?redirect_url=https://momenttify.store/auth/`
+      `https://inctagram.work/api/v1/auth/github/login?redirect_url=${process.env.NEXT_PUBLIC_BASE_URL as string}/auth/`
     )
   }
 

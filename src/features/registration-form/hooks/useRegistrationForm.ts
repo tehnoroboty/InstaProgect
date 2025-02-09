@@ -12,7 +12,7 @@ import { FormType, schema } from '../validators'
 export const useRegistrationForm = () => {
   const ref = useRef<HTMLInputElement>(null)
   const {
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
     handleSubmit,
     register,
@@ -20,15 +20,15 @@ export const useRegistrationForm = () => {
     setError,
     setValue,
     trigger,
-    watch,
   } = useForm<FormType>({
     defaultValues: {
       checkbox: false,
       email: '',
       password: '',
       passwordConfirmation: '',
-      username: '',
+      userName: '',
     },
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
 
@@ -40,24 +40,16 @@ export const useRegistrationForm = () => {
     }
   }
 
-  const disabledButton =
-    !watch('email') ||
-    !watch('username') ||
-    !watch('password') ||
-    !watch('passwordConfirmation') ||
-    !watch('checkbox') ||
-    Object.keys(errors).length > 0
-
   const [registration, { isLoading }] = useRegistrationMutation()
-  const dispatch = useDispatch()
+  const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoading
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationData = {
-        baseUrl: 'https://momenttify.store',
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
         email: formData.email,
         password: formData.password,
-        userName: formData.username,
+        userName: formData.userName,
       }
 
       await registration(registrationData).unwrap()
@@ -67,9 +59,8 @@ export const useRegistrationForm = () => {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
-      dispatch(setAppError({ error: null }))
       if (errorMessage?.field === 'userName') {
-        setError('username', { message: errorMessage.message, type: 'manual' })
+        setError('userName', { message: errorMessage.message, type: 'manual' })
       }
       if (errorMessage?.field === 'email') {
         setError('email', { message: errorMessage.message, type: 'manual' })
@@ -88,7 +79,6 @@ export const useRegistrationForm = () => {
     getValues,
     handleCloseMessage,
     handleSubmit,
-    isLoading,
     onChangeHandler,
     onSubmit,
     ref,

@@ -75,7 +75,6 @@ export const useCreateNewPassword = () => {
     } catch (error) {
       const typedError = error as CustomerError
 
-      dispatch(setAppError({ error: null }))
       if (typedError?.data?.messages && typedError.data.messages[0]?.message) {
         setError('newPassword', { message: typedError.data.messages[0].message, type: 'manual' })
       } else {

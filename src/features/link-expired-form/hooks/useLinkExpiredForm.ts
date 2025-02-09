@@ -10,7 +10,7 @@ import { FormType, schema } from '../validators'
 export const useLinkExpiredForm = () => {
   const {
     clearErrors,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
     handleSubmit,
     register,
@@ -40,7 +40,7 @@ export const useLinkExpiredForm = () => {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationEmailResendingData = {
-        baseUrl: 'https://momenttify.store',
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
         email: formData.email,
       }
 
@@ -68,11 +68,11 @@ export const useLinkExpiredForm = () => {
     handleCloseMessage,
     handleSubmit,
     isLoading,
+    isValid,
     onChangeHandler,
     onSubmit,
     register,
     showSuccessMessage,
     trigger,
-    watch,
   }
 }

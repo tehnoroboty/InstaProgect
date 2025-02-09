@@ -44,9 +44,12 @@ export type ArgsPostGoogleOAuth = {
 }
 
 export type LoginError = {
-  error?: string
-  messages: string
-  statusCode?: number
+  data: {
+    error?: string
+    messages: string
+    statusCode?: number
+  }
+  status: number
 }
 
 export type RegistrationEmailResending = {
