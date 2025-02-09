@@ -73,7 +73,10 @@ export default function ForgotPasswordCard() {
           <Recaptcha
             className={s.recaptcha}
             isError={recaptchaError}
-            onChangeValue={onChangeToken}
+            onChangeValue={value => {
+              onChangeToken(value)
+              trigger('recaptcha')
+            }}
             ref={recaptchaRef}
           />
         )}

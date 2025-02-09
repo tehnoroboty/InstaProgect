@@ -2,9 +2,7 @@ import { ChangeEvent, useRef, useState } from 'react'
 /* eslint-disable import/no-named-as-default */
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
 
-import { setAppError } from '@/src/store/Slices/appSlice'
 import { usePasswordRecoveryMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +15,6 @@ export const useForgotPasswordCard = () => {
   const [passwordRecovery, { isLoading }] = usePasswordRecoveryMutation()
   const [recaptchaError, setRecaptchaError] = useState<null | string>(null)
   const [serverError, setServerError] = useState<null | string>(null)
-  const dispatch = useDispatch()
   const recaptchaRef = useRef<ReCAPTCHA | null>(null)
   const {
     clearErrors,
