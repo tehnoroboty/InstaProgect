@@ -1,4 +1,4 @@
-import { createSlice, isFulfilled, isPending } from '@reduxjs/toolkit'
+import { createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit'
 
 export type RequestStatus = 'idle' | 'loading' | 'succeeded'
 
@@ -10,6 +10,9 @@ export const appSlice = createSlice({
       })
       .addMatcher(isFulfilled, state => {
         state.status = 'succeeded'
+      })
+      .addMatcher(isRejected, state => {
+        state.status = 'idle'
       })
   },
   initialState: {
