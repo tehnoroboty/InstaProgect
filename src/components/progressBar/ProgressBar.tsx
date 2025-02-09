@@ -3,13 +3,13 @@
 import { useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { RootState } from '@/src/store/store'
+import { selectAppStatus } from '@/src/store/Slices/appSlice'
 import NProgress from 'nprogress'
 
 import 'nprogress/nprogress.css'
 
 export const ProgressBar = () => {
-  const status = useSelector((state: RootState) => state.app.status)
+  const status = useSelector(selectAppStatus)
 
   NProgress.configure({
     easing: 'ease',
