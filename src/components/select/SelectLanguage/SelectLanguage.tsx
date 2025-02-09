@@ -4,7 +4,7 @@ import { ComponentPropsWithoutRef, useState } from 'react'
 
 import Arrow from '@/src/assets/componentsIcons/ArrowIosDownOutline'
 import FlagRu from '@/src/assets/componentsIcons/Flagrussia'
-import FlagUK from '@/src/assets/componentsIcons/Flagunitedkingdom'
+import FlagUK from '@/src/assets/componentsIcons/FlagunitedkingdomNew'
 import { Options } from '@/src/components/select/SelectBox'
 import { SelectItem } from '@/src/components/select/SelectItem'
 import * as Select from '@radix-ui/react-select'

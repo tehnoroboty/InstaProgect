@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 
 import { Loader } from '@/src/components/loader/Loader'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -30,4 +30,10 @@ const GitHubPage = () => {
   )
 }
 
-export default GitHubPage
+export default function SuspenseWrapper() {
+  return (
+    <Suspense>
+      <GitHubPage />
+    </Suspense>
+  )
+}

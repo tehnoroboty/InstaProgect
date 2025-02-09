@@ -1,27 +1,13 @@
-'use client'
-
 import { ChangeEvent, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useRegistrationEmailResendingMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
-export const useRegistrationEmailResending = () => {
-  const schema = z.object({
-    email: z
-      .string()
-      .min(1, 'Email is required')
-      .email('Invalid email address')
-      .regex(
-        /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-        'The email must match the format example@example.com'
-      ),
-  })
+import { FormType, schema } from '../validators'
 
-  type FormType = z.infer<typeof schema>
-
+export const useLinkExpiredForm = () => {
   const {
     clearErrors,
     formState: { errors },
@@ -54,7 +40,7 @@ export const useRegistrationEmailResending = () => {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationEmailResendingData = {
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: formData.email,
       }
 

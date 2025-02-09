@@ -33,3 +33,37 @@
 .active {
   color: var(--primary-500);
 }
+
+
+.modal {
+  width: 28%;
+  height: fit-content;
+
+  @media (width <= 780px) {
+    width: 55%;
+  }
+
+  @media (width <= 375px) {
+    width: 95%;
+  }
+}
+
+.contentModal {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding-top: 30px;
+
+  text-align: justify;
+}
+
+.modalActions{
+  display: flex;
+  justify-content: space-around;
+}
+
+.btnModal {
+  align-self: end;
+  width: max(100px, 20%);
+}

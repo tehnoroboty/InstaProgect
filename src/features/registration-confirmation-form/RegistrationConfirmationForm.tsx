@@ -1,14 +1,14 @@
 'use client'
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
-import { useRegistrationConfirmation } from '@/src/hooks/useRegistrationConfirmation'
+import { useRegistrationConfirmationForm } from '@/src/features/registration-confirmation-form/hooks/useRegistrationConfirmationForm'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import s from '@/src/features/registration-confirmation-form/email-confirmed.module.scss'
 
 export const RegistrationConfirmationForm = () => {
-  useRegistrationConfirmation()
+  useRegistrationConfirmationForm()
 
   return (
     <div className={s.container}>

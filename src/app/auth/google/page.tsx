@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { Loader } from '@/src/components/loader/Loader'
@@ -53,4 +53,10 @@ const GooglePage = () => {
   )
 }
 
-export default GooglePage
+export default function SuspenseWrapper() {
+  return (
+    <Suspense>
+      <GooglePage />
+    </Suspense>
+  )
+}

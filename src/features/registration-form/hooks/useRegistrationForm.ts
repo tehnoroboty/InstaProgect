@@ -1,59 +1,15 @@
-'use client'
-
 import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
+import { setAppError } from '@/src/store/Slices/appSlice'
 import { useRegistrationMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
-export const useRegistration = () => {
-  const schema = z
-    .object({
-      checkbox: z.boolean(),
-      email: z
-        .string()
-        .min(1, 'Email is required')
-        .email('Invalid email address')
-        .regex(
-          /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-          'The email must match the format example@example.com'
-        ),
-      password: z
-        .string()
-        .nonempty('Enter password')
-        .min(6, 'Min 6 characters long')
-        .max(20, 'Max 20 characters long')
-        .regex(
-          new RegExp(
-            /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
-          ),
-          'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
-        ),
-      passwordConfirmation: z.string().nonempty('Confirm your password'),
-      username: z
-        .string()
-        .nonempty('Enter username')
-        .min(6, 'Min 6 characters long')
-        .max(30, 'Max characters long')
-        .nonempty('Enter username')
-        .regex(/^[A-Za-z0-9_-]+$/, 'Invalid username'),
-    })
-    .superRefine((data, ctx) => {
-      if (data.password !== data.passwordConfirmation) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Passwords do not match',
-          path: ['passwordConfirmation'],
-        })
-      }
+import { FormType, schema } from '../validators'
 
-      return data
-    })
-
-  type FormType = z.infer<typeof schema>
-
+export const useRegistrationForm = () => {
   const ref = useRef<HTMLInputElement>(null)
   const {
     formState: { errors },
@@ -93,11 +49,12 @@ export const useRegistration = () => {
     Object.keys(errors).length > 0
 
   const [registration, { isLoading }] = useRegistrationMutation()
+  const dispatch = useDispatch()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationData = {
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: formData.email,
         password: formData.password,
         userName: formData.username,
@@ -110,6 +67,7 @@ export const useRegistration = () => {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
 
+      dispatch(setAppError({ error: null }))
       if (errorMessage?.field === 'userName') {
         setError('username', { message: errorMessage.message, type: 'manual' })
       }

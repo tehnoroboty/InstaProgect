@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
 
@@ -165,7 +165,10 @@ export const DisabledLabel = () => {
         </Typography>
         <input disabled={disabledLabel} id={'username'} type={'checkbox'} />
       </div>
-      <button onClick={onChangeDisabled}>disabled checkbox</button>
+
+      <button onClick={onChangeDisabled} type={'button'}>
+        disabled checkbox
+      </button>
     </>
   )
 }
