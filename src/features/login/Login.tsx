@@ -13,7 +13,7 @@ import Link from 'next/link'
 import s from './login.module.scss'
 
 export default function Login() {
-  const { disabledButton, errorObj, errors, handleSubmit, onSubmit, register } = useLogin()
+  const { disabledButton, errors, handleSubmit, onSubmit, register } = useLogin()
 
   return (
     <div className={s.wrapper}>
@@ -40,10 +40,7 @@ export default function Login() {
             placeholder={'**********'}
             type={'password'}
             {...register('password')}
-            error={
-              (errorObj?.statusCode === 400 ? errorObj.messages : '') ||
-              (errors.password && errors.password.message)
-            }
+            error={errors.password && errors.password.message}
           />
           <div className={s.forgotPassword}>
             <Link className={s.link} href={'/auth/forgot-password'}>

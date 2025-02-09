@@ -21,7 +21,10 @@ const GooglePage = () => {
     if (!code) {
       router.push('/auth/login')
     } else {
-      exchangeGoogleCodeForToken({ code, redirectUrl: 'https://momenttify.store/auth/google' })
+      exchangeGoogleCodeForToken({
+        code,
+        redirectUrl: (process.env.NEXT_PUBLIC_BASE_URL as string) + '/auth/google',
+      })
         .unwrap()
         .catch(err => {
           dispatch(setAppError({ error: err.data.messages[0].message }))

@@ -23,7 +23,7 @@ export const schema = z
         'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
       ),
     passwordConfirmation: z.string().nonempty('Confirm your password'),
-    username: z
+    userName: z
       .string()
       .nonempty('Enter username')
       .min(6, 'Min 6 characters long')

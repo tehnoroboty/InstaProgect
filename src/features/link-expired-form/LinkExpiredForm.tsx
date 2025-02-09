@@ -15,12 +15,12 @@ export const LinkExpiredForm = () => {
     handleCloseMessage,
     handleSubmit,
     isLoading,
+    isValid,
     onChangeHandler,
     onSubmit,
     register,
     showSuccessMessage,
     trigger,
-    watch,
   } = useLinkExpiredForm()
 
   return (
@@ -55,7 +55,7 @@ export const LinkExpiredForm = () => {
           {...register('email', { onBlur: () => trigger('email'), onChange: onChangeHandler })}
           error={errors.email && errors.email.message}
         />
-        <Button disabled={!watch('email') || isLoading} variant={'primary'}>
+        <Button disabled={!isValid || isLoading} variant={'primary'}>
           {'Resend verification link'}
         </Button>
       </form>

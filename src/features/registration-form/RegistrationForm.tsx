@@ -19,7 +19,6 @@ export const RegistrationForm = () => {
     getValues,
     handleCloseMessage,
     handleSubmit,
-    isLoading,
     onChangeHandler,
     onSubmit,
     ref,
@@ -57,10 +56,10 @@ export const RegistrationForm = () => {
             label={'Username'}
             placeholder={'Username'}
             type={'text'}
-            {...register('username', {
-              onBlur: () => trigger('username'),
+            {...register('userName', {
+              onBlur: () => trigger('userName'),
             })}
-            error={errors.username?.message}
+            error={errors.userName?.message}
           />
           <Input
             label={'Email'}
@@ -106,7 +105,7 @@ export const RegistrationForm = () => {
             onChange={onChangeHandler}
             ref={ref}
           />
-          <Button disabled={disabledButton || isLoading} fullWidth variant={'primary'}>
+          <Button disabled={disabledButton} fullWidth variant={'primary'}>
             {'Sing Up'}
           </Button>
         </form>
