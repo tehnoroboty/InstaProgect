@@ -40,7 +40,7 @@ export const useCreateNewPassword = () => {
   })
 
   useEffect(() => {
-    const confirmCode = async () => {
+    ;(async () => {
       try {
         await recoveryCode({ recoveryCode: code }).unwrap()
       } catch (err) {
@@ -52,10 +52,8 @@ export const useCreateNewPassword = () => {
           router.push('/auth/forgot-password')
         }
       }
-    }
-
-    confirmCode()
-  }, [searchParams])
+    })()
+  }, [code, dispatch, recoveryCode, router])
 
   const onChangeNewPassword = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value

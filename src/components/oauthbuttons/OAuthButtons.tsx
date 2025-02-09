@@ -1,6 +1,6 @@
 'use client'
 
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef, Suspense, useState } from 'react'
 
 import clsx from 'clsx'
 

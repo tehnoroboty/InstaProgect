@@ -1,4 +1,5 @@
 import { ChangeEvent, useRef, useState } from 'react'
+/* eslint-disable import/no-named-as-default */
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -60,7 +61,7 @@ export const useForgotPasswordCard = () => {
   const onSubmit: SubmitHandler<FormType> = async data => {
     try {
       await passwordRecovery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: data.email,
         recaptcha: data.recaptcha,
       }).unwrap()

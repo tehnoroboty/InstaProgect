@@ -54,7 +54,7 @@ export const useRegistrationForm = () => {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationData = {
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'https://momenttify.store',
         email: formData.email,
         password: formData.password,
         userName: formData.username,
