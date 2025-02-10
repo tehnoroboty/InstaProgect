@@ -34,10 +34,11 @@ export const appSlice = createSlice({
   }),
   selectors: {
     selectAppError: state => state.error,
+    selectAppStatus: state => state.status,
     selectIsLoggedIn: state => state.isLoggedIn,
   },
 })
 
-export const { setAppError, setIsLoggedIn } = appSlice.actions
-export const { selectAppError, selectIsLoggedIn } = appSlice.selectors
+export const { setAppError, setAppStatus, setIsLoggedIn } = appSlice.actions
+export const { selectAppError, selectAppStatus, selectIsLoggedIn } = appSlice.selectors
 export const appReducer = appSlice.reducer
