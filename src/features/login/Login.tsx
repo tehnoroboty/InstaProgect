@@ -15,7 +15,7 @@ import s from './login.module.scss'
 export default function Login() {
   const { disabledButton, errors, handleSubmit, isLoading, onSubmit, register } = useLogin()
 
-  console.log(isLoading)
+  console.log('Login', isLoading)
   // debugger
 
   return (

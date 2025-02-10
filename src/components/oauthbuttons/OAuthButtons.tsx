@@ -17,13 +17,17 @@ type Props = {
 export const OAuthButtons = (props: Props) => {
   const { className, disabled = false, ...rest } = props
 
-  const [disabledButton, setDisabledButton] = useState(disabled)
+  console.log(disabled)
+  const [disabledButton, setDisabledButton] = useState(false)
+
+  console.log(disabledButton)
 
   return (
     <div className={clsx(s.container, className)} {...rest}>
       <GoogleOAuthButton
         className={s.button}
-        disabled={disabledButton}
+        disabled={disabled}
+        disabledButton={disabledButton}
         setDisabledButton={setDisabledButton}
       />
 

@@ -10,8 +10,9 @@ import { useRouter } from 'next/navigation'
 import { FormType, schema } from '../validators'
 
 export const useLogin = () => {
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { data, error, isError, isLoading }] = useLoginMutation()
 
+  console.log({ data, error, isError, isLoading })
   const router = useRouter()
   const dispatch = useDispatch()
 
@@ -32,12 +33,12 @@ export const useLogin = () => {
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
-      const res = await login(formData).unwrap()
+      await login(formData).unwrap()
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      router.push('/home')
+      router.replace('/home')
     } catch (err) {
-      const { data, status } = err as LoginError
+      const { data } = err as LoginError
 
       setError('password', { message: data.messages, type: 'manual' })
     }

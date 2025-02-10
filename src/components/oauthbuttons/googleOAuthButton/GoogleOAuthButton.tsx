@@ -7,11 +7,15 @@ import { getClientId } from '@/src/utils/googleClientId'
 
 type Props = {
   className?: string
+  disabled?: boolean
+  disabledButton: boolean
   setDisabledButton: (value: boolean) => void
 } & ComponentPropsWithoutRef<'button'>
 
 export const GoogleOAuthButton = (props: Props) => {
-  const { className, setDisabledButton, ...rest } = props
+  const { className, disabled, disabledButton, setDisabledButton, ...rest } = props
+
+  // console.log('🚀GoogleOAuthButton', disabled)
 
   const login = () => {
     setDisabledButton(true)
@@ -24,7 +28,13 @@ export const GoogleOAuthButton = (props: Props) => {
   }
 
   return (
-    <button className={className} onClick={login} type={'button'} {...rest}>
+    <button
+      className={className}
+      disabled={disabledButton || disabled}
+      onClick={login}
+      type={'button'}
+      {...rest}
+    >
       <Google height={36} viewBox={'0 0 24 24'} width={36} />
     </button>
   )
