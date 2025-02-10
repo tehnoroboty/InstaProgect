@@ -47,26 +47,13 @@ export const ItemWrapper = ({
   }
 
   const onLogoutConfirm = async () => {
-    try {
-      await logout().unwrap()
-      dispatch(setIsLoggedIn({ isLoggedIn: false }))
-      localStorage.removeItem('sn-token')
-      route.push('/auth/login')
-      if (onClick) {
-        onClick()
-      }
-    } catch (err: unknown) {
-      if (isLogoutApiError(err)) {
-        const { error, statusCode: status } = err
-
-        if (status === 401) {
-          dispatch(setAppError({ error }))
-        }
-      }
+    await logout().unwrap()
+    dispatch(setIsLoggedIn({ isLoggedIn: false }))
+    route.push('/auth/login')
+    if (onClick) {
+      onClick()
     }
   }
-
-  const disabledButton = isLoading
 
   return (
     <>
@@ -102,7 +89,7 @@ export const ItemWrapper = ({
           <div className={s.modalActions}>
             <Button
               className={s.btnModal}
-              disabled={disabledButton}
+              disabled={isLoading}
               onClick={onLogoutConfirm}
               variant={'secondary'}
             >

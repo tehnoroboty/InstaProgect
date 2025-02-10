@@ -3,16 +3,19 @@
 
   box-sizing: border-box;
   padding: 6px 24px;
+  border: none;
+  border-radius: 2px;
 
   font-family: inherit;
   font-size: 16px;
   font-weight: 600;
   color: inherit;
 
-  border: none;
-  border-radius: 2px;
-
   transition: all 0.3s ease;
+
+  &:disabled{
+    cursor: default;
+  }
 
   &:focus-visible {
     outline: 2px solid var(--primary-500);
@@ -76,9 +79,9 @@ a.transparent:visited {
 }
 
 .bordered {
+  border: 1px solid var(--primary-500);
   color: var(--primary-500);
   background-color: transparent;
-  border: 1px solid var(--primary-500);
 
   &:focus {
     color: var(--primary-700);
@@ -86,18 +89,18 @@ a.transparent:visited {
   }
 
   &:hover {
-    color: var(--primary-100);
     border: 1px solid var(--primary-100);
+    color: var(--primary-100);
   }
 
   &:active {
-    color: var(--primary-700);
     border: 1px solid var(--primary-700);
+    color: var(--primary-700);
   }
 
   &:disabled {
-    color: var(--primary-900);
     border: 1px solid var(--primary-900);
+    color: var(--primary-900);
   }
 }
 

@@ -43,6 +43,11 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        const response = await queryFulfilled
+
+        localStorage.setItem('sn-token', response.data.accessToken)
+      },
       query: body => ({
         body,
         method: 'POST',
@@ -50,6 +55,12 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     logout: builder.mutation<void, void>({
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        const response = await queryFulfilled
+
+        localStorage.removeItem('sn-token')
+        dispatch(authApi.util.resetApiState())
+      },
       query: () => ({
         method: 'POST',
         url: 'auth/logout',

@@ -35,7 +35,6 @@ export const useLogin = () => {
       const res = await login(formData).unwrap()
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      localStorage.setItem('sn-token', res.accessToken)
       router.push('/home')
     } catch (err) {
       const { data, status } = err as LoginError
@@ -44,5 +43,5 @@ export const useLogin = () => {
     }
   }
 
-  return { disabledButton, errors, handleSubmit, onSubmit, register }
+  return { disabledButton, errors, handleSubmit, isLoading, onSubmit, register }
 }

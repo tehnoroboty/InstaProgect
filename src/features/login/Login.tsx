@@ -13,7 +13,10 @@ import Link from 'next/link'
 import s from './login.module.scss'
 
 export default function Login() {
-  const { disabledButton, errors, handleSubmit, onSubmit, register } = useLogin()
+  const { disabledButton, errors, handleSubmit, isLoading, onSubmit, register } = useLogin()
+
+  console.log(isLoading)
+  // debugger
 
   return (
     <div className={s.wrapper}>
@@ -25,7 +28,7 @@ export default function Login() {
           <br />
           pass: qwQW12!
         </Typography>
-        <OAuthButtons className={s.boxButtons} />
+        <OAuthButtons className={s.boxButtons} disabled={isLoading} />
         <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
           <Input
             className={s.input}
