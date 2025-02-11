@@ -21,6 +21,7 @@
 
   &:disabled {
     cursor: default;
+    border: 1px solid red
   }
 
   &:disabled svg {
