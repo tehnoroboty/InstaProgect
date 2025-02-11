@@ -12,7 +12,6 @@ import { FormType, schema } from '../validators'
 export const useLogin = () => {
   const [login, { data, error, isError, isLoading }] = useLoginMutation()
 
-  console.log({ data, error, isError, isLoading })
   const router = useRouter()
   const dispatch = useDispatch()
 

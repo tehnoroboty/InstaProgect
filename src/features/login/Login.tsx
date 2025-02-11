@@ -15,9 +15,6 @@ import s from './login.module.scss'
 export default function Login() {
   const { disabledButton, errors, handleSubmit, isLoading, onSubmit, register } = useLogin()
 
-  console.log('Login', isLoading)
-  // debugger
-
   return (
     <div className={s.wrapper}>
       <Card className={s.card}>

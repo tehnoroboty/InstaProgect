@@ -12,12 +12,12 @@ export const GooglePage = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [exchangeGoogleCodeForToken, { data, error }] = useExchangeGoogleCodeForTokenMutation()
+  const [exchangeGoogleCodeForToken] = useExchangeGoogleCodeForTokenMutation()
   const code = searchParams.get('code')
 
   useEffect(() => {
     if (!code) {
-      router.push('/auth/login')
+      router.replace('/auth/login')
 
       return
     }
@@ -29,9 +29,9 @@ export const GooglePage = () => {
           redirectUrl: 'http://localhost:3000/auth/google',
         }).unwrap()
 
-        router.push('/home')
+        router.replace('/home')
       } catch (err) {
-        router.push('/auth/registration')
+        router.replace('/auth/registration')
       }
     }
 
