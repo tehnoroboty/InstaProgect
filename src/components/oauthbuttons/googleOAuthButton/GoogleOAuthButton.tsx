@@ -12,7 +12,7 @@ type Props = {
 } & ComponentPropsWithoutRef<'button'>
 
 export const GoogleOAuthButton = (props: Props) => {
-  const { className, disabled, setDisabledButton, ...rest } = props
+  const { className, setDisabledButton, ...rest } = props
 
   const login = () => {
     setDisabledButton(true)

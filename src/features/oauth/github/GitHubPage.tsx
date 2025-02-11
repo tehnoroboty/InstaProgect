@@ -17,9 +17,9 @@ export const GitHubPage = () => {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem('sn-token', accessToken)
-      router.push('/home')
+      router.replace('/home')
     } else {
-      router.push('/auth/registration')
+      router.replace('/auth/registration')
     }
   }, [])
 
