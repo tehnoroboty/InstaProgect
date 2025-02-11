@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux'
 
 import { Dialog } from '@/src/components/dialog/Dialog'
 import { Typography } from '@/src/components/typography/Typography'
-import { setAppError, setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLoginMutation, useLogoutMutation } from '@/src/store/services/authApi'
-import { isLogoutApiError } from '@/src/utils/apiErrorHandlers'
+import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { useLogoutMutation } from '@/src/store/services/authApi'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -47,26 +46,13 @@ export const ItemWrapper = ({
   }
 
   const onLogoutConfirm = async () => {
-    try {
-      await logout().unwrap()
-      dispatch(setIsLoggedIn({ isLoggedIn: false }))
-      localStorage.removeItem('sn-token')
-      route.push('/auth/login')
-      if (onClick) {
-        onClick()
-      }
-    } catch (err: unknown) {
-      if (isLogoutApiError(err)) {
-        const { error, statusCode: status } = err
-
-        if (status === 401) {
-          dispatch(setAppError({ error }))
-        }
-      }
+    await logout().unwrap()
+    dispatch(setIsLoggedIn({ isLoggedIn: false }))
+    route.push('/auth/login')
+    if (onClick) {
+      onClick()
     }
   }
-
-  const disabledButton = isLoading
 
   return (
     <>
@@ -102,7 +88,7 @@ export const ItemWrapper = ({
           <div className={s.modalActions}>
             <Button
               className={s.btnModal}
-              disabled={disabledButton}
+              disabled={isLoading}
               onClick={onLogoutConfirm}
               variant={'secondary'}
             >
