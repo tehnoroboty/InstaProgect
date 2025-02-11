@@ -89,6 +89,7 @@ export const RegistrationForm = () => {
             error={errors.passwordConfirmation && errors.passwordConfirmation.message}
           />
           <CheckBox
+            className={s.checkbox}
             label={
               <>
                 {'I agree to the '}
