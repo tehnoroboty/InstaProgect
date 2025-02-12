@@ -35,7 +35,7 @@ export const useLogin = () => {
       await login(formData).unwrap()
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      router.replace('/home')
+      router.push('/home')
     } catch (err) {
       const { data } = err as LoginError
 

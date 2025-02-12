@@ -17,7 +17,7 @@ export const GooglePage = () => {
 
   useEffect(() => {
     if (!code) {
-      router.replace('/auth/login')
+      router.push('/auth/login')
 
       return
     }
@@ -26,12 +26,12 @@ export const GooglePage = () => {
       try {
         await exchangeGoogleCodeForToken({
           code,
-          redirectUrl: 'http://localhost:3000/auth/google',
+          redirectUrl: (process.env.NEXT_PUBLIC_BASE_URL as string) + '/auth/google',
         }).unwrap()
 
-        router.replace('/home')
+        router.push('/home')
       } catch (err) {
-        router.replace('/auth/registration')
+        router.push('/auth/registration')
       }
     }
 
