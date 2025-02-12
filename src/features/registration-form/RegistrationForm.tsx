@@ -7,7 +7,7 @@ import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { useRegistrationForm } from '@/src/features/registration-form/hooks/useRegistrationForm'
 import Link from 'next/link'
 

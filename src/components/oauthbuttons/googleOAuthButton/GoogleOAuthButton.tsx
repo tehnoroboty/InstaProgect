@@ -3,7 +3,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import Google from '@/src/assets/componentsIcons/GoogleSvgrepoCom1'
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { getClientId } from '@/src/utils/googleClientId'
 
 type Props = {

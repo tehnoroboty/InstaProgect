@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { setAppError } from '@/src/store/Slices/appSlice'
 import { useCreateNewPasswordMutation, useRecoveryCodeMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
