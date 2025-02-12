@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { LoginError } from '@/src/store/services/types'

@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/src/components/button/Button'
 import { Typography } from '@/src/components/typography/Typography'
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { useRegistrationConfirmationForm } from '@/src/features/registration-confirmation-form/hooks/useRegistrationConfirmationForm'
 import Image from 'next/image'
 import Link from 'next/link'

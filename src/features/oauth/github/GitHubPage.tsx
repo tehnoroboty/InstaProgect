@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 
 import { Loader } from '@/src/components/loader/Loader'
-import { AuthRoutes } from '@/src/constants /routing'
+import { AuthRoutes } from '@/src/constants/routing'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './githubOAuth.module.scss'
