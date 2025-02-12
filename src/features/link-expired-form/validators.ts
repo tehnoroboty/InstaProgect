@@ -5,9 +5,9 @@ import { z } from 'zod'
 export const schema = z.object({
   email: z
     .string()
-    .min(1, ERROR_MESSAGES.EMAIL_REQUIRED)
-    .email(ERROR_MESSAGES.EMAIL_INVALID)
-    .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL_FORMAT),
+    .min(1, ERROR_MESSAGES.EMAIL.REQUIRED)
+    .email(ERROR_MESSAGES.EMAIL.INVALID)
+    .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL.FORMAT),
 })
 
 export type FormType = z.infer<typeof schema>

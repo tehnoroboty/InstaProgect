@@ -6,17 +6,17 @@ export const schema = z
   .object({
     newPassword: z
       .string()
-      .nonempty(ERROR_MESSAGES.PASSWORD_REQUIRED)
-      .min(6, ERROR_MESSAGES.PASSWORD_MIN)
-      .max(20, ERROR_MESSAGES.PASSWORD_MAX)
-      .regex(new RegExp(PASSWORD_REGEX), ERROR_MESSAGES.PASSWORD_FORMAT),
-    passwordConfirmation: z.string().nonempty(ERROR_MESSAGES.PASSWORD_CONFIRM),
+      .nonempty(ERROR_MESSAGES.PASSWORD.REQUIRED)
+      .min(6, ERROR_MESSAGES.PASSWORD.MIN)
+      .max(20, ERROR_MESSAGES.PASSWORD.MAX)
+      .regex(new RegExp(PASSWORD_REGEX), ERROR_MESSAGES.PASSWORD.FORMAT),
+    passwordConfirmation: z.string().nonempty(ERROR_MESSAGES.PASSWORD.CONFIRM),
   })
   .superRefine((data, ctx) => {
     if (data.newPassword !== data.passwordConfirmation) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: ERROR_MESSAGES.PASSWORD_MISMATCH,
+        message: ERROR_MESSAGES.PASSWORD.MISMATCH,
         path: ['passwordConfirmation'],
       })
     }

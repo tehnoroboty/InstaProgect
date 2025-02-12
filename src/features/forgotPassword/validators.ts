@@ -5,9 +5,9 @@ import { z } from 'zod'
 export const schema = z.object({
   email: z
     .string()
-    .min(1, ERROR_MESSAGES.PASSWORD_REQUIRED)
-    .email(ERROR_MESSAGES.EMAIL_INVALID)
-    .regex(EMAIL_REGEX, ERROR_MESSAGES.USERNAME_FORMAT),
+    .min(1, ERROR_MESSAGES.PASSWORD.REQUIRED)
+    .email(ERROR_MESSAGES.EMAIL.INVALID)
+    .regex(EMAIL_REGEX, ERROR_MESSAGES.USER_NAME.FORMAT),
   recaptcha: z.string().min(1, ERROR_MESSAGES.RECAPTCHA_VERIFY),
 })
 
