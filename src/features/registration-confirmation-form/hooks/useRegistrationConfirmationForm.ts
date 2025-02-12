@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { AuthRoutes } from '@/src/constants/routing'
 import { useRegistrationConfirmationMutation } from '@/src/store/services/authApi'
 import { CustomerError } from '@/src/store/services/types'
 import { useRouter, useSearchParams } from 'next/navigation'

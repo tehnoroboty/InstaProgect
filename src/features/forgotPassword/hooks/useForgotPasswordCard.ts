@@ -33,7 +33,6 @@ export const useForgotPasswordCard = () => {
     mode: 'onChange',
     resolver: zodResolver(schema),
   })
-
   const onChangeToken = (value: null | string) => {
     if (value === null) {
       setRecaptchaError('Please verify that you are not a robot')
