@@ -1,27 +1,73 @@
 'use client'
+import { ChangeEvent, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
 import { Button } from '@/src/components/button/Button'
 import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input/Input'
 import { Typography } from '@/src/components/typography/Typography'
-import { useLinkExpiredForm } from '@/src/features/link-expired-form/hooks/useLinkExpiredForm'
+import { FormType, schema } from '@/src/features/link-expired-form/validators'
+import { useRegistrationEmailResendingMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 
 import s from './link-expired.module.scss'
 
 export const LinkExpiredForm = () => {
   const {
-    errors,
+    clearErrors,
+    formState: { errors, isValid },
     getValues,
-    handleCloseMessage,
     handleSubmit,
-    isLoading,
-    isValid,
-    onChangeHandler,
-    onSubmit,
     register,
-    showSuccessMessage,
+    reset,
+    setError,
+    setValue,
     trigger,
-  } = useLinkExpiredForm()
+    watch,
+  } = useForm<FormType>({
+    defaultValues: {
+      email: '',
+    },
+    resolver: zodResolver(schema),
+  })
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    setValue('email', value)
+    if (value) {
+      clearErrors('email')
+    }
+  }
+  const [registrationEmailResending, { isLoading }] = useRegistrationEmailResendingMutation()
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+
+  const onSubmit: SubmitHandler<FormType> = async formData => {
+    try {
+      const registrationEmailResendingData = {
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        email: formData.email,
+      }
+
+      await registrationEmailResending(registrationEmailResendingData).unwrap()
+
+      setShowSuccessMessage(true)
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage = error.data?.messages[0]
+
+      if (errorMessage?.field === 'email') {
+        setError('email', { message: errorMessage.message, type: 'manual' })
+      }
+    }
+  }
+
+  const handleCloseMessage = () => {
+    setShowSuccessMessage(false)
+    reset()
+  }
 
   return (
     <div className={s.container}>

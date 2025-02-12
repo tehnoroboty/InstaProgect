@@ -1,5 +1,8 @@
 'use client'
 
+import { useRef, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { CheckBox } from '@/src/components/checkbox/CheckBox'
@@ -8,25 +11,77 @@ import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
 import { AuthRoutes } from '@/src/constants/routing'
-import { useRegistrationForm } from '@/src/features/registration-form/hooks/useRegistrationForm'
+import { FormType, schema } from '@/src/features/registration-form/validators'
+import { useRegistrationMutation } from '@/src/store/services/authApi'
+import { CustomerError } from '@/src/store/services/types'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 
 import s from '@/src/features/registration-form/registration.module.scss'
 
 export const RegistrationForm = () => {
+  const ref = useRef<HTMLInputElement>(null)
   const {
-    disabledButton,
-    errors,
+    formState: { errors, isValid },
     getValues,
-    handleCloseMessage,
     handleSubmit,
-    onChangeHandler,
-    onSubmit,
-    ref,
     register,
-    showSuccessMessage,
+    reset,
+    setError,
+    setValue,
     trigger,
-  } = useRegistrationForm()
+  } = useForm<FormType>({
+    defaultValues: {
+      checkbox: false,
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+      userName: '',
+    },
+    mode: 'onChange',
+    resolver: zodResolver(schema),
+  })
+
+  const onChangeHandler = () => {
+    if (ref.current) {
+      const value = ref.current.checked
+
+      setValue('checkbox', value)
+    }
+  }
+
+  const [registration, { isLoading }] = useRegistrationMutation()
+  const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoading
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const onSubmit: SubmitHandler<FormType> = async formData => {
+    try {
+      const registrationData = {
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        email: formData.email,
+        password: formData.password,
+        userName: formData.userName,
+      }
+
+      await registration(registrationData).unwrap()
+
+      setShowSuccessMessage(true)
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage = error.data?.messages[0]
+
+      if (errorMessage?.field === 'userName') {
+        setError('userName', { message: errorMessage.message, type: 'manual' })
+      }
+      if (errorMessage?.field === 'email') {
+        setError('email', { message: errorMessage.message, type: 'manual' })
+      }
+    }
+  }
+
+  const handleCloseMessage = () => {
+    setShowSuccessMessage(false)
+    reset()
+  }
 
   return (
     <div className={s.container}>
