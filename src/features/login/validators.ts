@@ -1,25 +1,23 @@
+import { ERROR_MESSAGES } from '@/src/constants/error-messages'
 import { EMAIL_REGEX, PASSWORD_REGEX } from '@/src/constants/regex'
 import { z } from 'zod'
 
 export const schema = z.object({
   email: z
     .string()
-    .nonempty('Enter email')
-    .min(1, 'Email is required')
-    .email('Invalid email address')
+    .nonempty(ERROR_MESSAGES.EMAIL_REQUIRED)
+    .min(1, ERROR_MESSAGES.EMAIL_REQUIRED)
+    .email(ERROR_MESSAGES.EMAIL_INVALID)
     .trim()
-    .regex(EMAIL_REGEX, 'The email must match the format example@example.com'),
+    .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL_FORMAT),
 
   password: z
     .string()
-    .nonempty('Enter password')
-    .min(6, 'Min 6 characters long')
-    .max(20, 'Max 20 characters long')
+    .nonempty(ERROR_MESSAGES.PASSWORD_REQUIRED)
+    .min(6, ERROR_MESSAGES.PASSWORD_MIN)
+    .max(20, ERROR_MESSAGES.PASSWORD_MAX)
     .trim()
-    .regex(
-      new RegExp(PASSWORD_REGEX),
-      'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
-    ),
+    .regex(new RegExp(PASSWORD_REGEX), ERROR_MESSAGES.PASSWORD_FORMAT),
 })
 
 export type FormType = z.infer<typeof schema>
