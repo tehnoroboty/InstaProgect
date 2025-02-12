@@ -1,3 +1,5 @@
+import { ERROR_MESSAGES } from '@/src/constants/error-messages'
+import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from '@/src/constants/regex'
 import { z } from 'zod'
 
 export const schema = z
@@ -5,37 +7,28 @@ export const schema = z
     checkbox: z.boolean(),
     email: z
       .string()
-      .min(1, 'Email is required')
-      .email('Invalid email address')
-      .regex(
-        /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-        'The email must match the format example@example.com'
-      ),
+      .min(1, ERROR_MESSAGES.EMAIL.REQUIRED)
+      .email(ERROR_MESSAGES.EMAIL.INVALID)
+      .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL.FORMAT),
     password: z
       .string()
-      .nonempty('Enter password')
-      .min(6, 'Min 6 characters long')
-      .max(20, 'Max 20 characters long')
-      .regex(
-        new RegExp(
-          /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
-        ),
-        'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
-      ),
-    passwordConfirmation: z.string().nonempty('Confirm your password'),
+      .nonempty(ERROR_MESSAGES.PASSWORD.REQUIRED)
+      .min(6, ERROR_MESSAGES.PASSWORD.MIN)
+      .max(20, ERROR_MESSAGES.PASSWORD.MAX)
+      .regex(new RegExp(PASSWORD_REGEX), ERROR_MESSAGES.PASSWORD.FORMAT),
+    passwordConfirmation: z.string().nonempty(ERROR_MESSAGES.PASSWORD.CONFIRM),
     userName: z
       .string()
-      .nonempty('Enter username')
-      .min(6, 'Min 6 characters long')
-      .max(30, 'Max characters long')
-      .nonempty('Enter username')
-      .regex(/^[A-Za-z0-9_-]+$/, 'Invalid username'),
+      .nonempty(ERROR_MESSAGES.USER_NAME.REQUIRED)
+      .min(6, ERROR_MESSAGES.USER_NAME.MIN)
+      .max(30, ERROR_MESSAGES.USER_NAME.MAX)
+      .regex(USERNAME_REGEX, ERROR_MESSAGES.USER_NAME.FORMAT),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.passwordConfirmation) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Passwords do not match',
+        message: ERROR_MESSAGES.PASSWORD.MISMATCH,
         path: ['passwordConfirmation'],
       })
     }
