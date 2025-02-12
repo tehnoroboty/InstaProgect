@@ -1,3 +1,4 @@
+import { EMAIL_REGEX, PASSWORD_REGEX } from '@/src/constants/regex'
 import { z } from 'zod'
 
 export const schema = z.object({
@@ -7,10 +8,7 @@ export const schema = z.object({
     .min(1, 'Email is required')
     .email('Invalid email address')
     .trim()
-    .regex(
-      /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-      'The email must match the format example@example.com'
-    ),
+    .regex(EMAIL_REGEX, 'The email must match the format example@example.com'),
 
   password: z
     .string()
@@ -19,9 +17,7 @@ export const schema = z.object({
     .max(20, 'Max 20 characters long')
     .trim()
     .regex(
-      new RegExp(
-        /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/
-      ),
+      new RegExp(PASSWORD_REGEX),
       'Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character.'
     ),
 })
