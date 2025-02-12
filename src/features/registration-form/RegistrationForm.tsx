@@ -7,6 +7,7 @@ import { Dialog } from '@/src/components/dialog'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
+import { AuthRoutes } from '@/src/constants /routing'
 import { useRegistrationForm } from '@/src/features/registration-form/hooks/useRegistrationForm'
 import Link from 'next/link'
 
@@ -114,7 +115,7 @@ export const RegistrationForm = () => {
           <Typography as={'span'} className={s.text} option={'regular_text16'}>
             {'Do you have an account?'}
           </Typography>
-          <Button as={Link} fullWidth href={'/auth/login'} variant={'transparent'}>
+          <Button as={Link} fullWidth href={AuthRoutes.LOGIN} variant={'transparent'}>
             {'Sing In'}
           </Button>
         </div>

@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
+import { AuthRoutes } from '@/src/constants /routing'
 import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
 import { useLoginMutation } from '@/src/store/services/authApi'
 import { LoginError } from '@/src/store/services/types'
@@ -35,7 +36,7 @@ export const useLogin = () => {
       await login(formData).unwrap()
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      router.replace('/home')
+      router.push(AuthRoutes.HOME)
     } catch (err) {
       const { data } = err as LoginError
 
