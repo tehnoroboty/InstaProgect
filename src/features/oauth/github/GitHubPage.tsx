@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 
 import { Loader } from '@/src/components/loader/Loader'
+import { AuthRoutes } from '@/src/constants /routing'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './githubOAuth.module.scss'
@@ -17,9 +18,9 @@ export const GitHubPage = () => {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem('sn-token', accessToken)
-      router.push('/home')
+      router.push(AuthRoutes.HOME)
     } else {
-      router.push('/auth/registration')
+      router.push(AuthRoutes.REGISTRATION)
     }
   }, [])
 

@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 
 import { Loader } from '@/src/components/loader/Loader'
+import { AuthRoutes } from '@/src/constants /routing'
 import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -17,7 +18,7 @@ export const GooglePage = () => {
 
   useEffect(() => {
     if (!code) {
-      router.push('/auth/login')
+      router.push(AuthRoutes.LOGIN)
 
       return
     }
@@ -26,12 +27,12 @@ export const GooglePage = () => {
       try {
         await exchangeGoogleCodeForToken({
           code,
-          redirectUrl: (process.env.NEXT_PUBLIC_BASE_URL as string) + '/auth/google',
+          redirectUrl: (process.env.NEXT_PUBLIC_BASE_URL as string) + AuthRoutes.OAUTH_GOOGLE,
         }).unwrap()
 
-        router.push('/home')
+        router.push(AuthRoutes.HOME)
       } catch (err) {
-        router.push('/auth/registration')
+        router.push(AuthRoutes.REGISTRATION)
       }
     }
 
