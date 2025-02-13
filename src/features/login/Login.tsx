@@ -1,19 +1,58 @@
 'use client'
 
 import React from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { useLogin } from '@/src/features/login/hooks/useLogin'
+import { AuthRoutes } from '@/src/constants/routing'
+import { FormType, schema } from '@/src/features/login/validators'
+import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
+import { useLoginMutation } from '@/src/store/services/authApi'
+import { LoginError } from '@/src/store/services/types'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import s from './login.module.scss'
 
 export default function Login() {
-  const { disabledButton, errors, handleSubmit, isLoading, onSubmit, register } = useLogin()
+  const [login, { data, error, isError, isLoading }] = useLoginMutation()
+
+  const router = useRouter()
+  const dispatch = useDispatch()
+
+  const {
+    formState: { errors, isValid },
+    handleSubmit,
+    register,
+    setError,
+  } = useForm<FormType>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    mode: 'onChange',
+    resolver: zodResolver(schema),
+  })
+  const disabledButton = isLoading || !isValid || Object.keys(errors).length > 0
+
+  const onSubmit: SubmitHandler<FormType> = async formData => {
+    try {
+      await login(formData).unwrap()
+
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      router.push(AuthRoutes.HOME)
+    } catch (err) {
+      const { data } = err as LoginError
+
+      setError('password', { message: data.messages, type: 'manual' })
+    }
+  }
 
   return (
     <div className={s.wrapper}>
