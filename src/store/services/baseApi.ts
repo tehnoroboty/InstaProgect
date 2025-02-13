@@ -18,5 +18,6 @@ export const baseApi = createApi({
   },
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
+  tagTypes: ['me'],
   // tagTypes: ['Todolist', 'Task'],
 })
