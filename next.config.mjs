@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    env: {
+        NEXT_PUBLIC_BASE_URL: process.env.NODE_ENV === 'production'
+            ? 'https://momenttify.store'
+            : 'http://localhost:3000',
+    },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg'),
@@ -8,13 +13,13 @@ const nextConfig = {
         config.module.rules.push(
             {
                 ...fileLoaderRule,
-                test: /\.svg$/i,
                 resourceQuery: /url/, // *.svg?url
+                test: /\.svg$/i,
             },
             {
-                test: /\.svg$/i,
                 issuer: fileLoaderRule.issuer,
                 resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
+                test: /\.svg$/i,
                 use: ['@svgr/webpack'],
             },
         )
