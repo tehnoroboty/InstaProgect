@@ -6,6 +6,7 @@ import {
   SettingsOutline,
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons'
+import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
@@ -14,15 +15,47 @@ import s from './modalCommentsSection.module.scss'
 
 import { Button } from '../button/Button'
 
-export const ModalCommentsSection = () => {
+export type ProfileData = {
+  aboutMe: string
+  avatars: Avatar[]
+  city: string
+  country: string
+  createdAt: string
+  dateOfBirth: string
+  firstName: string
+  id: number
+  lastName: string
+  region: string
+  userName: string
+}
+
+export type Avatar = {
+  createdAt: string
+  fileSize: number
+  height: number
+  url: string
+  width: number
+}
+
+type Props = {
+  userData?: ProfileData
+}
+
+export const ModalCommentsSection = ({ userData }: Props) => {
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <div className={s.userAvaName}>
-          <div className={s.userAva}></div>
+          <div className={s.userAva}>
+            <AvatarBox
+              className={s.smallAva}
+              size={{ height: '36px', width: '36px' }}
+              src={userData?.avatars[0].url}
+            />
+          </div>
           <div className={s.userName}>
             <Typography size={'m'} weight={'semi-bold'}>
-              {'userName'}
+              {userData?.userName ? userData.userName : 'userName'}
             </Typography>
           </div>
         </div>
