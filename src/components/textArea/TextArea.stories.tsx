@@ -31,21 +31,27 @@ export const Error: Story = {
 }
 
 export const maxValue: Story = {
-  args: {
-    maxValue: 20,
-  },
   render: args => {
     const [text, setText] = useState('')
     const [error, setError] = useState<string>()
+    const maxLength = 20
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
       setText(e.currentTarget.value)
-      if (e.currentTarget.value.length > 20) {
+      if (e.currentTarget.value.length > maxLength) {
         setError('ERROR')
       } else {
         setError('')
       }
     }
 
-    return <TextArea error={error} onChange={onChangeHandler} value={text} {...args} />
+    return (
+      <TextArea
+        error={error}
+        maxLength={maxLength}
+        onChange={onChangeHandler}
+        value={text}
+        {...args}
+      />
+    )
   },
 }
