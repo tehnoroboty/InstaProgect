@@ -1,0 +1,33 @@
+.trigger {
+  display: flex;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+
+  background-color: transparent;
+  outline: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  min-width: 161px;
+  height: 204px;
+  padding: 12px;
+  border: 1px solid var(--dark-100);
+
+  background-color: var(--dark-500);
+}
+
+.icon {
+  color: var(--light-100);
+}
+
+.iconActive {
+  color: var(--primary-500);
+}
