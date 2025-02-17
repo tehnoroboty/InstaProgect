@@ -1,3 +1,9 @@
+import { AvatarBox } from '@/src/components/avatar/AvatarBox'
+
 export default function HomePage() {
-  return <div style={{ color: 'red' }}>{'Home page'}</div>
+  return (
+    <div style={{ color: 'red' }}>
+      <AvatarBox size={'m'} />
+    </div>
+  )
 }
