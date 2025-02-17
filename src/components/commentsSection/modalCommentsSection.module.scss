@@ -65,3 +65,17 @@
   width: 24px;
   height: 24px;
 }
+
+.usersCommentBody {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+.userComment {
+  display: flex;
+}
+
+.heartIcon {
+  align-self: center;
+}
