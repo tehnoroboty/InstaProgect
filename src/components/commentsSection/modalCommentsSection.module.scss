@@ -1,0 +1,60 @@
+.commentsBox {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 564px;
+  height: 100%;
+  max-height: 481px;
+  padding: 11px 0;
+
+  background-color: var(--dark-300);
+}
+
+.commentsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 23px 11px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.userAvaName {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.commentsBody {
+  padding: 19px 23px 8px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.postActions {
+  padding: 11px 23px 7px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.addComment {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 23px 17px 24px;
+}
+
+.textareaWrapper {
+  width: 100%;
+}
+
+.textarea textarea {
+  min-height: 24px;
+  padding: 0;
+  border: none;
+
+  font-size: 14px;
+
+  background-color: var(--dark-300);
+}
