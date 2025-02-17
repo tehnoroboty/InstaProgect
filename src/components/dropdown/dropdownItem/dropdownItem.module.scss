@@ -7,11 +7,12 @@
   fill: var(--light-100);
 }
 
-button.item {
+button.item,a.item {
   display: flex;
   gap: 12px;
   align-items: center;
 
+  width: 100%;
   padding: 5px 0;
 
   color: var(--light-100);
@@ -38,38 +39,9 @@ button.item {
 
 .active {
   color: var(--primary-500);
-}
 
-
-.modal {
-  width: 28%;
-  height: fit-content;
-
-  @media (width <= 780px) {
-    width: 55%;
+  &.icon g, &.icon path {
+    color: var(--primary-500);
+    fill: var(--primary-500);
   }
-
-  @media (width <= 375px) {
-    width: 95%;
-  }
-}
-
-.contentModal {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-
-  padding-top: 30px;
-
-  text-align: justify;
-}
-
-.modalActions {
-  display: flex;
-  justify-content: space-around;
-}
-
-.btnModal {
-  align-self: end;
-  width: max(100px, 20%);
 }

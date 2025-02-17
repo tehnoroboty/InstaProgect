@@ -20,14 +20,13 @@
   flex-direction: column;
   gap: 12px;
 
+  width: 100%;
   min-width: 137px;
   padding: 12px;
   border: 1px solid var(--dark-100);
 
   background-color: var(--dark-500);
 }
-
-
 
 .iconActive {
   color: var(--primary-500);

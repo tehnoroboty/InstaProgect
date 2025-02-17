@@ -2,13 +2,28 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import React, { useId } from 'react'
 
-import { Edit2Outline, MoreHorizontalOutline, TrashOutline } from '@/src/assets/componentsIcons'
+import {
+  BookmarkOutline,
+  Edit2Outline,
+  LogOutOutline,
+  MoreHorizontalOutline,
+  SettingsOutline,
+  TrashOutline,
+  TrendingUpOutline,
+} from '@/src/assets/componentsIcons'
 import { DropdownItem } from '@/src/components/dropdown/dropdownItem/dropdownItem'
 
 import { Dropdown } from './dropdown'
 
 const meta = {
   argTypes: {},
+  args: {
+    trigger: (
+      <button aria-label={'Customize options'} type={'button'}>
+        <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
+      </button>
+    ),
+  },
   component: Dropdown,
   tags: ['autodocs'],
   title: 'Components/Dropdown',
@@ -18,9 +33,10 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 type ItemType = {
+  href?: string
   icon: React.ComponentType
   iconActive?: React.ComponentType
-  onClick: () => void
+  onClick?: () => void
   title: string
 }
 const menuDropdown: ItemType[] = [
@@ -40,16 +56,47 @@ const menuDropdown: ItemType[] = [
   },
 ]
 
-export const DropdownStory: Story = {
+export const DropdownPostSettings: Story = {
   args: {
     list: menuDropdown,
     renderItem: (item: any) => (
       <DropdownItem Icon={item.icon} key={useId()} onClick={item.onClick} title={item.title} />
     ),
-    trigger: (
-      <button aria-label={'Customize options'} type={'button'}>
-        <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
-      </button>
+  },
+}
+
+const menuHeaderMobile: ItemType[] = [
+  {
+    href: '/statistics',
+    icon: TrendingUpOutline,
+    title: 'Statistics',
+  },
+  {
+    href: '/favorites',
+    icon: BookmarkOutline,
+    title: 'Favorites',
+  },
+  { href: '/settings', icon: SettingsOutline, title: 'Profile Settings' },
+  {
+    icon: LogOutOutline,
+    onClick: () => {
+      console.log('Log Out')
+    },
+    title: 'Log Out',
+  },
+]
+
+export const DropdownHeaderMobile: Story = {
+  args: {
+    list: menuHeaderMobile,
+    renderItem: (item: any) => (
+      <DropdownItem
+        Icon={item.icon}
+        href={item.href}
+        key={useId()}
+        onClick={item.onClick}
+        title={item.title}
+      />
     ),
   },
 }
