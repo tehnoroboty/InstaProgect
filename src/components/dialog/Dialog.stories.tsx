@@ -7,7 +7,7 @@ import s from './dialog.module.scss'
 
 import { Button } from '../button/Button'
 import { Dialog, DialogProps } from './Dialog'
-import { mockData, mockText } from './mock'
+import { CommentsSection, ImageViewer, mockData, mockText } from './mock/mock'
 
 const meta = {
   argTypes: {},
@@ -42,6 +42,7 @@ const DialogWrapper = (props: DialogProps) => {
         </div>
       </div>
       <Dialog modalTitle={mockData[0].modalTitle} onClose={closeModalHandler} open={showDialog}>
+        <hr className={s.lineHr} />
         <div className={s.boxDiscription}>
           <div className={s.image}></div>
           <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
@@ -58,6 +59,40 @@ const DialogWrapper = (props: DialogProps) => {
   )
 }
 
-export const DeleteFollowing: Story = {
+export const Default: Story = {
   render: args => <DialogWrapper {...args} />,
+}
+
+export const AddComent: Story = {
+  render: args => {
+    const [value, setValue] = useState(mockData)
+
+    const [showDialog, setShowDialog] = useState(false)
+
+    const openModalHandler = () => {
+      setShowDialog(true)
+    }
+
+    const closeModalHandler = () => {
+      setShowDialog(false)
+    }
+
+    return (
+      <>
+        <div className={s.headerWrapper}>
+          <div className={s.container}>
+            <h3>logotype</h3>
+            <Button onClick={openModalHandler}>Sign Up</Button>
+          </div>
+        </div>
+        <Dialog className={s.containerAddComent} onClose={closeModalHandler} open={showDialog}>
+          <div className={s.addComent}>
+            <ImageViewer />
+            <CommentsSection />
+          </div>
+        </Dialog>
+        <div className={s.lorem}>{mockText}</div>
+      </>
+    )
+  },
 }
