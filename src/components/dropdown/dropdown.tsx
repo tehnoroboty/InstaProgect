@@ -1,5 +1,5 @@
 'use client'
-import React, { JSXElementConstructor, ReactElement, ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
@@ -9,7 +9,7 @@ import s from './dropdown.module.scss'
 type Props<T> = {
   isOpen?: boolean
   list: T[]
-  renderItem: (item: T) => React.ReactNode
+  renderItem: (item: T, index?: number) => React.ReactNode
   trigger: React.ReactNode
 }
 

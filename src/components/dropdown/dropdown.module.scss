@@ -1,4 +1,6 @@
 .trigger {
+  cursor: pointer;
+
   display: flex;
   align-items: center;
 
@@ -6,6 +8,8 @@
   height: 30px;
   padding: 0;
   border: none;
+
+  color: var(--light-100);
 
   background-color: transparent;
   outline: none;
@@ -16,17 +20,14 @@
   flex-direction: column;
   gap: 12px;
 
-  min-width: 161px;
-  height: 204px;
+  min-width: 137px;
   padding: 12px;
   border: 1px solid var(--dark-100);
 
   background-color: var(--dark-500);
 }
 
-.icon {
-  color: var(--light-100);
-}
+
 
 .iconActive {
   color: var(--primary-500);
