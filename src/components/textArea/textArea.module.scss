@@ -1,14 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
-
-  & .errorText {
-    color: var(--danger-500);
-  }
 }
 
 .label {
-  
   &:has(+ textarea:disabled) {
     color: var(--dark-100);
   }
@@ -25,7 +20,7 @@
   box-shadow: none;
   min-height: 84px;
   background-color: var(--dark-500);
-  color: var(--dark-100);
+  color: var(--light-100);
 
   &::placeholder {
     color: var(--light-900);
@@ -42,6 +37,23 @@
   }
 }
 
+.informationWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+
+  & .symbol {
+    margin-left: auto;
+    color: var(--light-900);
+  }
+
+  & .errorText {
+    color: var(--danger-500);
+  }
+}
+
 .isError:not(textArea:disabled) {
-  border: 2px solid var(--danger-500);
+  outline: 2px solid var(--danger-500);
 }
