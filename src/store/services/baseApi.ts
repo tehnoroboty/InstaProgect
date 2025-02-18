@@ -10,7 +10,11 @@ export const baseApi = createApi({
       credentials: 'include',
       prepareHeaders: headers => {
         // headers.set('API-KEY', `${process.env.NEXT_PUBLIC_SITE_KEY}`)
-        headers.set('Authorization', `Bearer ${localStorage.getItem('sn-token')}`)
+        const token = localStorage.getItem('sn-token')
+
+        if (token) {
+          headers.set('Authorization', `Bearer ${token}`)
+        }
       },
     })(args, api, extraOptions)
 

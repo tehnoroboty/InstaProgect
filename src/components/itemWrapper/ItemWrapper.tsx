@@ -46,11 +46,14 @@ export const ItemWrapper = ({
   }
 
   const onLogoutConfirm = async () => {
-    await logout().unwrap()
-    dispatch(setIsLoggedIn({ isLoggedIn: false }))
-    route.push('/auth/login')
-    if (onClick) {
-      onClick()
+    try {
+      await logout().unwrap()
+      route.push('/auth/login')
+      if (onClick) {
+        onClick()
+      }
+    } catch (error) {
+      console.error('Ошибка выхода:', error)
     }
   }
 
