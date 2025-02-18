@@ -4,7 +4,7 @@ import clsx from 'clsx'
 
 import s from './avatar.module.scss'
 
-type SizeType = 'l' | 'm' | 's' | 'xl' | 'xs'
+type SizeType = 'l' | 'm' | 's' | 'xl' | 'xs' | 'xxs'
 
 type Props = {
   className?: string

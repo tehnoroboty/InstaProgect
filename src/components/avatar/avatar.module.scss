@@ -6,12 +6,9 @@
   align-items: center;
   justify-content: center;
 
-   width: 100%;
-   height: auto;
-
-
-  // width: 192px;
-  // height: 192px;
+  aspect-ratio: 1/1;
+  width: 100%;
+  height: 100%;
   border-radius: 100%;
 
   vertical-align: middle;
@@ -20,27 +17,26 @@
 
 .img-size-s {
   width: 48px;
-  height: 48px;
 }
 
 .img-size-m {
   width: 72px;
-  height: 72px;
 }
 
 .img-size-xs {
   width: 36px;
-  height: 36px;
 }
 
 .img-size-xl {
   width: 204px;
-  height: 204px;
 }
 
 .img-size-l {
   width: 192px;
-  height: 192px;
+}
+
+.img-size-xxs {
+  width: 24px;
 }
 
 .image {
@@ -59,5 +55,5 @@
   height: 100%;
 
 
-  background-color:var(--dark-500) ;
+  background-color: var(--dark-500);
 }
