@@ -10,10 +10,10 @@
 }
 
 .textArea {
-  font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
+  font-weight: 400;
   border: 1px solid var(--dark-100);
+  line-height: 24px;
   padding: 6px 12px;
   resize: none;
   border-radius: 2px;
@@ -25,13 +25,16 @@
   &::placeholder {
     color: var(--light-900);
   }
+
   &:focus::placeholder {
     color: var(--light-100);
   }
+
   &:focus {
     outline: 2px solid var(--primary-700);
     color: var(--light-100);
   }
+
   &:disabled::placeholder {
     color: var(--dark-100);
   }
@@ -54,6 +57,6 @@
   }
 }
 
-.isError:not(textArea:disabled) {
+.isError:not(.textArea:disabled) {
   outline: 2px solid var(--danger-500);
 }
