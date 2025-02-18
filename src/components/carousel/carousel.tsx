@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
+// eslint-disable-next-line import/extensions
 import 'swiper/scss'
 
 import s from './carousel.module.scss'
