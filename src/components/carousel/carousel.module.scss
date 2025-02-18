@@ -1,0 +1,45 @@
+.carousel{
+  position: relative;
+  width: 490px;
+  height: 503px;
+}
+
+.slide{
+  width: 100%;
+}
+
+.buttonNext,
+.buttonPrev{
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  opacity: 0.7;
+  background-color: var(--dark-300);
+
+  & svg path{
+    fill:var(--light-100);
+  }
+}
+
+.buttonPrev{
+  left: 0;
+}
+
+
+.buttonNext{
+  right: 0;
+}
+
+.pagination{
+  background: yellow;
+}
