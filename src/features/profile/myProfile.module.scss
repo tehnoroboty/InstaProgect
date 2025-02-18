@@ -1,0 +1,44 @@
+.profileContainer {
+  display: flex;
+  gap: 5%
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profileInfo{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap:1.5rem;
+  justify-content: space-between;
+}
+
+.userNameContainer {
+  display: flex;
+  gap: 1%
+}
+
+.followersStats {
+  display: flex;
+  gap: 10%
+}
+
+.profileDescription {
+  word-break: break-all;
+
+}
+
+.followersStatItem {
+  display: flex;
+  flex-direction: column;
+}

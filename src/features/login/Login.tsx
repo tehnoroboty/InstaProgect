@@ -9,10 +9,9 @@ import { Card } from '@/src/components/card/Card'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'
-import { AuthRoutes } from '@/src/constants/routing'
 import { FormType, schema } from '@/src/features/login/validators'
 import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLoginMutation } from '@/src/store/services/authApi'
+import { useLazyMeQuery, useLoginMutation } from '@/src/store/services/authApi'
 import { LoginError } from '@/src/store/services/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -22,6 +21,7 @@ import s from './login.module.scss'
 
 export default function Login() {
   const [login, { data, error, isError, isLoading }] = useLoginMutation()
+  const [getMe] = useLazyMeQuery()
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -46,7 +46,15 @@ export default function Login() {
       await login(formData).unwrap()
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
-      router.push(AuthRoutes.HOME)
+
+      const meRes = await getMe()
+      const userId = meRes?.data?.userId
+
+      if (!userId) {
+        return
+      }
+
+      router.push(`/users/profile/${userId}`)
     } catch (err) {
       const { data } = err as LoginError
 

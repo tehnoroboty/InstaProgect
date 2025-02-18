@@ -47,7 +47,6 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
-        await dispatch(authApi.endpoints.me.initiate())
         localStorage.setItem('sn-token', response.data.accessToken)
       },
       query: body => ({
@@ -114,6 +113,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
+  useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
   useMeQuery,
