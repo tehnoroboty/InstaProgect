@@ -1,12 +1,11 @@
 'use client'
 import * as React from 'react'
-import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
+import { ComponentPropsWithoutRef } from 'react'
+import { useSelector } from 'react-redux'
 
 import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
 import { HeaderWeb } from '@/src/components/header/header-web/HeaderWeb'
-import { AuthRoutes } from '@/src/constants/routing'
-import { useMeQuery } from '@/src/store/services/authApi'
-import { useRouter } from 'next/navigation'
+import { selectIsLoggedIn } from '@/src/store/Slices/appSlice'
 
 import s from './header.module.scss'
 
@@ -17,22 +16,13 @@ type Props = {
 
 export const Header = (props: Props) => {
   const { notification, title, ...rest } = props
-  const [isInitialized, setIsInitialized] = useState(false)
 
-  const { data, isLoading } = useMeQuery()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!isLoading && data) {
-      setIsInitialized(true)
-      router.push(AuthRoutes.HOME)
-    }
-  }, [data, isLoading])
+  const isLoggedIn = useSelector(selectIsLoggedIn)
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb hasNotification={notification} isLoggedIn={isInitialized} title={title} />
+      <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
     </header>
   )
 }
