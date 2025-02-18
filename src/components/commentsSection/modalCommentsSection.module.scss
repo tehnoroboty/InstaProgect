@@ -77,5 +77,19 @@
 }
 
 .heartIcon {
+  cursor: pointer;
   align-self: center;
+
+  & path {
+    fill: var(--light-100);
+  }
+}
+
+.red {
+  cursor: pointer;
+  align-self: center;
+
+  & path {
+    fill: var(--red-color, red); // Используйте переменную или просто красный цвет
+  }
 }

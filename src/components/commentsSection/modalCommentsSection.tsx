@@ -1,4 +1,6 @@
-// 'use client'
+'use client'
+
+import { useState } from 'react'
 
 import {
   BookmarkOutline,
@@ -7,6 +9,7 @@ import {
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons'
 import Heart from '@/src/assets/componentsIcons/Heart'
+import HeartOutline from '@/src/assets/componentsIcons/HeartOutline'
 import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { TextArea } from '@/src/components/textArea/TextArea'
@@ -39,10 +42,35 @@ export type Avatar = {
 }
 
 type Props = {
+  isLiked: boolean
   userData?: ProfileData
 }
 
-export const ModalCommentsSection = ({ userData }: Props) => {
+// comment type
+export type Comment = {
+  answerCount: number
+  content: string
+  createdAt: string
+  from: User
+  id: number
+  isLiked: boolean
+  likeCount: number
+  postId: number
+}
+
+export type User = {
+  avatars: Avatar[]
+  id: number
+  username: string
+}
+
+export const ModalCommentsSection = ({ isLiked, userData }: Props) => {
+  //const [isLiked, setIsLiked] = useState(false)
+
+  const handleLike = () => {
+    //setIsLiked(isLiked => !isLiked)
+  }
+
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
@@ -85,7 +113,7 @@ export const ModalCommentsSection = ({ userData }: Props) => {
                 </Typography>
               </div>
             </div>
-            <Heart className={s.heartIcon} />
+            <Heart className={isLiked ? s.red : s.heartIcon} onClick={handleLike} />
           </div>
         ))}
       </div>
@@ -123,6 +151,5 @@ export const fakeComments = [
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque delectus ea est hic perferendis quos!',
     id: '2',
     timeAgo: '2 hours ago Like: 1 Answer',
-    userName: 'userName',
   },
 ]
