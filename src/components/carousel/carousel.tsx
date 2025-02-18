@@ -1,9 +1,7 @@
-import { ArrowIosBackOutline, ArrowIosForwardOutline } from '@/src/assets/componentsIcons'
 import Image from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-// eslint-disable-next-line import/extensions
 import 'swiper/scss'
 
 import s from './carousel.module.scss'
@@ -23,6 +21,7 @@ export const Carousel = (props: Props) => {
         prevEl: `.${s.buttonPrev}`,
       }}
       pagination={{
+        bulletActiveClass: `${s.paginationActive}`,
         clickable: true,
         el: `.${s.pagination}`,
       }}
@@ -37,12 +36,8 @@ export const Carousel = (props: Props) => {
         <ImageView />
       </SwiperSlide>
 
-      <div className={s.buttonPrev}>
-        <ArrowIosBackOutline />
-      </div>
-      <div className={s.buttonNext}>
-        <ArrowIosForwardOutline />
-      </div>
+      <div className={s.buttonPrev}></div>
+      <div className={s.buttonNext}></div>
 
       {/* Пагинация */}
       <div className={s.pagination}></div>
