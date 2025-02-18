@@ -5,6 +5,7 @@ import { setAppError } from '../Slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
+  MeResponse,
   OAuthTokenResponse,
   PasswordRecoveryType,
   RecoveryCodeResponse,
@@ -46,6 +47,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
+        await dispatch(authApi.endpoints.me.initiate())
         localStorage.setItem('sn-token', response.data.accessToken)
       },
       query: body => ({
@@ -55,6 +57,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     logout: builder.mutation<void, void>({
+      invalidatesTags: ['ME'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
@@ -65,6 +68,10 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
         url: 'auth/logout',
       }),
+    }),
+    me: builder.query<MeResponse, void>({
+      providesTags: ['ME'],
+      query: () => 'auth/me',
     }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({
       query: data => ({
@@ -109,6 +116,7 @@ export const {
   useExchangeGoogleCodeForTokenMutation,
   useLoginMutation,
   useLogoutMutation,
+  useMeQuery,
   usePasswordRecoveryMutation,
   useRecoveryCodeMutation,
   useRegistrationConfirmationMutation,

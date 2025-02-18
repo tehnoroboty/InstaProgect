@@ -1,25 +1,38 @@
 'use client'
 import * as React from 'react'
-import { ComponentPropsWithoutRef } from 'react'
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
 import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
 import { HeaderWeb } from '@/src/components/header/header-web/HeaderWeb'
+import { AuthRoutes } from '@/src/constants/routing'
+import { useMeQuery } from '@/src/store/services/authApi'
+import { useRouter } from 'next/navigation'
 
 import s from './header.module.scss'
 
 type Props = {
-  isLoggedIn?: boolean
   notification?: boolean
   title: string
 } & ComponentPropsWithoutRef<'header'>
 
 export const Header = (props: Props) => {
-  const { isLoggedIn, notification, title, ...rest } = props
+  const { notification, title, ...rest } = props
+  const [isInitialized, setIsInitialized] = useState(false)
+
+  const { data, isLoading } = useMeQuery()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      setIsInitialized(true)
+      router.push(AuthRoutes.HOME)
+    }
+  }, [data, isLoading])
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
+      <HeaderWeb hasNotification={notification} isLoggedIn={isInitialized} title={title} />
     </header>
   )
 }
