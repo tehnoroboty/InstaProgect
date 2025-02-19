@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs'
+import { Typography } from '@/src/components/typography/Typography'
 
 import s from './tabs.module.scss'
-import { Typography } from '@/src/components/typography/Typography'
-import clsx from 'clsx'
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs'
 
 const meta = {
   component: Tabs,
@@ -30,7 +30,7 @@ const mockTabs: Tab[] = [
 const renderTabsList = (disabled = false) => (
   <TabsList loop>
     {mockTabs.map(tab => (
-      <TabsTrigger key={tab.value} value={tab.value} disabled={disabled}>
+      <TabsTrigger disabled={disabled} key={tab.value} value={tab.value}>
         {tab.title}
       </TabsTrigger>
     ))}
@@ -41,11 +41,11 @@ export const Default: Story = {
   args: {},
   render: args => {
     return (
-      <Tabs defaultValue={mockTabs[0].value} className={s.tabs}>
+      <Tabs className={s.tabs} defaultValue={mockTabs[0].value}>
         {renderTabsList()}
         {mockTabs.map(tab => (
           <TabsContent key={tab.value} value={tab.value}>
-            <Typography option={'h3'} className="p-4">
+            <Typography className={'p-4'} option={'h3'}>
               {tab.title}
             </Typography>
           </TabsContent>
@@ -57,27 +57,11 @@ export const Default: Story = {
 export const Disabled: Story = {
   render: args => {
     return (
-      <Tabs defaultValue={mockTabs[0].value} className={s.tabs}>
+      <Tabs className={s.tabs} defaultValue={mockTabs[0].value}>
         {renderTabsList(true)}
         {mockTabs.map(tab => (
           <TabsContent key={tab.value} value={tab.value}>
-            <Typography option={'h3'} className="p-4">
-              {tab.title}
-            </Typography>
-          </TabsContent>
-        ))}
-      </Tabs>
-    )
-  },
-}
-export const Custom: Story = {
-  render: args => {
-    return (
-      <Tabs defaultValue={mockTabs[0].value} className={clsx(s.tabs, s.customWidth)}>
-        {renderTabsList()}
-        {mockTabs.map(tab => (
-          <TabsContent key={tab.value} value={tab.value}>
-            <Typography option={'h3'} className="p-4">
+            <Typography className={'p-4'} option={'h3'}>
               {tab.title}
             </Typography>
           </TabsContent>

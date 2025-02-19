@@ -6,7 +6,9 @@
 .list {
   display: flex;
   flex-shrink: 1;
-  border-bottom: 2px solid var(--dark-100);
+  align-self: stretch;
+
+  //border-bottom: 2px solid var(--dark-100);
 }
 
 
@@ -23,7 +25,9 @@
   box-sizing: border-box;
   height: 36px;
   padding: 0 24px;
+  border-bottom: 2px solid var(--dark-100);
 
+  font-size: clamp(12px, 1vw, 24px);
   color: var(--dark-100);
   white-space: nowrap;
 
@@ -47,10 +51,10 @@
 
 
   &[data-state="active"] {
+    position: relative;
     color: var(--primary-500);
     background-color: #1D2431;
-    box-shadow: inset 0 0 0 0 currentcolor,
-    0 2px 0 0 currentcolor;
+    box-shadow:0 0 0 0 currentcolor;
 
     &:hover {
       background-color: #111722;
@@ -61,6 +65,18 @@
     }
   }
 
+  &[data-state="active"]::after {
+    content: '';
+
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+
+    width: 100%;
+    height: 2px; /* Толщина бордера */
+
+    background-color: var(--primary-500); /* Цвет бордера */
+  }
 
 }
 

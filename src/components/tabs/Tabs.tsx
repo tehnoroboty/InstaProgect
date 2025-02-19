@@ -1,13 +1,15 @@
 'use client'
 
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
-import { Root, List, Trigger, Content } from '@radix-ui/react-tabs'
-import s from './tabs.module.scss'
+
+import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
 import clsx from 'clsx'
+
+import s from './tabs.module.scss'
 
 const Tabs = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
   ({ className, ...props }, ref) => (
-    <Root ref={ref} className={clsx(s.root, className)} {...props} />
+    <Root className={clsx(s.root, className)} ref={ref} {...props} />
   )
 )
 
@@ -15,25 +17,28 @@ Tabs.displayName = 'Tabs'
 
 const TabsList = forwardRef<ElementRef<typeof List>, ComponentPropsWithoutRef<typeof List>>(
   ({ className, ...props }, ref) => (
-    <List ref={ref} className={clsx(s.list, className)} {...props} />
+    <List className={clsx(s.list, className)} ref={ref} {...props} />
   )
 )
+
 TabsList.displayName = List.displayName
 
 const TabsTrigger = forwardRef<
   ElementRef<typeof Trigger>,
   ComponentPropsWithoutRef<typeof Trigger>
 >(({ className, ...props }, ref) => (
-  <Trigger ref={ref} className={clsx(s.trigger, className)} {...props} />
+  <Trigger className={clsx(s.trigger, className)} ref={ref} {...props} />
 ))
+
 TabsTrigger.displayName = Trigger.displayName
 
 const TabsContent = forwardRef<
   ElementRef<typeof Content>,
   ComponentPropsWithoutRef<typeof Content>
 >(({ className, ...props }, ref) => (
-  <Content ref={ref} className={clsx(s.content, className)} {...props} />
+  <Content className={clsx(s.content, className)} ref={ref} {...props} />
 ))
+
 TabsContent.displayName = Content.displayName
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsContent, TabsList, TabsTrigger }
