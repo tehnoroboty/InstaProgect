@@ -61,7 +61,7 @@ export const Typography = <T extends ElementType = 'p'>(props: Props<T>) => {
     s[option],
     weight && s[`font-weight-${weight}`],
     size && s[`font-size-${size}`],
-    lineHeights && s[`line-heights${lineHeights}`],
+    lineHeights && s[`line-heights-${lineHeights}`],
     disabled && s.labelDisabled,
     disabledClassName,
     className
