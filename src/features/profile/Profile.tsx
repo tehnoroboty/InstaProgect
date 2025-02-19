@@ -15,7 +15,7 @@ export const Profile = () => {
   return (
     <div className={s.page}>
       <div className={s.profileContainer}>
-        <AvatarBox size={'xl'} src={'data.avatars[0].url'} />
+        <AvatarBox size={'xl'} />
         <div className={s.profileDetails}>
           <div className={s.container}>
             <div className={s.profileInfo}>
