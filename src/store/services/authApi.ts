@@ -27,7 +27,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const res = await queryFulfilled
 
-          localStorage.setItem('sn-token', res.data.accessToken)
+          localStorage.setItem('accessToken', res.data.accessToken)
         } catch (error) {
           const errorResponse = error as { error: { data: { messages: [{ message: string }] } } }
 
@@ -46,7 +46,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
-        localStorage.setItem('sn-token', response.data.accessToken)
+        localStorage.setItem('accessToken', response.data.accessToken)
       },
       query: body => ({
         body,
@@ -59,7 +59,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           await queryFulfilled
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
-          localStorage.removeItem('sn-token')
+          localStorage.removeItem('accessToken')
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
