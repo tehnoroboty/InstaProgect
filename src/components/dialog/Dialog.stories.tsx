@@ -144,6 +144,7 @@ export const ImageCropDialog: Story = {
             <ImageViewer />
           </div>
         </Dialog>
+        <div className={s.lorem}>{mockText}</div>
       </>
     )
   },

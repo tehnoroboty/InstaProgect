@@ -42,14 +42,11 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
-              <Close asChild>
-                <button
-                  aria-label={'Close'}
-                  className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}
-                  type={'button'}
-                >
-                  <CloseOutline className={s.icon} />
-                </button>
+              <Close
+                asChild
+                className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}
+              >
+                <CloseOutline className={s.icon} />
               </Close>
               {children}
             </div>
