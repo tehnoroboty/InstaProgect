@@ -2,16 +2,28 @@ import React from 'react'
 
 import Image from 'next/image'
 
+import s from './posts.module.scss'
+
 type Props = {
-  posts: Array<string>
+  posts: any
 }
 
 export const Posts = ({ posts }: Props) => {
+  const onClickPostHandler = (post: any) => {
+    console.log(post)
+  }
+
   return (
-    <div>
-      {posts.map((post, index) => {
-        return <Image alt={''} src={''} />
+    <div className={s.postsGrid}>
+      {p.map((post, index) => {
+        return (
+          <div className={s.image} key={index} onClick={() => onClickPostHandler(post)}>
+            {/* <Image alt={''} height={'post.height'} src={'post.url'} width={'post.wight'} />*/}
+          </div>
+        )
       })}
     </div>
   )
 }
+
+const p = ['1', '2', '3', '4', '5', '6', '7', '8', '9']

@@ -13,7 +13,7 @@ import { profileData } from './data'
 
 export const Profile = () => {
   return (
-    <>
+    <div className={s.page}>
       <div className={s.profileContainer}>
         <AvatarBox size={'xl'} src={'data.avatars[0].url'} />
         <div className={s.profileDetails}>
@@ -66,6 +66,6 @@ export const Profile = () => {
         </div>
       </div>
       <Posts posts={[]} />
-    </>
+    </div>
   )
 }
