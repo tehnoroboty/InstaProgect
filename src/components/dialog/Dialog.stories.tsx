@@ -7,7 +7,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import s from './dialog.module.scss'
 
 import { Button } from '../button/Button'
-import { Dialog, DialogProps } from './Dialog'
+import { Dialog } from './Dialog'
 import { CommentsSection, ImageViewer, mockData, mockText } from './mock/mock'
 
 const meta = {
@@ -63,9 +63,7 @@ export const Default: Story = {
 }
 
 export const AddComent: Story = {
-  render: args => {
-    const [value, setValue] = useState(mockData)
-
+  render: () => {
     const [showDialog, setShowDialog] = useState(false)
 
     const openModalHandler = () => {
@@ -97,7 +95,7 @@ export const AddComent: Story = {
 }
 
 export const ImageCropDialog: Story = {
-  render: args => {
+  render: () => {
     const [showDialog, setShowDialog] = useState(false)
 
     const openModalHandler = () => {
