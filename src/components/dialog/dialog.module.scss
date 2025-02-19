@@ -146,13 +146,52 @@
   color: var(--light-100);
 }
 
-.containerAddComent{
+.containerAddComent {
   max-width: 1000px;
-  padding:0
+  padding: 0
 }
 
-.addComent{
+.addComent {
   display: flex;
   justify-content: space-between;
   width: 992px;
+}
+
+.containerImageCrop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  //align-items: center;
+  justify-content: center;
+
+  width: 492px;
+  padding: 0;
+  border: 1px solid var(--dark-100);
+}
+
+.titleImageCrop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backImageCrop{
+  color: var(--light-100);
+}
+
+.imageImageCrop{
+    display: flex;
+    flex: 1; // Растягиваем контейнер
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // Заполняет контейнер, обрезая изображение
+  }
 }

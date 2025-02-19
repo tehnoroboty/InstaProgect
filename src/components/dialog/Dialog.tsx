@@ -9,20 +9,20 @@ import s from './dialog.module.scss'
 
 export type DialogProps = {
   extraHeaderContent?: ReactNode
+  isSimple?: boolean
   modalTitle?: string
   onClose: () => void
   open: boolean
-  photo?: boolean
 } & ComponentPropsWithoutRef<'div'>
 
 export const Dialog = ({
   children,
   className,
   extraHeaderContent,
+  isSimple = false,
   modalTitle,
   onClose,
   open,
-  photo = false,
   ...rest
 }: DialogProps) => {
   return (
@@ -30,7 +30,7 @@ export const Dialog = ({
       <Portal>
         <Overlay className={s.overlay} />
         <Content className={clsx(s.content, className)}>
-          {photo ? (
+          {isSimple ? (
             <div>{children}</div>
           ) : (
             <div>
@@ -51,10 +51,9 @@ export const Dialog = ({
                   <CloseOutline className={s.icon} />
                 </button>
               </Close>
+              {children}
             </div>
           )}
-
-          {children}
         </Content>
       </Portal>
     </Root>

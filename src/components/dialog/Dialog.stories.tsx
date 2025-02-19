@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
+import { Title } from '@radix-ui/react-dialog'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './dialog.module.scss'
@@ -20,9 +21,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof Dialog>
 
-const DialogWrapper = (props: DialogProps) => {
-  const [value, setValue] = useState(mockData)
-
+const DialogWrapper = () => {
   const [showDialog, setShowDialog] = useState(false)
 
   const openModalHandler = () => {
@@ -92,6 +91,61 @@ export const AddComent: Story = {
           </div>
         </Dialog>
         <div className={s.lorem}>{mockText}</div>
+      </>
+    )
+  },
+}
+
+export const ImageCropDialog: Story = {
+  render: args => {
+    const [showDialog, setShowDialog] = useState(false)
+
+    const openModalHandler = () => {
+      setShowDialog(true)
+    }
+
+    const closeModalHandler = () => {
+      setShowDialog(false)
+    }
+
+    return (
+      <>
+        <div className={s.headerWrapper}>
+          <div className={s.container}>
+            <h3>logotype</h3>
+            <Button onClick={openModalHandler}>Open Image Crop</Button>
+          </div>
+        </div>
+        <Dialog
+          className={s.containerImageCrop}
+          isSimple
+          modalTitle={'Cropping'}
+          onClose={closeModalHandler}
+          open={showDialog}
+        >
+          <Title className={s.titleImageCrop}>
+            <Button
+              className={s.backImageCrop}
+              onClick={() => alert('Back')}
+              variant={'transparent'}
+            >
+              {'<'}
+            </Button>
+            <Typography as={'h1'} option={'h1'}>
+              Cropping
+            </Typography>
+            <Button
+              className={s.nextImageCrop}
+              onClick={() => alert('Next')}
+              variant={'transparent'}
+            >
+              Next
+            </Button>
+          </Title>
+          <div className={s.imageImageCrop}>
+            <ImageViewer />
+          </div>
+        </Dialog>
       </>
     )
   },
