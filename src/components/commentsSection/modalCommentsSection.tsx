@@ -14,61 +14,42 @@ import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
+import clsx from 'clsx'
 
 import s from './modalCommentsSection.module.scss'
 
 import { Button } from '../button/Button'
 
-export type ProfileData = {
-  aboutMe: string
-  avatars: Avatar[]
-  city: string
-  country: string
-  createdAt: string
-  dateOfBirth: string
-  firstName: string
-  id: number
-  lastName: string
-  region: string
-  userName: string
-}
-
-export type Avatar = {
-  createdAt: string
-  fileSize: number
-  height: number
-  url: string
-  width: number
-}
-
-type Props = {
-  isLiked: boolean
-  userData?: ProfileData
-}
-
 // comment type
-export type Comment = {
+export type CommentType = {
   answerCount: number
   content: string
   createdAt: string
-  from: User
+  from: UserType
   id: number
   isLiked: boolean
   likeCount: number
   postId: number
 }
 
-export type User = {
-  avatars: Avatar[]
+export type UserType = {
+  avatars: [{ url: string }]
   id: number
   username: string
 }
 
-export const ModalCommentsSection = ({ isLiked, userData }: Props) => {
-  //const [isLiked, setIsLiked] = useState(false)
+type Props = {
+  commentData?: CommentType
+}
 
-  const handleLike = () => {
-    //setIsLiked(isLiked => !isLiked)
+export const ModalCommentsSection = ({ commentData }: Props) => {
+  const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({})
+
+  const handleLike = (commentId: string) => {
+    setLikedComments(prevLikedComments => ({
+      ...prevLikedComments,
+      [commentId]: !prevLikedComments[commentId],
+    }))
   }
 
   return (
@@ -79,12 +60,12 @@ export const ModalCommentsSection = ({ isLiked, userData }: Props) => {
             <AvatarBox
               className={s.smallAva}
               size={{ height: '36px', width: '36px' }}
-              src={userData?.avatars[0].url}
+              src={commentData?.from.avatars[0].url}
             />
           </div>
           <div className={s.userName}>
             <Typography size={'m'} weight={'semi-bold'}>
-              {userData?.userName ? userData.userName : 'UserName'}
+              {commentData?.from.username || 'UserName'}
             </Typography>
           </div>
         </div>
@@ -98,22 +79,35 @@ export const ModalCommentsSection = ({ isLiked, userData }: Props) => {
               <AvatarBox
                 className={s.smallAva}
                 size={{ height: '36px', width: '36px' }}
-                src={userData?.avatars[0].url}
+                src={commentData?.from.avatars[0].url}
               />
             </div>
             <div className={s.userComment}>
-              <div className={s.userName}>
-                <Typography size={'s'} weight={'bold'}>
-                  {userData?.userName ? userData.userName : 'UserName'}
+              <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
+                {commentData?.from.username || el.userName}
+              </Typography>
+              <Typography as={'span'} size={'s'} weight={'regular'}>
+                {commentData?.content || el.comment}
+              </Typography>
+              <div className={s.userCommentBottom}>
+                <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
+                  {commentData?.createdAt || el.timeAgo}
                 </Typography>
-              </div>
-              <div>
-                <Typography size={'s'} weight={'regular'}>
-                  {el.comment}
+                <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
+                  {`Like: ${commentData?.likeCount || el.likeCount}`}
                 </Typography>
+                <Button className={s.answerButton} variant={'transparent'}>
+                  {'Answer'}
+                </Button>
               </div>
             </div>
-            <Heart className={isLiked ? s.red : s.heartIcon} onClick={handleLike} />
+            <div className={s.heartIconWrapper}>
+              {likedComments[el.id] ? (
+                <Heart className={clsx(s.heartIcon, s.red)} onClick={() => handleLike(el.id)} />
+              ) : (
+                <HeartOutline className={s.heartIcon} onClick={() => handleLike(el.id)} />
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -143,13 +137,16 @@ export const fakeComments = [
   {
     comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, exercitationem?',
     id: '1',
-    timeAgo: '2 hours ago Answer',
-    userName: 'userName',
+    likeCount: 3,
+    timeAgo: '2 hours ago',
+    userName: 'userName1',
   },
   {
     comment:
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque delectus ea est hic perferendis quos!',
     id: '2',
-    timeAgo: '2 hours ago Like: 1 Answer',
+    likeCount: 5,
+    timeAgo: '5 hours ago',
+    userName: 'userName2',
   },
 ]

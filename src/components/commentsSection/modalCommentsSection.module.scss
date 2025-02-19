@@ -68,12 +68,27 @@
 
 .usersCommentBody {
   display: flex;
-  gap: 12px;
   align-items: start;
+  justify-content: space-between;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
 }
 
 .userComment {
+  margin-right: auto;
+  margin-left: 12px;
+}
+
+.userCommentBottom {
   display: flex;
+  gap: 12px;
+  margin-top: 5px;
+
+  & p {
+    color: var(--light-900);
+  }
 }
 
 .heartIcon {
@@ -90,6 +105,25 @@
   align-self: center;
 
   & path {
-    fill: var(--red-color, red); // Используйте переменную или просто красный цвет
+    fill: var(--danger-500);
   }
+}
+
+.answerButton {
+  display: inline;
+
+  padding: 0;
+  border: none;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--light-900);
+
+  background: none;
+}
+
+.userNameComment {
+  display: inline-flex;
+  margin-right: 5px;
 }
