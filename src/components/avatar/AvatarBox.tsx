@@ -19,7 +19,12 @@ export const AvatarBox = ({ className, size = 'xl', src }: Props) => {
     <Avatar.Root className={clsx(s.root, className, size && s[`img-size-${size}`])}>
       <Avatar.Image alt={'Avatar'} className={s.image} src={src} />
       <Avatar.Fallback className={s.fallback}>
-        <ImageOutline color={'white'} height={imageSize} width={imageSize} />
+        <ImageOutline
+          className={s.fallbackImage}
+          color={'white'}
+          height={imageSize}
+          width={imageSize}
+        />
       </Avatar.Fallback>
     </Avatar.Root>
   )
