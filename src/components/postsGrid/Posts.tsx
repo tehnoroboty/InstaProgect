@@ -18,7 +18,8 @@ export const Posts = ({ posts }: Props) => {
       {p.map((post, index) => {
         return (
           <div className={s.image} key={index} onClick={() => onClickPostHandler(post)}>
-            {/* <Image alt={''} height={'post.height'} src={'post.url'} width={'post.wight'} />*/}
+            {/* <Image alt={''} height={300} src={'post.url'}
+             width={300} />*/}
           </div>
         )
       })}
