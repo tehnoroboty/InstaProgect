@@ -36,16 +36,18 @@
 
   transition: opacity 0.2s ease;
 
-  &:hover {
-    color: var(--light-100);
-  }
-
   &:focus-visible {
     outline: 2px solid var(--primary-700);
   }
 
   &:disabled {
     pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--light-100);
+    }
   }
 }
 
