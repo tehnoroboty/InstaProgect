@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { KeyboardEvent, useState } from 'react'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
@@ -24,6 +24,22 @@ export const Dropdown = <T,>(props: Props<T>) => {
   const triggerClassName = clsx(s.trigger, { [s.iconActive]: open })
   const contentClassName = clsx(s.content)
 
+  const dropDownMenuItems = list.map((item: T, index) => {
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+      if (item instanceof Object && 'onClick' in item && typeof item.onClick === 'function') {
+        if (e.code === 'Enter') {
+          item.onClick()
+        }
+      }
+    }
+
+    return (
+      <DropdownMenu.Item className={s.dropdownItem} key={index} onKeyDown={onKeyDownHandler}>
+        {renderItem(item)}
+      </DropdownMenu.Item>
+    )
+  })
+
   return (
     <DropdownMenu.Root onOpenChange={handleOpenChange}>
       <DropdownMenu.Trigger asChild className={triggerClassName}>
@@ -31,11 +47,7 @@ export const Dropdown = <T,>(props: Props<T>) => {
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content align={'end'} className={contentClassName} sideOffset={7}>
-          {list.map((item, index) => (
-            <DropdownMenu.Item className={s.dropdownItem} key={index}>
-              {renderItem(item)}
-            </DropdownMenu.Item>
-          ))}
+          {dropDownMenuItems}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
