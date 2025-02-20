@@ -42,10 +42,7 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
-              <Close
-                asChild
-                className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}
-              >
+              <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
                 <CloseOutline className={s.icon} />
               </Close>
               {children}
