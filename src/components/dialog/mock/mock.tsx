@@ -1,3 +1,15 @@
+import Image from 'next/image'
+
+import img from './img.png'
+import img2 from './img_coment.png'
+
+export const ImageViewer = () => {
+  return <Image alt={'First image'} height={562} src={img} width={490} />
+}
+export const CommentsSection = () => {
+  return <Image alt={'Second image'} height={562} src={img2} width={490} />
+}
+
 export const mockData = [
   {
     id: 1,

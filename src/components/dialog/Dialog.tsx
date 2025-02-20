@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef } from 'react'
+import React, { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 import CloseOutline from '@/src/assets/componentsIcons/CloseOutline'
 import { Typography } from '@/src/components/typography/Typography'
@@ -8,7 +8,9 @@ import clsx from 'clsx'
 import s from './dialog.module.scss'
 
 export type DialogProps = {
-  modalTitle: string
+  extraHeaderContent?: ReactNode
+  isSimple?: boolean
+  modalTitle?: string
   onClose: () => void
   open: boolean
 } & ComponentPropsWithoutRef<'div'>
@@ -16,6 +18,8 @@ export type DialogProps = {
 export const Dialog = ({
   children,
   className,
+  extraHeaderContent,
+  isSimple = false,
   modalTitle,
   onClose,
   open,
@@ -26,18 +30,24 @@ export const Dialog = ({
       <Portal>
         <Overlay className={s.overlay} />
         <Content className={clsx(s.content, className)}>
-          <Title asChild className={s.title}>
-            <Typography as={'h1'} option={'h1'}>
-              {modalTitle}
-            </Typography>
-          </Title>
-          <hr className={s.lineHr} />
-          {children}
-          <Close asChild>
-            <button aria-label={'Close'} className={s.IconButton} type={'button'}>
-              <CloseOutline className={s.icon} />
-            </button>
-          </Close>
+          {isSimple ? (
+            <div>{children}</div>
+          ) : (
+            <div>
+              {modalTitle && (
+                <Title asChild className={s.title}>
+                  <Typography as={'h1'} option={'h1'}>
+                    {modalTitle}
+                  </Typography>
+                </Title>
+              )}
+              {extraHeaderContent}
+              <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
+                <CloseOutline className={s.icon} />
+              </Close>
+              {children}
+            </div>
+          )}
         </Content>
       </Portal>
     </Root>

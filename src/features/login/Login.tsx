@@ -33,8 +33,8 @@ export default function Login() {
     setError,
   } = useForm<FormType>({
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'tehnoroboty@gmail.com',
+      password: 'qwQW12!',
     },
     mode: 'onChange',
     resolver: zodResolver(schema),

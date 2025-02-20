@@ -1,7 +1,7 @@
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/store/services/baseApi'
 
-import { setAppError } from '../Slices/appSlice'
+import { setAppError, setIsLoggedIn } from '../Slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -28,7 +28,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const res = await queryFulfilled
 
-          localStorage.setItem('sn-token', res.data.accessToken)
+          localStorage.setItem('accessToken', res.data.accessToken)
         } catch (error) {
           const errorResponse = error as { error: { data: { messages: [{ message: string }] } } }
 
@@ -47,7 +47,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
-        localStorage.setItem('sn-token', response.data.accessToken)
+        localStorage.setItem('accessToken', response.data.accessToken)
       },
       query: body => ({
         body,
@@ -58,10 +58,14 @@ export const authApi = baseApi.injectEndpoints({
     logout: builder.mutation<void, void>({
       invalidatesTags: ['ME'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        const response = await queryFulfilled
-
-        localStorage.removeItem('sn-token')
-        dispatch(authApi.util.resetApiState())
+        try {
+          await queryFulfilled
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          localStorage.removeItem('accessToken')
+          dispatch(authApi.util.resetApiState())
+        } catch (error) {
+          console.error('Ошибка при разлогине:', error)
+        }
       },
       query: () => ({
         method: 'POST',
