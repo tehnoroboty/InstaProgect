@@ -12,6 +12,10 @@ import s from './myProfile.module.scss'
 import { profileData } from './data'
 
 export const Profile = () => {
+  const onClickHandler = () => {
+    console.log('onClickHandler')
+  }
+
   return (
     <div className={s.page}>
       <div className={s.profileContainer}>
@@ -55,7 +59,7 @@ export const Profile = () => {
               </div>
             </div>
             <div>
-              <Button type={'button'} variant={'secondary'}>
+              <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
                 {'Profile Settings'}
               </Button>
             </div>

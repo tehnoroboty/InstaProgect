@@ -4,9 +4,8 @@ import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
 import { HeaderMobile } from '@/src/components/header/header-mob/HeaderMobile'
 import { HeaderWeb } from '@/src/components/header/header-web/HeaderWeb'
-import { AccountRoutesUSERS, AuthRoutes } from '@/src/constants/routing'
 import { useMeQuery } from '@/src/store/services/authApi'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import s from './header.module.scss'
 
