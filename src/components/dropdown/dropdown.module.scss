@@ -28,6 +28,10 @@
   background-color: var(--dark-500);
 }
 
+.dropdownItem:focus {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
 .iconActive {
   color: var(--primary-500);
 }

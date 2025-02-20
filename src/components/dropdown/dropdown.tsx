@@ -32,7 +32,9 @@ export const Dropdown = <T,>(props: Props<T>) => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content align={'end'} className={contentClassName} sideOffset={7}>
           {list.map((item, index) => (
-            <DropdownMenu.Item key={index}>{renderItem(item)}</DropdownMenu.Item>
+            <DropdownMenu.Item className={s.dropdownItem} key={index}>
+              {renderItem(item)}
+            </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
