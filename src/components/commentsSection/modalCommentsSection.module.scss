@@ -100,10 +100,12 @@
   }
 }
 
-.red {
-  cursor: pointer;
-  align-self: center;
+.commentHeartIcon {
+  width: 16px;
+  height: 16px;
+}
 
+.red {
   & path {
     fill: var(--danger-500);
   }
@@ -126,4 +128,19 @@
 .userNameComment {
   display: inline-flex;
   margin-right: 5px;
+}
+
+.interactionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.postLike {
+  margin-right: 24px;
+}
+
+.share {
+  margin-right: auto;
+  margin-left: auto;
 }

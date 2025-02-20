@@ -40,17 +40,20 @@ export type UserType = {
 
 type Props = {
   commentData?: CommentType
+  isLikedPost: boolean
 }
 
-export const ModalCommentsSection = ({ commentData }: Props) => {
+export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props) => {
   const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({})
 
-  const handleLike = (commentId: string) => {
+  const handleLikeComment = (commentId: string) => {
     setLikedComments(prevLikedComments => ({
       ...prevLikedComments,
       [commentId]: !prevLikedComments[commentId],
     }))
   }
+
+  const handleLikePost = () => {}
 
   return (
     <div className={s.commentsBox}>
@@ -103,16 +106,32 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
             </div>
             <div className={s.heartIconWrapper}>
               {likedComments[el.id] ? (
-                <Heart className={clsx(s.heartIcon, s.red)} onClick={() => handleLike(el.id)} />
+                <Heart
+                  className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
+                  onClick={() => handleLikeComment(el.id)}
+                />
               ) : (
-                <HeartOutline className={s.heartIcon} onClick={() => handleLike(el.id)} />
+                <HeartOutline
+                  className={clsx(s.heartIcon, s.commentHeartIcon)}
+                  onClick={() => handleLikeComment(el.id)}
+                />
               )}
             </div>
           </div>
         ))}
       </div>
       <div className={s.postActions}>
-        <div className={s.interactionBar}></div>
+        <div className={s.interactionBar}>
+          <div className={s.postLike}>
+            {isLikedPost ? (
+              <Heart className={clsx(s.heartIcon, s.red)} onClick={handleLikePost} />
+            ) : (
+              <HeartOutline className={s.heartIcon} onClick={handleLikePost} />
+            )}
+          </div>
+          <div className={s.share}></div>
+          <div className={s.save}></div>
+        </div>
         <div className={s.postLikes}></div>
         <div className={s.postDate}></div>
       </div>
