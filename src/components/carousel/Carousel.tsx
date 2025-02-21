@@ -8,12 +8,14 @@ import 'swiper/scss'
 
 import s from './carousel.module.scss'
 
+import { Button } from '../button/Button'
+
 type Props<T> = {
   list: T[]
   renderItem: (item: T) => ReactNode
 }
 
-export const Carousel = <T,>(props: Props<T>) => {
+export const Arousel = <T,>(props: Props<T>) => {
   const { list, renderItem } = props
 
   return (
@@ -34,8 +36,8 @@ export const Carousel = <T,>(props: Props<T>) => {
       {list.map((item, index) => (
         <SwiperSlide key={index}>{renderItem(item)}</SwiperSlide>
       ))}
-      <div className={s.buttonPrev}></div>
-      <div className={s.buttonNext}></div>
+      <Button className={s.buttonPrev} variant={'transparent'}></Button>
+      <Button className={s.buttonNext} variant={'transparent'}></Button>
 
       <div className={s.pagination}></div>
     </Swiper>
