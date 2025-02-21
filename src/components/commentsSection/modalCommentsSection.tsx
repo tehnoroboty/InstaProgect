@@ -4,7 +4,9 @@ import { useState } from 'react'
 
 import {
   BookmarkOutline,
+  CopyOutline,
   LogOutOutline,
+  PersonRemoveOutline,
   SettingsOutline,
   TrendingUpOutline,
 } from '@/src/assets/componentsIcons'
@@ -14,6 +16,7 @@ import PaperPlane from '@/src/assets/componentsIcons/PaperPlaneOutline'
 import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { InteractionBar } from '@/src/components/interactionBar/InteractionBar'
+import { MenuItemType } from '@/src/components/navigationPanel/NavigationPanel'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
@@ -67,7 +70,16 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
             </Typography>
           </div>
         </div>
-        <div className={s.postMenu}>{<DropdownMenuMobile items={menuDropdown} />}</div>
+        <div className={s.postMenu}>
+          {
+            <DropdownMenuMobile
+              items={[
+                { icon: PersonRemoveOutline, title: 'Unfollow' },
+                { icon: CopyOutline, title: 'Copy Link' },
+              ]}
+            />
+          }
+        </div>
       </div>
 
       <div className={s.commentsBody}>
@@ -117,7 +129,10 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
       </div>
       <div className={s.postActions}>
         <InteractionBar hasCommentIcon={false} />
-        <div className={s.postLikes}></div>
+        <div className={s.postLikes}>
+          <div className={s.postLikesAvatars}></div>
+          <div className={s.likeCount}></div>
+        </div>
         <div className={s.postDate}></div>
       </div>
       <div className={s.addComment}>
@@ -129,13 +144,6 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
     </div>
   )
 }
-
-const menuDropdown: any = [
-  { href: '/statistics', icon: <TrendingUpOutline />, title: 'Statistics' },
-  { href: '/favorites', icon: <BookmarkOutline />, title: 'Favorites' },
-  { href: '/settings', icon: <SettingsOutline />, title: 'Profile Settings' },
-  { icon: <LogOutOutline />, title: 'Log Out' },
-]
 
 export const fakeComments = [
   {
