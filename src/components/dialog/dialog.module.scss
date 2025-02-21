@@ -134,6 +134,10 @@
   color: var(--light-100);
 }
 
+.widthDefault{
+  width: 50%;
+}
+
 .containerAddComent {
   max-width: 1000px;
   padding: 0
@@ -160,6 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px 24px;
 }
 
 .backImageCrop {

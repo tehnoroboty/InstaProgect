@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
-import { Title } from '@radix-ui/react-dialog'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './dialog.module.scss'
@@ -40,8 +39,12 @@ const DialogWrapper = () => {
           <Button onClick={openModalHandler}>Sign Up</Button>
         </div>
       </div>
-      <Dialog modalTitle={mockData[0].modalTitle} onClose={closeModalHandler} open={showDialog}>
-        <hr className={s.lineHr} />
+      <Dialog
+        className={s.widthDefault}
+        modalTitle={mockData[0].modalTitle}
+        onClose={closeModalHandler}
+        open={showDialog}
+      >
         <div className={s.boxDiscription}>
           <div className={s.image}></div>
           <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
@@ -121,7 +124,7 @@ export const ImageCropDialog: Story = {
           onClose={closeModalHandler}
           open={showDialog}
         >
-          <Title className={s.titleImageCrop}>
+          <div className={s.titleImageCrop}>
             <Button
               className={s.backImageCrop}
               onClick={() => alert('Back')}
@@ -139,7 +142,7 @@ export const ImageCropDialog: Story = {
             >
               Next
             </Button>
-          </Title>
+          </div>
           <div className={s.imageImageCrop}>
             <ImageViewer />
           </div>
