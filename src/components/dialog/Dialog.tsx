@@ -45,6 +45,7 @@ export const Dialog = ({
               <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
                 <CloseOutline className={s.icon} />
               </Close>
+              {modalTitle && <hr className={s.lineHr} />}
               {children}
             </div>
           )}

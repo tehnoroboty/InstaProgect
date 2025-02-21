@@ -45,7 +45,6 @@ const DialogWrapper = () => {
         onClose={closeModalHandler}
         open={showDialog}
       >
-        <hr className={s.lineHr} />
         <div className={s.boxDiscription}>
           <div className={s.image}></div>
           <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
