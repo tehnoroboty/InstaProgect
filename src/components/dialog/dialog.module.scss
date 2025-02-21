@@ -5,6 +5,10 @@
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.sthDialog{
+  max-width: 600px;
+}
+
 .content {
   position: fixed;
   z-index: 50;
