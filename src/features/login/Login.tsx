@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 
 import { Button } from '@/src/components/button/Button'
 import { Card } from '@/src/components/card/Card'
+import { CreatePost } from '@/src/components/createPost/CreatePost'
 import { Input } from '@/src/components/input'
 import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
 import { Typography } from '@/src/components/typography/Typography'

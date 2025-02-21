@@ -1,5 +1,9 @@
-import { AvatarBox } from '@/src/components/avatar/AvatarBox'
+import { CreatePost } from '@/src/components/createPost/CreatePost'
 
 export default function HomePage() {
-  return <div style={{ color: 'red', display: 'flex' }}>{'Some text'}</div>
+  return (
+    <div style={{ color: 'red', display: 'flex' }}>
+      <CreatePost />
+    </div>
+  )
 }
