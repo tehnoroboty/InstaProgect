@@ -40,8 +40,8 @@ export const Dropdown = <T,>(props: Props<T>) => {
   })
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild className={triggerClassName} onClick={handleOpenChange}>
+    <DropdownMenu.Root onOpenChange={handleOpenChange}>
+      <DropdownMenu.Trigger asChild className={triggerClassName}>
         {trigger}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
