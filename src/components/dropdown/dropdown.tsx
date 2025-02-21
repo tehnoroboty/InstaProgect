@@ -7,18 +7,17 @@ import clsx from 'clsx'
 import s from './dropdown.module.scss'
 
 type Props<T> = {
-  isOpen?: boolean
   list: T[]
   renderItem: (item: T, index?: number) => React.ReactNode
   trigger: React.ReactNode
 }
 
 export const Dropdown = <T,>(props: Props<T>) => {
-  const { isOpen = false, list, renderItem, trigger } = props
-  const [open, setOpen] = useState(isOpen)
+  const { list, renderItem, trigger } = props
+  const [open, setOpen] = useState(false)
 
-  const handleOpenChange = (open: boolean) => {
-    setOpen(open)
+  const handleOpenChange = () => {
+    setOpen(!open)
   }
 
   const triggerClassName = clsx(s.trigger, { [s.iconActive]: open })
@@ -41,8 +40,8 @@ export const Dropdown = <T,>(props: Props<T>) => {
   })
 
   return (
-    <DropdownMenu.Root onOpenChange={handleOpenChange}>
-      <DropdownMenu.Trigger asChild className={triggerClassName}>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild className={triggerClassName} onClick={handleOpenChange}>
         {trigger}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>

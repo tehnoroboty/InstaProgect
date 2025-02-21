@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import s from './dropdownItem.module.scss'
 

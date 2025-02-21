@@ -20,9 +20,9 @@ const meta = {
   argTypes: {},
   args: {
     trigger: (
-      <Button aria-label={'Customize options'} type={'button'}>
+      <button>
         <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
-      </Button>
+      </button>
     ),
   },
   component: Dropdown,
