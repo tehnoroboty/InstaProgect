@@ -18,10 +18,10 @@ import s from '@/src/components/interactionBar/interactionBar.module.scss'
 // type LikeStatus = 'DISLIKE' | 'LIKE' | 'NONE'
 
 type Props = {
-  hasMessageIcon?: boolean
+  hasCommentIcon?: boolean
 }
 
-export const InteractionBar = ({ hasMessageIcon = true }: Props) => {
+export const InteractionBar = ({ hasCommentIcon = true }: Props) => {
   const [isLikedPost, setIsLikedPost] = useState<boolean>(false)
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
 
@@ -34,7 +34,7 @@ export const InteractionBar = ({ hasMessageIcon = true }: Props) => {
 
   return (
     <div className={s.interactionBar}>
-      <div className={clsx(s.interactionBarLeftSide, { [s.withMessageIcon]: hasMessageIcon })}>
+      <div className={clsx(s.interactionBarLeftSide, { [s.withMessageIcon]: hasCommentIcon })}>
         <div className={s.postLike}>
           {isLikedPost ? (
             <div title={'Unlike'}>
@@ -46,8 +46,8 @@ export const InteractionBar = ({ hasMessageIcon = true }: Props) => {
             </div>
           )}
         </div>
-        {hasMessageIcon && (
-          <div className={s.message}>
+        {hasCommentIcon && (
+          <div className={s.comment} title={'Comment'}>
             <MessageCircleOutline className={s.interactionIcon} />
           </div>
         )}

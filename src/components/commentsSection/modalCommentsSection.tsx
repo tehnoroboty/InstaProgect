@@ -116,7 +116,7 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
         ))}
       </div>
       <div className={s.postActions}>
-        <InteractionBar hasMessageIcon={false} />
+        <InteractionBar hasCommentIcon={false} />
         <div className={s.postLikes}></div>
         <div className={s.postDate}></div>
       </div>
