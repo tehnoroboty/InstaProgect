@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import {
+  Bookmark,
   BookmarkOutline,
   LogOutOutline,
   SettingsOutline,
@@ -10,6 +11,7 @@ import {
 } from '@/src/assets/componentsIcons'
 import Heart from '@/src/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/assets/componentsIcons/HeartOutline'
+import PaperPlane from '@/src/assets/componentsIcons/PaperPlaneOutline'
 import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { TextArea } from '@/src/components/textArea/TextArea'
@@ -45,6 +47,8 @@ type Props = {
 
 export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props) => {
   const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({})
+  const [likedPost, setlikedPost] = useState<boolean>()
+  const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
 
   const handleLikeComment = (commentId: string) => {
     setLikedComments(prevLikedComments => ({
@@ -54,6 +58,9 @@ export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props)
   }
 
   const handleLikePost = () => {}
+  const handleSavePost = () => {
+    setIsSavedPost(prevSavedPost => !prevSavedPost)
+  }
 
   return (
     <div className={s.commentsBox}>
@@ -122,15 +129,26 @@ export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props)
       </div>
       <div className={s.postActions}>
         <div className={s.interactionBar}>
-          <div className={s.postLike}>
-            {isLikedPost ? (
-              <Heart className={clsx(s.heartIcon, s.red)} onClick={handleLikePost} />
+          <div className={s.interactionBarLeftSide}>
+            <div className={s.postLike}>
+              {isLikedPost ? (
+                <Heart className={clsx(s.interactionIcon, s.red)} onClick={handleLikePost} />
+              ) : (
+                <HeartOutline className={s.interactionIcon} onClick={handleLikePost} />
+              )}
+            </div>
+            <div className={s.share}>
+              <PaperPlane className={s.interactionIcon} />
+            </div>
+          </div>
+
+          <div className={s.save}>
+            {isSavedPost ? (
+              <Bookmark className={s.interactionIcon} onClick={handleSavePost} />
             ) : (
-              <HeartOutline className={s.heartIcon} onClick={handleLikePost} />
+              <BookmarkOutline className={s.interactionIcon} onClick={handleSavePost} />
             )}
           </div>
-          <div className={s.share}></div>
-          <div className={s.save}></div>
         </div>
         <div className={s.postLikes}></div>
         <div className={s.postDate}></div>
