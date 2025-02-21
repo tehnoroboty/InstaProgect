@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Typography } from '@/src/components/typography/Typography'
-import { Content, Title } from '@radix-ui/react-dialog'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './dialog.module.scss'
@@ -41,24 +40,22 @@ const DialogWrapper = () => {
         </div>
       </div>
       <Dialog
-        className={s.sthDialog}
+        className={s.widthDefault}
         modalTitle={mockData[0].modalTitle}
         onClose={closeModalHandler}
         open={showDialog}
       >
-        <Content>
-          <hr className={s.lineHr} />
-          <div className={s.boxDiscription}>
-            <div className={s.image}></div>
-            <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
-          </div>
-          <div className={s.boxButton}>
-            <Button onClick={closeModalHandler} variant={'bordered'}>
-              Yes
-            </Button>
-            <Button onClick={closeModalHandler}>No</Button>
-          </div>
-        </Content>
+        <hr className={s.lineHr} />
+        <div className={s.boxDiscription}>
+          <div className={s.image}></div>
+          <Typography option={'regular_text16'}>{mockData[0].modalDescription}</Typography>
+        </div>
+        <div className={s.boxButton}>
+          <Button onClick={closeModalHandler} variant={'bordered'}>
+            Yes
+          </Button>
+          <Button onClick={closeModalHandler}>No</Button>
+        </div>
       </Dialog>
       <div className={s.lorem}>{mockText}</div>
     </>
@@ -128,30 +125,28 @@ export const ImageCropDialog: Story = {
           onClose={closeModalHandler}
           open={showDialog}
         >
-          <Content>
-            <Title className={s.titleImageCrop}>
-              <Button
-                className={s.backImageCrop}
-                onClick={() => alert('Back')}
-                variant={'transparent'}
-              >
-                {'<'}
-              </Button>
-              <Typography as={'h1'} option={'h1'}>
-                Cropping
-              </Typography>
-              <Button
-                className={s.nextImageCrop}
-                onClick={() => alert('Next')}
-                variant={'transparent'}
-              >
-                Next
-              </Button>
-            </Title>
-            <div className={s.imageImageCrop}>
-              <ImageViewer />
-            </div>
-          </Content>
+          <div className={s.titleImageCrop}>
+            <Button
+              className={s.backImageCrop}
+              onClick={() => alert('Back')}
+              variant={'transparent'}
+            >
+              {'<'}
+            </Button>
+            <Typography as={'h1'} option={'h1'}>
+              Cropping
+            </Typography>
+            <Button
+              className={s.nextImageCrop}
+              onClick={() => alert('Next')}
+              variant={'transparent'}
+            >
+              Next
+            </Button>
+          </div>
+          <div className={s.imageImageCrop}>
+            <ImageViewer />
+          </div>
         </Dialog>
         <div className={s.lorem}>{mockText}</div>
       </>
