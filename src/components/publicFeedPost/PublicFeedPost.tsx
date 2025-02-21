@@ -45,7 +45,7 @@ export const PublicFeedPost = (props: PropsType) => {
 
   return (
     <div className={s.card}>
-      <div className={s.mockCarousel}>PHOTO CAROUSEL</div>
+      <div className={s.mockCarousel}>{'PHOTO CAROUSEL'}</div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>
         <div className={`${s.cardLowerPart} ${open ? s.shifted : ''}`}>
           <div className={s.owner}>
@@ -53,7 +53,7 @@ export const PublicFeedPost = (props: PropsType) => {
             <div className={s.mockUsername}>{userName}</div>
           </div>
           <div className={s.creationTime}>{timeSince(createdAt)}</div>
-          <p className={`${s.descriptionText} ${open ? s.open : ''}`}>
+          <p className={s.descriptionText}>
             {!isDescriptionLong || open ? description : truncatedDescription}
             {isDescriptionLong && (
               <Collapsible.Trigger asChild>
