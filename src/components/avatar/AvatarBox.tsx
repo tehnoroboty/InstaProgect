@@ -4,24 +4,27 @@ import clsx from 'clsx'
 
 import s from './avatar.module.scss'
 
+type SizeType = 'l' | 'm' | 's' | 'xl' | 'xs' | 'xxs'
+
 type Props = {
   className?: string
-  size?: { height: string; width: string }
+  size?: SizeType
   src?: string
 }
 
-export const AvatarBox = ({
-  className,
-  size = { height: '192px', width: '192px' },
-  src,
-}: Props) => {
-  const { height, width } = size
+export const AvatarBox = ({ className, size = 'xl', src }: Props) => {
+  const imageSize = size === 'xl' || size === 'l' ? 48 : 24
 
   return (
-    <Avatar.Root className={clsx(s.root, className)} style={{ height, width }}>
+    <Avatar.Root className={clsx(s.root, className, size && s[`img-size-${size}`])}>
       <Avatar.Image alt={'Avatar'} className={s.image} src={src} />
       <Avatar.Fallback className={s.fallback}>
-        <ImageOutline color={'white'} height={48} width={48} />
+        <ImageOutline
+          className={s.fallbackImage}
+          color={'white'}
+          height={imageSize}
+          width={imageSize}
+        />
       </Avatar.Fallback>
     </Avatar.Root>
   )
