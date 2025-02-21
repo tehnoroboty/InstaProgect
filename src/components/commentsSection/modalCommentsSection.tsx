@@ -2,21 +2,13 @@
 
 import { useState } from 'react'
 
-import {
-  BookmarkOutline,
-  CopyOutline,
-  LogOutOutline,
-  PersonRemoveOutline,
-  SettingsOutline,
-  TrendingUpOutline,
-} from '@/src/assets/componentsIcons'
+import { CopyOutline, PersonRemoveOutline } from '@/src/assets/componentsIcons'
 import Heart from '@/src/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/assets/componentsIcons/HeartOutline'
-import PaperPlane from '@/src/assets/componentsIcons/PaperPlaneOutline'
 import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
 import { InteractionBar } from '@/src/components/interactionBar/InteractionBar'
-import { MenuItemType } from '@/src/components/navigationPanel/NavigationPanel'
+import { PostLikesBox } from '@/src/components/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
@@ -129,10 +121,7 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
       </div>
       <div className={s.postActions}>
         <InteractionBar hasCommentIcon={false} />
-        <div className={s.postLikes}>
-          <div className={s.postLikesAvatars}></div>
-          <div className={s.likeCount}></div>
-        </div>
+        <PostLikesBox />
         <div className={s.postDate}></div>
       </div>
       <div className={s.addComment}>
