@@ -1,0 +1,30 @@
+.interactionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.interactionBarLeftSide {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+
+  &.withMessageIcon {
+    gap: 20px;
+  }
+}
+
+.interactionIcon {
+  cursor: pointer;
+
+  & path {
+    fill: var(--light-100);
+  }
+}
+
+.red {
+  & path {
+    fill: var(--danger-500);
+  }
+}

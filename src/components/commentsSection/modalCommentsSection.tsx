@@ -3,7 +3,6 @@
 import { useState } from 'react'
 
 import {
-  Bookmark,
   BookmarkOutline,
   LogOutOutline,
   SettingsOutline,
@@ -14,6 +13,7 @@ import HeartOutline from '@/src/assets/componentsIcons/HeartOutline'
 import PaperPlane from '@/src/assets/componentsIcons/PaperPlaneOutline'
 import { AvatarBox } from '@/src/components/avatar/AvatarBox'
 import { DropdownMenuMobile } from '@/src/components/header/header-mob/dropdown-menu/DropdownMenu'
+import { InteractionBar } from '@/src/components/interactionBar/InteractionBar'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
 import clsx from 'clsx'
@@ -42,13 +42,10 @@ export type UserType = {
 
 type Props = {
   commentData?: CommentType
-  isLikedPost: boolean
 }
 
-export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props) => {
+export const ModalCommentsSection = ({ commentData }: Props) => {
   const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({})
-  const [likedPost, setlikedPost] = useState<boolean>()
-  const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
 
   const handleLikeComment = (commentId: string) => {
     setLikedComments(prevLikedComments => ({
@@ -57,21 +54,12 @@ export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props)
     }))
   }
 
-  const handleLikePost = () => {}
-  const handleSavePost = () => {
-    setIsSavedPost(prevSavedPost => !prevSavedPost)
-  }
-
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <div className={s.userAvaName}>
           <div className={s.userAva}>
-            <AvatarBox
-              className={s.smallAva}
-              size={{ height: '36px', width: '36px' }}
-              src={commentData?.from.avatars[0].url}
-            />
+            <AvatarBox size={'xs'} src={commentData?.from.avatars[0].url} />
           </div>
           <div className={s.userName}>
             <Typography size={'m'} weight={'semi-bold'}>
@@ -83,12 +71,12 @@ export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props)
       </div>
 
       <div className={s.commentsBody}>
-        {fakeComments.map((el, index) => (
+        {fakeComments.map(el => (
           <div className={s.usersCommentBody} key={el.id}>
             <div className={s.userAva}>
               <AvatarBox
                 className={s.smallAva}
-                size={{ height: '36px', width: '36px' }}
+                size={'xs'}
                 src={commentData?.from.avatars[0].url}
               />
             </div>
@@ -128,28 +116,7 @@ export const ModalCommentsSection = ({ commentData, isLikedPost = true }: Props)
         ))}
       </div>
       <div className={s.postActions}>
-        <div className={s.interactionBar}>
-          <div className={s.interactionBarLeftSide}>
-            <div className={s.postLike}>
-              {isLikedPost ? (
-                <Heart className={clsx(s.interactionIcon, s.red)} onClick={handleLikePost} />
-              ) : (
-                <HeartOutline className={s.interactionIcon} onClick={handleLikePost} />
-              )}
-            </div>
-            <div className={s.share}>
-              <PaperPlane className={s.interactionIcon} />
-            </div>
-          </div>
-
-          <div className={s.save}>
-            {isSavedPost ? (
-              <Bookmark className={s.interactionIcon} onClick={handleSavePost} />
-            ) : (
-              <BookmarkOutline className={s.interactionIcon} onClick={handleSavePost} />
-            )}
-          </div>
-        </div>
+        <InteractionBar hasMessageIcon={false} />
         <div className={s.postLikes}></div>
         <div className={s.postDate}></div>
       </div>

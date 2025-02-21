@@ -61,11 +61,6 @@
   background-color: var(--dark-300);
 }
 
-.smallAva svg {
-  width: 24px;
-  height: 24px;
-}
-
 .usersCommentBody {
   display: flex;
   align-items: start;
@@ -128,33 +123,4 @@
 .userNameComment {
   display: inline-flex;
   margin-right: 5px;
-}
-
-.interactionBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.interactionBarLeftSide {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.interactionIcon {
-  cursor: pointer;
-
-  & path {
-    fill: var(--light-100);
-  }
-}
-
-.postLike {
-  //margin-right: 24px;
-}
-
-.share {
-  //margin-right: auto;
-  //margin-left: auto;
 }
