@@ -11,6 +11,7 @@ import { InteractionBar } from '@/src/components/interactionBar/InteractionBar'
 import { PostLikesBox } from '@/src/components/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/components/textArea/TextArea'
 import { Typography } from '@/src/components/typography/Typography'
+import { UserAvatarName } from '@/src/components/userAvatarName/UserAvatarName'
 import clsx from 'clsx'
 
 import s from './modalCommentsSection.module.scss'
@@ -37,6 +38,7 @@ export type UserType = {
 
 type Props = {
   commentData?: CommentType
+  // url: string
 }
 
 export const ModalCommentsSection = ({ commentData }: Props) => {
@@ -52,16 +54,10 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <div className={s.userAvaName}>
-          <div className={s.userAva}>
-            <AvatarBox size={'xs'} src={commentData?.from.avatars[0].url} />
-          </div>
-          <div className={s.userName}>
-            <Typography size={'m'} weight={'semi-bold'}>
-              {commentData?.from.username || 'UserName'}
-            </Typography>
-          </div>
-        </div>
+        <UserAvatarName
+          url={commentData?.from.avatars[0].url || ''}
+          username={commentData?.from.username || 'UserName'}
+        />
         <div className={s.postMenu}>
           {
             <DropdownMenuMobile
@@ -124,7 +120,7 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
       <div className={s.postActions}>
         <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
         <PostLikesBox avatars={fakeAvatars} className={s.postLikesBox} likesCount={10} />
-        <div className={s.postDate}></div>
+        <div className={s.postDate}>{commentData?.createdAt}</div>
       </div>
       <div className={s.addComment}>
         <div className={s.textareaWrapper}>

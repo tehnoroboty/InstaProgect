@@ -20,12 +20,6 @@
   border-bottom: 1px solid var(--dark-100);
 }
 
-.userAvaName {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
 .commentsBody {
   padding: 19px 23px 8px 24px;
   border-bottom: 1px solid var(--dark-100);
@@ -131,4 +125,11 @@
 .userNameComment {
   display: inline-flex;
   margin-right: 5px;
+}
+
+.postDate {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--light-900);
 }
