@@ -120,8 +120,8 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
         ))}
       </div>
       <div className={s.postActions}>
-        <InteractionBar hasCommentIcon={false} />
-        <PostLikesBox />
+        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        <PostLikesBox avatars={fakeAvatars} className={s.postLikesBox} likesCount={10} />
         <div className={s.postDate}></div>
       </div>
       <div className={s.addComment}>
@@ -149,5 +149,43 @@ export const fakeComments = [
     likeCount: 5,
     timeAgo: '5 hours ago',
     userName: 'userName2',
+  },
+]
+
+const fakeAvatars = [
+  {
+    createdAt: '2025-02-19T11:58:19.531Z',
+    fileSize: 300,
+    height: 300,
+    url: 'https://example.com/image1.jpg',
+    width: 300,
+  },
+  {
+    createdAt: '2025-02-19T11:58:19.531Z',
+    fileSize: 300,
+    height: 300,
+    url: 'https://example.com/image2.jpg',
+    width: 300,
+  },
+  {
+    createdAt: '2025-02-19T11:58:19.531Z',
+    fileSize: 300,
+    height: 300,
+    url: 'https://example.com/image3.jpg',
+    width: 300,
+  },
+  {
+    createdAt: '2025-02-19T11:58:19.531Z',
+    fileSize: 300,
+    height: 300,
+    url: 'https://example.com/image4.jpg',
+    width: 300,
+  },
+  {
+    createdAt: '2025-02-19T11:58:19.531Z',
+    fileSize: 300,
+    height: 300,
+    url: 'https://example.com/image5.jpg',
+    width: 300,
   },
 ]

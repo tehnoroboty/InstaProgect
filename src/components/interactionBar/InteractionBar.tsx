@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ComponentPropsWithoutRef, useState } from 'react'
 
 import {
   Bookmark,
@@ -19,9 +19,9 @@ import s from '@/src/components/interactionBar/interactionBar.module.scss'
 
 type Props = {
   hasCommentIcon?: boolean
-}
+} & ComponentPropsWithoutRef<'div'>
 
-export const InteractionBar = ({ hasCommentIcon = true }: Props) => {
+export const InteractionBar = ({ className, hasCommentIcon = true }: Props) => {
   const [isLikedPost, setIsLikedPost] = useState<boolean>(false)
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
 
@@ -33,36 +33,36 @@ export const InteractionBar = ({ hasCommentIcon = true }: Props) => {
   }
 
   return (
-    <div className={s.interactionBar}>
+    <div className={clsx(s.interactionBar, className)}>
       <div className={clsx(s.interactionBarLeftSide, { [s.withMessageIcon]: hasCommentIcon })}>
         <div className={s.postLike}>
           {isLikedPost ? (
-            <div title={'Unlike'}>
+            <div className={s.interactionIconWrapper} title={'Unlike'}>
               <Heart className={clsx(s.interactionIcon, s.red)} onClick={handleLikePost} />
             </div>
           ) : (
-            <div title={'Like'}>
+            <div className={s.interactionIconWrapper} title={'Like'}>
               <HeartOutline className={s.interactionIcon} onClick={handleLikePost} />
             </div>
           )}
         </div>
         {hasCommentIcon && (
-          <div className={s.comment} title={'Comment'}>
+          <div className={s.interactionIconWrapper} title={'Comment'}>
             <MessageCircleOutline className={s.interactionIcon} />
           </div>
         )}
-        <div className={s.share} title={'Share Post'}>
+        <div className={s.interactionIconWrapper} title={'Share Post'}>
           <PaperPlaneOutline className={s.interactionIcon} />
         </div>
       </div>
 
       <div className={s.save}>
         {isSavedPost ? (
-          <div title={'Remove'}>
+          <div className={s.interactionIconWrapper} title={'Remove'}>
             <Bookmark className={s.interactionIcon} onClick={handleSavePost} />
           </div>
         ) : (
-          <div title={'Save'}>
+          <div className={s.interactionIconWrapper} title={'Save'}>
             <BookmarkOutline className={s.interactionIcon} onClick={handleSavePost} />
           </div>
         )}
