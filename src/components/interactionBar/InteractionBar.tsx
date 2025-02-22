@@ -38,32 +38,36 @@ export const InteractionBar = ({ className, hasCommentIcon = true }: Props) => {
         <div className={s.postLike}>
           {isLikedPost ? (
             <div className={s.interactionIconWrapper} title={'Unlike'}>
-              <Heart className={clsx(s.interactionIcon, s.red)} onClick={handleLikePost} />
+              <Heart
+                className={clsx(s.interactionIcon, s.red)}
+                onClick={handleLikePost}
+                tabIndex={0}
+              />
             </div>
           ) : (
             <div className={s.interactionIconWrapper} title={'Like'}>
-              <HeartOutline className={s.interactionIcon} onClick={handleLikePost} />
+              <HeartOutline className={s.interactionIcon} onClick={handleLikePost} tabIndex={0} />
             </div>
           )}
         </div>
         {hasCommentIcon && (
           <div className={s.interactionIconWrapper} title={'Comment'}>
-            <MessageCircleOutline className={s.interactionIcon} />
+            <MessageCircleOutline className={s.interactionIcon} tabIndex={0} />
           </div>
         )}
         <div className={s.interactionIconWrapper} title={'Share Post'}>
-          <PaperPlaneOutline className={s.interactionIcon} />
+          <PaperPlaneOutline className={s.interactionIcon} tabIndex={0} />
         </div>
       </div>
 
       <div className={s.save}>
         {isSavedPost ? (
           <div className={s.interactionIconWrapper} title={'Remove'}>
-            <Bookmark className={s.interactionIcon} onClick={handleSavePost} />
+            <Bookmark className={s.interactionIcon} onClick={handleSavePost} tabIndex={0} />
           </div>
         ) : (
           <div className={s.interactionIconWrapper} title={'Save'}>
-            <BookmarkOutline className={s.interactionIcon} onClick={handleSavePost} />
+            <BookmarkOutline className={s.interactionIcon} onClick={handleSavePost} tabIndex={0} />
           </div>
         )}
       </div>

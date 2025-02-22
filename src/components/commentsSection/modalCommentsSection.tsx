@@ -108,11 +108,13 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
                 <Heart
                   className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
                   onClick={() => handleLikeComment(el.id)}
+                  tabIndex={0}
                 />
               ) : (
                 <HeartOutline
                   className={clsx(s.heartIcon, s.commentHeartIcon)}
                   onClick={() => handleLikeComment(el.id)}
+                  tabIndex={0}
                 />
               )}
             </div>
