@@ -36,7 +36,7 @@ a.transparent:visited {
   color: var(--light-100);
   background-color: var(--primary-500);
 
-  &:focus {
+  &:focus-visible {
     outline: 1px solid var(--primary-700);
   }
 
@@ -59,7 +59,7 @@ a.transparent:visited {
   color: var(--light-100);
   background-color: var(--dark-300);
 
-  &:focus {
+  &:focus-visible {
     outline: 1px solid var(--primary-300);
   }
 
@@ -83,7 +83,7 @@ a.transparent:visited {
   color: var(--primary-500);
   background-color: transparent;
 
-  &:focus {
+  &:focus-visible {
     color: var(--primary-700);
     outline: 2px solid var(--primary-700);
   }
@@ -108,7 +108,7 @@ a.transparent:visited {
   color: var(--primary-500);
   background-color: transparent;
 
-  &:focus {
+  &:focus-visible {
     color: var(--primary-700);
     outline: 2px solid var(--primary-700);
   }
