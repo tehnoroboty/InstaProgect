@@ -1,13 +1,14 @@
 // @flow
 import * as React from 'react'
 
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
+import { Button } from '@/src/shared/ui/button/Button'
 import { SelectLanguage } from '@/src/shared/ui/select/SelectLanguage/SelectLanguage'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { DropdownNotification } from '@/src/widgets/header/dropdownNotification/DropdownNotification'
+import Link from 'next/link'
 
 import s from './headerWeb.module.scss'
-
-import { Button } from '../../../shared/ui/button/Button'
 
 type Props = {
   hasNotification?: boolean
@@ -28,8 +29,12 @@ export const HeaderWeb = (props: Props) => {
         <SelectLanguage />
         {!isLoggedIn && (
           <div className={s.buttons}>
-            <Button variant={'transparent'}>{'Sign in'}</Button>
-            <Button variant={'primary'}>{'Sign up'}</Button>
+            <Button as={Link} href={AuthRoutes.LOGIN} variant={'transparent'}>
+              {'Sign in'}
+            </Button>
+            <Button as={Link} href={AuthRoutes.REGISTRATION} variant={'primary'}>
+              {'Sign up'}
+            </Button>
           </div>
         )}
       </div>

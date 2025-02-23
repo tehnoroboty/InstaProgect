@@ -3,6 +3,8 @@
   grid-auto-flow: row dense;
   grid-gap: 12px;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  height: fit-content;
 }
 
 .image {
