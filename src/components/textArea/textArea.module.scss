@@ -1,47 +1,62 @@
 .container {
   display: flex;
   flex-direction: column;
-
-  & .errorText {
-    color: var(--danger-500);
-  }
 }
 
 .label {
-  
   &:has(+ textarea:disabled) {
     color: var(--dark-100);
   }
 }
 
 .textArea {
-  font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
+  font-weight: 400;
   border: 1px solid var(--dark-100);
+  line-height: 24px;
   padding: 6px 12px;
   resize: none;
   border-radius: 2px;
   box-shadow: none;
   min-height: 84px;
   background-color: var(--dark-500);
-  color: var(--dark-100);
+  color: var(--light-100);
 
   &::placeholder {
     color: var(--light-900);
   }
+
   &:focus::placeholder {
     color: var(--light-100);
   }
+
   &:focus {
     outline: 2px solid var(--primary-700);
     color: var(--light-100);
   }
+
   &:disabled::placeholder {
     color: var(--dark-100);
   }
 }
 
-.isError:not(textArea:disabled) {
-  border: 2px solid var(--danger-500);
+.informationWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+
+  & .symbol {
+    margin-left: auto;
+    color: var(--light-900);
+  }
+
+  & .errorText {
+    color: var(--danger-500);
+  }
+}
+
+.isError:not(.textArea:disabled) {
+  outline: 2px solid var(--danger-500);
 }

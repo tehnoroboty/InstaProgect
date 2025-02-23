@@ -42,10 +42,12 @@ type TextAreaProps = {
   error?: string
   /** Текст метки (label) для поля ввода.*/
   label?: string
+  maxLength?: number
   /** Функция-обработчик для очистки поля ввода.*/
   onClear?: () => void
   /** Текст-подсказка, отображаемый в поле ввода, когда оно пусто. */
   placeholder?: string
+  value?: string
 } & ComponentPropsWithoutRef<'textarea'>
 
 export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props, ref) => {
@@ -55,6 +57,7 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
     error,
     id,
     label = 'Text-area',
+    maxLength,
     onClear,
     placeholder = 'Text-area',
     value,
@@ -79,8 +82,14 @@ export const TextArea = forwardRef<ElementRef<'textarea'>, TextAreaProps>((props
         ref={ref}
         value={value}
       />
-
-      {error && !disabled && <Typography className={s.errorText}>{error}</Typography>}
+      <div className={s.informationWrapper}>
+        {error && !disabled && <Typography className={s.errorText}>{error}</Typography>}
+        {maxLength && (
+          <Typography as={'span'} className={s.symbol} option={'small_text'}>
+            {`${value ? value.length : 0}/${maxLength}`}
+          </Typography>
+        )}
+      </div>
     </div>
   )
 })
