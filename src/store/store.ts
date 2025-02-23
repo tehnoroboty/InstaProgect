@@ -1,5 +1,7 @@
 import { appReducer, appSlice } from '@/src/store/Slices/appSlice'
 import { baseApi } from '@/src/store/services/baseApi'
+import { authApi } from '@/src/store/services/authApi'
+import { baseApi } from '@/src/store/services/baseApi'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const initializeStore = () => {
@@ -7,7 +9,7 @@ export const initializeStore = () => {
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
     reducer: {
       [appSlice.name]: appReducer,
-      [baseApi.reducerPath]: baseApi.reducer,
+      [authApi.reducerPath]: authApi.reducer,
     },
   })
 }
