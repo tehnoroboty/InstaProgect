@@ -25,9 +25,12 @@ export const Dropdown = <T,>(props: Props<T>) => {
 
   const dropDownMenuItems = list.map((item: T, index) => {
     const onKeyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
-      if (item instanceof Object && 'onClick' in item && typeof item.onClick === 'function') {
-        if (e.code === 'Enter') {
+      if (e.code === 'Enter') {
+        if (item instanceof Object && 'onClick' in item && typeof item.onClick === 'function') {
           item.onClick()
+          setOpen(false)
+        } else if (item instanceof Object && 'href' in item && typeof item.href === 'string') {
+          window.location.href = item.href
         }
       }
     }
