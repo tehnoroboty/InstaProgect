@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react'
-import '../src/styles/index.scss'
+import '@/src/shared/styles/index.scss'
 
 import '@fontsource-variable/inter'
 import '@fontsource/roboto/400.css'

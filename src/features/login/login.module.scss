@@ -7,11 +7,10 @@
   min-height: calc(100lvh - 60px);
 }
 
-
 .card {
-  width:clamp(320px, 50%, 400px);
+  width: clamp(320px, 50%, 400px);
   margin: 0 auto;
-  padding: 24px
+  padding: 24px;
 }
 
 .title {
@@ -28,7 +27,7 @@
   height: 36px;
   margin-bottom: 24px;
 
-  & button{
+  & button {
     background-color: transparent;
   }
 }
@@ -49,7 +48,6 @@
   display: flex;
   justify-content: flex-end;
   padding: 0;
-
 }
 
 .link {
@@ -62,10 +60,9 @@
   &:focus {
     outline: 1px solid var(--light-900);
   }
-
 }
 
-.linkText{
+.linkText {
   padding: 12px 0 12px 20px;
   color: var(--light-900);
 }
@@ -76,7 +73,7 @@
   width: 100%;
 }
 
-.singIn {
+.signIn {
   margin-top: 12px;
   margin-bottom: 18px;
 }
@@ -86,7 +83,7 @@
   text-align: center;
 }
 
-.singUp {
+.signUp {
   color: var(--primary-500);
   text-align: center;
 }

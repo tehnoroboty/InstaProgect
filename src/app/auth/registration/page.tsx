@@ -1,7 +1,7 @@
 'use client'
 
-import { RegistrationForm } from '@/src/features/registration-form/RegistrationForm'
+import { Register } from '@/src/features/register/Register'
 
 export default function RegistrationPage() {
-  return <RegistrationForm />
+  return <Register />
 }

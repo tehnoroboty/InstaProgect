@@ -3,16 +3,19 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { Button } from '@/src/components/button/Button'
-import { Card } from '@/src/components/card/Card'
-import { Dialog } from '@/src/components/dialog/Dialog'
-import { Input } from '@/src/components/input/Input'
-import { Typography } from '@/src/components/typography/Typography'
-import { AuthRoutes } from '@/src/constants/routing'
 import { FormType, schema } from '@/src/features/createNewPassword/validators'
-import { setAppError } from '@/src/store/Slices/appSlice'
-import { useCreateNewPasswordMutation, useRecoveryCodeMutation } from '@/src/store/services/authApi'
-import { CustomerError } from '@/src/store/services/types'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
+import {
+  useCreateNewPasswordMutation,
+  useRecoveryCodeMutation,
+} from '@/src/shared/model/api/authApi'
+import { CustomerError } from '@/src/shared/model/api/types'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Card } from '@/src/shared/ui/card/Card'
+import { Dialog } from '@/src/shared/ui/dialog/Dialog'
+import { Input } from '@/src/shared/ui/input/Input'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 

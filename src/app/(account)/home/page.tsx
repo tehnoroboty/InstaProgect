@@ -1,5 +1,3 @@
 export default function HomePage() {
-  return (
-    <div>{'Some text'}</div>
-  )
+  return <div>{'Some text'}</div>
 }
