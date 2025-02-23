@@ -117,6 +117,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
+  useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
   useMeQuery,
