@@ -1,0 +1,31 @@
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 219px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 492px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(30px, 6vh, 100px);
+  align-items: center;
+
+  padding-top: 72px;
+}
+
+.imageBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 222px;
+  height: 228px;
+
+  background-color: var(--dark-100);
+}
