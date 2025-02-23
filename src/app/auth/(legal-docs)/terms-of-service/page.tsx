@@ -1,7 +1,7 @@
 'use client'
-import ArrowBackOutline from '@/src/assets/componentsIcons/ArrowBackOutline'
-import { Button } from '@/src/components/button/Button'
-import { Typography } from '@/src/components/typography/Typography'
+import ArrowBackOutline from '@/src/shared/assets/componentsIcons/ArrowBackOutline'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useRouter } from 'next/navigation'
 
 import s from '../pageStyle.module.scss'

@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 
-import { Loader } from '@/src/components/loader/Loader'
-import { AuthRoutes } from '@/src/constants/routing'
-import { useExchangeGoogleCodeForTokenMutation } from '@/src/store/services/authApi'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
+import { useExchangeGoogleCodeForTokenMutation } from '@/src/shared/model/api/authApi'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './googleOAuth.module.scss'

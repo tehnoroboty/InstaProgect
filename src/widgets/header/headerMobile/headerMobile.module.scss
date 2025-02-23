@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  margin: 0 15px;
+}
+
+
+.headerActions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+@media  (width >= 768.5px) {
+  .container{
+    display: none;
+  }
+}
+
+div.modal  {
+  width: 28%;
+  height: fit-content;
+
+  @media (width <= 780px) {
+    width: 55%;
+  }
+
+  @media (width <= 320px) {
+    width: 95%;
+  }
+}
+
+.contentModal {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding-top: 30px;
+
+  text-align: justify;
+}
+
+.modalActions{
+  display: flex;
+  justify-content: space-around;
+}
+
+.btnModal {
+  align-self: end;
+  width: max(100px, 20%);
+}

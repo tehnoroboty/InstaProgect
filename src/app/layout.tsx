@@ -1,16 +1,15 @@
 import React from 'react'
 
-import { CommonAlert } from '@/src/components/alerts/CommonAlert'
-import { StoreWrapper } from '@/src/store/StoreWrapper'
+import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
+import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
+import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
+import { Header } from '@/src/widgets/header/Header'
 import { Metadata } from 'next'
 
-import '../styles/index.scss'
+import '@/src/shared/styles/index.scss'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource-variable/inter'
-
-import { Header } from '../components/header/Header'
-import { ProgressBar } from '../components/progressBar/ProgressBar'
 
 export const metadata: Metadata = {
   icons: {
@@ -32,7 +31,7 @@ export default function RootLayout({
       <body>
         <StoreWrapper>
           <div className={'main-layout'}>
-            <Header isLoggedIn title={'Momenttify'} />
+            <Header title={'Momenttify'} />
             <ProgressBar />
             <main>{children}</main>
           </div>

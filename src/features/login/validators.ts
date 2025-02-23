@@ -1,5 +1,5 @@
-import { ERROR_MESSAGES } from '@/src/constants/error-messages'
-import { EMAIL_REGEX, PASSWORD_REGEX } from '@/src/constants/regex'
+import { ERROR_MESSAGES } from '@/src/shared/lib/constants/error-messages'
+import { EMAIL_REGEX, PASSWORD_REGEX } from '@/src/shared/lib/constants/regex'
 import { z } from 'zod'
 
 export const schema = z.object({

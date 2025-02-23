@@ -1,12 +1,12 @@
 'use client'
 import { Suspense } from 'react'
 
-import { RegistrationConfirmationForm } from '@/src/features/registration-confirmation-form/RegistrationConfirmationForm'
+import { ConfirmRegistration } from '@/src/features/confirmRegistration/ConfirmRegistration'
 
 export default function RegistrationConfirmationPage() {
   return (
     <Suspense>
-      <RegistrationConfirmationForm />
+      <ConfirmRegistration />
     </Suspense>
   )
 }
