@@ -18,6 +18,37 @@ import s from './modalCommentsSection.module.scss'
 
 import { Button } from '../button/Button'
 
+// post type
+type Image = {
+  createdAt: string
+  fileSize: number
+  height: number
+  uploadId: string
+  url: string
+  width: number
+}
+
+type Owner = {
+  firstName: string
+  lastName: string
+}
+
+type Post = {
+  avatarOwner: string
+  avatarWhoLikes: boolean
+  createdAt: string
+  description: string
+  id: number
+  images: Image[]
+  isLiked: boolean
+  likesCount: number
+  location: string
+  owner: Owner
+  ownerId: number
+  updatedAt: string
+  userName: string
+}
+
 // comment type
 export type CommentType = {
   answerCount: number
@@ -31,33 +62,39 @@ export type CommentType = {
 }
 
 export type UserType = {
-  avatars: [{ url: string }]
+  avatars: { url: string }[]
   id: number
   username: string
 }
 
 type Props = {
-  commentData?: CommentType
-  // url: string
+  commentsData?: CommentType[]
+  post: Post
 }
 
-export const ModalCommentsSection = ({ commentData }: Props) => {
-  const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({})
+export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Props) => {
+  // Состояние для комментариев
+  const [comments, setComments] = useState<CommentType[]>(commentsData)
 
-  const handleLikeComment = (commentId: string) => {
-    setLikedComments(prevLikedComments => ({
-      ...prevLikedComments,
-      [commentId]: !prevLikedComments[commentId],
-    }))
+  const handleLikeComment = (commentId: number) => {
+    // Обновляем состояние лайка для конкретного комментария
+    setComments(prevComments =>
+      prevComments.map(comment =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              isLiked: !comment.isLiked,
+              likeCount: comment.isLiked ? comment.likeCount - 1 : comment.likeCount + 1,
+            }
+          : comment
+      )
+    )
   }
 
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <UserAvatarName
-          url={commentData?.from.avatars[0].url || ''}
-          username={commentData?.from.username || 'UserName'}
-        />
+        <UserAvatarName url={post?.images?.[0]?.url} username={post?.userName} />
         <div className={s.postMenu}>
           {
             <DropdownMenuMobile
@@ -71,28 +108,24 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
       </div>
 
       <div className={s.commentsBody}>
-        {fakeComments.map(el => (
+        {comments?.map(el => (
           <div className={s.usersCommentBody} key={el.id}>
             <div className={s.userAva}>
-              <AvatarBox
-                className={s.smallAva}
-                size={'xs'}
-                src={commentData?.from.avatars[0].url}
-              />
+              <AvatarBox className={s.smallAva} size={'xs'} src={el.from.avatars[0].url} />
             </div>
             <div className={s.userComment}>
               <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
-                {commentData?.from.username || el.userName}
+                {el.from.username}
               </Typography>
               <Typography as={'span'} size={'s'} weight={'regular'}>
-                {commentData?.content || el.comment}
+                {el.content}
               </Typography>
               <div className={s.userCommentBottom}>
                 <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                  {commentData?.createdAt || el.timeAgo}
+                  {el.createdAt}
                 </Typography>
                 <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
-                  {`Like: ${commentData?.likeCount || el.likeCount}`}
+                  {`Like: ${el.likeCount}`}
                 </Typography>
                 <Button className={s.answerButton} variant={'transparent'}>
                   {'Answer'}
@@ -100,7 +133,7 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
               </div>
             </div>
             <div className={s.heartIconWrapper}>
-              {likedComments[el.id] ? (
+              {el.isLiked ? (
                 <Heart
                   className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
                   onClick={() => handleLikeComment(el.id)}
@@ -120,7 +153,7 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
       <div className={s.postActions}>
         <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
         <PostLikesBox avatars={fakeAvatars} className={s.postLikesBox} likesCount={10} />
-        <div className={s.postDate}>{commentData?.createdAt}</div>
+        <div className={s.postDate}>{post?.createdAt}</div>
       </div>
       <div className={s.addComment}>
         <div className={s.textareaWrapper}>
@@ -132,21 +165,48 @@ export const ModalCommentsSection = ({ commentData }: Props) => {
   )
 }
 
-export const fakeComments = [
+const fakeComments = [
   {
-    comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, exercitationem?',
-    id: '1',
-    likeCount: 3,
-    timeAgo: '2 hours ago',
-    userName: 'userName1',
+    answerCount: 12,
+    content: 'HGFHGFHGFHGFH',
+    createdAt: '12',
+    from: {
+      avatars: [{ url: 'http://avatar1' }],
+      id: 1,
+      username: 'Name 1',
+    },
+    id: 1,
+    isLiked: true,
+    likeCount: 17,
+    postId: 9,
   },
   {
-    comment:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque delectus ea est hic perferendis quos!',
-    id: '2',
-    likeCount: 5,
-    timeAgo: '5 hours ago',
-    userName: 'userName2',
+    answerCount: 12,
+    content: 'dfghdfhdfh',
+    createdAt: '12',
+    from: {
+      avatars: [{ url: 'http://avatar2' }],
+      id: 2,
+      username: 'Name 2',
+    },
+    id: 2,
+    isLiked: true,
+    likeCount: 17,
+    postId: 9,
+  },
+  {
+    answerCount: 12,
+    content: 'dfghdfgdfgdf',
+    createdAt: '12',
+    from: {
+      avatars: [{ url: 'http://avatar3' }],
+      id: 3,
+      username: 'Name 3',
+    },
+    id: 3,
+    isLiked: false,
+    likeCount: 17,
+    postId: 9,
   },
 ]
 
