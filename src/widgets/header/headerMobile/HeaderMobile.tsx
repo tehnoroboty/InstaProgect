@@ -9,19 +9,19 @@ import {
   SettingsOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
 import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Dropdown } from '@/src/shared/ui/dropdown/dropdown'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
+import { SelectLanguage } from '@/src/shared/ui/select/SelectLanguage/SelectLanguage'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
 import { useRouter } from 'next/navigation'
 
 import s from './headerMobile.module.scss'
-
-import { SelectLanguage } from '../../../shared/ui/select/SelectLanguage/SelectLanguage'
 
 type Props = {
   isLoggedIn?: boolean
@@ -33,6 +33,7 @@ export const HeaderMobile = (props: Props) => {
   const { isLoggedIn = true, title } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
+  const id = useId()
 
   const dispatch = useDispatch()
   const route = useRouter()
@@ -45,7 +46,7 @@ export const HeaderMobile = (props: Props) => {
     await logout().unwrap()
     dispatch(setIsLoggedIn({ isLoggedIn: false }))
     setIsModalOpen(false)
-    route.push('/auth/login')
+    route.push(AuthRoutes.LOGIN)
   }
 
   const menuHeaderMobile: MenuItemType[] = [
@@ -73,7 +74,7 @@ export const HeaderMobile = (props: Props) => {
     <DropdownItem
       Icon={item.icon}
       href={item.href}
-      key={useId()}
+      key={id}
       onClick={item.onClick}
       title={item.title}
     />

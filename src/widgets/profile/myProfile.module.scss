@@ -1,20 +1,21 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap:5%;
-  height: 100%
+  gap: clamp(10px,15vh,40px);
+  height: fit-content;
+
 }
 
 .profileContainer {
   display: flex;
-  gap: 5%;
+  gap: clamp(15px,20vw,40px);
   align-items: center;
 }
 
 .profileDetails {
   display: flex;
   flex-direction: column;
-  gap:12px;
+  gap: 12px;
   justify-content: space-between;
 
   width: 80%;
@@ -25,11 +26,11 @@
   justify-content: space-between;
 }
 
-.profileInfo{
+.profileInfo {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap:1.5rem;
+  gap: 1.5rem;
   justify-content: space-between;
 }
 
@@ -40,7 +41,7 @@
 
 .followersStats {
   display: flex;
-  gap: 10%
+  gap: clamp(10px, 10vh,50px)
 }
 
 .profileDescription {
