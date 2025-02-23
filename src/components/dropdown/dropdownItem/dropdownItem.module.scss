@@ -23,9 +23,6 @@ button.item, a.item {
     fill: var(--primary-500);
   }
 
-  &:focus-visible {
-    outline: 1px solid var(--primary-500);
-  }
 
   @media (hover: hover) {
     &:hover .itemTitle,

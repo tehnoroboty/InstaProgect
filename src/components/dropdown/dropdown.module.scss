@@ -14,7 +14,7 @@
   background-color: transparent;
   outline: none;
 
-  &:focus{
+  &:focus-visible{
     outline: 1px solid var(--primary-500);
   }
 }
@@ -33,7 +33,7 @@
 }
 
 .dropdownItem:focus {
-  outline: -webkit-focus-ring-color auto 1px;
+  outline: 1px solid var(--primary-500);
 }
 
 .iconActive {
