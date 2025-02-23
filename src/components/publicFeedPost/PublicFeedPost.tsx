@@ -54,15 +54,16 @@ export const PublicFeedPost = (props: PropsType) => {
           </div>
           <div className={s.creationTime}>{timeSince(createdAt)}</div>
           <p className={s.descriptionText}>
-            {!isDescriptionLong || open ? description : truncatedDescription}
-            {isDescriptionLong && (
-              <Collapsible.Trigger asChild>
-                <button className={s.showmoreBtn} type={'button'}>
-                  {open ? 'Hide' : 'Show more'}
-                </button>
-              </Collapsible.Trigger>
-            )}
+            {/* {!isDescriptionLong || open ? description : truncatedDescription} */}
+            {
+              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores odio et maxime ab, dolore sed eaque enim? Dolores ut facilis exercitationem laudantium, dicta quisquam dolor reiciendis nesciunt consectetur, hic soluta?'
+            }
           </p>
+          <Collapsible.Trigger asChild>
+            <button className={s.showmoreBtn} type={'button'}>
+              {open ? 'Hide' : 'Show more'}
+            </button>
+          </Collapsible.Trigger>
         </div>
       </Collapsible.Root>
     </div>
