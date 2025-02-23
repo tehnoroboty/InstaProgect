@@ -32,7 +32,7 @@ export const baseApi = createApi({
   },
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
-  // tagTypes: ['Todolist', 'Task'],
+  tagTypes: ['ME'],
 })
 */
 
@@ -119,4 +119,5 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithReauth, // Используем кастомный baseQuery
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
+  tagTypes: ['ME'],
 })

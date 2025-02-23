@@ -32,7 +32,7 @@ export default function RootLayout({
       <body>
         <StoreWrapper>
           <div className={'main-layout'}>
-            <Header isLoggedIn title={'Momenttify'} />
+            <Header title={'Momenttify'} />
             <ProgressBar />
             <main>{children}</main>
           </div>

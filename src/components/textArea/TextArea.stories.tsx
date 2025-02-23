@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { ChangeEvent, useState } from 'react'
+
 import { TextArea } from '@/src/components/textArea/TextArea'
 
 const meta = {
@@ -25,5 +27,31 @@ export const Disabled: Story = {
 export const Error: Story = {
   args: {
     error: 'Text Error',
+  },
+}
+
+export const maxValue: Story = {
+  render: args => {
+    const [text, setText] = useState('')
+    const [error, setError] = useState<string>()
+    const maxLength = 20
+    const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setText(e.currentTarget.value)
+      if (e.currentTarget.value.length > maxLength) {
+        setError('ERROR')
+      } else {
+        setError('')
+      }
+    }
+
+    return (
+      <TextArea
+        error={error}
+        maxLength={maxLength}
+        onChange={onChangeHandler}
+        value={text}
+        {...args}
+      />
+    )
   },
 }
