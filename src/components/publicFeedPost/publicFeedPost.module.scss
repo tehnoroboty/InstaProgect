@@ -1,99 +1,103 @@
 .card {
-  height: 391px;
-  width: 234px;
-
   position: relative;
+
   overflow: hidden;
+
+  width: 234px;
+  height: 391px;
 
   background-color: var(--dark-500);
 }
 
 .mockCarousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 234px;
   height: 240px;
+  border-radius: 2px;
 
   background-color: var(--dark-300);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 2px;
 }
 
 .cardLowerPart {
-  padding: 0 2px;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
   transform: translateY(0);
+
+  overflow: hidden;
+
+  padding: 0 2px;
 
   background-color: var(--dark-500);
 
+  transition: transform 0.3s ease-in-out;
 
   &.shifted {
     transform: translateY(-50%);
   }
 }
 
-
-
 .owner {
-  margin: 12px 0;
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
+  margin: 12px 0;
 }
 
 .mockAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 36px;
   height: 36px;
   border-radius: 50%;
 
   background-color: var(--light-300);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .mockUsername {
-  color: var(--light-100);
   font-family: inherit;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
+  color: var(--light-100);
 }
 
-.creationTime{
-  color: var(--light-900);
+.creationTime {
   font-family: inherit;
-  font-weight: 400;
   font-size: 12px;
+  font-weight: 400;
   line-height: 16px;
+  color: var(--light-900);
 }
-
 
 .descriptionText {
-  color: var(--light-100);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-
   display: inline;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--light-100);
 }
 
 .showmoreBtn {
-  padding: 0;
-  margin: 0;
-  margin-left: 2px;
-  display: inline;
-
-  background-color: unset;
-  border: none;
-  text-decoration: underline;
   cursor: pointer;
 
-  color: var(--primary-500);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
+  display: inline;
+
+  margin: 0;
+  margin-left: 2px;
+  padding: 0;
+  border: none;
+
   font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--primary-500);
+  text-decoration: underline;
+
+  background-color: unset;
 }

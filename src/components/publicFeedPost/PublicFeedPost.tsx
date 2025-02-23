@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { timeSince } from '@/src/utils/timeSince'
 import * as Collapsible from '@radix-ui/react-collapsible'
+import clsx from 'clsx'
 
 import s from './publicFeedPost.module.scss'
 // эти типы пока положила сюда. по итогу они уйдут в типизацию ответа от эндпоинта
@@ -43,11 +44,13 @@ export const PublicFeedPost = (props: PropsType) => {
   const isDescriptionLong = description.length > 95
   const truncatedDescription = description.slice(0, 83) + '...'
 
+  const classNames = clsx(s.cardLowerPart, { [s.shifted]: open })
+
   return (
     <div className={s.card}>
       <div className={s.mockCarousel}>{'PHOTO CAROUSEL'}</div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>
-        <div className={`${s.cardLowerPart} ${open ? s.shifted : ''}`}>
+        <div className={classNames}>
           <div className={s.owner}>
             <div className={s.mockAvatar}>{userName[0]}</div>
             <div className={s.mockUsername}>{userName}</div>

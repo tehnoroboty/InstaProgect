@@ -10,7 +10,7 @@ const meta = {
 } satisfies Meta<typeof PublicFeedPost>
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof PublicFeedPost>
 
 export const Default: Story = {
   args: {
