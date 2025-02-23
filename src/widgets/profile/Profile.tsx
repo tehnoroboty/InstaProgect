@@ -12,9 +12,7 @@ import s from './myProfile.module.scss'
 import { profileData } from './data'
 
 export const Profile = () => {
-  const onClickHandler = () => {
-    console.log('onClickHandler')
-  }
+  const onClickHandler = () => {}
 
   return (
     <div className={s.page}>

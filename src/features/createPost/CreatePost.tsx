@@ -3,12 +3,11 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Dialog } from '@/src/shared/ui/dialog'
 import Image from 'next/image'
 
 import s from './createPost.module.scss'
-
-import { Button } from '../../shared/ui/button/Button'
-import { Dialog } from '../../shared/ui/dialog/Dialog'
 
 export const CreatePost = () => {
   const [photo, setPhoto] = useState<null | string>(null)
