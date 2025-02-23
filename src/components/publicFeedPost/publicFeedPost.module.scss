@@ -1,0 +1,103 @@
+.card {
+  position: relative;
+
+  overflow: hidden;
+
+  width: 234px;
+  height: 391px;
+
+  background-color: var(--dark-500);
+}
+
+.mockCarousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 234px;
+  height: 240px;
+  border-radius: 2px;
+
+  background-color: var(--dark-300);
+}
+
+.cardLowerPart {
+  position: relative;
+  transform: translateY(0);
+
+  overflow: hidden;
+
+  padding: 0 2px;
+
+  background-color: var(--dark-500);
+
+  transition: transform 0.3s ease-in-out;
+
+  &.shifted {
+    transform: translateY(-50%);
+  }
+}
+
+.owner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.mockAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background-color: var(--light-300);
+}
+
+.mockUsername {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--light-100);
+}
+
+.creationTime {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--light-900);
+}
+
+.descriptionText {
+  display: inline;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--light-100);
+}
+
+.showmoreBtn {
+  cursor: pointer;
+
+  display: inline;
+
+  margin: 0;
+  margin-left: 2px;
+  padding: 0;
+  border: none;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--primary-500);
+  text-decoration: underline;
+
+  background-color: unset;
+}
