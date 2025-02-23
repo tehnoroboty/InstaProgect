@@ -13,14 +13,13 @@ import {
 } from '@/src/assets/componentsIcons'
 import { DropdownItem } from '@/src/components/dropdown/dropdownItem/dropdownItem'
 
-import { Button } from '../button/Button'
 import { Dropdown } from './dropdown'
 
 const meta = {
   argTypes: {},
   args: {
     trigger: (
-      <button>
+      <button type={'button'}>
         <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
       </button>
     ),
