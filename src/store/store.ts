@@ -1,4 +1,5 @@
 import { appReducer, appSlice } from '@/src/store/Slices/appSlice'
+import { baseApi } from '@/src/store/services/baseApi'
 import { authApi } from '@/src/store/services/authApi'
 import { baseApi } from '@/src/store/services/baseApi'
 import { configureStore } from '@reduxjs/toolkit'
