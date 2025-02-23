@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { NavigationPanel } from '@/src/components/navigationPanel/NavigationPanel'
+import { NavigationPanel } from '@/src/widgets/navigationPanel/NavigationPanel'
 
 export default function AuthLayout({
   children,

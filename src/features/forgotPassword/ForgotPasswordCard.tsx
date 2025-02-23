@@ -3,15 +3,15 @@ import { ChangeEvent, useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { Button } from '@/src/components/button/Button'
-import { Card } from '@/src/components/card/Card'
-import { Dialog } from '@/src/components/dialog/Dialog'
-import { Input } from '@/src/components/input/Input'
-import { Recaptcha } from '@/src/components/recaptcha/Recaptcha'
-import { Typography } from '@/src/components/typography/Typography'
 import { FormType, schema } from '@/src/features/forgotPassword/validators'
-import { usePasswordRecoveryMutation } from '@/src/store/services/authApi'
-import { CustomerError } from '@/src/store/services/types'
+import { usePasswordRecoveryMutation } from '@/src/shared/model/api/authApi'
+import { CustomerError } from '@/src/shared/model/api/types'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Card } from '@/src/shared/ui/card/Card'
+import { Dialog } from '@/src/shared/ui/dialog/Dialog'
+import { Input } from '@/src/shared/ui/input/Input'
+import { Recaptcha } from '@/src/shared/ui/recaptcha/Recaptcha'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 
@@ -130,7 +130,7 @@ export default function ForgotPasswordCard() {
           )}
         </form>
         <Button as={Link} className={s.link} fullWidth href={'/auth/login'} variant={'transparent'}>
-          {'Back to Sing In'}
+          {'Back to Sign In'}
         </Button>
         {!formSubmit && (
           <Recaptcha

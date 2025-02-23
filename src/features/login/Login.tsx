@@ -4,16 +4,16 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { Button } from '@/src/components/button/Button'
-import { Card } from '@/src/components/card/Card'
-import { CreatePost } from '@/src/components/createPost/CreatePost'
-import { Input } from '@/src/components/input'
-import { OAuthButtons } from '@/src/components/oauthbuttons/OAuthButtons'
-import { Typography } from '@/src/components/typography/Typography'
+import { CreatePost } from '@/src/features/createPost/CreatePost'
 import { FormType, schema } from '@/src/features/login/validators'
-import { setIsLoggedIn } from '@/src/store/Slices/appSlice'
-import { useLazyMeQuery, useLoginMutation } from '@/src/store/services/authApi'
-import { LoginError } from '@/src/store/services/types'
+import { useLazyMeQuery, useLoginMutation } from '@/src/shared/model/api/authApi'
+import { LoginError } from '@/src/shared/model/api/types'
+import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Card } from '@/src/shared/ui/card/Card'
+import { Input } from '@/src/shared/ui/input'
+import { OAuthButtons } from '@/src/shared/ui/oauthbuttons/OAuthButtons'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -98,7 +98,7 @@ export default function Login() {
             </Link>
           </div>
           <Button
-            className={s.singIn}
+            className={s.signIn}
             disabled={disabledButton}
             fullWidth
             type={'submit'}
@@ -113,7 +113,7 @@ export default function Login() {
           </Typography>
           <Button
             as={Link}
-            className={s.singUp}
+            className={s.signUp}
             fullWidth
             href={'/auth/registration'}
             variant={'transparent'}

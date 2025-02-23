@@ -1,7 +1,7 @@
 'use client'
 
-import { LinkExpiredForm } from '@/src/features/link-expired-form/LinkExpiredForm'
+import { ResendEmail } from '@/src/features/resendEmail/ResendEmail'
 
 export default function LinkExpiredPage() {
-  return <LinkExpiredForm />
+  return <ResendEmail />
 }
