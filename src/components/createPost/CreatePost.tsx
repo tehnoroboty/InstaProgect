@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import ImageOutline from '@/src/assets/componentsIcons/ImageOutline'
-import { Content } from '@radix-ui/react-dialog'
 import Image from 'next/image'
 
 import s from './createPost.module.scss'
@@ -34,7 +33,15 @@ export const CreatePost = () => {
       <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={() => {}} open>
         <div className={s.content}>
           {photo ? (
-            <Image alt={'img'} height={300} src={photo} width={300} />
+            <Image
+              alt={'img'}
+              className={s.photo}
+              height={300}
+              layout={'intrinsic'}
+              //  layout={'responsive'}
+              src={photo}
+              width={300}
+            />
           ) : (
             <div className={s.imageBox}>
               <ImageOutline height={48} width={48} />
