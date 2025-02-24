@@ -48,7 +48,8 @@ export const ItemWrapper = ({
   const onLogoutConfirm = async () => {
     try {
       await logout().unwrap()
-      route.push('/auth/login')
+      // route.push('/auth/login')
+      route.push('/')
       if (onClick) {
         onClick()
       }

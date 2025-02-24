@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Header } from '@/src/widgets/header/Header'
-import { NavigationPanel } from '@/src/widgets/navigationPanel/NavigationPanel'
 
 export default function AccountLayout({
   children,
@@ -10,9 +9,8 @@ export default function AccountLayout({
 }>) {
   return (
     <>
-      <Header notification title={'Momenttify'} />
+      <Header title={'Momenttify'} />
       <div className={'accountWrapper'}>
-        <NavigationPanel />
         <section>{children}</section>
       </div>
     </>

@@ -1,7 +1,9 @@
 // "lint": "next lint",
 
+import { MeRequest } from '../features/MERequest/MeRequest'
+
 const Home = () => {
-  return <div>{'Some text'}</div>
+  return <MeRequest />
 }
 
 export default Home

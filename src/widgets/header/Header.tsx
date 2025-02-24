@@ -17,12 +17,12 @@ type Props = {
 export const Header = (props: Props) => {
   const { notification, title, ...rest } = props
 
-  const isLoggedIn = useSelector(selectIsLoggedIn)
+  // const isLoggedIn = useSelector(selectIsLoggedIn)
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
+      <HeaderWeb hasNotification={notification} isLoggedIn={notification} title={title} />
     </header>
   )
 }

@@ -22,7 +22,7 @@ import s from './login.module.scss'
 
 export default function Login() {
   const [login, { data, error, isError, isLoading }] = useLoginMutation()
-  const [getMe] = useLazyMeQuery()
+  // const [getMe] = useLazyMeQuery()
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -45,17 +45,18 @@ export default function Login() {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       await login(formData).unwrap()
-
+      // debugger
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
 
-      const meRes = await getMe()
-      const userId = meRes?.data?.userId
+      // const meRes = await getMe()
+      // const userId = meRes?.data?.userId
 
-      if (!userId) {
-        return
-      }
+      // if (!userId) {
+      //   return
+      // }
 
-      router.push(`/users/profile/${userId}`)
+      // router.push(`/users/profile/${userId}`)
+      router.push(`/`)
     } catch (err) {
       const { data } = err as LoginError
 

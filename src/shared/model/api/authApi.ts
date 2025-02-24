@@ -47,6 +47,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
+        // debugger
         localStorage.setItem('accessToken', response.data.accessToken)
       },
       query: body => ({
@@ -73,6 +74,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     me: builder.query<MeResponse, void>({
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          // debugger
+          await queryFulfilled
+        } catch (error) {
+          console.error('Ошибка при разлогине:', error)
+        }
+      },
       providesTags: ['ME'],
       query: () => 'auth/me',
     }),

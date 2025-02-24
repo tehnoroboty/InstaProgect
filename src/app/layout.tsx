@@ -31,7 +31,6 @@ export default function RootLayout({
       <body>
         <StoreWrapper>
           <div className={'main-layout'}>
-            <Header title={'Momenttify'} />
             <ProgressBar />
             <main>{children}</main>
           </div>
