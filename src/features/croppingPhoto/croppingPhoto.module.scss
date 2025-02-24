@@ -1,0 +1,58 @@
+.modal {
+  width: 100%;
+  max-width: 492px;
+  padding: 0;
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  padding: 10px;
+}
+
+.buttonBack{
+  border: none;
+}
+
+.container{
+  width: 100%;
+  height: 100%;
+}
+
+.media{
+  width: 100%;
+  height: 100%;
+}
+
+.cropArea {
+  display: none;
+}
+
+.navigations {
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  left: 11px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnSize{
+  display: flex;
+  gap:30px;
+  align-items: center;
+}
+
+.btn{
+  width: max-content;
+}
+
+.box{
+  position: absolute;
+  z-index: 1000;
+  width: 200px;
+  height: 200px;
+
+}
