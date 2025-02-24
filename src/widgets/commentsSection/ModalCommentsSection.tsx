@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { CopyOutline, PersonRemoveOutline } from '@/src/shared/assets/componentsIcons'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
+import { timeSince } from '@/src/shared/lib/timeSince'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
@@ -67,12 +68,22 @@ export type UserType = {
   username: string
 }
 
+type Avatar = {
+  createdAt: string
+  fileSize: number
+  height: number
+  url: string
+  width: number
+}
+
 type Props = {
-  commentsData?: CommentType[]
+  avatars: Avatar[]
+  commentsData: CommentType[]
   post: Post
 }
 
-export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Props) => {
+export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => {
+  const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<CommentType[]>(commentsData)
 
@@ -94,7 +105,7 @@ export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Prop
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <UserAvatarName url={post?.images?.[0]?.url} username={post?.userName} />
+        <UserAvatarName url={avatarOwner} username={userName} />
         <div className={s.postMenu}>
           {
             <DropdownMenuMobile
@@ -122,7 +133,7 @@ export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Prop
               </Typography>
               <div className={s.userCommentBottom}>
                 <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                  {el.createdAt}
+                  {timeSince(el.createdAt)}
                 </Typography>
                 <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
                   {`Like: ${el.likeCount}`}
@@ -152,8 +163,8 @@ export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Prop
       </div>
       <div className={s.postActions}>
         <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        <PostLikesBox avatars={fakeAvatars} className={s.postLikesBox} likesCount={10} />
-        <div className={s.postDate}>{post?.createdAt}</div>
+        <PostLikesBox avatars={avatars} className={s.postLikesBox} likesCount={10} />
+        <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={s.addComment}>
         <div className={s.textareaWrapper}>
@@ -164,86 +175,3 @@ export const ModalCommentsSection = ({ commentsData = fakeComments, post }: Prop
     </div>
   )
 }
-
-const fakeComments = [
-  {
-    answerCount: 12,
-    content: 'HGFHGFHGFHGFH',
-    createdAt: '12',
-    from: {
-      avatars: [{ url: 'http://avatar1' }],
-      id: 1,
-      username: 'Name 1',
-    },
-    id: 1,
-    isLiked: true,
-    likeCount: 17,
-    postId: 9,
-  },
-  {
-    answerCount: 12,
-    content: 'dfghdfhdfh',
-    createdAt: '12',
-    from: {
-      avatars: [{ url: 'http://avatar2' }],
-      id: 2,
-      username: 'Name 2',
-    },
-    id: 2,
-    isLiked: true,
-    likeCount: 17,
-    postId: 9,
-  },
-  {
-    answerCount: 12,
-    content: 'dfghdfgdfgdf',
-    createdAt: '12',
-    from: {
-      avatars: [{ url: 'http://avatar3' }],
-      id: 3,
-      username: 'Name 3',
-    },
-    id: 3,
-    isLiked: false,
-    likeCount: 17,
-    postId: 9,
-  },
-]
-
-const fakeAvatars = [
-  {
-    createdAt: '2025-02-19T11:58:19.531Z',
-    fileSize: 300,
-    height: 300,
-    url: 'https://example.com/image1.jpg',
-    width: 300,
-  },
-  {
-    createdAt: '2025-02-19T11:58:19.531Z',
-    fileSize: 300,
-    height: 300,
-    url: 'https://example.com/image2.jpg',
-    width: 300,
-  },
-  {
-    createdAt: '2025-02-19T11:58:19.531Z',
-    fileSize: 300,
-    height: 300,
-    url: 'https://example.com/image3.jpg',
-    width: 300,
-  },
-  {
-    createdAt: '2025-02-19T11:58:19.531Z',
-    fileSize: 300,
-    height: 300,
-    url: 'https://example.com/image4.jpg',
-    width: 300,
-  },
-  {
-    createdAt: '2025-02-19T11:58:19.531Z',
-    fileSize: 300,
-    height: 300,
-    url: 'https://example.com/image5.jpg',
-    width: 300,
-  },
-]
