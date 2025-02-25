@@ -50,4 +50,21 @@ export const ShortDescription: Story = {
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing',
   },
+  render: args => {
+    return (
+      <>
+        <div
+          style={{
+            display: 'grid',
+            gap: '12px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          }}
+        >
+          {Array.from({ length: 5 }).map((i, index) => {
+            return <PublicFeedPost key={index} {...args} />
+          })}
+        </div>
+      </>
+    )
+  },
 }
