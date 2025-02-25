@@ -32,10 +32,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
     x: number
     y: number
   } | null>(null)
-  const router = useRouter()
-  const onClickBack = () => {
-    router.back()
-  }
+
   const handleAspectChange = (ratio: number) => {
     setSize(ratio)
   }
@@ -53,7 +50,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
   return (
     <Dialog className={s.modal} isSimple onClose={() => {}} open>
       <div className={s.header}>
-        <Button className={s.buttonBack} onClick={onClickBack} variant={'transparent'}>
+        <Button className={s.buttonBack} onClick={() => {}} variant={'transparent'}>
           <ArrowIosBackOutline color={'white'} />
         </Button>
         <Title asChild>
@@ -103,7 +100,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
             icon={<ImageOutline />}
             iconActive={<Image className={s.active} />}
           >
-            <SliderComponent setVolume={() => {}} />
+            <AddPhotoBox />
           </PopoverComponent>
         </div>
       </div>
