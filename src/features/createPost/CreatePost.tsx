@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
@@ -8,8 +8,14 @@ import { Dialog } from '@/src/shared/ui/dialog'
 
 import s from './createPost.module.scss'
 
-export const CreatePost = () => {
-  const [photo, setPhoto] = useState<null | string>(null)
+type Props = {
+  download: (photo: string) => void
+}
+
+export const CreatePost = ({ download }: Props) => {
+  const [openModal, setOpenModel] = useState<boolean>(true)
+
+  const closeModal = () => setOpenModel(false)
 
   const { getInputProps, getRootProps, open } = useDropzone({
     accept: {
@@ -22,13 +28,14 @@ export const CreatePost = () => {
       const file = acceptedFiles[0]
       const fileUrl = URL.createObjectURL(file)
 
-      setPhoto(fileUrl)
+      download(fileUrl)
+      closeModal()
     },
   })
 
   return (
     <div>
-      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={() => {}} open>
+      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={close} open={openModal}>
         <div className={s.content}>
           <div className={s.imageBox}>
             <ImageOutline height={48} width={48} />

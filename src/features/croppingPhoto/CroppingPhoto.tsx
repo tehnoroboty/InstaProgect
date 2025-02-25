@@ -20,13 +20,18 @@ import { useRouter } from 'next/navigation'
 import s from './croppingPhoto.module.scss'
 
 type Props = {
-  photo: any
+  photo: string
 }
 export const CroppingPhoto = ({ photo }: Props) => {
   const [size, setSize] = useState<number>(1)
   const [zoomLevel, setZoomLevel] = useState<number>(1)
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [croppedArea, setCroppedArea] = useState(null)
+  const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+  const [croppedArea, setCroppedArea] = useState<{
+    height: number
+    width: number
+    x: number
+    y: number
+  } | null>(null)
   const router = useRouter()
   const onClickBack = () => {
     router.back()
@@ -56,11 +61,9 @@ export const CroppingPhoto = ({ photo }: Props) => {
             {'Cropping'}
           </Typography>
         </Title>
-        <Button as={Link} href={''} variant={'transparent'}>
-          {'Next'}
-        </Button>
+        <Button variant={'transparent'}>{'Next'}</Button>
       </div>
-      <div style={{ height: '503px', position: 'relative', width: '490px' }}>
+      <div className={s.contentModal}>
         <Cropper
           aspect={size}
           classes={{
@@ -115,16 +118,15 @@ const SizeBox = ({ onAspectChange }: { onAspectChange: (ratio: number) => void }
         <Typography as={'span'} option={'h3'}>
           {'Оригинал'}
         </Typography>
-        <ImageOutline color={'white'} />
+        <ImageOutline className={s.img} />
       </div>
       <div className={s.itemWrapper} onClick={() => onAspectChange(1)}>
         <Typography as={'span'} option={'h3'}>
           {'1:1'}
         </Typography>
         <span
+          className={s.imgItem}
           style={{
-            border: '2px solid gray',
-            borderRadius: '3px',
             height: '20px',
             width: '20px',
           }}
@@ -135,9 +137,8 @@ const SizeBox = ({ onAspectChange }: { onAspectChange: (ratio: number) => void }
           {'4:5'}
         </Typography>
         <span
+          className={s.imgItem}
           style={{
-            border: '2px solid gray',
-            borderRadius: '3px',
             height: '26px',
             width: '20px',
           }}
@@ -147,9 +148,7 @@ const SizeBox = ({ onAspectChange }: { onAspectChange: (ratio: number) => void }
         <Typography as={'span'} option={'h3'}>
           {'16:9'}
         </Typography>
-        <span
-          style={{ border: '2px solid gray', borderRadius: '3px', height: '20px', width: '26px' }}
-        ></span>
+        <span className={s.imgItem} style={{ height: '20px', width: '26px' }}></span>
       </div>
     </div>
   )
