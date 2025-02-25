@@ -1,9 +1,9 @@
 // "lint": "next lint",
 
-import { MeRequest } from '../features/MERequest/MeRequest'
+// import { RequestMe } from '@/src/features/requestMe/requestMe'
 
 const Home = () => {
-  return <MeRequest />
+  // return <RequestMe />
 }
 
 export default Home

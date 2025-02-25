@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { RequestMe } from '@/src/features/requestMe/requestMe'
 import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
 import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
@@ -30,11 +31,13 @@ export default function RootLayout({
     <html lang={'en'}>
       <body>
         <StoreWrapper>
-          <div className={'main-layout'}>
-            <ProgressBar />
-            <main>{children}</main>
-          </div>
-          <CommonAlert />
+          <RequestMe>
+            <div className={'main-layout'}>
+              <ProgressBar />
+              <main>{children}</main>
+            </div>
+            <CommonAlert />
+          </RequestMe>
         </StoreWrapper>
       </body>
     </html>

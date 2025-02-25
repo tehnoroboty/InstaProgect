@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useLayoutEffect } from 'react'
+import { type FC, type PropsWithChildren, useEffect, useLayoutEffect } from 'react'
 
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLazyMeQuery, useMeQuery } from '@/src/shared/model/api/authApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export const MeRequest = () => {
+export const RequestMe: FC<PropsWithChildren<{}>> = ({ children }) => {
   const router = useRouter()
   //   const { data, isSuccess } = useMeQuery()
   const [getMe] = useLazyMeQuery()
@@ -24,5 +24,5 @@ export const MeRequest = () => {
       })
   }, [])
 
-  return null
+  return <>{children}</>
 }
