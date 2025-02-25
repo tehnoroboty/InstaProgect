@@ -5,18 +5,26 @@ import * as Slider from '@radix-ui/react-slider'
 
 import s from './slider.module.scss'
 
-export const SliderComponent = () => {
-  const [value, setValue] = useState([0])
+type Props = {
+  setVolume: (value: number) => void
+}
+
+export const SliderComponent = ({ setVolume }: Props) => {
+  const [value, setValue] = useState([1])
 
   const handleSliderChange = (newValue: number[]) => {
+    const value = Number(newValue)
+
     setValue(newValue)
+    setVolume(value)
   }
 
   return (
     <Slider.Root
       className={s.root}
-      defaultValue={[0]}
+      defaultValue={[1]}
       max={10}
+      min={1}
       onValueChange={handleSliderChange}
       step={1}
       value={value}
