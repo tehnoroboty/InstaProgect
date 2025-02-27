@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { Button } from '@/src/shared/ui/button/Button'
+import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import {
@@ -37,10 +38,10 @@ const editorConfig = {
 }
 
 type Props = {
-  photo: string
+  photos: string[]
 }
 
-export const FilteringPhoto = ({ photo }: Props) => {
+export const FilteringPhoto = ({ photos }: Props) => {
   const [inlineResult, setInlineResult] = useState<string | undefined>(undefined)
 
   const handleEditorProcess = (res: PinturaDefaultImageWriterResult) => {
@@ -63,18 +64,26 @@ export const FilteringPhoto = ({ photo }: Props) => {
       </div>
 
       <div className={s.contentModal}>
-        <PinturaEditor
-          {...editorConfig}
-          filterFunctions={{
-            ...plugin_filter_defaults.filterFunctions,
-            blue: () => {
-              return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-            },
-            invert: filterInvert,
-          }}
-          filterOptions={[...plugin_filter_defaults.filterOptions, ['Custom', [['blue', 'Blue']]]]}
-          onProcess={handleEditorProcess}
-          src={photo}
+        <Arousel
+          list={photos}
+          renderItem={photo => (
+            <PinturaEditor
+              {...editorConfig}
+              filterFunctions={{
+                ...plugin_filter_defaults.filterFunctions,
+                blue: () => {
+                  return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                },
+                invert: filterInvert,
+              }}
+              filterOptions={[
+                ...plugin_filter_defaults.filterOptions,
+                ['Custom', [['blue', 'Blue']]],
+              ]}
+              onProcess={handleEditorProcess}
+              src={photo}
+            />
+          )}
         />
       </div>
     </Dialog>
