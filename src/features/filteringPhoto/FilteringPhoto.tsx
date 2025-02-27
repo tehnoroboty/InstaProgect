@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 
+import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
+import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Arousel } from '@/src/shared/ui/carousel/Carousel'
@@ -44,15 +46,37 @@ type Props = {
 export const FilteringPhoto = ({ photos }: Props) => {
   const [inlineResult, setInlineResult] = useState<string | undefined>(undefined)
 
+  const [openModal, setOpenModel] = useState<boolean>(true)
+  const [showPublishPhoto, setShowPublishPhoto] = useState<boolean>(false)
+  const [showCroppingPhoto, setShowCroppingPhoto] = useState<boolean>(false)
+  const closeModal = () => setOpenModel(false)
+
+  const handleNextClick = () => {
+    closeModal()
+    setShowPublishPhoto(true)
+  }
+
+  const handleBackClick = () => {
+    closeModal()
+    setShowCroppingPhoto(true)
+  }
+
   const handleEditorProcess = (res: PinturaDefaultImageWriterResult) => {
-    console.log(res)
     setInlineResult(URL.createObjectURL(res.dest))
   }
 
+  if (showPublishPhoto) {
+    return <PublishPhoto />
+  }
+
+  if (showCroppingPhoto) {
+    return <CroppingPhoto photo={photos[0]} />
+  }
+
   return (
-    <Dialog className={s.modal} isSimple onClose={() => {}} open>
+    <Dialog className={s.modal} isSimple onClose={() => {}} open={openModal}>
       <div className={s.header}>
-        <Button className={s.buttonBack} onClick={() => {}} variant={'transparent'}>
+        <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
           <ArrowIosBackOutline color={'white'} />
         </Button>
         <Title asChild>
@@ -60,7 +84,9 @@ export const FilteringPhoto = ({ photos }: Props) => {
             {'Filters'}
           </Typography>
         </Title>
-        <Button variant={'transparent'}>{'Next'}</Button>
+        <Button onClick={handleNextClick} variant={'transparent'}>
+          {'Next'}
+        </Button>
       </div>
 
       <div className={s.contentModal}>
