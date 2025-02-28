@@ -1,42 +1,17 @@
+import type { Post, PostImage } from '@/src/entities/posts/types'
+
 import { useState } from 'react'
 
 import { timeSince } from '@/src/shared/lib/timeSince'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
+import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import clsx from 'clsx'
+import Image from 'next/image'
 
 import s from './publicFeedPost.module.scss'
-// эти типы пока положила сюда. по итогу они уйдут в типизацию ответа от эндпоинта
-type Image = {
-  createdAt: string
-  fileSize: number
-  height: number
-  uploadId: string
-  url: string
-  width: number
-}
 
-type Owner = {
-  firstName: string
-  lastName: string
-}
-
-type PropsType = {
-  avatarOwner: string
-  avatarWhoLikes: boolean
-  createdAt: string
-  description: string
-  id: number
-  images: Image[]
-  isLiked: boolean
-  likesCount: number
-  location: string
-  owner: Owner
-  ownerId: number
-  updatedAt: string
-  userName: string
-}
-
-export const PublicFeedPost = (props: PropsType) => {
+export const PublicFeedPost = (props: Post) => {
   const { avatarOwner, createdAt, description, id, images, userName } = props
 
   const [open, setOpen] = useState<boolean>(false)
@@ -46,26 +21,28 @@ export const PublicFeedPost = (props: PropsType) => {
 
   const classNames = clsx(s.cardLowerPart, { [s.shifted]: open })
 
+  const renderImgCarousel = (img: PostImage) => {
+    return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
+  }
+
   return (
     <div className={s.card}>
-      <div className={s.mockCarousel}>{'PHOTO CAROUSEL'}</div>
+      <div className={s.carouselContainer}>
+        <Carousel list={images} renderItem={renderImgCarousel} size={'small'} />
+      </div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>
         <div className={classNames}>
-          <div className={s.owner}>
-            <div className={s.mockAvatar}>{userName[0]}</div>
-            <div className={s.mockUsername}>{userName}</div>
-          </div>
+          <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
           <div className={s.creationTime}>{timeSince(createdAt)}</div>
           <p className={s.descriptionText}>
-            {/* {!isDescriptionLong || open ? description : truncatedDescription} */}
-            {
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores odio et maxime ab, dolore sed eaque enim? Dolores ut facilis exercitationem laudantium, dicta quisquam dolor reiciendis nesciunt consectetur, hic soluta?'
-            }
+            {!isDescriptionLong || open ? description : truncatedDescription}
           </p>
           <Collapsible.Trigger asChild>
-            <button className={s.showmoreBtn} type={'button'}>
-              {open ? 'Hide' : 'Show more'}
-            </button>
+            {isDescriptionLong && (
+              <button className={s.showmoreBtn} type={'button'}>
+                {open ? 'Hide' : 'Show more'}
+              </button>
+            )}
           </Collapsible.Trigger>
         </div>
       </Collapsible.Root>
