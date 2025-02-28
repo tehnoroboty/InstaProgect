@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import clsx from 'clsx'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -13,14 +14,17 @@ import { Button } from '../button/Button'
 type Props<T> = {
   list: T[]
   renderItem: (item: T) => ReactNode
+  size: 'large' | 'small'
 }
 
-export const Arousel = <T,>(props: Props<T>) => {
-  const { list, renderItem } = props
+export const Carousel = <T,>(props: Props<T>) => {
+  const { list, renderItem, size } = props
+  const hasMoreThanOneItem = list.length > 1
+  const classNames = clsx(s.carousel, s[size])
 
   return (
     <Swiper
-      className={s.carousel}
+      className={classNames}
       loop
       modules={[Navigation, Pagination]}
       navigation={{
@@ -34,12 +38,17 @@ export const Arousel = <T,>(props: Props<T>) => {
       }}
     >
       {list.map((item, index) => (
-        <SwiperSlide key={index}>{renderItem(item)}</SwiperSlide>
+        <SwiperSlide className={s.slide} key={index}>
+          {renderItem(item)}
+        </SwiperSlide>
       ))}
-      <Button className={s.buttonPrev} variant={'transparent'}></Button>
-      <Button className={s.buttonNext} variant={'transparent'}></Button>
-
-      <div className={s.pagination}></div>
+      {hasMoreThanOneItem && (
+        <>
+          <Button className={s.buttonPrev} variant={'transparent'}></Button>
+          <Button className={s.buttonNext} variant={'transparent'}></Button>
+          <div className={s.pagination}></div>
+        </>
+      )}
     </Swiper>
   )
 }
