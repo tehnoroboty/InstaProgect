@@ -5,6 +5,14 @@ const nextConfig = {
             ? 'https://momenttify.store'
             : 'http://localhost:3000',
     },
+    images: {
+        remotePatterns: [
+            {
+                hostname: 'staging-it-incubator.s3.eu-central-1.amazonaws.com',
+                protocol: 'https',
+            },
+        ],
+    },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg'),

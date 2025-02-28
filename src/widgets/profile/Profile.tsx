@@ -2,10 +2,13 @@
 
 import React from 'react'
 
+import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import Image from 'next/image'
 
 import s from './myProfile.module.scss'
 
@@ -13,6 +16,13 @@ import { profileData } from './data'
 
 export const Profile = () => {
   const onClickHandler = () => {}
+
+  const { data } = useMeQuery()
+  const userName = data?.userName
+
+  const { data: posts } = useGetMyPostsQuery(userName ?? '', {
+    skip: !userName,
+  })
 
   return (
     <div className={s.page}>
@@ -67,7 +77,14 @@ export const Profile = () => {
           </Typography>
         </div>
       </div>
-      <Posts posts={[]} />
+      {posts && (
+        <Posts
+          posts={posts?.items}
+          renderItem={post => {
+            return <Image alt={''} height={300} src={post.images[0].url} width={300} />
+          }}
+        />
+      )}
     </div>
   )
 }

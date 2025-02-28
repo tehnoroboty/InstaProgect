@@ -4,7 +4,6 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { CreatePost } from '@/src/features/createPost/CreatePost'
 import { FormType, schema } from '@/src/features/login/validators'
 import { useLazyMeQuery, useLoginMutation } from '@/src/shared/model/api/authApi'
 import { LoginError } from '@/src/shared/model/api/types'
