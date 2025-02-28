@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
+import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ExpandOutline from '@/src/shared/assets/componentsIcons/ExpandOutline'
 import Image from '@/src/shared/assets/componentsIcons/Image'
@@ -14,8 +15,6 @@ import { PopoverComponent } from '@/src/shared/ui/popover/Popover'
 import { SliderComponent } from '@/src/shared/ui/slider/Slider'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Title } from '@radix-ui/react-dialog'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 import s from './croppingPhoto.module.scss'
 
@@ -33,6 +32,9 @@ export const CroppingPhoto = ({ photo }: Props) => {
     y: number
   } | null>(null)
 
+  const [photos, setPhotos] = useState<string[]>([photo])
+  const [selectedPhoto, setSelectedPhoto] = useState<string>(photo)
+
   const handleAspectChange = (ratio: number) => {
     setSize(ratio)
   }
@@ -45,6 +47,24 @@ export const CroppingPhoto = ({ photo }: Props) => {
 
   const onCropComplete = (croppedArea: any) => {
     setCroppedArea(croppedArea)
+  }
+
+  const handlePhotoSelect = (selected: string) => {
+    setSelectedPhoto(selected)
+  }
+
+  const handlePhotoUpload = (newPhoto: string) => {
+    setPhotos([...photos, newPhoto])
+    setSelectedPhoto(newPhoto)
+  }
+
+  const handlePhotoDelete = (index: number) => {
+    const updatedPhotos = photos.filter((_, i) => i !== index)
+
+    setPhotos(updatedPhotos)
+    if (selectedPhoto === photos[index]) {
+      setSelectedPhoto(updatedPhotos[0] || '')
+    }
   }
 
   return (
@@ -69,7 +89,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
             mediaClassName: s.media,
           }}
           crop={crop}
-          image={photo}
+          image={selectedPhoto}
           maxZoom={10}
           minZoom={1}
           objectFit={'cover'}
@@ -100,7 +120,12 @@ export const CroppingPhoto = ({ photo }: Props) => {
             icon={<ImageOutline />}
             iconActive={<Image className={s.active} />}
           >
-            <AddPhotoBox />
+            <PhotoPreview
+              onDelete={handlePhotoDelete}
+              onSelect={handlePhotoSelect}
+              onUpload={handlePhotoUpload}
+              photos={photos}
+            />
           </PopoverComponent>
         </div>
       </div>
