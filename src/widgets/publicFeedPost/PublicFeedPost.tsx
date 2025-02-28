@@ -26,7 +26,7 @@ export const PublicFeedPost = (props: Post) => {
   }
 
   return (
-    <div className={s.card}>
+    <div className={s.card} id={`${id}`}>
       <div className={s.carouselContainer}>
         <Carousel list={images} renderItem={renderImgCarousel} size={'small'} />
       </div>

@@ -75,11 +75,19 @@ export const SeveralImages: Story = {
   },
 }
 
-export const MultipleCards: Story = {
+export const ShortDescription: Story = {
   args: {
     ...Default.args,
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing',
+  },
+}
+
+export const MultipleCards: Story = {
+  args: {
+    ...Default.args,
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..',
   },
   render: args => {
     return (
