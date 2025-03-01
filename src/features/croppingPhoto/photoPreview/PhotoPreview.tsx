@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone'
 
 import CloseOutline from '@/src/shared/assets/componentsIcons/CloseOutline'
 import PlusCircleOutline from '@/src/shared/assets/componentsIcons/PlusCircleOutline'
+import clsx from 'clsx'
 
 import s from './photoPreview.module.scss'
 
@@ -13,7 +14,11 @@ type Props = {
   onUpload: (photo: string) => void
   photos: string[]
 }
+
 export const PhotoPreview = ({ onDelete, onSelect, onUpload, photos }: Props) => {
+  const MAX_PHOTOS = 10
+  const isDisabled = photos.length >= MAX_PHOTOS
+
   const { getInputProps, getRootProps, open } = useDropzone({
     accept: {
       'image/jpeg': ['.jpg', '.jpeg'],
@@ -25,7 +30,9 @@ export const PhotoPreview = ({ onDelete, onSelect, onUpload, photos }: Props) =>
       const file = acceptedFiles[0]
       const fileUrl = URL.createObjectURL(file)
 
-      onUpload(fileUrl)
+      if (!isDisabled) {
+        onUpload(fileUrl)
+      }
     },
   })
 
@@ -37,7 +44,7 @@ export const PhotoPreview = ({ onDelete, onSelect, onUpload, photos }: Props) =>
           <CloseOutline
             className={s.closeIcon}
             onClick={e => {
-              e.stopPropagation() // Предотвращает выполнение onClick у родителя
+              e.stopPropagation()
               onDelete(index)
             }}
           />
@@ -45,7 +52,10 @@ export const PhotoPreview = ({ onDelete, onSelect, onUpload, photos }: Props) =>
       ))}
       <div {...getRootProps()} className={s.plusCircleContainer}>
         <input {...getInputProps()} />
-        <PlusCircleOutline className={s.plusCircleIcon} onClick={open} />
+        <PlusCircleOutline
+          className={clsx(s.plusCircleIcon, { [s.disabled]: isDisabled })}
+          onClick={isDisabled ? undefined : open}
+        />
       </div>
     </div>
   )
