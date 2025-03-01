@@ -19,6 +19,7 @@ export const appSlice = createSlice({
     error: null as null | string,
     isLoggedIn: false,
     status: 'idle' as RequestStatus,
+    userId: null as null | number,
   },
   name: 'app',
   reducers: create => ({
@@ -31,14 +32,19 @@ export const appSlice = createSlice({
     setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn
     }),
+    setUserId: create.reducer<{ userId: null | number }>((state, action) => {
+      state.userId = action.payload.userId
+    }),
   }),
   selectors: {
     selectAppError: state => state.error,
     selectAppStatus: state => state.status,
     selectIsLoggedIn: state => state.isLoggedIn,
+    selectUserId: state => state.userId,
   },
 })
 
-export const { setAppError, setAppStatus, setIsLoggedIn } = appSlice.actions
-export const { selectAppError, selectAppStatus, selectIsLoggedIn } = appSlice.selectors
+export const { setAppError, setAppStatus, setIsLoggedIn, setUserId } = appSlice.actions
+export const { selectAppError, selectAppStatus, selectIsLoggedIn, selectUserId } =
+  appSlice.selectors
 export const appReducer = appSlice.reducer

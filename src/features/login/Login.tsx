@@ -48,14 +48,14 @@ export default function Login() {
 
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
 
-      const meRes = await getMe()
-      const userId = meRes?.data?.userId
+      // const meRes = await getMe()
+      // const userId = meRes?.data?.userId
 
-      if (!userId) {
-        return
-      }
+      // if (!userId) {
+      //   return
+      // }
 
-      router.push(`/users/profile/${userId}`)
+      router.replace(`/account`)
     } catch (err) {
       const { data } = err as LoginError
 

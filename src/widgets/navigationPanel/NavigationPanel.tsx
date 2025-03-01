@@ -35,7 +35,7 @@ export const menuItems: MenuItemsType = {
     { href: '/favorites', icon: BookmarkOutline, iconActive: Bookmark, title: 'Favorites' },
   ],
   mainActions: [
-    { href: '/', icon: HomeLine, iconActive: Home, title: 'Home' },
+    { href: '/account', icon: HomeLine, iconActive: Home, title: 'Home' },
     { href: '/create', icon: PlusSquareOutline, iconActive: PlusSquare, title: 'Create' },
     { href: '/my-profile', icon: PersonOutline, iconActive: Person, title: 'My Profile' },
     {

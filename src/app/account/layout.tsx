@@ -4,14 +4,13 @@ import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
 import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
 import { Header } from '@/src/widgets/header/Header'
+import { NavigationPanel } from '@/src/widgets/navigationPanel/NavigationPanel'
 import { Metadata } from 'next'
 
 import '@/src/shared/styles/index.scss'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource-variable/inter'
-
-import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
 
 export const metadata: Metadata = {
   icons: {
@@ -29,17 +28,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang={'en'}>
-      <body>
-        <StoreWrapper>
-          <div className={'main-layout'}>
-            <Header title={'Momenttify'} />
-            <ProgressBar />
-            <main>{children}</main>
-          </div>
-          <CommonAlert />
-        </StoreWrapper>
-      </body>
-    </html>
+    <div className={'accountWrapper'}>
+      <NavigationPanel />
+      <section>{children}</section>
+    </div>
   )
 }

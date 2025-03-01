@@ -48,7 +48,9 @@ export const ItemWrapper = ({
   const onLogoutConfirm = async () => {
     try {
       await logout().unwrap()
-      route.push('/auth/login')
+
+      setIsModalOpen(false)
+
       if (onClick) {
         onClick()
       }
