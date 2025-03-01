@@ -64,6 +64,16 @@ export type MeResponse = {
   userName: string
 }
 
+export type SortDirection = 'asc' | 'desc'
+
+export type GetMyPostsArgs = {
+  pageNumber?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  userName: string
+}
+
 export type GetMyPostsResponse = {
   items: Item[]
   page: number
