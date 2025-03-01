@@ -17,10 +17,11 @@ import { profileData } from './data'
 
 const PAGESIZE = 8
 const SORTBY = 'createdAt'
+const SORTDIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
-  const sortDirection: SortDirection = 'desc'
   const [pageNumber, setPageNumber] = useState(1)
+  const [allPosts, setAllPosts] = useState<any[]>([])
 
   const { data } = useMeQuery()
   const userName = data?.userName
@@ -30,18 +31,24 @@ export const Profile = () => {
       pageNumber,
       pageSize: PAGESIZE,
       sortBy: SORTBY,
-      sortDirection,
+      sortDirection: SORTDIRECTION,
       userName: userName ?? '',
     },
     { skip: !userName }
   )
+
+  useEffect(() => {
+    if (posts?.items?.length) {
+      setAllPosts(prev => [...prev, ...posts.items])
+    }
+  }, [posts])
 
   // Функция для подгрузки следующей страницы при скролле
   const handleScroll = useCallback(() => {
     if (
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
       !isFetching &&
-      posts?.items?.length
+      posts?.items?.length === PAGESIZE // Если получили ровно 8 постов, значит есть еще данные
     ) {
       setPageNumber(prev => prev + 1)
     }
@@ -52,6 +59,7 @@ export const Profile = () => {
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isFetching, posts, handleScroll])
+
   const onClickHandler = () => {}
 
   return (
@@ -107,14 +115,15 @@ export const Profile = () => {
           </Typography>
         </div>
       </div>
-      {posts && (
+      {allPosts.length > 0 && (
         <Posts
-          posts={posts?.items}
+          posts={allPosts}
           renderItem={post => {
             return <Image alt={'Post image'} height={300} src={post.images[0].url} width={300} />
           }}
         />
       )}
+      {isFetching && <div>Loader...</div>}
     </div>
   )
 }
