@@ -3,6 +3,12 @@
   gap: 12px;
 }
 
+.photos{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+}
+
 .photoItem {
   cursor: pointer;
 

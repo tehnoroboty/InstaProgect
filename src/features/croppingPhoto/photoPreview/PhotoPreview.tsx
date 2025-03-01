@@ -38,18 +38,20 @@ export const PhotoPreview = ({ onDelete, onSelect, onUpload, photos }: Props) =>
 
   return (
     <div className={s.photoPreview}>
-      {photos.map((photo, index) => (
-        <div className={s.photoItem} key={index} onClick={() => onSelect(photo)}>
-          <img alt={`preview-${index}`} className={s.photoImg} src={photo} />
-          <CloseOutline
-            className={s.closeIcon}
-            onClick={e => {
-              e.stopPropagation()
-              onDelete(index)
-            }}
-          />
-        </div>
-      ))}
+      <div className={s.photos}>
+        {photos.map((photo, index) => (
+          <div className={s.photoItem} key={index} onClick={() => onSelect(photo)}>
+            <img alt={`preview-${index}`} className={s.photoImg} src={photo} />
+            <CloseOutline
+              className={s.closeIcon}
+              onClick={e => {
+                e.stopPropagation()
+                onDelete(index)
+              }}
+            />
+          </div>
+        ))}
+      </div>
       <div {...getRootProps()} className={s.plusCircleContainer}>
         <input {...getInputProps()} />
         <PlusCircleOutline

@@ -9,6 +9,7 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import {
   PinturaDefaultImageWriterResult,
   createDefaultImageReader,
@@ -45,7 +46,7 @@ type Props = {
 
 export const FilteringPhoto = ({ photos }: Props) => {
   const [inlineResult, setInlineResult] = useState<string | undefined>(undefined)
-
+  const [exitModal, setExitModal] = useState<boolean>(false)
   const [openModal, setOpenModel] = useState<boolean>(true)
   const [showPublishPhoto, setShowPublishPhoto] = useState<boolean>(false)
   const [showCroppingPhoto, setShowCroppingPhoto] = useState<boolean>(false)
@@ -74,44 +75,59 @@ export const FilteringPhoto = ({ photos }: Props) => {
   }
 
   return (
-    <Dialog className={s.modal} isSimple onClose={() => {}} open={openModal}>
-      <div className={s.header}>
-        <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
-          <ArrowIosBackOutline color={'white'} />
-        </Button>
-        <Title asChild>
-          <Typography as={'h1'} option={'h1'}>
-            {'Filters'}
-          </Typography>
-        </Title>
-        <Button onClick={handleNextClick} variant={'transparent'}>
-          {'Next'}
-        </Button>
-      </div>
+    <>
+      <Dialog
+        className={s.modal}
+        isSimple
+        onClose={() => {
+          setExitModal(true)
+        }}
+        open={openModal}
+      >
+        <div className={s.header}>
+          <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
+            <ArrowIosBackOutline color={'white'} />
+          </Button>
+          <Title asChild>
+            <Typography as={'h1'} option={'h1'}>
+              {'Filters'}
+            </Typography>
+          </Title>
+          <Button onClick={handleNextClick} variant={'transparent'}>
+            {'Next'}
+          </Button>
+        </div>
 
-      <div className={s.contentModal}>
-        <Arousel
-          list={photos}
-          renderItem={photo => (
-            <PinturaEditor
-              {...editorConfig}
-              filterFunctions={{
-                ...plugin_filter_defaults.filterFunctions,
-                blue: () => {
-                  return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-                },
-                invert: filterInvert,
-              }}
-              filterOptions={[
-                ...plugin_filter_defaults.filterOptions,
-                ['Custom', [['blue', 'Blue']]],
-              ]}
-              onProcess={handleEditorProcess}
-              src={photo}
-            />
-          )}
-        />
-      </div>
-    </Dialog>
+        <div className={s.contentModal}>
+          <Arousel
+            list={photos}
+            renderItem={photo => (
+              <PinturaEditor
+                {...editorConfig}
+                filterFunctions={{
+                  ...plugin_filter_defaults.filterFunctions,
+                  blue: () => {
+                    return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                  },
+                  invert: filterInvert,
+                }}
+                filterOptions={[
+                  ...plugin_filter_defaults.filterOptions,
+                  ['Custom', [['blue', 'Blue']]],
+                ]}
+                onProcess={handleEditorProcess}
+                src={photo}
+              />
+            )}
+          />
+        </div>
+      </Dialog>
+      <ExitModal
+        onCloseModal={() => setExitModal(false)}
+        onCloseParentModal={closeModal}
+        onSaveDraft={() => {}}
+        open={exitModal}
+      />
+    </>
   )
 }

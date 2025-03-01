@@ -1,10 +1,12 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
+import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
+import { errorMaxPhoto } from '@/src/widgets/addPost/data'
 
 import s from './createPost.module.scss'
 
@@ -14,8 +16,10 @@ type Props = {
 
 export const CreatePost = ({ download }: Props) => {
   const [openModal, setOpenModel] = useState<boolean>(true)
+  const [additionalModal, setAdditionalModal] = useState<boolean>(false)
 
   const closeModal = () => setOpenModel(false)
+  const onCloseAdditionalModal = () => setAdditionalModal(false)
 
   const { getInputProps, getRootProps, open } = useDropzone({
     accept: {
@@ -28,14 +32,18 @@ export const CreatePost = ({ download }: Props) => {
       const file = acceptedFiles[0]
       const fileUrl = URL.createObjectURL(file)
 
-      download(fileUrl)
-      closeModal()
+      if (file.size > MAX_SIZE_PHOTO) {
+        setAdditionalModal(true)
+      } else {
+        download(fileUrl)
+        closeModal()
+      }
     },
   })
 
   return (
     <div>
-      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={close} open={openModal}>
+      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={closeModal} open={openModal}>
         <div className={s.content}>
           <div className={s.imageBox}>
             <ImageOutline height={48} width={48} />
@@ -48,6 +56,19 @@ export const CreatePost = ({ download }: Props) => {
             <Button variant={'bordered'}>{'Open Draft'}</Button>
           </div>
         </div>
+      </Dialog>
+      <Dialog
+        className={s.additionalModal}
+        modalTitle={errorMaxPhoto.title}
+        onClose={onCloseAdditionalModal}
+        open={additionalModal}
+      >
+        <>
+          {errorMaxPhoto.text}
+          <div className={s.additionalModalBtn}>
+            <Button onClick={onCloseAdditionalModal}>{'OK'}</Button>
+          </div>
+        </>
       </Dialog>
     </div>
   )
