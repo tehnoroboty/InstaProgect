@@ -5,17 +5,18 @@ import { CreatePost } from '@/src/features/createPost/CreatePost'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 
 export const AddPost = () => {
-  const [photoFirst, setPhotoFirst] = useState('')
-  const [photoSecond, setPhotoSecond] = useState([])
+  const [photos, setPhotos] = useState<string[]>([])
+  const [selectedPhoto, setSelectedPhoto] = useState<string>('')
 
   const createPhoto = (photo: string) => {
-    setPhotoFirst(photo)
+    setPhotos([...photos, photo])
+    setSelectedPhoto(photo)
   }
 
   return (
     <>
       <CreatePost download={createPhoto} />
-      {photoFirst && <CroppingPhoto photo={photoFirst} />}
+      {selectedPhoto && <CroppingPhoto photos={photos} selectedPhoto={selectedPhoto} />}
     </>
   )
 }

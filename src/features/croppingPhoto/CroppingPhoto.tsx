@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
+import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ExpandOutline from '@/src/shared/assets/componentsIcons/ExpandOutline'
 import Image from '@/src/shared/assets/componentsIcons/Image'
@@ -14,14 +15,20 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { PopoverComponent } from '@/src/shared/ui/popover/Popover'
 import { SliderComponent } from '@/src/shared/ui/slider/Slider'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { AddPost } from '@/src/widgets/addPost/AddPost'
 import { Title } from '@radix-ui/react-dialog'
 
 import s from './croppingPhoto.module.scss'
 
 type Props = {
-  photo: string
+  photos: string[]
+  selectedPhoto: string
 }
-export const CroppingPhoto = ({ photo }: Props) => {
+export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
+  const [openModal, setOpenModel] = useState<boolean>(true)
+  const [showFilteringPhoto, setShowFilteringPhoto] = useState<boolean>(false)
+  const [showAddPost, setShowAddPost] = useState<boolean>(false)
+
   const [size, setSize] = useState<number>(1)
   const [zoomLevel, setZoomLevel] = useState<number>(1)
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
@@ -32,8 +39,20 @@ export const CroppingPhoto = ({ photo }: Props) => {
     y: number
   } | null>(null)
 
-  const [photos, setPhotos] = useState<string[]>([photo])
-  const [selectedPhoto, setSelectedPhoto] = useState<string>(photo)
+  const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
+  const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(selectedPhoto)
+
+  const closeModal = () => setOpenModel(false)
+
+  const handleNextClick = () => {
+    closeModal()
+    setShowFilteringPhoto(true)
+  }
+
+  const handleBackClick = () => {
+    closeModal()
+    setShowAddPost(true)
+  }
 
   const handleAspectChange = (ratio: number) => {
     setSize(ratio)
@@ -50,27 +69,35 @@ export const CroppingPhoto = ({ photo }: Props) => {
   }
 
   const handlePhotoSelect = (selected: string) => {
-    setSelectedPhoto(selected)
+    setLocalSelectedPhoto(selected)
   }
 
   const handlePhotoUpload = (newPhoto: string) => {
-    setPhotos([...photos, newPhoto])
-    setSelectedPhoto(newPhoto)
+    setLocalPhotos([...localPhotos, newPhoto])
+    setLocalSelectedPhoto(newPhoto)
   }
 
   const handlePhotoDelete = (index: number) => {
-    const updatedPhotos = photos.filter((_, i) => i !== index)
+    const updatedPhotos = localPhotos.filter((_, i) => i !== index)
 
-    setPhotos(updatedPhotos)
-    if (selectedPhoto === photos[index]) {
-      setSelectedPhoto(updatedPhotos[0] || '')
+    setLocalPhotos(updatedPhotos)
+    if (localSelectedPhoto === localPhotos[index]) {
+      setLocalSelectedPhoto(updatedPhotos[0] || '')
     }
   }
 
+  if (showFilteringPhoto) {
+    return <FilteringPhoto photos={localPhotos} />
+  }
+
+  if (showAddPost) {
+    return <AddPost />
+  }
+
   return (
-    <Dialog className={s.modal} isSimple onClose={() => {}} open>
+    <Dialog className={s.modal} isSimple onClose={() => {}} open={openModal}>
       <div className={s.header}>
-        <Button className={s.buttonBack} onClick={() => {}} variant={'transparent'}>
+        <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
           <ArrowIosBackOutline color={'white'} />
         </Button>
         <Title asChild>
@@ -78,7 +105,9 @@ export const CroppingPhoto = ({ photo }: Props) => {
             {'Cropping'}
           </Typography>
         </Title>
-        <Button variant={'transparent'}>{'Next'}</Button>
+        <Button onClick={handleNextClick} variant={'transparent'}>
+          {'Next'}
+        </Button>
       </div>
       <div className={s.contentModal}>
         <Cropper
@@ -89,7 +118,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
             mediaClassName: s.media,
           }}
           crop={crop}
-          image={selectedPhoto}
+          image={localSelectedPhoto}
           maxZoom={10}
           minZoom={1}
           objectFit={'cover'}
@@ -124,7 +153,7 @@ export const CroppingPhoto = ({ photo }: Props) => {
               onDelete={handlePhotoDelete}
               onSelect={handlePhotoSelect}
               onUpload={handlePhotoUpload}
-              photos={photos}
+              photos={localPhotos}
             />
           </PopoverComponent>
         </div>
