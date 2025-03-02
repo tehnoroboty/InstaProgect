@@ -12,11 +12,12 @@ import { Button } from '../button/Button'
 
 type Props<T> = {
   list: T[]
-  renderItem: (item: T) => ReactNode
+  onChange?: (index: number) => void
+  renderItem: (item: T, index: number) => ReactNode
 }
 
 export const Arousel = <T,>(props: Props<T>) => {
-  const { list, renderItem } = props
+  const { list, onChange, renderItem } = props
 
   return (
     <Swiper
@@ -27,6 +28,11 @@ export const Arousel = <T,>(props: Props<T>) => {
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
       }}
+      onSlideChange={swiper => {
+        if (onChange) {
+          onChange(swiper.activeIndex)
+        }
+      }}
       pagination={{
         bulletActiveClass: `${s.paginationActive}`,
         clickable: true,
@@ -34,7 +40,7 @@ export const Arousel = <T,>(props: Props<T>) => {
       }}
     >
       {list.map((item, index) => (
-        <SwiperSlide key={index}>{renderItem(item)}</SwiperSlide>
+        <SwiperSlide key={index}>{renderItem(item, index)}</SwiperSlide>
       ))}
       <Button className={s.buttonPrev} variant={'transparent'}></Button>
       <Button className={s.buttonNext} variant={'transparent'}></Button>

@@ -71,7 +71,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
   }
 
   if (showCroppingPhoto) {
-    return <CroppingPhoto photos={photos} selectedPhoto={photos[0]} />
+    return <CroppingPhoto photos={photos} />
   }
 
   return (

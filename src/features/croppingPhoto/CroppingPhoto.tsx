@@ -1,9 +1,11 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
+import { getCroppedImage } from '@/scripts/getCroppedImage'
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
 import { SizeBox } from '@/src/features/croppingPhoto/sizeBox/SizeBox'
+import { PhotoSettings } from '@/src/features/croppingPhoto/types'
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ExpandOutline from '@/src/shared/assets/componentsIcons/ExpandOutline'
@@ -25,30 +27,60 @@ import s from './croppingPhoto.module.scss'
 
 type Props = {
   photos: string[]
-  selectedPhoto: string
 }
-export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
+export const CroppingPhoto = ({ photos }: Props) => {
   const [openModal, setOpenModel] = useState<boolean>(true)
   const [exitModal, setExitModal] = useState<boolean>(false)
   const [showFilteringPhoto, setShowFilteringPhoto] = useState<boolean>(false)
   const [showAddPost, setShowAddPost] = useState<boolean>(false)
-
-  const [size, setSize] = useState<number>(1)
-  const [zoomLevel, setZoomLevel] = useState<number>(1)
-  const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
-  const [croppedArea, setCroppedArea] = useState<{
-    height: number
-    width: number
-    x: number
-    y: number
-  } | null>(null)
-
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
-  const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(selectedPhoto)
+  const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(photos[0])
+  const [photoSettings, setPhotoSettings] = useState(
+    photos.reduce(
+      (acc, photo, index) => {
+        acc[index] = {
+          crop: { x: 0, y: 0 },
+          croppedAreaPixels: null,
+          size: 1,
+          zoomLevel: 1,
+        }
+
+        return acc
+      },
+      {} as Record<
+        number,
+        {
+          crop: { x: number; y: number }
+          croppedAreaPixels: any
+          size: number
+          zoomLevel: number
+        }
+      >
+    )
+  )
+  const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
+  const currentPhotoSettings = photoSettings[selectedPhotoIndex]
 
   const closeModal = () => setOpenModel(false)
 
+  const applyCropToAllPhotos = async () => {
+    const updatedPhotos = await Promise.all(
+      localPhotos.map(async (photo, index) => {
+        const { croppedAreaPixels } = photoSettings[index]
+
+        if (croppedAreaPixels) {
+          return await getCroppedImage(photo, croppedAreaPixels)
+        }
+
+        return photo
+      })
+    )
+
+    setLocalPhotos(updatedPhotos)
+  }
+
   const handleNextClick = () => {
+    applyCropToAllPhotos()
     closeModal()
     setShowFilteringPhoto(true)
   }
@@ -58,18 +90,27 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
     setShowAddPost(true)
   }
 
-  const handleAspectChange = (ratio: number) => {
-    setSize(ratio)
-  }
-  const onChangeVolume = (volume: number) => {
-    setZoomLevel(volume)
-  }
-  const onCropChange = (crop: { x: number; y: number }) => {
-    setCrop(crop)
+  const updatePhotoSettings = (index: number, updates: Partial<PhotoSettings>) => {
+    setPhotoSettings(prevSettings => ({
+      ...prevSettings,
+      [index]: {
+        ...prevSettings[index],
+        ...updates,
+      },
+    }))
   }
 
-  const onCropComplete = (croppedArea: any) => {
-    setCroppedArea(croppedArea)
+  const handleAspectChange = (index: number, ratio: number) => {
+    updatePhotoSettings(index, { size: ratio })
+  }
+  const onChangeVolume = (index: number, volume: number) => {
+    updatePhotoSettings(index, { zoomLevel: volume })
+  }
+  const onCropChange = (index: number, crop: { x: number; y: number }) => {
+    updatePhotoSettings(index, { crop })
+  }
+  const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
+    updatePhotoSettings(index, { croppedAreaPixels })
   }
 
   const handlePhotoSelect = (selected: string) => {
@@ -77,7 +118,19 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
   }
 
   const handlePhotoUpload = (newPhoto: string) => {
+    const newIndex = localPhotos.length
+
     setLocalPhotos([...localPhotos, newPhoto])
+    setPhotoSettings(prevSettings => ({
+      ...prevSettings,
+      [newIndex]: {
+        ...prevSettings[newIndex],
+        crop: { x: 0, y: 0 },
+        croppedAreaPixels: null,
+        size: 1,
+        zoomLevel: 1,
+      },
+    }))
     setLocalSelectedPhoto(newPhoto)
   }
 
@@ -125,7 +178,12 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
           {localPhotos.length > 1 ? (
             <Arousel
               list={localPhotos}
-              renderItem={(item: string) => {
+              onChange={index => {
+                setLocalSelectedPhoto(localPhotos[index])
+              }}
+              renderItem={(item, index) => {
+                const { crop, size, zoomLevel } = photoSettings[index]
+
                 return (
                   <Cropper
                     aspect={size}
@@ -139,8 +197,10 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
                     maxZoom={10}
                     minZoom={1}
                     objectFit={'cover'}
-                    onCropChange={onCropChange}
-                    onCropComplete={onCropComplete}
+                    onCropChange={newCrop => onCropChange(index, newCrop)}
+                    onCropComplete={(cropArea, croppedAreaPixels) =>
+                      onCropComplete(index, cropArea, croppedAreaPixels)
+                    }
                     showGrid={false}
                     zoom={zoomLevel}
                   />
@@ -149,21 +209,23 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
             />
           ) : (
             <Cropper
-              aspect={size}
+              aspect={currentPhotoSettings?.size || 1}
               classes={{
                 containerClassName: s.container,
                 cropAreaClassName: s.cropArea,
                 mediaClassName: s.media,
               }}
-              crop={crop}
+              crop={currentPhotoSettings?.crop || { x: 0, y: 0 }}
               image={localSelectedPhoto}
               maxZoom={10}
               minZoom={1}
               objectFit={'cover'}
-              onCropChange={onCropChange}
-              onCropComplete={onCropComplete}
+              onCropChange={newCrop => onCropChange(0, newCrop)}
+              onCropComplete={(cropArea, croppedAreaPixels) =>
+                onCropComplete(0, cropArea, croppedAreaPixels)
+              }
               showGrid={false}
-              zoom={zoomLevel}
+              zoom={currentPhotoSettings?.zoomLevel || 1}
             />
           )}
           <div className={s.navigations}>
@@ -173,14 +235,17 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
                 icon={<ExpandOutline />}
                 iconActive={<ExpandOutline className={s.active} />}
               >
-                <SizeBox onAspectChange={handleAspectChange} />
+                <SizeBox onAspectChange={ratio => handleAspectChange(selectedPhotoIndex, ratio)} />
               </PopoverComponent>
               <PopoverComponent
                 align={'start'}
                 icon={<MaximizeOutline />}
                 iconActive={<Maximize className={s.active} />}
               >
-                <SliderComponent setVolume={onChangeVolume} zoom={zoomLevel} />
+                <SliderComponent
+                  setVolume={volume => onChangeVolume(selectedPhotoIndex, volume)}
+                  zoom={photoSettings[selectedPhotoIndex]?.zoomLevel}
+                />
               </PopoverComponent>
             </div>
             <PopoverComponent
