@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
+import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -11,10 +12,23 @@ import { Title } from '@radix-ui/react-dialog'
 import s from './publishPhoto.module.scss'
 
 export const PublishPhoto = () => {
+  const [openModal, setOpenModel] = useState<boolean>(true)
+  const [showFilteringPhoto, setShowFilteringPhoto] = useState<boolean>(false)
+  const closeModal = () => setOpenModel(false)
+
+  const handleBackClick = () => {
+    closeModal()
+    setShowFilteringPhoto(true)
+  }
+
+  if (showFilteringPhoto) {
+    return <FilteringPhoto photos={[]} />
+  }
+
   return (
-    <Dialog className={s.modal} isSimple onClose={() => {}} open>
+    <Dialog className={s.modal} isSimple onClose={() => {}} open={openModal}>
       <div className={s.header}>
-        <Button className={s.buttonBack} onClick={() => {}} variant={'transparent'}>
+        <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
           <ArrowIosBackOutline color={'white'} />
         </Button>
         <Title asChild>
