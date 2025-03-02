@@ -3,6 +3,7 @@ import type { Post, PostImage } from '@/src/entities/posts/types'
 import { useState } from 'react'
 
 import { timeSince } from '@/src/shared/lib/timeSince'
+import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import * as Collapsible from '@radix-ui/react-collapsible'
@@ -40,9 +41,9 @@ export const PublicFeedPost = (props: Post) => {
           </p>
           <Collapsible.Trigger asChild>
             {isDescriptionLong && (
-              <button className={s.showmoreBtn} type={'button'}>
+              <Button className={s.showmoreBtn} variant={'transparent'}>
                 {open ? 'Hide' : 'Show more'}
-              </button>
+              </Button>
             )}
           </Collapsible.Trigger>
         </div>
