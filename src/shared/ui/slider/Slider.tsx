@@ -7,10 +7,11 @@ import s from './slider.module.scss'
 
 type Props = {
   setVolume: (value: number) => void
+  zoom: number
 }
 
-export const SliderComponent = ({ setVolume }: Props) => {
-  const [value, setValue] = useState([1])
+export const SliderComponent = ({ setVolume, zoom }: Props) => {
+  const [value, setValue] = useState([zoom])
 
   const handleSliderChange = (newValue: number[]) => {
     const value = Number(newValue)

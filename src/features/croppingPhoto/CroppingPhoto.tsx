@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Cropper from 'react-easy-crop'
 
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
@@ -12,6 +12,7 @@ import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { Button } from '@/src/shared/ui/button/Button'
+import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { PopoverComponent } from '@/src/shared/ui/popover/Popover'
 import { SliderComponent } from '@/src/shared/ui/slider/Slider'
@@ -121,23 +122,50 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
           </Button>
         </div>
         <div className={s.contentModal}>
-          <Cropper
-            aspect={size}
-            classes={{
-              containerClassName: s.container,
-              cropAreaClassName: s.cropArea,
-              mediaClassName: s.media,
-            }}
-            crop={crop}
-            image={localSelectedPhoto}
-            maxZoom={10}
-            minZoom={1}
-            objectFit={'cover'}
-            onCropChange={onCropChange}
-            onCropComplete={onCropComplete}
-            showGrid={false}
-            zoom={zoomLevel}
-          />
+          {localPhotos.length > 1 ? (
+            <Arousel
+              list={localPhotos}
+              renderItem={(item: string) => {
+                return (
+                  <Cropper
+                    aspect={size}
+                    classes={{
+                      containerClassName: s.container,
+                      cropAreaClassName: s.cropArea,
+                      mediaClassName: s.media,
+                    }}
+                    crop={crop}
+                    image={item}
+                    maxZoom={10}
+                    minZoom={1}
+                    objectFit={'cover'}
+                    onCropChange={onCropChange}
+                    onCropComplete={onCropComplete}
+                    showGrid={false}
+                    zoom={zoomLevel}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <Cropper
+              aspect={size}
+              classes={{
+                containerClassName: s.container,
+                cropAreaClassName: s.cropArea,
+                mediaClassName: s.media,
+              }}
+              crop={crop}
+              image={localSelectedPhoto}
+              maxZoom={10}
+              minZoom={1}
+              objectFit={'cover'}
+              onCropChange={onCropChange}
+              onCropComplete={onCropComplete}
+              showGrid={false}
+              zoom={zoomLevel}
+            />
+          )}
           <div className={s.navigations}>
             <div className={s.btnSize}>
               <PopoverComponent
@@ -152,7 +180,7 @@ export const CroppingPhoto = ({ photos, selectedPhoto }: Props) => {
                 icon={<MaximizeOutline />}
                 iconActive={<Maximize className={s.active} />}
               >
-                <SliderComponent setVolume={onChangeVolume} />
+                <SliderComponent setVolume={onChangeVolume} zoom={zoomLevel} />
               </PopoverComponent>
             </div>
             <PopoverComponent
