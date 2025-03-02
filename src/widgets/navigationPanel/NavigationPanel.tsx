@@ -37,7 +37,12 @@ export const menuItems: MenuItemsType = {
   mainActions: [
     { href: '/account', icon: HomeLine, iconActive: Home, title: 'Home' },
     { href: '/create', icon: PlusSquareOutline, iconActive: PlusSquare, title: 'Create' },
-    { href: '/my-profile', icon: PersonOutline, iconActive: Person, title: 'My Profile' },
+    {
+      href: `account/profile/${2084}`,
+      icon: PersonOutline,
+      iconActive: Person,
+      title: 'My Profile',
+    },
     {
       href: '/messenger',
       icon: MessageCircleOutline,

@@ -1,10 +1,10 @@
 'use client'
 
 import { ComponentPropsWithoutRef, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useLazyMeQuery, useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsLoggedIn, setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { HeaderMobile } from '@/src/widgets/header/headerMobile/HeaderMobile'
 import { HeaderWeb } from '@/src/widgets/header/headerWeb/HeaderWeb'
 import { useRouter } from 'next/navigation'
@@ -12,27 +12,39 @@ import { useRouter } from 'next/navigation'
 import s from './header.module.scss'
 
 type Props = {
+  isLogged?: boolean
   notification?: boolean
   title: string
 } & ComponentPropsWithoutRef<'header'>
 
 export const Header = (props: Props) => {
-  const { notification, title, ...rest } = props
+  const { isLogged = false, notification, title, ...rest } = props
   const router = useRouter()
-  const isLoggedIn = useSelector(selectIsLoggedIn)
-
-  const { data, isLoading, isSuccess } = useMeQuery()
+  const [getMe] = useLazyMeQuery()
 
   useEffect(() => {
-    if (!isSuccess && !isLoading) {
+    const logout = () => {
+      getMe()
       router.push('/')
     }
-  }, [isSuccess, isLoading])
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'isLoggedIn') {
+        logout()
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
+      <HeaderWeb hasNotification={notification} isLoggedIn={isLogged} title={title} />
     </header>
   )
 }

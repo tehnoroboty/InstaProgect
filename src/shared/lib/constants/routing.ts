@@ -1,7 +1,7 @@
 export enum AuthRoutes {
   FORGOT_PASSWORD = '/auth/forgot-password',
   HOME = '/home',
-  LOGIN = '/auth/login',
+  LOGIN = '/unregistered/auth/login',
   OAUTH_GITHUB = 'auth/github',
   OAUTH_GOOGLE = 'auth/google',
   RECOVERY = '/auth/recovery',

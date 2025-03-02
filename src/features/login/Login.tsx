@@ -55,7 +55,7 @@ export default function Login() {
       //   return
       // }
 
-      router.replace(`/account`)
+      router.replace(`/`)
     } catch (err) {
       const { data } = err as LoginError
 

@@ -48,6 +48,7 @@ export const authApi = baseApi.injectEndpoints({
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
+        localStorage.setItem('isLoggedIn', 'true')
       },
       query: body => ({
         body,
@@ -61,6 +62,7 @@ export const authApi = baseApi.injectEndpoints({
           await queryFulfilled
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
           localStorage.removeItem('accessToken')
+          localStorage.setItem('isLoggedIn', 'false')
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Ошибка при разлогине:', error)

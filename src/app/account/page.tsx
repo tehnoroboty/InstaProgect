@@ -3,9 +3,10 @@ import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 
 const AccountPosts = () => {
   return (
-    <AuthWrapper>
+    <>
+      <AuthWrapper />
       <Posts posts={[]} />
-    </AuthWrapper>
+    </>
   )
 }
 

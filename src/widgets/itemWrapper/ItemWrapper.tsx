@@ -50,6 +50,7 @@ export const ItemWrapper = ({
       await logout().unwrap()
 
       setIsModalOpen(false)
+      route.push('/')
 
       if (onClick) {
         onClick()
