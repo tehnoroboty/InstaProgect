@@ -20,6 +20,7 @@ export const PublicFeedPost = (props: Post) => {
   const truncatedDescription = description.slice(0, 83) + '...'
 
   const classNames = clsx(s.cardLowerPart, { [s.shifted]: open })
+  const containerClasses = clsx(s.carouselContainer, { [s.open]: open })
 
   const renderImgCarousel = (img: PostImage) => {
     return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
@@ -27,7 +28,7 @@ export const PublicFeedPost = (props: Post) => {
 
   return (
     <div className={s.card} id={`${id}`}>
-      <div className={s.carouselContainer}>
+      <div className={containerClasses}>
         <Carousel list={images} renderItem={renderImgCarousel} size={'small'} />
       </div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>
