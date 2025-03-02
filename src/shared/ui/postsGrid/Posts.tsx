@@ -18,8 +18,6 @@ export const Posts = <T,>({ posts, renderItem }: Props<T>) => {
         return (
           <div className={s.image} key={index} onClick={() => onClickPostHandler(post)}>
             {renderItem(post)}
-            {/* <Image alt={''} height={300} src={'post.url'}
-             width={300} />*/}
           </div>
         )
       })}

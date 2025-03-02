@@ -81,7 +81,9 @@ export const Profile = () => {
         <Posts
           posts={posts?.items}
           renderItem={post => {
-            return <Image alt={''} height={300} src={post.images[0].url} width={300} />
+            if (post.images.length > 0) {
+              return <Image alt={''} height={300} src={post.images[0].url} width={300} />
+            }
           }}
         />
       )}
