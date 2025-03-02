@@ -1,8 +1,8 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
 import { Navigation, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 
 // eslint-disable-next-line import/extensions
 import 'swiper/scss'
@@ -12,15 +12,27 @@ import s from './carousel.module.scss'
 import { Button } from '../button/Button'
 
 type Props<T> = {
+  disableSwipe?: boolean
   list: T[]
   renderItem: (item: T) => ReactNode
   size: 'large' | 'small'
 }
 
 export const Carousel = <T,>(props: Props<T>) => {
-  const { list, renderItem, size } = props
+  const { disableSwipe, list, renderItem, size } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
+  const swiperRef = useRef<SwiperRef | null>(null)
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      if (disableSwipe) {
+        swiperRef.current.swiper.disable()
+      } else {
+        swiperRef.current.swiper.enable()
+      }
+    }
+  }, [disableSwipe])
 
   return (
     <Swiper
@@ -36,6 +48,7 @@ export const Carousel = <T,>(props: Props<T>) => {
         clickable: true,
         el: `.${s.pagination}`,
       }}
+      ref={swiperRef}
     >
       {list.map((item, index) => (
         <SwiperSlide className={s.slide} key={index}>
