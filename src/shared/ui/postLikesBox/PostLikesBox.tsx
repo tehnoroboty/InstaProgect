@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 import s from '@/src/shared/ui/postLikesBox/postLikesBox.module.scss'
 
-export type Avatar = {
+type Avatar = {
   createdAt: string
   fileSize: number
   height: number

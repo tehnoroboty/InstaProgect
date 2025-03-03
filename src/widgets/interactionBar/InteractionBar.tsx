@@ -19,9 +19,16 @@ import s from '@/src/widgets/interactionBar/interactionBar.module.scss'
 
 type Props = {
   hasCommentIcon?: boolean
+  isLiked?: boolean
+  likesCount?: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const InteractionBar = ({ className, hasCommentIcon = true }: Props) => {
+export const InteractionBar = ({
+  className,
+  hasCommentIcon = true,
+  isLiked,
+  likesCount,
+}: Props) => {
   const [isLikedPost, setIsLikedPost] = useState<boolean>(false)
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
 
