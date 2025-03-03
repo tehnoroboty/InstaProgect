@@ -5,7 +5,11 @@ import Cropper from 'react-easy-crop'
 import { getCroppedImage } from '@/scripts/getCroppedImage'
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
 import { SizeBox } from '@/src/features/croppingPhoto/sizeBox/SizeBox'
-import { PhotoSettings } from '@/src/features/croppingPhoto/types'
+import {
+  CroppedAreaPixelsType,
+  CroppedAreaType,
+  PhotoSettings,
+} from '@/src/features/croppingPhoto/types'
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ExpandOutline from '@/src/shared/assets/componentsIcons/ExpandOutline'
@@ -47,15 +51,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
 
         return acc
       },
-      {} as Record<
-        number,
-        {
-          crop: { x: number; y: number }
-          croppedAreaPixels: any
-          size: number
-          zoomLevel: number
-        }
-      >
+      {} as Record<number, PhotoSettings>
     )
   )
   const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
@@ -80,7 +76,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
   }
 
   const handleNextClick = async () => {
-   await applyCropToAllPhotos()
+    await applyCropToAllPhotos()
     closeModal()
     setShowFilteringPhoto(true)
   }
@@ -109,7 +105,11 @@ export const CroppingPhoto = ({ photos }: Props) => {
   const onCropChange = (index: number, crop: { x: number; y: number }) => {
     updatePhotoSettings(index, { crop })
   }
-  const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = (
+    index: number,
+    croppedArea: CroppedAreaType,
+    croppedAreaPixels: CroppedAreaPixelsType
+  ) => {
     updatePhotoSettings(index, { croppedAreaPixels })
   }
 
