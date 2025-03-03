@@ -24,10 +24,10 @@ export const SliderComponent = ({ setVolume, zoom }: Props) => {
     <Slider.Root
       className={s.root}
       defaultValue={[1]}
-      max={10}
-      min={1}
+      max={2}
+      min={0.8}
       onValueChange={handleSliderChange}
-      step={1}
+      step={0.1}
       value={value}
     >
       <Slider.Track className={s.track}>

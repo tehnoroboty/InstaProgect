@@ -79,8 +79,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
     setLocalPhotos(updatedPhotos)
   }
 
-  const handleNextClick = () => {
-    applyCropToAllPhotos()
+  const handleNextClick = async () => {
+   await applyCropToAllPhotos()
     closeModal()
     setShowFilteringPhoto(true)
   }
@@ -194,8 +194,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
                     }}
                     crop={crop}
                     image={item}
-                    maxZoom={10}
-                    minZoom={1}
+                    maxZoom={2}
+                    minZoom={0.8}
                     objectFit={'cover'}
                     onCropChange={newCrop => onCropChange(index, newCrop)}
                     onCropComplete={(cropArea, croppedAreaPixels) =>
@@ -217,8 +217,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
               }}
               crop={currentPhotoSettings?.crop || { x: 0, y: 0 }}
               image={localSelectedPhoto}
-              maxZoom={10}
-              minZoom={1}
+              maxZoom={2}
+              minZoom={0.8}
               objectFit={'cover'}
               onCropChange={newCrop => onCropChange(0, newCrop)}
               onCropComplete={(cropArea, croppedAreaPixels) =>
