@@ -27,9 +27,8 @@ export const PublishPhoto = ({ photos }: Props) => {
   }
 
   if (showFilteringPhoto) {
-    return <FilteringPhoto photos={[]} />
+    return <FilteringPhoto photos={photos} />
   }
-  console.log(photos)
 
   return (
     <Dialog className={s.modal} isSimple onClose={() => {}} open={openModal}>

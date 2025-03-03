@@ -80,7 +80,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
   }
 
   if (showCroppingPhoto) {
-    return <CroppingPhoto photos={editedPhotos} selectedPhoto={editedPhotos[0]} />
+    return <CroppingPhoto photos={editedPhotos} />
   }
 
   return (
