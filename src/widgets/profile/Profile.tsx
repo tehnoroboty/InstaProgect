@@ -45,16 +45,18 @@ export const Profile = () => {
     }
   }, [posts])
 
+  const totalCount = posts?.totalCount ?? 0
+
   // Функция для подгрузки следующей страницы при скролле
   const handleScroll = useCallback(() => {
     if (
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
       !isFetching &&
-      posts?.items?.length === PAGESIZE // Если получили ровно 8 постов, значит есть еще данные
+      Math.ceil(totalCount / PAGESIZE) > pageNumber
     ) {
       setPageNumber(prev => prev + 1)
     }
-  }, [isFetching, posts])
+  }, [isFetching, pageNumber, totalCount])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
