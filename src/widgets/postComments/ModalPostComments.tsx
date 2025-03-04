@@ -1,21 +1,27 @@
-import React, {ReactNode, useState} from 'react'
+import React, { ReactNode, useState } from 'react'
 
-import {Carousel} from '@/src/shared/ui/carousel/Carousel'
-import {Dialog} from '@/src/shared/ui/dialog'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
+import { Dialog } from '@/src/shared/ui/dialog'
 import {
   ModalCommentsSection,
-  ModalCommonSectionProps,
+  ModalCommentsSectionProps,
 } from '@/src/widgets/commentsSection/ModalCommentsSection'
-import Image from 'next/image'
+import { StaticImageData } from 'next/image'
 
 import s from './modalPostComments.module.scss'
-import sliderImage from "@/src/shared/ui/carousel/assets/slider.jpg";
 
+type ListType = {
+  id: string
+  img: StaticImageData | string
+}
 
-type Props = ModalCommonSectionProps
+type Props = {
+  list: ListType[]
+  renderItem: (item: ListType) => ReactNode
+} & ModalCommentsSectionProps
 
 export default function ModalPostComments(props: Props) {
-  const {avatars, commentsData, post} = props
+  const { avatars, commentsData, list, post, renderItem } = props
 
   const [showDialog, setShowDialog] = useState(true)
 
@@ -36,13 +42,8 @@ export default function ModalPostComments(props: Props) {
         open={showDialog}
       >
         <div className={s.container}>
-          <Carousel list=[
-            {id: 'slide1', img: sliderImage},
-            {id: 'slide1', img: sliderImage},
-            {id: 'slide1', img: sliderImage},
-            ],
-            renderItem= {(item: any) => <Image alt={'image'} src={item.img}/>}/>
-          <ModalCommentsSection avatars={avatars} commentsData={commentsData} post={post}/>
+          <Carousel list={list} renderItem={renderItem} />
+          <ModalCommentsSection avatars={avatars} commentsData={commentsData} post={post} />
         </div>
       </Dialog>
     </>

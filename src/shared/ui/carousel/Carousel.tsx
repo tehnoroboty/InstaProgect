@@ -15,7 +15,7 @@ type Props<T> = {
   renderItem: (item: T) => ReactNode
 }
 
-export const Arousel = <T,>(props: Props<T>) => {
+export const Carousel = <T,>(props: Props<T>) => {
   const { list, renderItem } = props
 
   return (

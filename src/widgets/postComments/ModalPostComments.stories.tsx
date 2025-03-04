@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import React from 'react'
 
-import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
+import ModalPostComments from '@/src/widgets/postComments/ModalPostComments'
 import Image from 'next/image'
 
 import sliderImage from './assets/slider.jpg'
@@ -128,70 +128,12 @@ const meta = {
     },
     renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
   },
-  component: ModalCommentsSection,
+  component: ModalPostComments,
   tags: ['autodocs'],
-  title: 'Components/ModalCommentsSection',
-} satisfies Meta<typeof ModalCommentsSection>
+  title: 'Components/ModalPostComments',
+} satisfies Meta<typeof ModalPostComments>
 
 export default meta
-type Story = StoryObj<typeof ModalCommentsSection>
+type Story = StoryObj<typeof ModalPostComments>
 
 export const Default: Story = {}
-
-export const LikedComments: Story = {
-  args: {
-    commentsData: [
-      {
-        answerCount: 12,
-        content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, asperiores?',
-        createdAt: '2025-01-19T11:10:15.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar1' }],
-          id: 1,
-          username: 'Alex',
-        },
-        id: 1,
-        isLiked: true,
-        likeCount: 17,
-        postId: 9,
-      },
-      {
-        answerCount: 12,
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad cum id illo, iste laudantium veritatis.',
-        createdAt: '2025-02-19T11:58:19.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar2' }],
-          id: 2,
-          username: 'Kate',
-        },
-        id: 2,
-        isLiked: true,
-        likeCount: 17,
-        postId: 9,
-      },
-      {
-        answerCount: 12,
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus excepturi magnam voluptas?',
-        createdAt: '2025-03-19T11:15:19.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar3' }],
-          id: 3,
-          username: 'Andrew',
-        },
-        id: 3,
-        isLiked: true,
-        likeCount: 17,
-        postId: 9,
-      },
-    ],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstration of the Interaction Bar component with a comment icon.',
-      },
-    },
-  },
-}
