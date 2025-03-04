@@ -82,7 +82,7 @@ export type GetMyPostsResponse = {
   totalCount: number
 }
 
-type Item = {
+export type Item = {
   avatarWhoLikes: any[]
   createdAt: string
   description: string

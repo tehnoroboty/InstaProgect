@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
-import { SortDirection } from '@/src/shared/model/api/types'
+import { Item, SortDirection } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
@@ -15,13 +15,13 @@ import s from './myProfile.module.scss'
 
 import { profileData } from './data'
 
-const PAGESIZE = 8
+const PAGESIZE = 2
 const SORTBY = 'createdAt'
 const SORTDIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState(1)
-  const [allPosts, setAllPosts] = useState<any[]>([])
+  const [allPosts, setAllPosts] = useState<Item[]>([])
 
   const { data } = useMeQuery()
   const userName = data?.userName
@@ -36,6 +36,8 @@ export const Profile = () => {
     },
     { skip: !userName }
   )
+
+  // debugger
 
   useEffect(() => {
     if (posts?.items?.length) {

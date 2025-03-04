@@ -4,9 +4,15 @@ import { GetMyPostsArgs, GetMyPostsResponse } from '@/src/shared/model/api/types
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
-      query: data => ({
+      query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
-        url: `/posts/${data.userName}`,
+        params: {
+          pageNumber,
+          pageSize,
+          sortBy,
+          sortDirection,
+        },
+        url: `/posts/${userName}`,
       }),
     }),
   }),
