@@ -4,10 +4,7 @@ import s from './creationTime.module.scss'
 
 type Props = {
   createdAt: string
-  type: 'publicationDate' | 'timeSince'
 }
-export const CreationTime = ({ createdAt, type }: Props) => {
-  const timeToDisplay = type === 'timeSince' ? timeSince(createdAt) : createdAt
-
-  return <div className={s.creationTime}>{timeToDisplay}</div>
+export const CreationTime = ({ createdAt }: Props) => {
+  return <div className={s.creationTime}>{timeSince(createdAt)}</div>
 }

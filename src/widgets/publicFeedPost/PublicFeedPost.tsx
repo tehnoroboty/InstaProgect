@@ -35,7 +35,7 @@ export const PublicFeedPost = (props: Post) => {
       <Collapsible.Root onOpenChange={setOpen} open={open}>
         <div className={classNames}>
           <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
-          <CreationTime createdAt={createdAt} type={'timeSince'} />
+          <CreationTime createdAt={createdAt} />
           <p className={s.descriptionText}>
             {!isDescriptionLong || open ? description : truncatedDescription}
           </p>

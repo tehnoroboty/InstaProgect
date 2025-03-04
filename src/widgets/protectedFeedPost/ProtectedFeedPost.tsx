@@ -90,7 +90,7 @@ export const ProtectedFeedPost = (props: Post) => {
       <div className={s.cardHeader}>
         <div className={s.cardHeaderGroup}>
           <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
-          <CreationTime createdAt={createdAt} type={'timeSince'} />
+          <CreationTime createdAt={createdAt} />
         </div>
         <DropdownPost isFollowedBy={isFollowedBy} isOurPost={isOurPost} />
       </div>
