@@ -18,11 +18,12 @@
   display: flex;
   width: 100%;
   height: 60vh;
+  border-top: 1px solid var(--dark-100);
 }
 
 .photoBox {
-  overflow: hidden;
-  flex: 0 0 49.5%;
+  width: 100%;
+  max-width: 490px;
 }
 
 .photoImg {
@@ -32,6 +33,8 @@
 }
 
 .descriptionBox {
-  flex: 0 0 50.5%;
-  background-color: #0f9954;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 24px 44px;
+  background-color: var(--dark-300);
 }
