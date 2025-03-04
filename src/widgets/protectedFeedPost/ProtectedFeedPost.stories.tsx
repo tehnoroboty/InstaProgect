@@ -18,7 +18,7 @@ export const Default: Story = {
     avatarWhoLikes: false,
     createdAt: '2025-02-17T16:36:44.410Z',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     id: 1,
     images: [
       {
@@ -47,7 +47,7 @@ export const Default: Story = {
       },
     ],
     isLiked: true,
-    likesCount: 1,
+    likesCount: 3,
     location: 'location',
     owner: {
       firstName: 'firstName',
@@ -55,6 +55,6 @@ export const Default: Story = {
     },
     ownerId: 1,
     updatedAt: '2025-02-17T16:36:44.410Z',
-    userName: 'Alex',
+    userName: 'AlexMeowlex',
   },
 }

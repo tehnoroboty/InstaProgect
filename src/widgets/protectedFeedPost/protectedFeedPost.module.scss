@@ -1,11 +1,12 @@
 .card {
   width: 100%;
   max-width: 491px;
-  height: 100%;
-  min-height: 816px;
   border-bottom: 1px solid var(--dark-100);
-
   background-color: var(--dark-500);
+}
+
+.cardBody {
+  margin-top: 12px;
 }
 
 .cardHeader {
@@ -55,4 +56,64 @@
 
     background-color: var(--light-700);
   }
+}
+
+.infoContainer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 17px 0 14px;
+
+  & .avatar {
+    align-self: flex-start;
+    min-width: 36px;
+    margin-top: 5px;
+  }
+}
+
+.postInfo {
+  margin: 0;
+  padding: 0;
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--light-100);
+}
+
+.userName {
+  font-weight: 700;
+}
+
+.likesBox {
+  margin-bottom: 24px;
+}
+
+.viewCommentsBtn {
+  margin-bottom: 12px;
+  padding: 0;
+
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--light-900);
+}
+
+.addCommentContainer {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.textareaContainer {
+  width: 100%;
+}
+
+.textArea textarea {
+  min-height: unset;
+  padding: 0;
+  border: none;
+
+  font-size: 14px;
+  text-align: left;
 }
