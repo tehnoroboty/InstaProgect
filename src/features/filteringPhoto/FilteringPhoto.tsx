@@ -108,31 +108,50 @@ export const FilteringPhoto = ({ photos }: Props) => {
         </div>
 
         <div className={s.contentModal}>
-          <Arousel
-            list={editedPhotos}
-            renderItem={photo => {
-              const index = editedPhotos.indexOf(photo)
+          {editedPhotos.length > 1 ? (
+            <Arousel
+              list={editedPhotos}
+              renderItem={photo => {
+                const index = editedPhotos.indexOf(photo)
 
-              return (
-                <PinturaEditor
-                  {...editorConfig}
-                  filterFunctions={{
-                    ...plugin_filter_defaults.filterFunctions,
-                    blue: () => {
-                      return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-                    },
-                    invert: filterInvert,
-                  }}
-                  filterOptions={[
-                    ...plugin_filter_defaults.filterOptions,
-                    ['Custom', [['blue', 'Blue']]],
-                  ]}
-                  onProcess={res => handleEditorProcess(res, index)}
-                  src={photo}
-                />
-              )
-            }}
-          />
+                return (
+                  <PinturaEditor
+                    {...editorConfig}
+                    filterFunctions={{
+                      ...plugin_filter_defaults.filterFunctions,
+                      blue: () => {
+                        return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                      },
+                      invert: filterInvert,
+                    }}
+                    filterOptions={[
+                      ...plugin_filter_defaults.filterOptions,
+                      ['Custom', [['blue', 'Blue']]],
+                    ]}
+                    onProcess={res => handleEditorProcess(res, index)}
+                    src={photo}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <PinturaEditor
+              {...editorConfig}
+              filterFunctions={{
+                ...plugin_filter_defaults.filterFunctions,
+                blue: () => {
+                  return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                },
+                invert: filterInvert,
+              }}
+              filterOptions={[
+                ...plugin_filter_defaults.filterOptions,
+                ['Custom', [['blue', 'Blue']]],
+              ]}
+              onProcess={res => handleEditorProcess(res, 0)}
+              src={photos[0]}
+            />
+          )}
         </div>
       </Dialog>
       <ExitModal
