@@ -1,6 +1,7 @@
 // @flow
 'use client'
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 
 import {
   Bookmark,
@@ -17,10 +18,17 @@ import {
   SearchOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 
 export const NavigationPanel = () => {
+  const isLoggedIn = useSelector(selectIsLoggedIn)
+
+  if (!isLoggedIn) {
+    return null
+  }
+
   return (
     <>
       <MenuMobile items={menuItems.mainActions} />
@@ -35,10 +43,10 @@ export const menuItems: MenuItemsType = {
     { href: '/favorites', icon: BookmarkOutline, iconActive: Bookmark, title: 'Favorites' },
   ],
   mainActions: [
-    { href: '/account', icon: HomeLine, iconActive: Home, title: 'Home' },
+    { href: '/', icon: HomeLine, iconActive: Home, title: 'Home' },
     { href: '/create', icon: PlusSquareOutline, iconActive: PlusSquare, title: 'Create' },
     {
-      href: `account/profile/${2084}`,
+      href: `profile/${2084}`,
       icon: PersonOutline,
       iconActive: Person,
       title: 'My Profile',

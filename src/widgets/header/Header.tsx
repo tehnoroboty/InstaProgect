@@ -20,31 +20,41 @@ type Props = {
 export const Header = (props: Props) => {
   const { isLogged = false, notification, title, ...rest } = props
   const router = useRouter()
-  const [getMe] = useLazyMeQuery()
+  const isLoggedIn = useSelector(selectIsLoggedIn)
+  const dispatch = useDispatch()
+  // const [getMe] = useLazyMeQuery()
+  const { data, isLoading, isSuccess } = useMeQuery()
 
   useEffect(() => {
-    const logout = () => {
-      getMe()
+    if (!isSuccess && !isLoading) {
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
       router.push('/')
     }
+  }, [isSuccess])
 
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'isLoggedIn') {
-        logout()
-      }
-    }
+  // useEffect(() => {
+  //   const logout = () => {
+  //     getMe()
+  //     router.push('/')
+  //   }
 
-    window.addEventListener('storage', handleStorageChange)
+  //   const handleStorageChange = (event: StorageEvent) => {
+  //     if (event.key === 'isLoggedIn') {
+  //       logout()
+  //     }
+  //   }
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-    }
-  }, [])
+  //   window.addEventListener('storage', handleStorageChange)
+
+  //   return () => {
+  //     window.removeEventListener('storage', handleStorageChange)
+  //   }
+  // }, [])
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb hasNotification={notification} isLoggedIn={isLogged} title={title} />
+      <HeaderWeb hasNotification={notification} isLoggedIn={isLoggedIn} title={title} />
     </header>
   )
 }

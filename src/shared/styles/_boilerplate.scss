@@ -87,10 +87,11 @@ body {
     height: 100vh;
 
     & main {
-      flex-grow: 1;
+      width: 100%;
+      height: 100%;
     }
 
-    .authWrapper {
+    & .authWrapper {
       width: 100%;
       height: 100%;
       padding:1.5rem;
@@ -101,9 +102,9 @@ body {
       }
     }
 
-    .accountWrapper {
+    & .accountWrapper {
       display: flex;
-      height: 95vh;
+      flex-grow: 1;
 
 
       & section {
@@ -117,7 +118,7 @@ body {
 
   @media (width <= 768px) {
     .accountWrapper {
-      flex-direction: column;
+      flex-direction: column-reverse;
       height: 100%;
 
       & section {

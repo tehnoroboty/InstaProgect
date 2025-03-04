@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Header } from '@/src/widgets/header/Header'
+import { AuthWrapper } from '@/src/features/authWrapper/AuthWrapper'
 
 export default function RootLayout({
   children,
@@ -9,8 +9,8 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Header title={'Momenttify'} />
-      <section>{children}</section>
+      <AuthWrapper login />
+      <div>{children}</div>
     </>
   )
 }
