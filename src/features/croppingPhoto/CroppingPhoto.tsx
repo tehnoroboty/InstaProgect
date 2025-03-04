@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
 import { getCroppedImage } from '@/scripts/getCroppedImage'
+import { applyCropToAllPhotos } from '@/src/features/croppingPhoto/applyCropToAllPhotos'
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
 import { SizeBox } from '@/src/features/croppingPhoto/sizeBox/SizeBox'
 import {
@@ -59,24 +60,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
 
   const closeModal = () => setOpenModel(false)
 
-  const applyCropToAllPhotos = async () => {
-    const updatedPhotos = await Promise.all(
-      localPhotos.map(async (photo, index) => {
-        const { croppedAreaPixels } = photoSettings[index]
-
-        if (croppedAreaPixels) {
-          return await getCroppedImage(photo, croppedAreaPixels)
-        }
-
-        return photo
-      })
-    )
-
-    setLocalPhotos(updatedPhotos)
-  }
-
   const handleNextClick = async () => {
-    await applyCropToAllPhotos()
+    await applyCropToAllPhotos(localPhotos, photoSettings, setLocalPhotos)
     closeModal()
     setShowFilteringPhoto(true)
   }
