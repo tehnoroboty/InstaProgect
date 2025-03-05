@@ -110,16 +110,35 @@ export const Profile = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className={s.buttonsBlock}>
+              {/*
               {false && (
                 <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
                   {'Profile Settings'}
                 </Button>
               )}
+*/}
+              {/*
               {true && (
-                <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                  {'Profile Settings'}
-                </Button>
+                <>
+                  <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
+                    {'Follow'}
+                  </Button>
+                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
+                    {'Send Message'}
+                  </Button>
+                </>
+              )}
+*/}
+              {true && (
+                <>
+                  <Button onClick={onClickHandler} type={'button'} variant={'bordered'}>
+                    {'Unfollow'}
+                  </Button>
+                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
+                    {'Send Message'}
+                  </Button>
+                </>
               )}
             </div>
           </div>
