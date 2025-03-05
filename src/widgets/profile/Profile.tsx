@@ -111,9 +111,16 @@ export const Profile = () => {
               </div>
             </div>
             <div>
-              <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                {'Profile Settings'}
-              </Button>
+              {false && (
+                <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
+                  {'Profile Settings'}
+                </Button>
+              )}
+              {true && (
+                <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
+                  {'Profile Settings'}
+                </Button>
+              )}
             </div>
           </div>
           <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
