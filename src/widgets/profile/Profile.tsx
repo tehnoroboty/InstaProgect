@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -15,7 +15,7 @@ import s from './myProfile.module.scss'
 
 import { profileData } from './data'
 
-const PAGESIZE = 4
+const PAGESIZE = 6
 const SORTBY = 'createdAt'
 const SORTDIRECTION: SortDirection = 'desc'
 
