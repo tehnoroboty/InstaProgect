@@ -45,12 +45,13 @@ type Props = {
 }
 
 export const FilteringPhoto = ({ photos }: Props) => {
-  const [inlineResult, setInlineResult] = useState<string | undefined>(undefined)
   const [exitModal, setExitModal] = useState<boolean>(false)
   const [openModal, setOpenModel] = useState<boolean>(true)
   const [showPublishPhoto, setShowPublishPhoto] = useState<boolean>(false)
   const [showCroppingPhoto, setShowCroppingPhoto] = useState<boolean>(false)
   const closeModal = () => setOpenModel(false)
+
+  const [editedPhotos, setEditedPhotos] = useState<string[]>(photos)
 
   const handleNextClick = () => {
     closeModal()
@@ -62,16 +63,24 @@ export const FilteringPhoto = ({ photos }: Props) => {
     setShowCroppingPhoto(true)
   }
 
-  const handleEditorProcess = (res: PinturaDefaultImageWriterResult) => {
-    setInlineResult(URL.createObjectURL(res.dest))
+  const handleEditorProcess = (res: PinturaDefaultImageWriterResult, index: number) => {
+    const newUrl = URL.createObjectURL(res.dest)
+
+    setEditedPhotos(prevPhotos => {
+      const updatedPhotos = [...prevPhotos]
+
+      updatedPhotos[index] = newUrl
+
+      return updatedPhotos
+    })
   }
 
   if (showPublishPhoto) {
-    return <PublishPhoto />
+    return <PublishPhoto photos={editedPhotos} />
   }
 
   if (showCroppingPhoto) {
-    return <CroppingPhoto photos={photos} />
+    return <CroppingPhoto photos={editedPhotos} />
   }
 
   return (
@@ -99,27 +108,50 @@ export const FilteringPhoto = ({ photos }: Props) => {
         </div>
 
         <div className={s.contentModal}>
-          <Arousel
-            list={photos}
-            renderItem={photo => (
-              <PinturaEditor
-                {...editorConfig}
-                filterFunctions={{
-                  ...plugin_filter_defaults.filterFunctions,
-                  blue: () => {
-                    return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-                  },
-                  invert: filterInvert,
-                }}
-                filterOptions={[
-                  ...plugin_filter_defaults.filterOptions,
-                  ['Custom', [['blue', 'Blue']]],
-                ]}
-                onProcess={handleEditorProcess}
-                src={photo}
-              />
-            )}
-          />
+          {editedPhotos.length > 1 ? (
+            <Arousel
+              list={editedPhotos}
+              renderItem={photo => {
+                const index = editedPhotos.indexOf(photo)
+
+                return (
+                  <PinturaEditor
+                    {...editorConfig}
+                    filterFunctions={{
+                      ...plugin_filter_defaults.filterFunctions,
+                      blue: () => {
+                        return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                      },
+                      invert: filterInvert,
+                    }}
+                    filterOptions={[
+                      ...plugin_filter_defaults.filterOptions,
+                      ['Custom', [['blue', 'Blue']]],
+                    ]}
+                    onProcess={res => handleEditorProcess(res, index)}
+                    src={photo}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <PinturaEditor
+              {...editorConfig}
+              filterFunctions={{
+                ...plugin_filter_defaults.filterFunctions,
+                blue: () => {
+                  return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
+                },
+                invert: filterInvert,
+              }}
+              filterOptions={[
+                ...plugin_filter_defaults.filterOptions,
+                ['Custom', [['blue', 'Blue']]],
+              ]}
+              onProcess={res => handleEditorProcess(res, 0)}
+              src={photos[0]}
+            />
+          )}
         </div>
       </Dialog>
       <ExitModal
