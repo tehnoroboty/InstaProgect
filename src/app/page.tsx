@@ -1,7 +1,7 @@
-// "lint": "next lint",
+import { AuthWrapper } from '../features/authWrapper/AuthWrapper'
 
-const Home = () => {
-  return <div>{'Some text'}</div>
+const Page = () => {
+  return <AuthWrapper />
 }
 
-export default Home
+export default Page

@@ -11,6 +11,8 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource-variable/inter'
 
+import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
+
 export const metadata: Metadata = {
   icons: {
     icon: [
@@ -33,7 +35,12 @@ export default function RootLayout({
           <div className={'main-layout'}>
             <Header title={'Momenttify'} />
             <ProgressBar />
-            <main>{children}</main>
+            <div className={'accountWrapper'}>
+              <NavigationPanel />
+              <main>
+                <section>{children}</section>
+              </main>
+            </div>
           </div>
           <CommonAlert />
         </StoreWrapper>

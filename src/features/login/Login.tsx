@@ -46,16 +46,16 @@ export default function Login() {
     try {
       await login(formData).unwrap()
 
-      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      // dispatch(setIsLoggedIn({ isLoggedIn: true }))
 
-      const meRes = await getMe()
-      const userId = meRes?.data?.userId
+      // const meRes = await getMe()
+      // const userId = meRes?.data?.userId
 
-      if (!userId) {
-        return
-      }
+      // if (!userId) {
+      //   return
+      // }
 
-      router.push(`/users/profile/${userId}`)
+      router.replace(`/`)
     } catch (err) {
       const { data } = err as LoginError
 

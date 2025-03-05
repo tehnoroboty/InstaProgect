@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 
 import { timeSince } from '@/src/shared/lib/timeSince'
