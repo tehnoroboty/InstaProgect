@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -15,14 +15,13 @@ import s from './myProfile.module.scss'
 
 import { profileData } from './data'
 
-const PAGESIZE = 2
+const PAGESIZE = 4
 const SORTBY = 'createdAt'
 const SORTDIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState(1)
   const [allPosts, setAllPosts] = useState<Item[]>([])
-
   const { data } = useMeQuery()
   const userName = data?.userName
 
@@ -37,32 +36,35 @@ export const Profile = () => {
     { skip: !userName }
   )
 
-  // debugger
-
   useEffect(() => {
     if (posts?.items?.length) {
       setAllPosts(prev => [...prev, ...posts.items])
     }
   }, [posts])
 
-  const totalCount = posts?.totalCount ?? 0
-
-  // Функция для подгрузки следующей страницы при скролле
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
-      !isFetching &&
-      Math.ceil(totalCount / PAGESIZE) > pageNumber
-    ) {
-      setPageNumber(prev => prev + 1)
-    }
-  }, [isFetching, pageNumber, totalCount])
-
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
+    const scrollEl = document.querySelector('section')
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [isFetching, posts, handleScroll])
+    if (scrollEl) {
+      const handleScroll = () => {
+        const totalCount = posts?.totalCount ?? PAGESIZE
+
+        if (
+          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
+          !isFetching &&
+          Math.ceil(totalCount / PAGESIZE) > pageNumber
+        ) {
+          setPageNumber(prev => prev + 1)
+        }
+      }
+
+      scrollEl.addEventListener('scroll', handleScroll)
+
+      return () => {
+        scrollEl.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [posts, isFetching])
 
   const onClickHandler = () => {}
 

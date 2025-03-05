@@ -1,4 +1,4 @@
-.postsGrid{
+.postsGrid {
   display: grid;
   grid-auto-flow: row dense;
   grid-gap: 12px;
@@ -8,12 +8,7 @@
 }
 
 .image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   aspect-ratio: 1/1;
   width: 100%;
-
 }
 
