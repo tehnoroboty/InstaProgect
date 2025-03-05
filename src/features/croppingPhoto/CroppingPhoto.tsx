@@ -109,9 +109,9 @@ export const CroppingPhoto = ({ photos }: Props) => {
   const onCropChange = (index: number, crop: { x: number; y: number }) => {
     updatePhotoSettings(index, { crop })
   }
-  // const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
-  //   updatePhotoSettings(index, { croppedAreaPixels })
-  // }
+  const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
+    updatePhotoSettings(index, { croppedAreaPixels })
+  }
 
   const handlePhotoSelect = (selected: string) => {
     setLocalSelectedPhoto(selected) //TODO: setLocalSelectedPhoto напрямую
