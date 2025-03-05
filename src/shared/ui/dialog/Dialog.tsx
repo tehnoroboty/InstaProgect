@@ -2,6 +2,7 @@ import React, { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 import CloseOutline from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { Close, Content, Overlay, Portal, Root, Title } from '@radix-ui/react-dialog'
 import clsx from 'clsx'
 
@@ -42,6 +43,7 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
+              {<DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />}
               <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
                 <CloseOutline className={s.icon} />
               </Close>
