@@ -1,5 +1,3 @@
-'use client'
-
 import { useDropzone } from 'react-dropzone'
 
 import CloseOutline from '@/src/shared/assets/componentsIcons/CloseOutline'
