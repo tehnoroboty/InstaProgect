@@ -60,7 +60,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
   )
   const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
   const currentPhotoSettings = photoSettings[selectedPhotoIndex]
-
+  //TODO: useBoolean()
   const closeModal = () => setOpenModel(false)
 
   const applyCropToAllPhotos = async () => {
@@ -109,12 +109,12 @@ export const CroppingPhoto = ({ photos }: Props) => {
   const onCropChange = (index: number, crop: { x: number; y: number }) => {
     updatePhotoSettings(index, { crop })
   }
-  const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
-    updatePhotoSettings(index, { croppedAreaPixels })
-  }
+  // const onCropComplete = (index: number, croppedArea: any, croppedAreaPixels: any) => {
+  //   updatePhotoSettings(index, { croppedAreaPixels })
+  // }
 
   const handlePhotoSelect = (selected: string) => {
-    setLocalSelectedPhoto(selected)
+    setLocalSelectedPhoto(selected) //TODO: setLocalSelectedPhoto напрямую
   }
 
   const handlePhotoUpload = (newPhoto: string) => {
@@ -198,8 +198,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
                     minZoom={1}
                     objectFit={'cover'}
                     onCropChange={newCrop => onCropChange(index, newCrop)}
-                    onCropComplete={(cropArea, croppedAreaPixels) =>
-                      onCropComplete(index, cropArea, croppedAreaPixels)
+                    onCropComplete={(_, croppedAreaPixels) =>
+                      updatePhotoSettings(index, { croppedAreaPixels })
                     }
                     showGrid={false}
                     zoom={zoomLevel}
