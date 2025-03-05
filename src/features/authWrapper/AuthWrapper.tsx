@@ -17,9 +17,9 @@ type Props = {
 export const AuthWrapper = (props: Props) => {
   const { login } = props
   const router = useRouter()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
-  const isLoggedIn = useSelector(selectIsLoggedIn)
+  // const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const { data, isLoading, isSuccess } = useMeQuery()
 
@@ -28,9 +28,6 @@ export const AuthWrapper = (props: Props) => {
       if (login) {
         router.push('/')
       }
-      dispatch(setIsLoggedIn({ isLoggedIn: true }))
-    } else {
-      dispatch(setIsLoggedIn({ isLoggedIn: false }))
     }
   }, [isSuccess])
 

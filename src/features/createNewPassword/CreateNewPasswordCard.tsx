@@ -103,7 +103,7 @@ export default function CreateNewPasswordCard() {
   }
 
   return (
-    <div className={s.container}>
+    <>
       <Card className={s.card}>
         <Typography as={'h1'} option={'h1'}>
           {'Forgot Password'}
@@ -156,6 +156,6 @@ export default function CreateNewPasswordCard() {
             </div>
           </Dialog>
         ))}
-    </div>
+    </>
   )
 }

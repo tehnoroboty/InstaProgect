@@ -2,6 +2,8 @@ import React from 'react'
 
 import { AuthWrapper } from '@/src/features/authWrapper/AuthWrapper'
 
+import s from './auth.module.scss'
+
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -10,7 +12,7 @@ export default function AuthLayout({
   return (
     <>
       <AuthWrapper login />
-      <div>{children}</div>
+      <div className={s.container}>{children}</div>
     </>
   )
 }

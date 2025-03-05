@@ -37,9 +37,7 @@ export default function RootLayout({
             <ProgressBar />
             <div className={'accountWrapper'}>
               <NavigationPanel />
-              <main>
-                <section>{children}</section>
-              </main>
+              <main>{children}</main>
             </div>
           </div>
           <CommonAlert />
