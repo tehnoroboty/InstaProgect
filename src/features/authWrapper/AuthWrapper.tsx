@@ -48,11 +48,7 @@ export const AuthWrapper = (props: Props) => {
 
   return (
     <>
-      {isSuccess ? (
-        <h1 className={s.h1}>Зарегистрированный</h1>
-      ) : (
-        <h1 className={s.h1}>Незаригестрированный</h1>
-      )}
+      <h1 className={s.h1}>{isSuccess ? 'Зарегистрированный' : 'Незаригестрированный'}</h1>
     </>
   )
 }
