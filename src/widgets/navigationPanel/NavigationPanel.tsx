@@ -1,7 +1,6 @@
 // @flow
 'use client'
 import * as React from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   Bookmark,
@@ -18,14 +17,14 @@ import {
   SearchOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
-import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 
 export const NavigationPanel = () => {
-  const isLoggedIn = useSelector(selectIsLoggedIn)
+  const { data, isLoading, isSuccess } = useMeQuery()
 
-  if (!isLoggedIn) {
+  if (!isSuccess) {
     return null
   }
 
