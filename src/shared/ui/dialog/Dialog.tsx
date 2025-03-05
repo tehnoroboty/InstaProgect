@@ -43,7 +43,9 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
-              {<DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />}
+              {!modalTitle && (
+                <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />
+              )}
               <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
                 <CloseOutline className={s.icon} />
               </Close>
