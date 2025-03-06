@@ -1,21 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Arousel } from '@/src/shared/ui/carousel/Carousel'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import Image from 'next/image'
 
 import sliderImage from './assets/slider.jpg'
 
 const meta = {
   argTypes: {},
-  component: Arousel,
+  component: Carousel,
   tags: ['autodocs'],
   title: 'Components/Carousel',
-} satisfies Meta<typeof Arousel>
+} satisfies Meta<typeof Carousel>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const CarouselStory: Story = {
+export const SmallCarousel: Story = {
   args: {
     list: [
       { id: 'slide1', img: sliderImage },
@@ -23,5 +23,13 @@ export const CarouselStory: Story = {
       { id: 'slide1', img: sliderImage },
     ],
     renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
+    size: 'small',
+  },
+}
+
+export const LargeCarousel: Story = {
+  args: {
+    ...SmallCarousel.args,
+    size: 'large',
   },
 }

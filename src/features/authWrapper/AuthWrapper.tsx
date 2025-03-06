@@ -1,10 +1,8 @@
 'use client'
 
-import { ReactNode, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { selectIsLoggedIn, setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { useRouter } from 'next/navigation'
 
@@ -17,9 +15,6 @@ type Props = {
 export const AuthWrapper = (props: Props) => {
   const { login } = props
   const router = useRouter()
-  const dispatch = useDispatch()
-
-  const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const { data, isLoading, isSuccess } = useMeQuery()
 
@@ -28,9 +23,6 @@ export const AuthWrapper = (props: Props) => {
       if (login) {
         router.push('/')
       }
-      dispatch(setIsLoggedIn({ isLoggedIn: true }))
-    } else {
-      dispatch(setIsLoggedIn({ isLoggedIn: false }))
     }
   }, [isSuccess])
 

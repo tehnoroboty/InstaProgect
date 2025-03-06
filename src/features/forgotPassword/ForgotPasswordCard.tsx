@@ -94,7 +94,7 @@ export default function ForgotPasswordCard() {
   const isButtonDisabled = !isValid || recaptchaError !== null || isLoading
 
   return (
-    <div className={s.container}>
+    <>
       <Card className={s.card}>
         <Typography as={'h1'} option={'h1'}>
           {'Forgot Password'}
@@ -160,6 +160,6 @@ export default function ForgotPasswordCard() {
           </Button>
         </div>
       </Dialog>
-    </div>
+    </>
   )
 }

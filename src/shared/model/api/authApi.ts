@@ -1,7 +1,7 @@
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
-import { setAppError, setIsLoggedIn, setUserId } from '../slices/appSlice'
+import { setAppError, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -48,7 +48,6 @@ export const authApi = baseApi.injectEndpoints({
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
-        localStorage.setItem('isLoggedIn', 'true')
       },
       query: body => ({
         body,
@@ -60,9 +59,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          dispatch(setIsLoggedIn({ isLoggedIn: false }))
           localStorage.removeItem('accessToken')
-          localStorage.setItem('isLoggedIn', 'false')
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
@@ -78,10 +75,9 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const res = await queryFulfilled
 
-          dispatch(setIsLoggedIn({ isLoggedIn: true }))
           dispatch(setUserId({ userId: res.data.userId }))
         } catch (error) {
-          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          console.error('Ошибка ME запроса:', error)
         }
       },
       query: () => 'auth/me',
