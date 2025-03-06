@@ -5,6 +5,9 @@ const nextConfig = {
             ? 'https://momenttify.store'
             : 'http://localhost:3000',
     },
+    images: {
+        domains: ['encrypted-tbn0.gstatic.com'],
+    },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg'),
@@ -28,6 +31,7 @@ const nextConfig = {
 
         return config
     },
+
 };
 
 export default nextConfig;

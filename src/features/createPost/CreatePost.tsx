@@ -1,16 +1,24 @@
-'use client'
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
+import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
-import Image from 'next/image'
+import { errorMaxPhoto } from '@/src/widgets/addPost/data'
 
 import s from './createPost.module.scss'
 
-export const CreatePost = () => {
-  const [photo, setPhoto] = useState<null | string>(null)
+type Props = {
+  download: (photo: string) => void
+}
+
+export const CreatePost = ({ download }: Props) => {
+  const [openModal, setOpenModel] = useState<boolean>(true)
+  const [additionalModal, setAdditionalModal] = useState<boolean>(false)
+
+  const closeModal = () => setOpenModel(false)
+  const onCloseAdditionalModal = () => setAdditionalModal(false)
 
   const { getInputProps, getRootProps, open } = useDropzone({
     accept: {
@@ -23,29 +31,22 @@ export const CreatePost = () => {
       const file = acceptedFiles[0]
       const fileUrl = URL.createObjectURL(file)
 
-      setPhoto(fileUrl)
+      if (file.size > MAX_SIZE_PHOTO) {
+        setAdditionalModal(true)
+      } else {
+        download(fileUrl)
+        closeModal()
+      }
     },
   })
 
   return (
     <div>
-      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={() => {}} open>
+      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={closeModal} open={openModal}>
         <div className={s.content}>
-          {photo ? (
-            <Image
-              alt={'img'}
-              className={s.photo}
-              height={300}
-              layout={'intrinsic'}
-              //  layout={'responsive'}
-              src={photo}
-              width={300}
-            />
-          ) : (
-            <div className={s.imageBox}>
-              <ImageOutline height={48} width={48} />
-            </div>
-          )}
+          <div className={s.imageBox}>
+            <ImageOutline height={48} width={48} />
+          </div>
           <div className={s.buttons}>
             <Button onClick={open} variant={'primary'}>
               <input {...getInputProps()} />
@@ -54,6 +55,19 @@ export const CreatePost = () => {
             <Button variant={'bordered'}>{'Open Draft'}</Button>
           </div>
         </div>
+      </Dialog>
+      <Dialog
+        className={s.additionalModal}
+        modalTitle={errorMaxPhoto.title}
+        onClose={onCloseAdditionalModal}
+        open={additionalModal}
+      >
+        <>
+          {errorMaxPhoto.text}
+          <div className={s.additionalModalBtn}>
+            <Button onClick={onCloseAdditionalModal}>{'OK'}</Button>
+          </div>
+        </>
       </Dialog>
     </div>
   )

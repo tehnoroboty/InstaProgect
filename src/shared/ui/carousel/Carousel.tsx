@@ -14,12 +14,13 @@ import { Button } from '../button/Button'
 type Props<T> = {
   disableSwipe?: boolean
   list: T[]
-  renderItem: (item: T) => ReactNode
+  onChange?: (index: number) => void
+  renderItem: (item: T, index: number) => ReactNode
   size: 'large' | 'small'
 }
 
 export const Carousel = <T,>(props: Props<T>) => {
-  const { disableSwipe, list, renderItem, size } = props
+  const { disableSwipe, list, onChange, renderItem, size } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
   const swiperRef = useRef<SwiperRef | null>(null)
@@ -43,6 +44,11 @@ export const Carousel = <T,>(props: Props<T>) => {
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
       }}
+      onSlideChange={swiper => {
+        if (onChange) {
+          onChange(swiper.activeIndex)
+        }
+      }}
       pagination={{
         bulletActiveClass: `${s.paginationActive}`,
         clickable: true,
@@ -52,7 +58,7 @@ export const Carousel = <T,>(props: Props<T>) => {
     >
       {list.map((item, index) => (
         <SwiperSlide className={s.slide} key={index}>
-          {renderItem(item)}
+          {renderItem(item, index)}
         </SwiperSlide>
       ))}
       {hasMoreThanOneItem && (
