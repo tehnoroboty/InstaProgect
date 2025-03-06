@@ -12,8 +12,12 @@ import Image from 'next/image'
 
 import s from './publicFeedPost.module.scss'
 
-export const PublicFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, userName } = props
+type Props = {
+  post: Post
+}
+
+export const PublicFeedPost = ({ post }: Props) => {
+  const { avatarOwner, createdAt, description, id, images, userName } = post
 
   const [open, setOpen] = useState<boolean>(false)
 
