@@ -15,7 +15,7 @@ import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
-import { Arousel } from '@/src/shared/ui/carousel/Carousel'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { PopoverComponent } from '@/src/shared/ui/popover/Popover'
 import { SliderComponent } from '@/src/shared/ui/slider/Slider'
@@ -109,6 +109,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
   if (showAddPost.value) {
     return <AddPost />
   }
+  console.log(localPhotos)
 
   return (
     <>
@@ -135,7 +136,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
         </div>
         <div className={s.contentModal}>
           {localPhotos.length > 1 ? (
-            <Arousel
+            <Carousel
               list={localPhotos}
               onChange={index => {
                 setLocalSelectedPhoto(localPhotos[index])
@@ -165,6 +166,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
                   />
                 )
               }}
+              size={'small'}
             />
           ) : (
             <Cropper

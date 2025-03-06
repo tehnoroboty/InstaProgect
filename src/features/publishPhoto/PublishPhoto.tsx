@@ -7,7 +7,7 @@ import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBac
 import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
-import { Arousel } from '@/src/shared/ui/carousel/Carousel'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Input } from '@/src/shared/ui/input'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
@@ -63,9 +63,10 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
         <div className={s.contentModal}>
           <div className={s.photoBox}>
             {photos.length > 1 ? (
-              <Arousel
+              <Carousel
                 list={photos}
                 renderItem={photo => <img alt={'photo'} className={s.photoImg} src={photo} />}
+                size={'small'}
               />
             ) : (
               <img alt={'photo'} className={s.photoImg} src={photos[0]} />
