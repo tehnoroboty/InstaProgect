@@ -2,13 +2,10 @@
 
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
 
-import { CreatePost } from '@/src/features/createPost/CreatePost'
 import { FormType, schema } from '@/src/features/login/validators'
-import { useLazyMeQuery, useLoginMutation } from '@/src/shared/model/api/authApi'
+import { useLoginMutation } from '@/src/shared/model/api/authApi'
 import { LoginError } from '@/src/shared/model/api/types'
-import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Card } from '@/src/shared/ui/card/Card'
 import { Input } from '@/src/shared/ui/input'
@@ -22,10 +19,8 @@ import s from './login.module.scss'
 
 export default function Login() {
   const [login, { data, error, isError, isLoading }] = useLoginMutation()
-  const [getMe] = useLazyMeQuery()
 
   const router = useRouter()
-  const dispatch = useDispatch()
 
   const {
     formState: { errors, isValid },
@@ -46,16 +41,7 @@ export default function Login() {
     try {
       await login(formData).unwrap()
 
-      dispatch(setIsLoggedIn({ isLoggedIn: true }))
-
-      const meRes = await getMe()
-      const userId = meRes?.data?.userId
-
-      if (!userId) {
-        return
-      }
-
-      router.push(`/users/profile/${userId}`)
+      router.push(`/`)
     } catch (err) {
       const { data } = err as LoginError
 
@@ -64,7 +50,7 @@ export default function Login() {
   }
 
   return (
-    <div className={s.wrapper}>
+    <>
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           {'Sign In'}
@@ -122,6 +108,6 @@ export default function Login() {
           </Button>
         </div>
       </Card>
-    </div>
+    </>
   )
 }

@@ -103,10 +103,10 @@ export default function CreateNewPasswordCard() {
   }
 
   return (
-    <div className={s.container}>
+    <>
       <Card className={s.card}>
         <Typography as={'h1'} option={'h1'}>
-          {'Forgot Password'}
+          {'Create  New Password'}
         </Typography>
         <form className={s.content} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={s.inputs}>
@@ -156,6 +156,6 @@ export default function CreateNewPasswordCard() {
             </div>
           </Dialog>
         ))}
-    </div>
+    </>
   )
 }
