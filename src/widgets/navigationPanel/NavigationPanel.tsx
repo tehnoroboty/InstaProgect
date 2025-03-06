@@ -45,7 +45,7 @@ export const menuItems: MenuItemsType = {
     { href: '/', icon: HomeLine, iconActive: Home, title: 'Home' },
     { href: '/create', icon: PlusSquareOutline, iconActive: PlusSquare, title: 'Create' },
     {
-      href: `profile/${2084}`,
+      href: `/profile/${2084}`,
       icon: PersonOutline,
       iconActive: Person,
       title: 'My Profile',
