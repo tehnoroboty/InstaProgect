@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
+import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -45,22 +46,21 @@ type Props = {
 }
 
 export const FilteringPhoto = ({ photos }: Props) => {
-  const [exitModal, setExitModal] = useState<boolean>(false)
-  const [openModal, setOpenModel] = useState<boolean>(true)
-  const [showPublishPhoto, setShowPublishPhoto] = useState<boolean>(false)
-  const [showCroppingPhoto, setShowCroppingPhoto] = useState<boolean>(false)
-  const closeModal = () => setOpenModel(false)
+  const exitModal = useBoolean()
+  const openModal = useBoolean(true)
+  const showPublishPhoto = useBoolean()
+  const showCroppingPhoto = useBoolean()
 
   const [editedPhotos, setEditedPhotos] = useState<string[]>(photos)
 
   const handleNextClick = () => {
-    closeModal()
-    setShowPublishPhoto(true)
+    openModal.setFalse()
+    showPublishPhoto.setTrue()
   }
 
   const handleBackClick = () => {
-    closeModal()
-    setShowCroppingPhoto(true)
+    openModal.setFalse()
+    showCroppingPhoto.setTrue()
   }
 
   const handleEditorProcess = (res: PinturaDefaultImageWriterResult, index: number) => {
@@ -75,11 +75,11 @@ export const FilteringPhoto = ({ photos }: Props) => {
     })
   }
 
-  if (showPublishPhoto) {
+  if (showPublishPhoto.value) {
     return <PublishPhoto photos={editedPhotos} />
   }
 
-  if (showCroppingPhoto) {
+  if (showCroppingPhoto.value) {
     return <CroppingPhoto photos={editedPhotos} />
   }
 
@@ -89,9 +89,9 @@ export const FilteringPhoto = ({ photos }: Props) => {
         className={s.modal}
         isSimple
         onClose={() => {
-          setExitModal(true)
+          exitModal.setTrue()
         }}
-        open={openModal}
+        open={openModal.value}
       >
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
@@ -155,10 +155,10 @@ export const FilteringPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
-        onCloseModal={() => setExitModal(false)}
-        onCloseParentModal={closeModal}
+        onCloseModal={() => exitModal.setFalse()}
+        onCloseParentModal={() => openModal.setFalse()}
         onSaveDraft={() => {}}
-        open={exitModal}
+        open={exitModal.value}
       />
     </>
   )

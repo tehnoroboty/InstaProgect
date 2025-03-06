@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
+import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -24,17 +25,16 @@ type Props = {
 }
 
 export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' }: Props) => {
-  const [openModal, setOpenModel] = useState<boolean>(true)
-  const [showFilteringPhoto, setShowFilteringPhoto] = useState<boolean>(false)
-  const closeModal = () => setOpenModel(false)
-  const [exitModal, setExitModal] = useState<boolean>(false)
+  const openModal = useBoolean(true)
+  const exitModal = useBoolean()
+  const showFilteringPhoto = useBoolean()
 
   const handleBackClick = () => {
-    closeModal()
-    setShowFilteringPhoto(true)
+    openModal.setFalse()
+    showFilteringPhoto.setTrue()
   }
 
-  if (showFilteringPhoto) {
+  if (showFilteringPhoto.value) {
     return <FilteringPhoto photos={photos} />
   }
 
@@ -44,9 +44,9 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
         className={s.modal}
         isSimple
         onClose={() => {
-          setExitModal(true)
+          exitModal.setTrue()
         }}
-        open={openModal}
+        open={openModal.value}
       >
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
@@ -107,10 +107,10 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
         </div>
       </Dialog>
       <ExitModal
-        onCloseModal={() => setExitModal(false)}
-        onCloseParentModal={closeModal}
+        onCloseModal={() => exitModal.setFalse()}
+        onCloseParentModal={() => openModal.setFalse()}
         onSaveDraft={() => {}}
-        open={exitModal}
+        open={exitModal.value}
       />
     </>
   )

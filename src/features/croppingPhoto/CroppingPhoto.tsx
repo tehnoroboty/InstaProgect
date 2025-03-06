@@ -13,6 +13,7 @@ import Image from '@/src/shared/assets/componentsIcons/Image'
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
+import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Arousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -29,10 +30,10 @@ type Props = {
   photos: string[]
 }
 export const CroppingPhoto = ({ photos }: Props) => {
-  const [openModal, setOpenModel] = useState<boolean>(true)
-  const [exitModal, setExitModal] = useState<boolean>(false)
-  const [showFilteringPhoto, setShowFilteringPhoto] = useState<boolean>(false)
-  const [showAddPost, setShowAddPost] = useState<boolean>(false)
+  const openModal = useBoolean(true)
+  const exitModal = useBoolean()
+  const showFilteringPhoto = useBoolean()
+  const showAddPost = useBoolean()
 
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
   const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(photos[0])
@@ -53,18 +54,16 @@ export const CroppingPhoto = ({ photos }: Props) => {
   )
   const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
   const currentPhotoSettings = photoSettings[selectedPhotoIndex]
-  //TODO: useBoolean()
-  const closeModal = () => setOpenModel(false)
 
   const handleNextClick = async () => {
     await applyCropToAllPhotos(localPhotos, photoSettings, setLocalPhotos)
-    closeModal()
-    setShowFilteringPhoto(true)
+    openModal.setFalse()
+    showFilteringPhoto.setTrue()
   }
 
   const handleBackClick = () => {
-    closeModal()
-    setShowAddPost(true)
+    openModal.setFalse()
+    showAddPost.setTrue()
   }
 
   const updatePhotoSettings = (index: number, updates: Partial<PhotoSettings>) => {
@@ -103,11 +102,11 @@ export const CroppingPhoto = ({ photos }: Props) => {
     }
   }
 
-  if (showFilteringPhoto) {
+  if (showFilteringPhoto.value) {
     return <FilteringPhoto photos={localPhotos} />
   }
 
-  if (showAddPost) {
+  if (showAddPost.value) {
     return <AddPost />
   }
 
@@ -117,9 +116,9 @@ export const CroppingPhoto = ({ photos }: Props) => {
         className={s.modal}
         isSimple
         onClose={() => {
-          setExitModal(true)
+          exitModal.setTrue()
         }}
-        open={openModal}
+        open={openModal.value}
       >
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
@@ -228,10 +227,10 @@ export const CroppingPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
-        onCloseModal={() => setExitModal(false)}
-        onCloseParentModal={closeModal}
+        onCloseModal={() => exitModal.setFalse()}
+        onCloseParentModal={() => openModal.setFalse()}
         onSaveDraft={() => {}}
-        open={exitModal}
+        open={exitModal.value}
       />
     </>
   )
