@@ -1,10 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
-import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
@@ -38,7 +36,6 @@ export const ItemWrapper = ({
 
   const [logout, { isLoading }] = useLogoutMutation()
 
-  const dispatch = useDispatch()
   const route = useRouter()
 
   const onClickHandler = () => {
@@ -48,7 +45,10 @@ export const ItemWrapper = ({
   const onLogoutConfirm = async () => {
     try {
       await logout().unwrap()
-      route.push('/auth/login')
+
+      setIsModalOpen(false)
+      route.push('/')
+
       if (onClick) {
         onClick()
       }

@@ -17,10 +17,17 @@ import {
   SearchOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
+import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 
 export const NavigationPanel = () => {
+  const { data, isLoading, isSuccess } = useMeQuery()
+
+  if (!isSuccess) {
+    return null
+  }
+
   return (
     <>
       <MenuMobile items={menuItems.mainActions} />
@@ -37,7 +44,12 @@ export const menuItems: MenuItemsType = {
   mainActions: [
     { href: '/', icon: HomeLine, iconActive: Home, title: 'Home' },
     { href: '/create', icon: PlusSquareOutline, iconActive: PlusSquare, title: 'Create' },
-    { href: '/my-profile', icon: PersonOutline, iconActive: Person, title: 'My Profile' },
+    {
+      href: `/profile/${2084}`,
+      icon: PersonOutline,
+      iconActive: Person,
+      title: 'My Profile',
+    },
     {
       href: '/messenger',
       icon: MessageCircleOutline,

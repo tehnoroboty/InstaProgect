@@ -1,15 +1,11 @@
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  min-height:100%;
-}
-
 .card {
-  width: clamp(320px, 50%, 400px);
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  align-items: center;
+
+  width: max(378px, 30vw);
+  height: fit-content;
   padding: 24px;
 }
 
