@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Typography } from '@/src/shared/ui/typography/Typography'
+
 import { ScrollArea, ScrollBar } from '@/src/shared/ui/Scrollbar/Scrollbar'
+import { Typography } from '@/src/shared/ui/typography/Typography'
+
 import s from './scrollbar.module.scss'
 
 const meta = {
@@ -28,7 +30,7 @@ quos tenetur, vel voluptate?`
 export const VerticalScroll: Story = {
   render: () => (
     <ScrollArea className={s.verticalScroll}>
-      <div style={{ width: '100%', fontWeight: 900, backgroundColor: 'lightgreen' }}>
+      <div style={{ backgroundColor: 'lightgreen', fontWeight: 900, width: '100%' }}>
         Vertical Scroll
       </div>
 
@@ -39,11 +41,11 @@ export const VerticalScroll: Story = {
 export const HorizontalScroll: Story = {
   render: () => (
     <ScrollArea className={s.horizontalScroll}>
-      <div style={{ width: '100%', fontWeight: 900, backgroundColor: 'lightblue' }}>
+      <div style={{ backgroundColor: 'lightblue', fontWeight: 900, width: '100%' }}>
         Horizontal Scroll
       </div>
       <Typography className={s.text}>{text}</Typography>
-      <ScrollBar orientation="horizontal" />
+      <ScrollBar orientation={'horizontal'} />
     </ScrollArea>
   ),
 }
@@ -52,11 +54,11 @@ export const BothScroll: Story = {
   render: () => (
     <div>
       <ScrollArea className={s.verticalScroll}>
-        <div style={{ width: '100%', fontWeight: 900, backgroundColor: 'violet' }}>Both Scroll</div>
-        <div style={{ width: '200px', height: '200px' }}>
+        <div style={{ backgroundColor: 'violet', fontWeight: 900, width: '100%' }}>Both Scroll</div>
+        <div style={{ height: '200px', width: '200px' }}>
           <Typography className={s.text}>{text}</Typography>
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation={'horizontal'} />
       </ScrollArea>
     </div>
   ),
