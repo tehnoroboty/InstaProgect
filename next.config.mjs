@@ -5,6 +5,12 @@ const nextConfig = {
             ? 'https://momenttify.store'
             : 'http://localhost:3000',
     },
+    images: {//TODO!: временное решение для тестов, потом удалить надо!
+        domains: [
+            'images.squarespace-cdn.com',
+            'catastic.pet',
+        ],
+    },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg'),

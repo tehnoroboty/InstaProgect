@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
+import { PublicFeed } from '@/src/widgets/publicFeed/PublicFeed'
 import { useRouter } from 'next/navigation'
 
 import s from './authWrapper.module.scss'
@@ -40,7 +41,8 @@ export const AuthWrapper = (props: Props) => {
 
   return (
     <>
-      <h1 className={s.h1}>{isSuccess ? 'Зарегистрированный' : 'Незаригестрированный'}</h1>
+      {/*<h1 className={s.h1}>{isSuccess ? 'Зарегистрированный' : 'Незаригестрированный'}</h1>*/}
+      {isSuccess ? <h1 className={s.h1}>{'Зарегистрированный'}</h1> : <PublicFeed />}
     </>
   )
 }

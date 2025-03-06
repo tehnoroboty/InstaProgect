@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  max-width: 972px;
+  margin: 0 auto;
+}
+
+.feed {
+}
+
+.registeredUsersContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 72px;
+  margin-bottom: 36px;
+  padding: 0 24px;
+}
+
+.postsContainer {
+  display: flex;
+  gap: 12px;
+}
