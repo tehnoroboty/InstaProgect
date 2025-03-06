@@ -1,7 +1,7 @@
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
-import { setAppError, setIsLoggedIn } from '../slices/appSlice'
+import { setAppError, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -56,11 +56,9 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     logout: builder.mutation<void, void>({
-      invalidatesTags: ['ME'],
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          dispatch(setIsLoggedIn({ isLoggedIn: false }))
           localStorage.removeItem('accessToken')
           dispatch(authApi.util.resetApiState())
         } catch (error) {
@@ -73,7 +71,15 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     me: builder.query<MeResponse, void>({
-      providesTags: ['ME'],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const res = await queryFulfilled
+
+          dispatch(setUserId({ userId: res.data.userId }))
+        } catch (error) {
+          console.error('Ошибка ME запроса:', error)
+        }
+      },
       query: () => 'auth/me',
     }),
     passwordRecovery: builder.mutation<void, PasswordRecoveryType>({

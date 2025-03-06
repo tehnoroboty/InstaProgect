@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { NavigationPanel } from '@/src/widgets/navigationPanel/NavigationPanel'
+import { AuthWrapper } from '@/src/features/authWrapper/AuthWrapper'
+
+import s from './auth.module.scss'
 
 export default function AuthLayout({
   children,
@@ -8,8 +10,9 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className={'authWrapper'}>
-      <section>{children}</section>
-    </div>
+    <>
+      <AuthWrapper login />
+      <div className={s.container}>{children}</div>
+    </>
   )
 }
