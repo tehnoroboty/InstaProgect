@@ -48,7 +48,7 @@ export const Dropdown = <T,>(props: Props<T>) => {
         {trigger}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content align={'end'} className={contentClassName} sideOffset={7}>
+        <DropdownMenu.Content align={'end'} className={contentClassName}>
           {dropDownMenuItems}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

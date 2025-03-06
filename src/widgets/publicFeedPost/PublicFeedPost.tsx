@@ -1,10 +1,10 @@
-import type { Post, PostImage } from '@/src/entities/posts/types'
+import type { Post, PostImage } from '@/src/entities/post/types'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-import { timeSince } from '@/src/shared/lib/timeSince'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
+import { CreationTime } from '@/src/shared/ui/creationTime/CreationTime'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import clsx from 'clsx'
@@ -35,7 +35,7 @@ export const PublicFeedPost = (props: Post) => {
       <Collapsible.Root onOpenChange={setOpen} open={open}>
         <div className={classNames}>
           <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
-          <div className={s.creationTime}>{timeSince(createdAt)}</div>
+          <CreationTime createdAt={createdAt} />
           <p className={s.descriptionText}>
             {!isDescriptionLong || open ? description : truncatedDescription}
           </p>
