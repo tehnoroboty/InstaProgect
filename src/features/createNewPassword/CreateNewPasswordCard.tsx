@@ -106,7 +106,7 @@ export default function CreateNewPasswordCard() {
     <>
       <Card className={s.card}>
         <Typography as={'h1'} option={'h1'}>
-          {'Forgot Password'}
+          {'Create  New Password'}
         </Typography>
         <form className={s.content} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={s.inputs}>
