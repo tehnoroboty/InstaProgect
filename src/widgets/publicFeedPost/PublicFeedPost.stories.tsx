@@ -14,8 +14,7 @@ type Story = StoryObj<typeof PublicFeedPost>
 
 export const Default: Story = {
   args: {
-    avatarOwner:
-      'https://storage.yandexcloud.net/users-inctagram/users/41/avatar/3359612b-cff9-4b6b-8897-fbbd09153d51-images-45x45',
+    avatarOwner: 'https://catastic.pet/wp-content/uploads/2022/10/clever-tuxedo-cat.jpg',
     avatarWhoLikes: false,
     createdAt: '2025-02-17T16:36:44.410Z',
     description:
@@ -27,7 +26,7 @@ export const Default: Story = {
         fileSize: 300,
         height: 300,
         uploadId: 'string',
-        url: 'https://example.com/image.jpg',
+        url: 'https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg?format=2500w',
         width: 300,
       },
     ],
@@ -44,10 +43,67 @@ export const Default: Story = {
   },
 }
 
+export const SeveralImages: Story = {
+  args: {
+    ...Default.args,
+    images: [
+      {
+        createdAt: '2025-02-17T16:36:44.101Z',
+        fileSize: 300,
+        height: 300,
+        uploadId: 'string',
+        url: 'https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg?format=2500w',
+        width: 300,
+      },
+      {
+        createdAt: '2025-02-17T16:36:44.101Z',
+        fileSize: 300,
+        height: 300,
+        uploadId: 'string',
+        url: 'https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg?format=2500w',
+        width: 300,
+      },
+      {
+        createdAt: '2025-02-17T16:36:44.101Z',
+        fileSize: 300,
+        height: 300,
+        uploadId: 'string',
+        url: 'https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg?format=2500w',
+        width: 300,
+      },
+    ],
+  },
+}
+
 export const ShortDescription: Story = {
   args: {
     ...Default.args,
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing',
+  },
+}
+
+export const MultipleCards: Story = {
+  args: {
+    ...Default.args,
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..',
+  },
+  render: args => {
+    return (
+      <>
+        <div
+          style={{
+            display: 'grid',
+            gap: '12px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          }}
+        >
+          {Array.from({ length: 5 }).map((i, index) => {
+            return <PublicFeedPost key={index} {...args} />
+          })}
+        </div>
+      </>
+    )
   },
 }

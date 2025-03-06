@@ -2,27 +2,33 @@
   position: relative;
 
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  width: 234px;
+  width: 100%;
+  max-width: 234px;
   height: 391px;
 
   background-color: var(--dark-500);
 }
 
-.mockCarousel {
+.carouselContainer {
+  z-index: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 234px;
-  height: 240px;
-  border-radius: 2px;
+  aspect-ratio: 234/240;
+  width: 100%;
 
   background-color: var(--dark-300);
 }
 
 .cardLowerPart {
   position: relative;
+  z-index: 100500;
   transform: translateY(0);
 
   overflow: hidden;
@@ -38,31 +44,21 @@
   }
 }
 
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease-in-out;
+}
+
+.open {
+  .img {
+    height: 50%;
+  }
+}
+
 .owner {
-  display: flex;
-  gap: 12px;
-  align-items: center;
   margin: 12px 0;
-}
-
-.mockAvatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-
-  background-color: var(--light-300);
-}
-
-.mockUsername {
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  color: var(--light-100);
 }
 
 .creationTime {
@@ -74,6 +70,7 @@
 }
 
 .descriptionText {
+  overflow: hidden;
   display: inline;
 
   font-size: 14px;
