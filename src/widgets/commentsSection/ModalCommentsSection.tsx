@@ -110,11 +110,11 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
         <div className={s.postMenu}>
           {
             /*<DropdownMenuMobile
-              items={[
-                { icon: PersonRemoveOutline, title: 'Unfollow' },
-                { icon: CopyOutline, title: 'Copy Link' },
-              ]}
-            />*/
+                          items={[
+                            { icon: PersonRemoveOutline, title: 'Unfollow' },
+                            { icon: CopyOutline, title: 'Copy Link' },
+                          ]}
+                        />*/
 
             <DropdownPost isFollowedBy={false} isOurPost />
           }
@@ -148,11 +148,19 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
             </div>
             <div className={s.heartIconWrapper}>
               {el.isLiked ? (
-                <Heart
-                  className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
+                <Button
+                  className={s.iconButton}
                   onClick={() => handleLikeComment(el.id)}
-                  tabIndex={0}
-                />
+                  onKeyDown={e => {
+                    e.key === 'Enter' && handleLikeComment(el.id)
+                  }}
+                >
+                  <Heart
+                    className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
+                    //onClick={() => handleLikeComment(el.id)}
+                    //tabIndex={0}
+                  />
+                </Button>
               ) : (
                 <HeartOutline
                   className={clsx(s.heartIcon, s.commentHeartIcon)}
