@@ -3,7 +3,7 @@ import { ImagesType, RequestPostsType, ResponsePostsType } from '@/src/shared/mo
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<ImagesType, { file: File }>({
+    createImageForPost: builder.mutation<{ images: ImagesType }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
 
