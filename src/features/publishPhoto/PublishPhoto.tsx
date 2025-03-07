@@ -1,11 +1,15 @@
 'use client'
 
-import React from 'react'
+import React, { Suspense, useRef, useState } from 'react'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import {
+  useCreateImageForPostMutation,
+  useCreateNewPostMutation,
+} from '@/src/shared/model/api/postsApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -28,6 +32,48 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
   const openModal = useBoolean(true)
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [value, setValue] = useState('')
+  const [addPhotosForPost] = useCreateImageForPostMutation()
+  const [addPost] = useCreateNewPostMutation()
+
+  const urlToFile = async (url: string, filename: string): Promise<File> => {
+    const response = await fetch(url)
+    const blob = await response.blob()
+
+    return new File([blob], filename, { type: blob.type })
+  }
+
+  const onClickPublishHandler = async () => {
+    try {
+      const files = await Promise.all(
+        photos.map((photo, index) => urlToFile(photo, `photo_${index + 1}.jpg`))
+      )
+
+      const uploadId = await Promise.all(files.map(file => addPhotosForPost({ file }).unwrap()))
+
+      console.log(uploadId)
+
+      if (uploadId && uploadId.length > 0) {
+        const publishData = {
+          childrenMetadata: uploadId.map(result => ({ uploadId: result.uploadId })),
+          description: value,
+        }
+
+        console.log(publishData)
+
+        /*  await addPost(publishData).unwrap()*/
+      }
+    } catch (error) {
+      console.error('Failed to upload photos or create post:', error)
+    }
+  }
+
+  const onChangeValue = () => {
+    if (textareaRef.current) {
+      setValue(textareaRef.current.value)
+    }
+  }
 
   const handleBackClick = () => {
     openModal.setFalse()
@@ -57,7 +103,9 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
               {'Publication'}
             </Typography>
           </Title>
-          <Button variant={'transparent'}>{'Publish'}</Button>
+          <Button onClick={onClickPublishHandler} variant={'transparent'}>
+            {'Publish'}
+          </Button>
         </div>
 
         <div className={s.contentModal}>
@@ -79,6 +127,9 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
                 className={s.addPublication}
                 label={'Add publication descriptions'}
                 maxLength={500}
+                onChange={onChangeValue}
+                ref={textareaRef}
+                value={value}
               />
             </div>
             <div className={s.locationBox}>

@@ -63,3 +63,40 @@ export type MeResponse = {
   userId: number
   userName: string
 }
+
+// Posts types
+
+export type RequestPostsType = {
+  childrenMetadata: { uploadId: string }[]
+  description: string
+}
+
+export type ResponsePostsType = {
+  avatarOwner: string
+  avatarWhoLikes: boolean
+  createdAt: string
+  description: string
+  id: number
+  images: ImagesType[]
+  isLiked: boolean
+  likesCount: number
+  location: string
+  owner: OnwerType
+  ownerId: number
+  updatedAt: string
+  userName: string
+}
+
+export type OnwerType = {
+  firstName: string
+  lastName: string
+}
+
+export type ImagesType = {
+  createdAt: string
+  fileSize: number
+  height: number
+  uploadId: string
+  url: string
+  width: number
+}

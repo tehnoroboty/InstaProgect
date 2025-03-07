@@ -109,7 +109,6 @@ export const CroppingPhoto = ({ photos }: Props) => {
   if (showAddPost.value) {
     return <AddPost />
   }
-  console.log(localPhotos)
 
   return (
     <>
