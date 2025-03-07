@@ -1,18 +1,28 @@
 'use client'
 import React, { KeyboardEvent, useState } from 'react'
 
+import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
+import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
 
 import s from './dropdown.module.scss'
 
-type Props<T> = {
-  list: T[]
-  renderItem: (item: T, index?: number) => React.ReactNode
-  trigger: React.ReactNode
+export type DropdownMenuItems = {
+  href?: string
+  icon: React.ElementType
+  id: string
+  onClick?: () => void
+  title: string
 }
 
-export const Dropdown = <T,>(props: Props<T>) => {
+type Props<T extends DropdownMenuItems> = {
+  list: T[]
+  renderItem?: (item: T, index?: number) => React.ReactNode
+  trigger?: React.ReactNode
+}
+
+export const Dropdown = <T extends DropdownMenuItems>(props: Props<T>) => {
   const { list, renderItem, trigger } = props
   const [open, setOpen] = useState(false)
 
@@ -23,21 +33,25 @@ export const Dropdown = <T,>(props: Props<T>) => {
   const triggerClassName = clsx(s.trigger, { [s.iconActive]: open })
   const contentClassName = clsx(s.content)
 
-  const dropDownMenuItems = list.map((item: T, index) => {
+  const dropDownMenuItems = list.map((item: T) => {
     const onKeyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
       if (e.code === 'Enter') {
-        if (item instanceof Object && 'onClick' in item && typeof item.onClick === 'function') {
+        if ('onClick' in item && typeof item.onClick === 'function') {
           item.onClick()
           setOpen(false)
-        } else if (item instanceof Object && 'href' in item && typeof item.href === 'string') {
+        } else if ('href' in item && typeof item.href === 'string') {
           window.location.href = item.href
         }
       }
     }
 
     return (
-      <DropdownMenu.Item className={s.dropdownItem} key={index} onKeyDown={onKeyDownHandler}>
-        {renderItem(item)}
+      <DropdownMenu.Item className={s.dropdownItem} key={item.id} onKeyDown={onKeyDownHandler}>
+        {renderItem ? (
+          renderItem(item)
+        ) : (
+          <DropdownItem Icon={item.icon} onClick={item.onClick} title={item.title} />
+        )}
       </DropdownMenu.Item>
     )
   })
@@ -45,7 +59,11 @@ export const Dropdown = <T,>(props: Props<T>) => {
   return (
     <DropdownMenu.Root onOpenChange={handleOpenChange}>
       <DropdownMenu.Trigger asChild className={triggerClassName}>
-        {trigger}
+        {trigger ?? (
+          <button type={'button'}>
+            <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
+          </button>
+        )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content align={'end'} className={contentClassName}>

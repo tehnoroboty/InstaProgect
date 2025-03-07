@@ -13,7 +13,7 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
 
-import { Dropdown } from './dropdown'
+import { Dropdown, DropdownMenuItems } from './dropdown'
 
 const meta = {
   argTypes: {},
@@ -32,16 +32,10 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-type ItemType = {
-  href?: string
-  icon: React.ComponentType
-  iconActive?: React.ComponentType
-  onClick?: () => void
-  title: string
-}
-const menuDropdown: ItemType[] = [
+const menuDropdown: DropdownMenuItems[] = [
   {
     icon: Edit2Outline,
+    id: '1',
     onClick: () => {
       console.log('Edit Post')
     },
@@ -49,6 +43,7 @@ const menuDropdown: ItemType[] = [
   },
   {
     icon: TrashOutline,
+    id: '2',
     onClick: () => {
       console.log('Delete Post')
     },
@@ -56,7 +51,7 @@ const menuDropdown: ItemType[] = [
   },
 ]
 
-export const DropdownPostSettings: Story = {
+export const DropdownPostSettingsWithRenderItem: Story = {
   args: {
     list: menuDropdown,
     renderItem: (item: any) => (
@@ -64,21 +59,29 @@ export const DropdownPostSettings: Story = {
     ),
   },
 }
+export const DropdownPostSettingsWithoutRenderItem: Story = {
+  args: {
+    list: menuDropdown,
+  },
+}
 
-const menuHeaderMobile: ItemType[] = [
+const menuHeaderMobile: DropdownMenuItems[] = [
   {
     href: '/statistics',
     icon: TrendingUpOutline,
+    id: '3',
     title: 'Statistics',
   },
   {
     href: '/favorites',
     icon: BookmarkOutline,
+    id: '4',
     title: 'Favorites',
   },
-  { href: '/settings', icon: SettingsOutline, title: 'Profile Settings' },
+  { href: '/settings', icon: SettingsOutline, id: '5', title: 'Profile Settings' },
   {
     icon: LogOutOutline,
+    id: '6',
     onClick: () => {
       console.log('Log Out')
     },
