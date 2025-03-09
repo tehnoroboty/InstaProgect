@@ -25,6 +25,19 @@
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dropdownPost{
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+
+  &:disabled {
+    pointer-events: none;
+  }
+
+
+}
+
 .IconButton {
   all: unset;
 

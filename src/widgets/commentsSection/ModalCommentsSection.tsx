@@ -1,22 +1,18 @@
 'use client'
 
-import React, { useId, useState } from 'react'
+import { useState } from 'react'
 
-import {
-  CopyOutline,
-  MoreHorizontalOutline,
-  PersonRemoveOutline,
-} from '@/src/shared/assets/componentsIcons'
+import { CopyOutline, PersonRemoveOutline } from '@/src/shared/assets/componentsIcons'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
-import { Dropdown } from '@/src/shared/ui/dropdown/dropdown'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
+import { DropdownMenuMobile } from '@/src/widgets/header/headerMobile/dropdownMenu/DropdownMenu'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 
@@ -81,17 +77,13 @@ type Avatar = {
   width: number
 }
 
-export type ModalCommentsSectionProps = {
+type Props = {
   avatars: Avatar[]
   commentsData: CommentType[]
   post: Post
 }
 
-export const ModalCommentsSection = ({
-  avatars,
-  commentsData,
-  post,
-}: ModalCommentsSectionProps) => {
+export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<CommentType[]>(commentsData)
@@ -116,38 +108,16 @@ export const ModalCommentsSection = ({
       <div className={s.commentsHeader}>
         <UserAvatarName url={avatarOwner} username={userName} />
         <div className={s.postMenu}>
-          <Dropdown
-            list={[
-              {
-                icon: PersonRemoveOutline,
-                onClick: () => {
-                  console.log('Unfollow')
-                },
-                title: 'Unfollow',
-              },
-              {
-                icon: CopyOutline,
-                onClick: () => {
-                  console.log('Copy Link')
-                },
-                title: 'Copy Link',
-              },
-            ]}
-            renderItem={(item: any) => (
-              <DropdownItem
-                Icon={item.icon}
-                href={item.href}
-                key={useId()}
-                onClick={item.onClick}
-                title={item.title}
-              />
-            )}
-            trigger={
-              <button type={'button'}>
-                <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
-              </button>
-            }
-          />
+          {
+            /*<DropdownMenuMobile
+              items={[
+                { icon: PersonRemoveOutline, title: 'Unfollow' },
+                { icon: CopyOutline, title: 'Copy Link' },
+              ]}
+            />*/
+
+            <DropdownPost isFollowedBy={false} isOurPost />
+          }
         </div>
       </div>
 

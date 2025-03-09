@@ -15,7 +15,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const CarouselStory: Story = {
+export const SmallCarousel: Story = {
   args: {
     list: [
       { id: 'slide1', img: sliderImage },
@@ -23,5 +23,13 @@ export const CarouselStory: Story = {
       { id: 'slide1', img: sliderImage },
     ],
     renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
+    size: 'small',
+  },
+}
+
+export const LargeCarousel: Story = {
+  args: {
+    ...SmallCarousel.args,
+    size: 'large',
   },
 }
