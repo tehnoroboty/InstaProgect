@@ -38,7 +38,7 @@ export default function ModalPost(props: Props) {
         open={showDialog}
       >
         <div className={s.container}>
-          <Carousel list={list} renderItem={renderItem} />
+          <Carousel list={list} renderItem={renderItem} size={'large'} />
           <ModalCommentsSection avatars={avatars} commentsData={commentsData} post={post} />
         </div>
       </Dialog>

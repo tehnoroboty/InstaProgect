@@ -77,13 +77,17 @@ type Avatar = {
   width: number
 }
 
-type Props = {
+export type ModalCommentsSectionProps = {
   avatars: Avatar[]
   commentsData: CommentType[]
   post: Post
 }
 
-export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => {
+export const ModalCommentsSection = ({
+  avatars,
+  commentsData,
+  post,
+}: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<CommentType[]>(commentsData)
@@ -115,8 +119,8 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
                 { icon: CopyOutline, title: 'Copy Link' },
               ]}
             />*/
-
-            <DropdownPost isFollowedBy={false} isOurPost />
+            //TODO
+            // <DropdownPost isFollowedBy={false} isOurPost />
           }
         </div>
       </div>
