@@ -84,7 +84,7 @@ export const Register = () => {
   }
 
   return (
-    <div className={s.container}>
+    <>
       <Dialog
         className={s.modalEmailSent}
         modalTitle={'Email sent'}
@@ -175,6 +175,6 @@ export const Register = () => {
           </Button>
         </div>
       </Card>
-    </div>
+    </>
   )
 }

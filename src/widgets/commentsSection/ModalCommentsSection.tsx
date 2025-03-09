@@ -11,6 +11,7 @@ import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { DropdownMenuMobile } from '@/src/widgets/header/headerMobile/dropdownMenu/DropdownMenu'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
@@ -108,12 +109,14 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
         <UserAvatarName url={avatarOwner} username={userName} />
         <div className={s.postMenu}>
           {
-            <DropdownMenuMobile
+            /*<DropdownMenuMobile
               items={[
                 { icon: PersonRemoveOutline, title: 'Unfollow' },
                 { icon: CopyOutline, title: 'Copy Link' },
               ]}
-            />
+            />*/
+
+            <DropdownPost isFollowedBy={false} isOurPost />
           }
         </div>
       </div>

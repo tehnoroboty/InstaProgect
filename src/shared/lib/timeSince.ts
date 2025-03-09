@@ -20,8 +20,12 @@ export function timeSince(isoDate: string): string {
   const diffMonths = Math.floor(diffDays / 30)
   const diffYears = Math.floor(diffMonths / 12)
 
-  if (diffYears > 0) {
-    return `${diffYears} y ago`
+  if (diffYears >= 1) {
+    return creationDate.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
   }
   if (diffMonths > 0) {
     return `${diffMonths} mo ago`

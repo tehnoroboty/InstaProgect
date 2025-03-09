@@ -25,7 +25,7 @@ export const PostLikesBox = ({ avatars = [], className, likesCount }: Props) => 
 
   return (
     <div className={clsx(s.postLikes, className)}>
-      {avatars.length === 0 || likesCount === 0 ? (
+      {avatars.length === 0 && (!likesCount || likesCount === 0) ? (
         <Typography as={'div'} className={s.likeCount}>
           {'Be the first to like this'}
         </Typography>
@@ -44,7 +44,7 @@ export const PostLikesBox = ({ avatars = [], className, likesCount }: Props) => 
           <div className={s.likeCount}>
             <Typography as={'span'}>{likesCount}</Typography>
             <Typography as={'span'} option={'bold_text14'}>
-              {` "Like"`}
+              {likesCount && likesCount > 1 ? ` "Likes"` : ` "Like"`}
             </Typography>
           </div>
         </>
