@@ -92,7 +92,6 @@
   width: 16px;
   height: 16px;
   padding: 0;
-  background-color: transparent;
 }
 
 .heartIcon {
@@ -103,7 +102,7 @@
 
   & path {
     fill: var(--light-100);
-    transition: fill 0.2s ease;
+    transition: opacity 0.3s ease;
   }
 }
 

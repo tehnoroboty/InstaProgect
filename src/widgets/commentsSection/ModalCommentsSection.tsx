@@ -101,13 +101,6 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
     )
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, commentId: number) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleLikeComment(commentId)
-    }
-  }
-
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
@@ -145,7 +138,7 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
                 <Button
                   className={s.iconButton}
                   onClick={() => handleLikeComment(el.id)}
-                  onKeyDown={e => handleKeyDown(e, el.id)}
+                  title={'Unlike'}
                   variant={'transparent'}
                 >
                   <Heart className={clsx(s.heartIcon, s.red)} />
@@ -154,7 +147,7 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
                 <Button
                   className={s.iconButton}
                   onClick={() => handleLikeComment(el.id)}
-                  onKeyDown={e => handleKeyDown(e, el.id)}
+                  title={'Like'}
                   variant={'transparent'}
                 >
                   <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
