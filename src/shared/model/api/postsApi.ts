@@ -1,21 +1,15 @@
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { GetMyPostsArgs, GetMyPostsResponse, ImagesType, RequestPostsType, ResponsePostsType } from '@/src/shared/model/api/types'
+import {
+  GetMyPostsArgs,
+  GetMyPostsResponse,
+  Image,
+  RequestPostsType,
+  ResponsePostsType,
+} from '@/src/shared/model/api/types'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
-      query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
-        method: 'GET',
-        params: {
-          pageNumber,
-          pageSize,
-          sortBy,
-          sortDirection,
-        },
-        url: `/posts/${userName}`,
-          }),
-        }),
-    createImageForPost: builder.mutation<{ images: ImagesType }, { file: File }>({
+    createImageForPost: builder.mutation<{ images: Image }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
 
@@ -35,8 +29,20 @@ export const postsApi = baseApi.injectEndpoints({
         url: 'posts',
       }),
     }),
+    getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
+      query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
+        method: 'GET',
+        params: {
+          pageNumber,
+          pageSize,
+          sortBy,
+          sortDirection,
+        },
+        url: `/posts/${userName}`,
+      }),
+    }),
   }),
 })
 
-export const { useGetMyPostsQuery, useCreateImageForPostMutation, useCreateNewPostMutation  } = postsApi
-
+export const { useCreateImageForPostMutation, useCreateNewPostMutation, useGetMyPostsQuery } =
+  postsApi

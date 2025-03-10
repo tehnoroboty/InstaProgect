@@ -102,7 +102,7 @@ type Owner = {
   lastName?: any
 }
 
-type Image = {
+export type Image = {
   createdAt: string
   fileSize: number
   height: number
