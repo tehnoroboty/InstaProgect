@@ -64,7 +64,52 @@ export type MeResponse = {
   userName: string
 }
 
-// Posts types
+export type SortDirection = 'asc' | 'desc'
+
+export type GetMyPostsArgs = {
+  pageNumber?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  userName: string
+}
+
+export type GetMyPostsResponse = {
+  items: Item[]
+  page: number
+  pageSize: number
+  pagesCount: number
+  totalCount: number
+}
+
+export type Item = {
+  avatarWhoLikes: any[]
+  createdAt: string
+  description: string
+  id: number
+  images: Image[]
+  isLiked: boolean
+  likesCount: number
+  location?: any
+  owner: Owner
+  ownerId: number
+  updatedAt: string
+  userName: string
+}
+
+type Owner = {
+  firstName?: any
+  lastName?: any
+}
+
+type Image = {
+  createdAt: string
+  fileSize: number
+  height: number
+  uploadId: string
+  url: string
+  width: number
+}
 
 export type RequestPostsType = {
   childrenMetadata: { uploadId: string }[]
@@ -77,26 +122,12 @@ export type ResponsePostsType = {
   createdAt: string
   description: string
   id: number
-  images: ImagesType[]
+  images: Image[]
   isLiked: boolean
   likesCount: number
   location: string
-  owner: OnwerType
+  owner: Owner
   ownerId: number
   updatedAt: string
   userName: string
-}
-
-export type OnwerType = {
-  firstName: string
-  lastName: string
-}
-
-export type ImagesType = {
-  createdAt: string
-  fileSize: number
-  height: number
-  uploadId: string
-  url: string
-  width: number
 }
