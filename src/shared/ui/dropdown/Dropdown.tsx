@@ -2,7 +2,6 @@
 import { type ElementType, KeyboardEvent, type ReactNode, useState } from 'react'
 
 import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
 

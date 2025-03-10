@@ -12,7 +12,6 @@ import s from './carousel.module.scss'
 
 import { Button } from '../button/Button'
 
-// Обновите тип CarouselItem
 type CarouselItem = { url: StaticImageData | string }
 
 type Props<T extends CarouselItem> = {
