@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
+import Image, { StaticImageData } from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 
@@ -11,15 +12,17 @@ import s from './carousel.module.scss'
 
 import { Button } from '../button/Button'
 
-type Props<T> = {
+type CarouselItem = { id: string; img: StaticImageData }
+type Props<T extends CarouselItem> = {
   disableSwipe?: boolean
   list: T[]
-  renderItem: (item: T) => ReactNode
-  size: 'large' | 'small'
+  onChange?: (index: number) => void
+  renderItem?: (item: T, index: string) => ReactNode
+  size?: 'large' | 'small'
 }
 
-export const Carousel = <T,>(props: Props<T>) => {
-  const { disableSwipe, list, renderItem, size } = props
+export const Carousel = <T extends CarouselItem>(props: Props<T>) => {
+  const { disableSwipe, list, onChange, renderItem, size = 'large' } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
   const swiperRef = useRef<SwiperRef | null>(null)
@@ -43,6 +46,11 @@ export const Carousel = <T,>(props: Props<T>) => {
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
       }}
+      onSlideChange={swiper => {
+        if (onChange) {
+          onChange(swiper.activeIndex)
+        }
+      }}
       pagination={{
         bulletActiveClass: `${s.paginationActive}`,
         clickable: true,
@@ -50,9 +58,9 @@ export const Carousel = <T,>(props: Props<T>) => {
       }}
       ref={swiperRef}
     >
-      {list.map((item, index) => (
-        <SwiperSlide className={s.slide} key={index}>
-          {renderItem(item)}
+      {list.map(item => (
+        <SwiperSlide className={s.slide} key={item.id}>
+          {renderItem ? renderItem(item, item.id) : <Image alt={'image'} src={item.img} />}
         </SwiperSlide>
       ))}
       {hasMoreThanOneItem && (

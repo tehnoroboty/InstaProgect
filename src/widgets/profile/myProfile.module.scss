@@ -1,14 +1,14 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: clamp(10px,15vh,40px);
+  gap: clamp(10px, 15vh, 40px);
   height: fit-content;
 
 }
 
 .profileContainer {
   display: flex;
-  gap: clamp(15px,20vw,40px);
+  gap: clamp(15px, 20vw, 40px);
   align-items: center;
 }
 
@@ -41,7 +41,7 @@
 
 .followersStats {
   display: flex;
-  gap: clamp(10px, 10vh,50px)
+  gap: clamp(10px, 10vh, 50px)
 }
 
 .profileDescription {
@@ -52,4 +52,10 @@
 .followersStatItem {
   display: flex;
   flex-direction: column;
+}
+
+.buttonsBlock {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
 }

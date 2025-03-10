@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import s from './dialog.module.scss'
 
 export type DialogProps = {
+  closeClassName?: string
   extraHeaderContent?: ReactNode
   isSimple?: boolean
   modalTitle?: string
@@ -19,6 +20,7 @@ export type DialogProps = {
 export const Dialog = ({
   children,
   className,
+  closeClassName,
   extraHeaderContent,
   isSimple = false,
   modalTitle,
@@ -46,7 +48,13 @@ export const Dialog = ({
               {!modalTitle && (
                 <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />
               )}
-              <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
+              <Close
+                className={clsx(
+                  s.IconButton,
+                  modalTitle ? s.IconButtonIn : s.IconButtonOut,
+                  closeClassName
+                )}
+              >
                 <CloseOutline className={s.icon} />
               </Close>
               {modalTitle && <hr className={s.lineHr} />}
