@@ -15,19 +15,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 23px 11px 24px;
-  border-bottom: 1px solid var(--dark-100);
 }
 
 .commentsBody {
+  overflow: auto;
+  max-height: 336px;
   padding: 19px 23px 8px 24px;
-  border-bottom: 1px solid var(--dark-100);
 }
 
 .postActions {
   padding: 11px 23px 7px 24px;
-  border-bottom: 1px solid var(--dark-100);
 }
 
 .interactionBar {
