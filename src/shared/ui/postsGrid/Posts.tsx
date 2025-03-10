@@ -1,26 +1,24 @@
 'use client'
 import React from 'react'
 
-import Image from 'next/image'
-
 import s from './posts.module.scss'
 
-type Props = {
-  posts: any
+type Props<T> = {
+  posts: T[]
+  renderItem: (item: T, index?: number) => React.ReactNode
 }
 
-export const Posts = ({ posts }: Props) => {
+export const Posts = <T,>({ posts, renderItem }: Props<T>) => {
   const onClickPostHandler = (post: any) => {
     console.log(post)
   }
 
   return (
     <div className={s.postsGrid}>
-      {p.map((post, index) => {
+      {posts.map((post, index) => {
         return (
           <div className={s.image} key={index} onClick={() => onClickPostHandler(post)}>
-            {/* <Image alt={''} height={300} src={'post.url'}
-             width={300} />*/}
+            {renderItem(post)}
           </div>
         )
       })}
