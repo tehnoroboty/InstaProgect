@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ReactNode, useState } from 'react'
 
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -6,6 +8,7 @@ import {
   ModalCommentsSection,
   ModalCommentsSectionProps,
 } from '@/src/widgets/commentsSection/ModalCommentsSection'
+import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { StaticImageData } from 'next/image'
 
 import s from './modalPost.module.scss'
@@ -24,9 +27,18 @@ export default function ModalPost(props: Props) {
   const { avatars, commentsData, list, post, renderItem } = props
 
   const [showDialog, setShowDialog] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
 
   const toggleModalHandler = () => {
     setShowDialog(!showDialog)
+  }
+
+  const handleEditPost = () => {
+    setIsEditing(true)
+  }
+
+  if (isEditing) {
+    return <EditPost />
   }
 
   return (
@@ -35,6 +47,7 @@ export default function ModalPost(props: Props) {
         className={s.dialog}
         closeClassName={s.closeClassName}
         onClose={toggleModalHandler}
+        onEdit={handleEditPost}
         open={showDialog}
       >
         <div className={s.container}>

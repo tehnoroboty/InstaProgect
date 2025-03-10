@@ -22,9 +22,10 @@ type Props = {
   className?: string
   isFollowedBy: boolean
   isOurPost: boolean
+  onEdit?: () => void
 }
 
-export const DropdownPost = ({ className, isFollowedBy, isOurPost }: Props) => {
+export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () => {} }: Props) => {
   const renderMenuItem = (item: Item) => (
     <DropdownItem Icon={item.icon} key={item.id} onClick={item.onClick} title={item.title} />
   )
@@ -33,9 +34,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost }: Props) => {
     {
       icon: Edit2Outline,
       id: 1,
-      onClick: () => {
-        console.log('edit post')
-      },
+      onClick: onEdit,
       title: 'Edit Post',
     },
     {
