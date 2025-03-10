@@ -1,8 +1,8 @@
 'use client'
-import React, { KeyboardEvent, useState } from 'react'
+import { type ElementType, KeyboardEvent, type ReactNode, useState } from 'react'
 
 import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
+import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
 
@@ -10,7 +10,7 @@ import s from './dropdown.module.scss'
 
 export type DropdownMenuItems = {
   href?: string
-  icon: React.ElementType
+  icon: ElementType
   id: string
   onClick?: () => void
   title: string
@@ -18,8 +18,8 @@ export type DropdownMenuItems = {
 
 type Props<T extends DropdownMenuItems> = {
   list: T[]
-  renderItem?: (item: T, index?: number) => React.ReactNode
-  trigger?: React.ReactNode
+  renderItem?: (item: T, index?: number) => ReactNode
+  trigger?: ReactNode
 }
 
 export const Dropdown = <T extends DropdownMenuItems>(props: Props<T>) => {

@@ -7,7 +7,7 @@ import {
   PersonRemoveOutline,
   TrashOutline,
 } from '@/src/shared/assets/componentsIcons'
-import { Dropdown, DropdownMenuItems } from '@/src/shared/ui/dropdown/dropdown'
+import { Dropdown, DropdownMenuItems } from '@/src/shared/ui/dropdown/Dropdown'
 
 type Props = {
   className?: string

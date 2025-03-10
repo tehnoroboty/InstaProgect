@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import type { ElementType, ReactNode } from 'react'
 
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
@@ -11,10 +11,10 @@ import s from './dropdownItem.module.scss'
 import { Button } from '../../button/Button'
 
 type Props = {
-  Icon: React.ElementType
+  Icon: ElementType
   href?: string
   onClick?: () => void
-  title: React.ReactNode | string
+  title: ReactNode | string
 }
 
 export const DropdownItem = ({ Icon, href, onClick, title }: Props) => {
