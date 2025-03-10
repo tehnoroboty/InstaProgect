@@ -17,23 +17,15 @@ type Story = StoryObj<typeof meta>
 
 export const SmallCarousel: Story = {
   args: {
-    list: [
-      { id: 'slide1', img: sliderImage },
-      { id: 'slide2', img: sliderImage },
-      { id: 'slide3', img: sliderImage },
-    ],
-    renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
+    list: [{ url: sliderImage }, { url: sliderImage }, { url: sliderImage }],
+    renderItem: (item: any) => <Image alt={'image'} height={100} src={item.url} width={100} />,
     size: 'small',
   },
 }
 
 export const CarouselWithoutRenderItem: Story = {
   args: {
-    list: [
-      { id: 'slide1', img: sliderImage },
-      { id: 'slide2', img: sliderImage },
-      { id: 'slide3', img: sliderImage },
-    ],
+    list: [{ url: sliderImage }, { url: sliderImage }, { url: sliderImage }],
   },
 }
 

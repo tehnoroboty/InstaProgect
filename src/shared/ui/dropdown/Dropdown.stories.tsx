@@ -11,9 +11,9 @@ import {
   TrashOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
+import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
 
-import { Dropdown, DropdownMenuItems } from './dropdown'
+import { Dropdown, DropdownMenuItems } from './Dropdown'
 
 const meta = {
   argTypes: {},

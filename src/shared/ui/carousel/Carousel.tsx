@@ -12,7 +12,9 @@ import s from './carousel.module.scss'
 
 import { Button } from '../button/Button'
 
-type CarouselItem = { id: string; img: StaticImageData }
+// Обновите тип CarouselItem
+type CarouselItem = { url: StaticImageData | string }
+
 type Props<T extends CarouselItem> = {
   disableSwipe?: boolean
   list: T[]
@@ -58,11 +60,21 @@ export const Carousel = <T extends CarouselItem>(props: Props<T>) => {
       }}
       ref={swiperRef}
     >
-      {list.map(item => (
-        <SwiperSlide className={s.slide} key={item.id}>
-          {renderItem ? renderItem(item, item.id) : <Image alt={'image'} src={item.img} />}
-        </SwiperSlide>
-      ))}
+      {list.map((item: T, index: number) => {
+        const src = typeof item.url === 'string' ? item.url : item.url.src
+
+        return (
+          <SwiperSlide className={s.slide} key={index}>
+            {renderItem ? (
+              renderItem(item, index.toString())
+            ) : (
+              <>
+                <Image alt={'image'} height={100} src={src} width={100} />
+              </>
+            )}
+          </SwiperSlide>
+        )
+      })}
       {hasMoreThanOneItem && (
         <>
           <Button className={s.buttonPrev} variant={'transparent'}></Button>
