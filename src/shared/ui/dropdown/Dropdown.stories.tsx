@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import React, { useId } from 'react'
+import { useId } from 'react'
 
 import {
   BookmarkOutline,
