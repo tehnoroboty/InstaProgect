@@ -7,7 +7,7 @@ import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { Button } from '@/src/shared/ui/button/Button'
-import { Arousel } from '@/src/shared/ui/carousel/Carousel'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
@@ -109,7 +109,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
 
         <div className={s.contentModal}>
           {editedPhotos.length > 1 ? (
-            <Arousel
+            <Carousel
               list={editedPhotos}
               renderItem={photo => {
                 const index = editedPhotos.indexOf(photo)
@@ -133,6 +133,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
                   />
                 )
               }}
+              size={'large'}
             />
           ) : (
             <PinturaEditor
