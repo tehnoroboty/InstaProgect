@@ -19,11 +19,21 @@ export const SmallCarousel: Story = {
   args: {
     list: [
       { id: 'slide1', img: sliderImage },
-      { id: 'slide1', img: sliderImage },
-      { id: 'slide1', img: sliderImage },
+      { id: 'slide2', img: sliderImage },
+      { id: 'slide3', img: sliderImage },
     ],
     renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
     size: 'small',
+  },
+}
+
+export const CarouselWithoutRenderItem: Story = {
+  args: {
+    list: [
+      { id: 'slide1', img: sliderImage },
+      { id: 'slide2', img: sliderImage },
+      { id: 'slide3', img: sliderImage },
+    ],
   },
 }
 

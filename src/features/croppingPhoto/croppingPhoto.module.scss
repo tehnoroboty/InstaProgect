@@ -17,8 +17,7 @@
 .contentModal {
   position: relative;
   width: 100%;
-  height: fit-content;
-  min-height: 503px;
+  height: 70vh;
 }
 
 .buttonBack {
@@ -45,7 +44,7 @@
   & .media {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
 
   }
 

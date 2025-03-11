@@ -39,7 +39,11 @@ export const ItemWrapper = ({
   const route = useRouter()
 
   const onClickHandler = () => {
-    setIsModalOpen(true)
+    if (onClick) {
+      onClick()
+    } else {
+      setIsModalOpen(true)
+    }
   }
 
   const onLogoutConfirm = async () => {

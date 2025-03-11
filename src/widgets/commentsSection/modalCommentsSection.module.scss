@@ -86,23 +86,33 @@
   }
 }
 
+.iconButton {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+}
+
 .heartIcon {
   cursor: pointer;
   align-self: center;
+  width: 16px;
+  height: 16px;
 
   & path {
     fill: var(--light-100);
+    transition: opacity 0.3s ease;
   }
-}
-
-.commentHeartIcon {
-  width: 16px;
-  height: 16px;
 }
 
 .red {
   & path {
     fill: var(--danger-500);
+  }
+}
+
+.heartOutlineIcon {
+  &:hover path {
+    opacity: 0.5;
   }
 }
 

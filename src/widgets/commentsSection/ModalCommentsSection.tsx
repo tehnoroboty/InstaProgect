@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { KeyboardEvent, useState } from 'react'
 
-import { CopyOutline, PersonRemoveOutline } from '@/src/shared/assets/componentsIcons'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
@@ -12,7 +11,6 @@ import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
-import { DropdownMenuMobile } from '@/src/widgets/header/headerMobile/dropdownMenu/DropdownMenu'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 
@@ -77,17 +75,13 @@ type Avatar = {
   width: number
 }
 
-export type ModalCommentsSectionProps = {
+type Props = {
   avatars: Avatar[]
   commentsData: CommentType[]
   post: Post
 }
 
-export const ModalCommentsSection = ({
-  avatars,
-  commentsData,
-  post,
-}: ModalCommentsSectionProps) => {
+export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<CommentType[]>(commentsData)
@@ -111,18 +105,7 @@ export const ModalCommentsSection = ({
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <UserAvatarName url={avatarOwner} username={userName} />
-        <div className={s.postMenu}>
-          {
-            /*<DropdownMenuMobile
-              items={[
-                { icon: PersonRemoveOutline, title: 'Unfollow' },
-                { icon: CopyOutline, title: 'Copy Link' },
-              ]}
-            />*/
-            //TODO
-            // <DropdownPost isFollowedBy={false} isOurPost />
-          }
-        </div>
+        <div className={s.postMenu}>{<DropdownPost isFollowedBy={false} isOurPost />}</div>
       </div>
 
       <div className={s.commentsBody}>
@@ -152,17 +135,23 @@ export const ModalCommentsSection = ({
             </div>
             <div className={s.heartIconWrapper}>
               {el.isLiked ? (
-                <Heart
-                  className={clsx(s.heartIcon, s.commentHeartIcon, s.red)}
+                <Button
+                  className={s.iconButton}
                   onClick={() => handleLikeComment(el.id)}
-                  tabIndex={0}
-                />
+                  title={'Unlike'}
+                  variant={'transparent'}
+                >
+                  <Heart className={clsx(s.heartIcon, s.red)} />
+                </Button>
               ) : (
-                <HeartOutline
-                  className={clsx(s.heartIcon, s.commentHeartIcon)}
+                <Button
+                  className={s.iconButton}
                   onClick={() => handleLikeComment(el.id)}
-                  tabIndex={0}
-                />
+                  title={'Like'}
+                  variant={'transparent'}
+                >
+                  <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
+                </Button>
               )}
             </div>
           </div>

@@ -3,20 +3,11 @@ import React from 'react'
 import {
   CopyOutline,
   Edit2Outline,
-  MoreHorizontalOutline,
   PersonAddOutline,
   PersonRemoveOutline,
   TrashOutline,
 } from '@/src/shared/assets/componentsIcons'
-import { Dropdown } from '@/src/shared/ui/dropdown/dropdown'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
-
-type Item = {
-  icon: React.ComponentType
-  id: number
-  onClick: () => void
-  title: string
-}
+import { Dropdown, DropdownMenuItems } from '@/src/shared/ui/dropdown/Dropdown'
 
 type Props = {
   className?: string
@@ -26,30 +17,26 @@ type Props = {
 }
 
 export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () => {} }: Props) => {
-  const renderMenuItem = (item: Item) => (
-    <DropdownItem Icon={item.icon} key={item.id} onClick={item.onClick} title={item.title} />
-  )
-
-  const ourPostActions: Item[] = [
+  const ourPostActions: DropdownMenuItems[] = [
     {
       icon: Edit2Outline,
-      id: 1,
+      id: '1',
       onClick: onEdit,
       title: 'Edit Post',
     },
     {
       icon: TrashOutline,
-      id: 2,
+      id: '2',
       onClick: () => {
         console.log('delete post')
       },
       title: 'Delete Post',
     },
   ]
-  const ourFolloweeActions: Item[] = [
+  const ourFolloweeActions: DropdownMenuItems[] = [
     {
       icon: PersonRemoveOutline,
-      id: 1,
+      id: '1',
       onClick: () => {
         console.log('unfollow user')
       },
@@ -57,17 +44,17 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () =
     },
     {
       icon: CopyOutline,
-      id: 2,
+      id: '2',
       onClick: () => {
         console.log('Copy link')
       },
       title: 'Copy Link',
     },
   ] //пользователь, которого мы фолловим
-  const nonFolloweeActions: Item[] = [
+  const nonFolloweeActions: DropdownMenuItems[] = [
     {
       icon: PersonAddOutline,
-      id: 1,
+      id: '1',
       onClick: () => {
         console.log('follow user')
       },
@@ -75,7 +62,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () =
     },
     {
       icon: CopyOutline,
-      id: 2,
+      id: '2',
       onClick: () => {
         console.log('Copy link')
       },
@@ -84,7 +71,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () =
   ] // пользователь, которого НЕ фолловим
 
   // eslint-disable-next-line no-nested-ternary
-  const menuItems: Item[] = isOurPost
+  const menuItems: DropdownMenuItems[] = isOurPost
     ? ourPostActions
     : isFollowedBy
       ? ourFolloweeActions
@@ -92,15 +79,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () =
 
   return (
     <div className={className}>
-      <Dropdown
-        list={menuItems}
-        renderItem={renderMenuItem}
-        trigger={
-          <button type={'button'}>
-            <MoreHorizontalOutline height={24} viewBox={`1 3 20 20`} />
-          </button>
-        }
-      />
+      <Dropdown list={menuItems} />
     </div>
   )
 }
