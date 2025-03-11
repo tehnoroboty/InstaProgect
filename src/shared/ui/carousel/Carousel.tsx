@@ -12,7 +12,7 @@ import s from './carousel.module.scss'
 
 import { Button } from '../button/Button'
 
-type CarouselItem = { id: string; img: StaticImageData }
+type CarouselItem = { id: number | string; src: StaticImageData | string }
 type Props<T extends CarouselItem> = {
   disableSwipe?: boolean
   list: T[]
@@ -58,11 +58,25 @@ export const Carousel = <T extends CarouselItem>(props: Props<T>) => {
       }}
       ref={swiperRef}
     >
-      {list.map(item => (
-        <SwiperSlide className={s.slide} key={item.id}>
-          {renderItem ? renderItem(item, item.id) : <Image alt={'image'} src={item.img} />}
-        </SwiperSlide>
-      ))}
+      {list.map(item => {
+        const widthSrc = size === 'large' ? 490 : 234
+        const heightSrc = size === 'small' ? 503 : 228
+
+        return (
+          <SwiperSlide className={s.slide} key={item.id}>
+            {renderItem ? (
+              renderItem(item, item.id.toString())
+            ) : (
+              <Image
+                alt={'image'}
+                height={typeof item.src === 'string' ? heightSrc : item.src.height}
+                src={typeof item.src === 'string' ? item.src : item.src.src}
+                width={typeof item.src === 'string' ? widthSrc : item.src.width}
+              />
+            )}
+          </SwiperSlide>
+        )
+      })}
       {hasMoreThanOneItem && (
         <>
           <Button className={s.buttonPrev} variant={'transparent'}></Button>

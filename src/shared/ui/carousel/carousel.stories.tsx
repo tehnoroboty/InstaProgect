@@ -18,28 +18,37 @@ type Story = StoryObj<typeof meta>
 export const SmallCarousel: Story = {
   args: {
     list: [
-      { id: 'slide1', img: sliderImage },
-      { id: 'slide2', img: sliderImage },
-      { id: 'slide3', img: sliderImage },
+      { id: 'slide1', src: sliderImage },
+      { id: 'slide2', src: sliderImage },
+      { id: 'slide3', src: sliderImage },
     ],
-    renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
+    renderItem: (item: any) => (
+      <Image alt={'image'} height={item.src.height} src={item.src.src} width={item.src.width} />
+    ),
     size: 'small',
+  },
+}
+
+export const LargeCarousel: Story = {
+  args: {
+    list: [
+      { id: 'slide1', src: sliderImage },
+      { id: 'slide2', src: sliderImage },
+      { id: 'slide3', src: sliderImage },
+    ],
+    renderItem: (item: any) => (
+      <Image alt={'image'} height={item.src.height} src={item.src.src} width={item.src.width} />
+    ),
+    size: 'large',
   },
 }
 
 export const CarouselWithoutRenderItem: Story = {
   args: {
     list: [
-      { id: 'slide1', img: sliderImage },
-      { id: 'slide2', img: sliderImage },
-      { id: 'slide3', img: sliderImage },
+      { id: 'slide1', src: sliderImage },
+      { id: 'slide2', src: sliderImage },
+      { id: 'slide3', src: sliderImage },
     ],
-  },
-}
-
-export const LargeCarousel: Story = {
-  args: {
-    ...SmallCarousel.args,
-    size: 'large',
   },
 }
