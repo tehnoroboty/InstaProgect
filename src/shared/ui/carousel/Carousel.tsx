@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
-import Image, { StaticImageData } from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 
@@ -12,16 +11,15 @@ import s from './carousel.module.scss'
 
 import { Button } from '../button/Button'
 
-type CarouselItem = { id: number | string; src: StaticImageData | string }
-type Props<T extends CarouselItem> = {
+type Props<T> = {
   disableSwipe?: boolean
   list: T[]
   onChange?: (index: number) => void
-  renderItem?: (item: T, index: string) => ReactNode
+  renderItem: (item: T, index: number) => ReactNode
   size?: 'large' | 'small'
 }
 
-export const Carousel = <T extends CarouselItem>(props: Props<T>) => {
+export const Carousel = <T,>(props: Props<T>) => {
   const { disableSwipe, list, onChange, renderItem, size = 'large' } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
@@ -58,25 +56,9 @@ export const Carousel = <T extends CarouselItem>(props: Props<T>) => {
       }}
       ref={swiperRef}
     >
-      {list.map(item => {
-        const widthSrc = size === 'large' ? 490 : 234
-        const heightSrc = size === 'small' ? 503 : 228
-
-        return (
-          <SwiperSlide className={s.slide} key={item.id}>
-            {renderItem ? (
-              renderItem(item, item.id.toString())
-            ) : (
-              <Image
-                alt={'image'}
-                height={typeof item.src === 'string' ? heightSrc : item.src.height}
-                src={typeof item.src === 'string' ? item.src : item.src.src}
-                width={typeof item.src === 'string' ? widthSrc : item.src.width}
-              />
-            )}
-          </SwiperSlide>
-        )
-      })}
+      {list.map((item, index) => (
+        <SwiperSlide key={index}>{renderItem(item, index)}</SwiperSlide>
+      ))}
       {hasMoreThanOneItem && (
         <>
           <Button className={s.buttonPrev} variant={'transparent'}></Button>
