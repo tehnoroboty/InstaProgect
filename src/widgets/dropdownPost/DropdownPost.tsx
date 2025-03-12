@@ -16,7 +16,7 @@ type Props = {
   onEdit?: () => void
 }
 
-export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit = () => {} }: Props) => {
+export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit }: Props) => {
   const ourPostActions: DropdownMenuItems[] = [
     {
       icon: Edit2Outline,

@@ -75,6 +75,8 @@ type Avatar = {
   width: number
 }
 
+export type ModalCommentsSectionProps = Props
+
 type Props = {
   avatars: Avatar[]
   commentsData: CommentType[]
