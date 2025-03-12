@@ -22,6 +22,7 @@ import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
 import { useRouter } from 'next/navigation'
 
 import s from './headerMobile.module.scss'
+import Link from 'next/link'
 
 type Props = {
   isLoggedIn?: boolean
@@ -87,9 +88,11 @@ export const HeaderMobile = (props: Props) => {
 
   return (
     <div className={s.container}>
-      <Typography as={'h1'} option={'Large'}>
-        {title}
-      </Typography>
+      <Link href={AuthRoutes.HOME}>
+        <Typography as={'h1'} option={'Large'}>
+          {title}
+        </Typography>
+      </Link>
       <div className={s.headerActions}>
         <SelectLanguage />
         {isLoggedIn && (

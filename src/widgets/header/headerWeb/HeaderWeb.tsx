@@ -21,9 +21,11 @@ export const HeaderWeb = (props: Props) => {
 
   return (
     <div className={s.container}>
-      <Typography as={'h1'} option={'Large'}>
-        {title}
-      </Typography>
+      <Link href={AuthRoutes.HOME}>
+        <Typography as={'h1'} option={'Large'}>
+          {title}
+        </Typography>
+      </Link>
       <div className={s.headerActions}>
         {isLoggedIn && hasNotification && <DropdownNotification />}
         <SelectLanguage />
