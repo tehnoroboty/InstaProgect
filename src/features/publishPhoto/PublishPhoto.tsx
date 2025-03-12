@@ -7,7 +7,6 @@ import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
-import { useLazyMeQuery, useMeQuery } from '@/src/shared/model/api/authApi'
 import {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
@@ -24,7 +23,7 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import { Title } from '@radix-ui/react-dialog'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
 
