@@ -7,27 +7,25 @@ import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/mod
 import { Item, SortDirection } from '@/src/shared/model/api/types'
 import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
+import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-import { Button } from '../../shared/ui/button/Button'
-
 const PAGESIZE = 6
 const SORTBY = 'createdAt'
 const SORTDIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, setPageNumber] = useState<number>(1)
   const [allPosts, setAllPosts] = useState<Item[]>([])
   const { data } = useMeQuery()
   const userName = data?.userName
   const userId = data?.userId
-  const params: { userId: string } = useParams()
+  const params = useParams() as { userId: string }
 
-  /*
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,
@@ -38,7 +36,6 @@ export const Profile = () => {
     },
     { skip: !userName }
   )
-*/
 
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery({
     // endCursorPostId: '456', // Или undefined для первой страницы
@@ -49,7 +46,7 @@ export const Profile = () => {
   })
 
   // console.log(publicPosts)
-  console.log(allPosts)
+  // console.log(allPosts)
 
   const { data: publicUserProfile } = useGetPublicUserProfileQuery({
     profileId: Number(params.userId),
