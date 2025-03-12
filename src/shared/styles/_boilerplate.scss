@@ -40,6 +40,7 @@ body {
   scrollbar-color: var(--dark-300) transparent;
   scrollbar-width: thin;
 
+
   margin: 0;
   padding: 0;
 
@@ -96,13 +97,13 @@ body {
     & .accountWrapper {
       display: flex;
       flex-grow: 1;
+      height: 100%;
     }
   }
 
   @media (width <= 768px) {
     .accountWrapper {
       flex-direction: column-reverse;
-      height: 100%;
     }
   }
 }

@@ -10,6 +10,7 @@ type ImageType = {
 }
 
 type PostType = {
+  id: number
   images: ImageType[]
 }
 
@@ -24,9 +25,13 @@ export const Posts = ({ posts }: Props) => {
 
   return (
     <div className={s.postsGrid}>
-      {posts.map((post, index) => {
+      {posts.map(post => {
+        if (post.images.length < 1) {
+          return <></>
+        }
+
         return (
-          <div className={s.image} key={index} onClick={() => onClickPostHandler(post)}>
+          <div className={s.image} key={post.id} onClick={() => onClickPostHandler(post)}>
             <Image alt={'Post image'} height={300} src={post.images[0].url} width={300} />
           </div>
         )

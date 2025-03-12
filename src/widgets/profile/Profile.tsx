@@ -6,10 +6,8 @@ import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
 import { Item, SortDirection } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
-import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import Image from 'next/image'
 
 import s from './myProfile.module.scss'
 
@@ -43,7 +41,7 @@ export const Profile = () => {
   }, [posts])
 
   useEffect(() => {
-    const scrollEl = document.querySelector('section')
+    const scrollEl = document.querySelector('main')
 
     if (scrollEl) {
       const handleScroll = () => {
@@ -64,7 +62,7 @@ export const Profile = () => {
         scrollEl.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [posts, isFetching])
+  }, [posts, isFetching, pageNumber])
 
   const onClickHandler = () => {}
 
@@ -130,16 +128,16 @@ export const Profile = () => {
                 </>
               )}
 */}
-              {true && (
-                <>
-                  <Button onClick={onClickHandler} type={'button'} variant={'bordered'}>
-                    {'Unfollow'}
-                  </Button>
-                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                    {'Send Message'}
-                  </Button>
-                </>
-              )}
+              {/*{true && (*/}
+              {/*  <>*/}
+              {/*    <Button onClick={onClickHandler} type={'button'} variant={'bordered'}>*/}
+              {/*      {'Unfollow'}*/}
+              {/*    </Button>*/}
+              {/*    <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>*/}
+              {/*      {'Send Message'}*/}
+              {/*    </Button>*/}
+              {/*  </>*/}
+              {/*)}*/}
             </div>
           </div>
           <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
@@ -147,16 +145,7 @@ export const Profile = () => {
           </Typography>
         </div>
       </div>
-      {allPosts.length > 0 && (
-        <Posts
-          posts={allPosts}
-          renderItem={post => {
-            if (post.images.length !== 0) {
-              return <Image alt={'Post image'} height={300} src={post.images[0].url} width={300} />
-            }
-          }}
-        />
-      )}
+      {allPosts.length > 0 && <Posts posts={allPosts} />}
       {isFetching && <div>Loader...</div>}
     </div>
   )
