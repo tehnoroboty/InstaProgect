@@ -8,9 +8,11 @@ import { Item, SortDirection } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { useParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
+import { Button } from '../../shared/ui/button/Button'
 import { profileData } from './data'
 
 const PAGESIZE = 6
@@ -22,6 +24,8 @@ export const Profile = () => {
   const [allPosts, setAllPosts] = useState<Item[]>([])
   const { data } = useMeQuery()
   const userName = data?.userName
+  const userId = data?.userId
+  const params: { userId: string } = useParams()
 
   const { data: posts, isFetching } = useGetMyPostsQuery(
     {
@@ -109,35 +113,25 @@ export const Profile = () => {
               </div>
             </div>
             <div className={s.buttonsBlock}>
-              {/*
-              {false && (
+              {+params.userId === userId && (
                 <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
                   {'Profile Settings'}
                 </Button>
               )}
-*/}
-              {/*
-              {true && (
+
+              {+params.userId !== userId && (
                 <>
                   <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
                     {'Follow'}
+                  </Button>
+                  <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
+                    {'unFollow'}
                   </Button>
                   <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
                     {'Send Message'}
                   </Button>
                 </>
               )}
-*/}
-              {/*{true && (*/}
-              {/*  <>*/}
-              {/*    <Button onClick={onClickHandler} type={'button'} variant={'bordered'}>*/}
-              {/*      {'Unfollow'}*/}
-              {/*    </Button>*/}
-              {/*    <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>*/}
-              {/*      {'Send Message'}*/}
-              {/*    </Button>*/}
-              {/*  </>*/}
-              {/*)}*/}
             </div>
           </div>
           <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
