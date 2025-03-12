@@ -9,6 +9,7 @@ const meta = {
     title: { control: 'text' },
   },
   component: Header,
+  decorators: [story => <StoreWrapper>{story()}</StoreWrapper>],
   tags: ['autodocs'],
   title: 'Components/Header',
 } satisfies Meta<typeof Header>
@@ -19,12 +20,5 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     title: 'Momenttify',
-  },
-  render: args => {
-    return (
-      <StoreWrapper>
-        <Header {...args} />
-      </StoreWrapper>
-    )
   },
 }

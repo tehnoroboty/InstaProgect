@@ -5,6 +5,7 @@ import { NavigationPanel } from './NavigationPanel'
 
 const meta = {
   component: NavigationPanel,
+  decorators: [story => <StoreWrapper>{story()}</StoreWrapper>],
   tags: ['autodocs'],
   title: 'Components/NavigationPanel',
 } satisfies Meta<typeof NavigationPanel>
@@ -12,13 +13,4 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {
-  args: {},
-  render: args => {
-    return (
-      <StoreWrapper>
-        <NavigationPanel {...args} />
-      </StoreWrapper>
-    )
-  },
-}
+export const Primary: Story = {}
