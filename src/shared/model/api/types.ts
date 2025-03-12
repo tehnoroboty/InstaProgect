@@ -102,11 +102,32 @@ type Owner = {
   lastName?: any
 }
 
-type Image = {
+export type Image = {
   createdAt: string
   fileSize: number
   height: number
   uploadId: string
   url: string
   width: number
+}
+
+export type RequestPostsType = {
+  childrenMetadata: { uploadId: string }[]
+  description: string
+}
+
+export type ResponsePostsType = {
+  avatarOwner: string
+  avatarWhoLikes: boolean
+  createdAt: string
+  description: string
+  id: number
+  images: Image[]
+  isLiked: boolean
+  likesCount: number
+  location: string
+  owner: Owner
+  ownerId: number
+  updatedAt: string
+  userName: string
 }

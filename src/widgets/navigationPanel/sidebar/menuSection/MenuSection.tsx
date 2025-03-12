@@ -18,6 +18,7 @@ export const MenuSection = ({ className, items }: Props) => {
           IconActive={item.iconActive}
           href={item.href}
           key={index}
+          onClick={item.onClick}
           title={item.title}
         />
       ))}
