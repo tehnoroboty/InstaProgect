@@ -2,6 +2,8 @@ import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetMyPostsArgs,
   GetMyPostsResponse,
+  GetPublicUserPostsArgs,
+  GetPublicUserPostsResponse,
   Image,
   RequestPostsType,
   ResponsePostsType,
@@ -41,8 +43,28 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${userName}`,
       }),
     }),
+    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
+        const baseUrl = `/public-posts/user/${userId}`
+        const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
+
+        return {
+          method: 'GET',
+          params: {
+            pageSize,
+            sortBy,
+            sortDirection,
+          },
+          url: `${baseUrl}${cursorSegment}`,
+        }
+      },
+    }),
   }),
 })
 
-export const { useCreateImageForPostMutation, useCreateNewPostMutation, useGetMyPostsQuery } =
-  postsApi
+export const {
+  useCreateImageForPostMutation,
+  useCreateNewPostMutation,
+  useGetMyPostsQuery,
+  useGetPublicUserPostsQuery,
+} = postsApi

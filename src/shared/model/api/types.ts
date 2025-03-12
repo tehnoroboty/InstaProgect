@@ -136,7 +136,37 @@ export type GetPublicUserProfileArgs = {
 }
 export type GetPublicUserProfileResponse = {
   aboutMe: string
+  avatars: Avatar[]
+  hasPaymentSubscription: boolean
   id: number
+  userMetadata: UserMetadata
   userName: string
-  avatars:
+}
+
+type Avatar = {
+  createdAt: string
+  fileSize: number
+  height: number
+  url: string
+  width: number
+}
+
+export type UserMetadata = {
+  followers: number
+  following: number
+  publications: number
+}
+
+export type GetPublicUserPostsArgs = {
+  endCursorPostId?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  userId: number
+}
+export type GetPublicUserPostsResponse = {
+  items: Item[]
+  pageSize: number
+  totalCount: number
+  totalUsers: number
 }

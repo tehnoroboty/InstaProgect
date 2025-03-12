@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
+import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
 import { Item, SortDirection } from '@/src/shared/model/api/types'
+import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -13,7 +14,6 @@ import { useParams } from 'next/navigation'
 import s from './myProfile.module.scss'
 
 import { Button } from '../../shared/ui/button/Button'
-import { profileData } from './data'
 
 const PAGESIZE = 6
 const SORTBY = 'createdAt'
@@ -27,7 +27,8 @@ export const Profile = () => {
   const userId = data?.userId
   const params: { userId: string } = useParams()
 
-  const { data: posts, isFetching } = useGetMyPostsQuery(
+  /*
+  const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,
       pageSize: PAGESIZE,
@@ -37,23 +38,46 @@ export const Profile = () => {
     },
     { skip: !userName }
   )
+*/
+
+  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery({
+    // endCursorPostId: '456', // Или undefined для первой страницы
+    pageSize: PAGESIZE,
+    sortBy: SORTBY,
+    sortDirection: SORTDIRECTION,
+    userId: Number(params.userId),
+  })
+
+  // console.log(publicPosts)
+  console.log(allPosts)
+
+  const { data: publicUserProfile } = useGetPublicUserProfileQuery({
+    profileId: Number(params.userId),
+  })
+
+  const avatarUrl = publicUserProfile?.avatars?.[0]?.url
+  const aboutMe = publicUserProfile?.aboutMe
+  const publicUserName = publicUserProfile?.userName
+  const followingCount = publicUserProfile?.userMetadata.following
+  const followersCount = publicUserProfile?.userMetadata.followers
+  const publicationsCount = publicUserProfile?.userMetadata.publications
 
   useEffect(() => {
-    if (posts?.items?.length) {
-      setAllPosts(prev => [...prev, ...posts.items])
+    if (publicPosts?.items?.length) {
+      setAllPosts(prev => [...prev, ...publicPosts.items])
     }
-  }, [posts])
+  }, [publicPosts])
 
   useEffect(() => {
     const scrollEl = document.querySelector('main')
 
     if (scrollEl) {
       const handleScroll = () => {
-        const totalCount = posts?.totalCount ?? PAGESIZE
+        const totalCount = publicPosts?.totalCount ?? PAGESIZE
 
         if (
           scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-          !isFetching &&
+          !isFetchingPublicPosts &&
           Math.ceil(totalCount / PAGESIZE) > pageNumber
         ) {
           setPageNumber(prev => prev + 1)
@@ -66,29 +90,26 @@ export const Profile = () => {
         scrollEl.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [posts, isFetching, pageNumber])
+  }, [publicPosts, isFetchingPublicPosts, pageNumber])
 
   const onClickHandler = () => {}
 
   return (
     <div className={s.page}>
       <div className={s.profileContainer}>
-        <AvatarBox size={'xl'} />
+        <AvatarBox size={'xl'} src={avatarUrl} />
         <div className={s.profileDetails}>
           <div className={s.container}>
             <div className={s.profileInfo}>
               <div className={s.userNameContainer}>
                 <Typography as={'h1'} option={'h1'}>
-                  {profileData.firstName}
-                </Typography>
-                <Typography as={'h1'} option={'h1'}>
-                  {profileData.lastName}
+                  {publicUserName}
                 </Typography>
               </div>
               <div className={s.followersStats}>
                 <div className={s.followersStatItem}>
                   <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.followingCount}
+                    {followingCount}
                   </Typography>
                   <Typography as={'span'} option={'regular_text14'}>
                     {'Following'}
@@ -96,7 +117,7 @@ export const Profile = () => {
                 </div>
                 <div className={s.followersStatItem}>
                   <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.followersCount}
+                    {followersCount}
                   </Typography>
                   <Typography as={'span'} option={'regular_text14'}>
                     {'Followers'}
@@ -104,7 +125,7 @@ export const Profile = () => {
                 </div>
                 <div className={s.followersStatItem}>
                   <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.publicationsCount}
+                    {publicationsCount}
                   </Typography>
                   <Typography as={'span'} option={'regular_text14'}>
                     {'Publications'}
@@ -135,12 +156,12 @@ export const Profile = () => {
             </div>
           </div>
           <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
-            {profileData.aboutMe}
+            {aboutMe}
           </Typography>
         </div>
       </div>
       {allPosts.length > 0 && <Posts posts={allPosts} />}
-      {isFetching && <div>Loader...</div>}
+      {isFetchingPublicPosts && <div>Loader...</div>}
     </div>
   )
 }

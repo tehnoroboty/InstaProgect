@@ -1,27 +1,18 @@
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
-  GetMyPostsArgs,
-  GetMyPostsResponse,
-  Image,
-  RequestPostsType,
-  ResponsePostsType,
+  GetPublicUserProfileArgs,
+  GetPublicUserProfileResponse,
 } from '@/src/shared/model/api/types'
 
-export const postsApi = baseApi.injectEndpoints({
+export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getPublicUserProfile: builder.query<GetPublicUserProfileResponse, GetPublicUserProfileArgs>({
-      query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
+      query: ({ profileId }) => ({
         method: 'GET',
-        params: {
-          pageNumber,
-          pageSize,
-          sortBy,
-          sortDirection,
-        },
-        url: `/posts/${userName}`,
+        url: `/public-user/profile/${profileId}`,
       }),
     }),
   }),
 })
 
-export const {} = postsApi
+export const { useGetPublicUserProfileQuery } = usersApi
