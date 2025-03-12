@@ -87,9 +87,9 @@ body {
     height: 100vh;
 
     & main {
+      overflow-y: auto;
       width: 100%;
       height: 100%;
-      overflow-y: auto;
       padding: 36px 24px;
     }
 
