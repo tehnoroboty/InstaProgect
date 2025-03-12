@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -47,7 +48,7 @@ export const ItemWrapper = ({
       await logout().unwrap()
 
       setIsModalOpen(false)
-      route.push('/')
+      route.push(AuthRoutes.HOME)
 
       if (onClick) {
         onClick()

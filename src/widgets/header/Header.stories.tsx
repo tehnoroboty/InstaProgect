@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Header } from '@/src/widgets/header/Header'
+import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
+
+import { Header } from './Header'
 
 const meta = {
   argTypes: {
@@ -14,8 +16,15 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
     title: 'Momenttify',
+  },
+  render: args => {
+    return (
+      <StoreWrapper>
+        <Header {...args} />
+      </StoreWrapper>
+    )
   },
 }
