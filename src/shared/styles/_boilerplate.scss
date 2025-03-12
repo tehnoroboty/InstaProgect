@@ -40,7 +40,9 @@ body {
   scrollbar-color: var(--dark-300) transparent;
   scrollbar-width: thin;
 
+  overflow: hidden;
 
+  height: 100%;
   margin: 0;
   padding: 0;
 
