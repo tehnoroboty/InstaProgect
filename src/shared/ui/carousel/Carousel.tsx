@@ -16,11 +16,11 @@ type Props<T> = {
   list: T[]
   onChange?: (index: number) => void
   renderItem: (item: T, index: number) => ReactNode
-  size: 'large' | 'small'
+  size?: 'large' | 'small'
 }
 
 export const Carousel = <T,>(props: Props<T>) => {
-  const { disableSwipe, list, onChange, renderItem, size } = props
+  const { disableSwipe, list, onChange, renderItem, size = 'large' } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
   const swiperRef = useRef<SwiperRef | null>(null)
@@ -57,9 +57,7 @@ export const Carousel = <T,>(props: Props<T>) => {
       ref={swiperRef}
     >
       {list.map((item, index) => (
-        <SwiperSlide className={s.slide} key={index}>
-          {renderItem(item, index)}
-        </SwiperSlide>
+        <SwiperSlide key={index}>{renderItem(item, index)}</SwiperSlide>
       ))}
       {hasMoreThanOneItem && (
         <>

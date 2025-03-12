@@ -1,15 +1,23 @@
 'use client'
 
-import React from 'react'
+import React, { useRef, useState } from 'react'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
+import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import {
+  useCreateImageForPostMutation,
+  useCreateNewPostMutation,
+} from '@/src/shared/model/api/postsApi'
+import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
-import { Arousel } from '@/src/shared/ui/carousel/Carousel'
+import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Input } from '@/src/shared/ui/input'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
@@ -28,6 +36,57 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
   const openModal = useBoolean(true)
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [value, setValue] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [addPhotosForPost, { isError: isErrorForPhoto, isLoading: isLoadingForPhoto }] =
+    useCreateImageForPostMutation()
+  const [addPost, { isError, isLoading, isSuccess }] = useCreateNewPostMutation()
+
+  const onClickPublishHandler = async () => {
+    try {
+      const files = await Promise.all(
+        photos.map((photo, index) => urlToFile(photo, `photo_${index + 1}.jpg`))
+      )
+      const uploadResults = await Promise.all(
+        files.map(file => addPhotosForPost({ file }).unwrap())
+      )
+
+      const uploudIds = uploadResults
+        .map(result => {
+          if (result.images && Array.isArray(result.images)) {
+            return result.images.map(image => ({ uploadId: image.uploadId }))
+          }
+
+          return []
+        })
+        .flat()
+
+      if (uploudIds.length > 0) {
+        const publishData: RequestPostsType = {
+          childrenMetadata: uploudIds,
+          description: value,
+        }
+
+        await addPost(publishData).unwrap()
+        openModal.setFalse()
+        alert('ok')
+      } else {
+        console.warn('No files were uploaded successfully.')
+      }
+    } catch (error) {
+      const err = error as CustomerError
+      const errorMessage = err.data?.messages[0]
+
+      setErrorMessage(errorMessage?.message)
+    }
+  }
+
+  const onChangeValue = () => {
+    if (textareaRef.current) {
+      setValue(textareaRef.current.value)
+    }
+  }
 
   const handleBackClick = () => {
     openModal.setFalse()
@@ -40,6 +99,8 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
 
   return (
     <>
+      {isError ||
+        (isErrorForPhoto && <Alerts message={errorMessage} position={'fixed'} type={'error'} />)}
       <Dialog
         className={s.modal}
         isSimple
@@ -48,6 +109,13 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
         }}
         open={openModal.value}
       >
+        {isLoading ||
+          (isLoadingForPhoto && (
+            <div className={s.loading}>
+              <Loader />
+            </div>
+          ))}
+
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
             <ArrowIosBackOutline color={'white'} />
@@ -57,15 +125,18 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
               {'Publication'}
             </Typography>
           </Title>
-          <Button variant={'transparent'}>{'Publish'}</Button>
+          <Button onClick={onClickPublishHandler} variant={'transparent'}>
+            {'Publish'}
+          </Button>
         </div>
 
         <div className={s.contentModal}>
           <div className={s.photoBox}>
             {photos.length > 1 ? (
-              <Arousel
+              <Carousel
                 list={photos}
                 renderItem={photo => <img alt={'photo'} className={s.photoImg} src={photo} />}
+                size={'small'}
               />
             ) : (
               <img alt={'photo'} className={s.photoImg} src={photos[0]} />
@@ -78,6 +149,9 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
                 className={s.addPublication}
                 label={'Add publication descriptions'}
                 maxLength={500}
+                onChange={onChangeValue}
+                ref={textareaRef}
+                value={value}
               />
             </div>
             <div className={s.locationBox}>

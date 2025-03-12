@@ -1,5 +1,6 @@
 'use client'
 import { ChangeEvent, useRef, useState } from 'react'
+// eslint-disable-next-line import/no-named-as-default
 import ReCAPTCHA from 'react-google-recaptcha'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
