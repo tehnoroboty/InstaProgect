@@ -131,3 +131,12 @@ export type ResponsePostsType = {
   updatedAt: string
   userName: string
 }
+export type GetPublicUserProfileArgs = {
+  profileId: number
+}
+export type GetPublicUserProfileResponse = {
+  aboutMe: string
+  id: number
+  userName: string
+  avatars:
+}
