@@ -12,6 +12,7 @@ import {
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
+import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -28,12 +29,11 @@ import { useRouter } from 'next/navigation'
 import s from './publishPhoto.module.scss'
 
 type Props = {
-  avatarOwner?: string
   photos: string[]
-  userName?: string
 }
 
-export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' }: Props) => {
+export const PublishPhoto = ({ photos }: Props) => {
+  const { data: userProfile } = useGetUserProfileQuery()
   const openModal = useBoolean(true)
   const router = useRouter()
   const exitModal = useBoolean()
@@ -146,7 +146,10 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
           </div>
           <div className={s.descriptionBox}>
             <div className={s.publicationBox}>
-              <UserAvatarName url={avatarOwner} username={userName} />
+              <UserAvatarName
+                url={userProfile?.avatars[0]?.url || ''}
+                username={`${userProfile?.firstName} ${userProfile?.lastName}`}
+              />
               <TextArea
                 className={s.addPublication}
                 label={'Add publication descriptions'}
