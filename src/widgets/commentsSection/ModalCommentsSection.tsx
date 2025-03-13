@@ -89,8 +89,10 @@ export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => 
 
   const hendleChangeHeight = () => {
     if (textArea.current) {
-      textArea.current.style.height = 'auto'
-      textArea.current.style.minHeight = Math.min(textArea.current.scrollHeight, 120) + 'px'
+      textArea.current.style.height = '24px'
+      const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
+
+      textArea.current.style.height = textAreaHeight + 'px'
     }
   }
 
