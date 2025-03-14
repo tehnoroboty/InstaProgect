@@ -10,7 +10,8 @@ import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { useParams } from 'next/navigation'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
@@ -21,10 +22,27 @@ const SORTDIRECTION: SortDirection = 'desc'
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [allPosts, setAllPosts] = useState<Item[]>([])
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const { data } = useMeQuery()
   const userName = data?.userName
   const userId = data?.userId
   const params = useParams() as { userId: string }
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId')
+  const router = useRouter()
+
+  const closeModal = () => {
+    setModalIsOpen(false)
+    router.replace(`/profile/${params.userId}`)
+  }
+
+  useEffect(() => {
+    if (postId) {
+      setModalIsOpen(true)
+    } else {
+      closeModal()
+    }
+  }, [closeModal, postId])
 
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
@@ -44,9 +62,6 @@ export const Profile = () => {
     sortDirection: SORTDIRECTION,
     userId: Number(params.userId),
   })
-
-  // console.log(publicPosts)
-  // console.log(allPosts)
 
   const { data: publicUserProfile } = useGetPublicUserProfileQuery({
     profileId: Number(params.userId),
@@ -159,6 +174,7 @@ export const Profile = () => {
       </div>
       {allPosts.length > 0 && <Posts posts={allPosts} />}
       {isFetchingPublicPosts && <div>Loader...</div>}
+      <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
 }

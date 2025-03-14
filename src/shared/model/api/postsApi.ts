@@ -1,17 +1,19 @@
+import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetMyPostsArgs,
   GetMyPostsResponse,
   GetPublicUserPostsArgs,
   GetPublicUserPostsResponse,
-  Image,
+  ImageType,
+  Item,
   RequestPostsType,
   ResponsePostsType,
 } from '@/src/shared/model/api/types'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<{ images: Image }, { file: File }>({
+    createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
 
@@ -31,6 +33,12 @@ export const postsApi = baseApi.injectEndpoints({
         url: 'posts',
       }),
     }),
+    getComments: builder.query<Post, { postId: number }>({
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/id/${postId}/comments`,
+      }),
+    }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
@@ -43,6 +51,13 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${userName}`,
       }),
     }),
+    getPost: builder.query<Post, { postId: number }>({
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/id/${postId}`,
+      }),
+    }),
+
     getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
         const baseUrl = `/public-posts/user/${userId}`
@@ -65,6 +80,8 @@ export const postsApi = baseApi.injectEndpoints({
 export const {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
+  useGetCommentsQuery,
   useGetMyPostsQuery,
+  useGetPostQuery,
   useGetPublicUserPostsQuery,
 } = postsApi

@@ -87,7 +87,7 @@ export type Item = {
   createdAt: string
   description: string
   id: number
-  images: Image[]
+  images: ImageType[]
   isLiked: boolean
   likesCount: number
   location?: any
@@ -102,7 +102,7 @@ type Owner = {
   lastName?: any
 }
 
-export type Image = {
+export type ImageType = {
   createdAt: string
   fileSize: number
   height: number
@@ -122,7 +122,7 @@ export type ResponsePostsType = {
   createdAt: string
   description: string
   id: number
-  images: Image[]
+  images: ImageType[]
   isLiked: boolean
   likesCount: number
   location: string
