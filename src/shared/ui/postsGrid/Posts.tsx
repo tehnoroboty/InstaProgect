@@ -2,6 +2,7 @@
 import React from 'react'
 
 import Image from 'next/image'
+import { useParams, useRouter } from 'next/navigation'
 
 import s from './posts.module.scss'
 
@@ -19,8 +20,11 @@ type Props = {
 }
 
 export const Posts = ({ posts }: Props) => {
+  const router = useRouter()
+  const params = useParams() as { userId: string }
+
   const onClickPostHandler = (post: any) => {
-    console.log(post)
+    router.replace(`/profile/${params.userId}?postId=${post.id}`)
   }
 
   return (
