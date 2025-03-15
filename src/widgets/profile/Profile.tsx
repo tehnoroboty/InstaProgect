@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -15,15 +14,17 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-const PAGESIZE = 6
+const AUTH_PAGE_SIZE = 6
+const PUBLIC_PAGE_SIZE = 8
 const SORTBY = 'createdAt'
-const SORTDIRECTION: SortDirection = 'desc'
+const SORT_DIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [allPosts, setAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const { data } = useMeQuery()
+  const isAuthenticated = !!data
   const userName = data?.userName
   const userId = data?.userId
   const params = useParams() as { userId: string }
@@ -31,10 +32,13 @@ export const Profile = () => {
   const postId = searchParams.get('postId')
   const router = useRouter()
 
-  const closeModal = () => {
+  const isMyProfile = isAuthenticated && Number(params.userId) === userId
+  const pageSize = isAuthenticated ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
+
+  const closeModal = useCallback(() => {
     setModalIsOpen(false)
     router.replace(`/profile/${params.userId}`)
-  }
+  }, [router, params.userId])
 
   useEffect(() => {
     if (postId) {
@@ -47,19 +51,19 @@ export const Profile = () => {
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,
-      pageSize: PAGESIZE,
+      pageSize,
       sortBy: SORTBY,
-      sortDirection: SORTDIRECTION,
+      sortDirection: SORT_DIRECTION,
       userName: userName ?? '',
     },
-    { skip: !userName }
+    { skip: !isAuthenticated }
   )
 
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery({
     // endCursorPostId: '456', // Или undefined для первой страницы
-    pageSize: PAGESIZE,
+    pageSize,
     sortBy: SORTBY,
-    sortDirection: SORTDIRECTION,
+    sortDirection: SORT_DIRECTION,
     userId: Number(params.userId),
   })
 
@@ -73,38 +77,49 @@ export const Profile = () => {
   const followingCount = publicUserProfile?.userMetadata.following
   const followersCount = publicUserProfile?.userMetadata.followers
   const publicationsCount = publicUserProfile?.userMetadata.publications
+  const isFollowing = false // Заглушка, пока нет запроса
 
   useEffect(() => {
-    if (publicPosts?.items?.length) {
-      setAllPosts(prev => [...prev, ...publicPosts.items])
+    console.log('Updating posts list')
+    if (isAuthenticated && myPosts?.items?.length) {
+      setAllPosts(prev => [...prev, ...myPosts.items])
+    } else if (!isAuthenticated && publicPosts?.items?.length) {
+      setAllPosts(publicPosts.items)
     }
-  }, [publicPosts])
+  }, [myPosts, publicPosts, isAuthenticated])
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      return
+    }
     const scrollEl = document.querySelector('main')
 
-    if (scrollEl) {
-      const handleScroll = () => {
-        const totalCount = publicPosts?.totalCount ?? PAGESIZE
+    if (!scrollEl) {
+      return
+    }
 
+    const handleScroll = () => {
+      const totalCount = publicPosts?.totalCount ?? pageSize
+
+      setPageNumber(prevPage => {
         if (
           scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
           !isFetchingPublicPosts &&
-          Math.ceil(totalCount / PAGESIZE) > pageNumber
+          Math.ceil(totalCount / pageSize) > pageNumber
         ) {
-          setPageNumber(prev => prev + 1)
+          return prevPage + 1
         }
-      }
 
-      scrollEl.addEventListener('scroll', handleScroll)
-
-      return () => {
-        scrollEl.removeEventListener('scroll', handleScroll)
-      }
+        return prevPage
+      })
     }
-  }, [publicPosts, isFetchingPublicPosts, pageNumber])
 
-  const onClickHandler = () => {}
+    scrollEl.addEventListener('scroll', handleScroll)
+
+    return () => {
+      scrollEl.removeEventListener('scroll', handleScroll)
+    }
+  }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
 
   return (
     <div className={s.page}>
@@ -146,30 +161,19 @@ export const Profile = () => {
               </div>
             </div>
             <div className={s.buttonsBlock}>
-              {+params.userId === userId && (
-                <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                  {'Profile Settings'}
-                </Button>
-              )}
-
-              {+params.userId !== userId && (
-                <>
-                  <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
-                    {'Follow'}
-                  </Button>
-                  <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
-                    {'unFollow'}
-                  </Button>
-                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                    {'Send Message'}
-                  </Button>
-                </>
-              )}
+              {isMyProfile && <Button variant={'secondary'}>{'Profile Settings'}</Button>}
+              {!isMyProfile &&
+                (isFollowing ? (
+                  <Button variant={'primary'}>{'unFollow'}</Button>
+                ) : (
+                  <Button variant={'primary'}>{'Follow'}</Button>
+                ))}
+              {!isMyProfile && <Button variant={'secondary'}>{'Send Message'}</Button>}
             </div>
+            <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
+              {aboutMe}
+            </Typography>
           </div>
-          <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
-            {aboutMe}
-          </Typography>
         </div>
       </div>
       {allPosts.length > 0 && <Posts posts={allPosts} />}
