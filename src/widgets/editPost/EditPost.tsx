@@ -1,11 +1,11 @@
 'use client'
 
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
+import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { Title } from '@radix-ui/react-dialog'
@@ -17,20 +17,7 @@ import Picture from './slider.jpg'
 
 export const EditPost = () => {
   const [showDialog, setShowDialog] = useState(true)
-  const [textValue, setTextValue] = useState('')
   const [error, setError] = useState<string | undefined>(undefined)
-  const maxLength = 500
-
-  const onChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.currentTarget.value
-
-    setTextValue(newValue)
-    if (newValue.length <= maxLength) {
-      setError(undefined) // Очищаем ошибку, если текст в пределах допустимого
-    } else {
-      setError(`The maximum length should be no more than ${maxLength} characters`)
-    }
-  }
 
   const onSaveChanges = () => {
     // if (textValue.length > maxLength) {
@@ -68,11 +55,10 @@ export const EditPost = () => {
               url={'avatarOwner'}
               username={'userName'}
             />
-            <TextArea
-              error={error}
-              maxLength={maxLength}
-              onChange={onChangeText}
-              value={textValue}
+            <TextAreaWithValidation
+              className={s.addPublication}
+              maxLength={500}
+              onErrorChange={error => setError(error)}
             />
             <Button className={s.saveChangesBtn} disabled={!!error} onClick={onSaveChanges}>
               {'Save Changes'}
