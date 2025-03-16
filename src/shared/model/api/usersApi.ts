@@ -3,6 +3,7 @@ import {
   GetPublicUserProfileArgs,
   GetPublicUserProfileResponse,
 } from '@/src/shared/model/api/types'
+import { Profile } from '@/src/entities/user/types'
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -12,7 +13,10 @@ export const usersApi = baseApi.injectEndpoints({
         url: `/public-user/profile/${profileId}`,
       }),
     }),
+    getUserProfile: builder.query<Profile, void>({
+      query: () => '/users/profile',
+    }),
   }),
 })
 
-export const { useGetPublicUserProfileQuery } = usersApi
+export const { useGetPublicUserProfileQuery, useGetUserProfileQuery } = usersApi
