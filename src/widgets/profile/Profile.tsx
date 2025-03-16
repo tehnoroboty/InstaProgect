@@ -21,7 +21,8 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const [allPosts, setAllPosts] = useState<Item[]>([])
+  const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
+  const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
   const observerRef = useRef<HTMLDivElement | null>(null)
   const params = useParams() as { userId: string }
 
@@ -62,8 +63,6 @@ export const Profile = () => {
     { skip: !isMyProfile }
   )
 
-  console.log('myPosts from hook:', myPosts)
-
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
@@ -79,48 +78,72 @@ export const Profile = () => {
     profileId: Number(params.userId),
   })
 
-  // собираем посты в зависимости от профиля
+  // собираем посты в Личный профиль
   useEffect(() => {
     if (isMyProfile && myPosts?.items) {
-      setAllPosts(prev => {
+      setMyAllPosts(prev => {
         const existingIds = new Set(prev.map(post => post.id))
         const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
 
         return [...prev, ...newItems]
       })
-    } else if (!isMyProfile && publicPosts?.items) {
-      setAllPosts(publicPosts.items) // Публичные — только одна порция
     }
   }, [myPosts, publicPosts, isMyProfile])
 
+  //собираем посты в Публичный профиль
+  useEffect(() => {
+    if (!isMyProfile && publicPosts?.items) {
+      setPublicAllPosts(publicPosts.items)
+    }
+  }, [publicPosts, isMyProfile])
+
+  const hasNextPage = useCallback(() => {
+    if (isMyProfile && myPosts) {
+      return myPosts.page < myPosts.pagesCount
+    }
+
+    return false
+  }, [isMyProfile, myPosts])
+
+  const isEndReached = !hasNextPage()
+
+  // бесконечный скролл только для личного профиля
   useEffect(() => {
     if (!isMyProfile) {
       return
     }
 
-    // бесконечный скролл только для личного профиля
     const observer = new IntersectionObserver(
       entries => {
         const target = entries[0]
 
-        if (target.isIntersecting) {
+        if (target.isIntersecting && hasNextPage()) {
           setPageNumber(prev => prev + 1)
         }
       },
       { rootMargin: '100px' }
     )
+    const currentRef = observerRef.current
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current)
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
-  }, [isMyProfile])
+  }, [hasNextPage, isMyProfile])
 
+  useEffect(() => {
+    setMyAllPosts([])
+    setPublicAllPosts([])
+    setPageNumber(1)
+  }, [params.userId])
+
+  const isLoading = isMyProfile ? isFetchingMyPosts : isFetchingPublicPosts
+  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
   const avatarUrl = publicUserProfile?.avatars?.[0]?.url
   const aboutMe = publicUserProfile?.aboutMe
   const publicUserName = publicUserProfile?.userName
@@ -185,10 +208,10 @@ export const Profile = () => {
         </div>
       </div>
 
-      {allPosts.length > 0 && <Posts posts={allPosts} />}
-      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+      {postsToShow.length && <Posts posts={postsToShow} />}
+      {isLoading && <div>Loader...</div>}
 
-      {isMyProfile && (
+      {isMyProfile && !isEndReached && (
         <div ref={observerRef} style={{ height: '1px' }}>
           {/* trigger for infinite scroll */}
         </div>
