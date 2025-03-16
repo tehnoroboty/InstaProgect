@@ -38,20 +38,18 @@ export const Profile = () => {
   const isMyProfile = isAuthenticated && Number(params.userId) === userId
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
-  /*
-    const closeModal = useCallback(() => {
-      setModalIsOpen(false)
-      router.replace(`/profile/${params.userId}`)
-    }, [router, params.userId])
-  
-    useEffect(() => {
-      if (postId) {
-        setModalIsOpen(true)
-      } else {
-        closeModal()
-      }
-    }, [closeModal, postId])
-  */
+  const closeModal = useCallback(() => {
+    setModalIsOpen(false)
+    router.replace(`/profile/${params.userId}`)
+  }, [router, params.userId])
+
+  useEffect(() => {
+    if (postId) {
+      setModalIsOpen(true)
+    } else {
+      closeModal()
+    }
+  }, [closeModal, postId])
 
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
@@ -122,6 +120,7 @@ export const Profile = () => {
   }, [isMyProfile])
 
   /*
+  // бесконечный скролл
   useEffect(() => {
     if (!isAuthenticated) {
       return
@@ -213,15 +212,15 @@ export const Profile = () => {
                 ))}
               {!isMyProfile && <Button variant={'secondary'}>{'Send Message'}</Button>}
             </div>
-            <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
-              {aboutMe}
-            </Typography>
           </div>
+          <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
+            {aboutMe}
+          </Typography>
         </div>
       </div>
 
       {allPosts.length > 0 && <Posts posts={allPosts} />}
-      {(isFetchingPublicPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
 
       {isMyProfile && (
         <div ref={observerRef} style={{ height: '1px' }}>
@@ -229,7 +228,7 @@ export const Profile = () => {
         </div>
       )}
 
-      {/* <ModalPost onClose={closeModal} open={modalIsOpen} /> */}
+      <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
 }
