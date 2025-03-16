@@ -131,3 +131,7 @@ export type ResponsePostsType = {
   updatedAt: string
   userName: string
 }
+
+export type UpdatePostModel = {
+  description: string
+}

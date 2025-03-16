@@ -5,6 +5,7 @@ import {
   Image,
   RequestPostsType,
   ResponsePostsType,
+  UpdatePostModel,
 } from '@/src/shared/model/api/types'
 
 export const postsApi = baseApi.injectEndpoints({
@@ -41,8 +42,19 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${userName}`,
       }),
     }),
+    updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
+      query: ({ model, postId }) => ({
+        body: model,
+        method: 'PUT',
+        url: `/posts/${postId}`,
+      }),
+    }),
   }),
 })
 
-export const { useCreateImageForPostMutation, useCreateNewPostMutation, useGetMyPostsQuery } =
-  postsApi
+export const {
+  useCreateImageForPostMutation,
+  useCreateNewPostMutation,
+  useGetMyPostsQuery,
+  useUpdatePostMutation,
+} = postsApi

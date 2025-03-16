@@ -60,8 +60,14 @@
   margin-bottom: 24px;
 }
 
-.addPublication textarea {
-  height: 120px;
+.addPublication {
+  & label {
+    color: var(--light-900);
+  }
+
+  & textarea {
+    min-height: 120px;
+  }
 }
 
 .saveChangesBtn {
