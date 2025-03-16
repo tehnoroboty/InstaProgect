@@ -62,10 +62,12 @@ export const Profile = () => {
     { skip: !isMyProfile }
   )
 
+  console.log('myPosts from hook:', myPosts)
+
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
-      pageSize,
+      // pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
       userId: Number(params.userId),
@@ -118,42 +120,6 @@ export const Profile = () => {
       }
     }
   }, [isMyProfile])
-
-  /*
-  // бесконечный скролл
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return
-    }
-    const scrollEl = document.querySelector('main')
-
-    if (!scrollEl) {
-      return
-    }
-
-    const handleScroll = () => {
-      const totalCount = publicPosts?.totalCount ?? pageSize
-
-      setPageNumber(prevPage => {
-        if (
-          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-          !isFetchingPublicPosts &&
-          Math.ceil(totalCount / pageSize) > pageNumber
-        ) {
-          return prevPage + 1
-        }
-
-        return prevPage
-      })
-    }
-
-    scrollEl.addEventListener('scroll', handleScroll)
-
-    return () => {
-      scrollEl.removeEventListener('scroll', handleScroll)
-    }
-  }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
-*/
 
   const avatarUrl = publicUserProfile?.avatars?.[0]?.url
   const aboutMe = publicUserProfile?.aboutMe
