@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -16,78 +16,112 @@ import s from './myProfile.module.scss'
 
 const AUTH_PAGE_SIZE = 6
 const PUBLIC_PAGE_SIZE = 8
-const SORTBY = 'createdAt'
+const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [allPosts, setAllPosts] = useState<Item[]>([])
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const { data } = useMeQuery()
-  const isAuthenticated = !!data
-  const userName = data?.userName
-  const userId = data?.userId
+  const observerRef = useRef<HTMLDivElement | null>(null)
   const params = useParams() as { userId: string }
+
+  const { data: meData } = useMeQuery()
+  const isAuthenticated = !!meData
+  const userId = meData?.userId
+
   const searchParams = useSearchParams()
+  const userName = meData?.userName
   const postId = searchParams.get('postId')
   const router = useRouter()
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const isMyProfile = isAuthenticated && Number(params.userId) === userId
-  const pageSize = isAuthenticated ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
+  const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
-  const closeModal = useCallback(() => {
-    setModalIsOpen(false)
-    router.replace(`/profile/${params.userId}`)
-  }, [router, params.userId])
-
-  useEffect(() => {
-    if (postId) {
-      setModalIsOpen(true)
-    } else {
-      closeModal()
-    }
-  }, [closeModal, postId])
+  /*
+    const closeModal = useCallback(() => {
+      setModalIsOpen(false)
+      router.replace(`/profile/${params.userId}`)
+    }, [router, params.userId])
+  
+    useEffect(() => {
+      if (postId) {
+        setModalIsOpen(true)
+      } else {
+        closeModal()
+      }
+    }, [closeModal, postId])
+  */
 
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,
       pageSize,
-      sortBy: SORTBY,
+      sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
       userName: userName ?? '',
     },
-    { skip: !isAuthenticated }
+    { skip: !isMyProfile }
   )
 
-  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery({
-    // endCursorPostId: '456', // Или undefined для первой страницы
-    pageSize,
-    sortBy: SORTBY,
-    sortDirection: SORT_DIRECTION,
-    userId: Number(params.userId),
-  })
+  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
+    {
+      // endCursorPostId: '456', // Или undefined для первой страницы
+      pageSize,
+      sortBy: SORT_BY,
+      sortDirection: SORT_DIRECTION,
+      userId: Number(params.userId),
+    },
+    { skip: isMyProfile }
+  )
 
   const { data: publicUserProfile } = useGetPublicUserProfileQuery({
     profileId: Number(params.userId),
   })
 
-  const avatarUrl = publicUserProfile?.avatars?.[0]?.url
-  const aboutMe = publicUserProfile?.aboutMe
-  const publicUserName = publicUserProfile?.userName
-  const followingCount = publicUserProfile?.userMetadata.following
-  const followersCount = publicUserProfile?.userMetadata.followers
-  const publicationsCount = publicUserProfile?.userMetadata.publications
-  const isFollowing = false // Заглушка, пока нет запроса
+  // собираем посты в зависимости от профиля
+  useEffect(() => {
+    if (isMyProfile && myPosts?.items) {
+      setAllPosts(prev => {
+        const existingIds = new Set(prev.map(post => post.id))
+        const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
+
+        return [...prev, ...newItems]
+      })
+    } else if (!isMyProfile && publicPosts?.items) {
+      setAllPosts(publicPosts.items) // Публичные — только одна порция
+    }
+  }, [myPosts, publicPosts, isMyProfile])
 
   useEffect(() => {
-    console.log('Updating posts list')
-    if (isAuthenticated && myPosts?.items?.length) {
-      setAllPosts(prev => [...prev, ...myPosts.items])
-    } else if (!isAuthenticated && publicPosts?.items?.length) {
-      setAllPosts(publicPosts.items)
+    if (!isMyProfile) {
+      return
     }
-  }, [myPosts, publicPosts, isAuthenticated])
 
+    // бесконечный скролл только для личного профиля
+    const observer = new IntersectionObserver(
+      entries => {
+        const target = entries[0]
+
+        if (target.isIntersecting) {
+          setPageNumber(prev => prev + 1)
+        }
+      },
+      { rootMargin: '100px' }
+    )
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current)
+      }
+    }
+  }, [isMyProfile])
+
+  /*
   useEffect(() => {
     if (!isAuthenticated) {
       return
@@ -120,6 +154,15 @@ export const Profile = () => {
       scrollEl.removeEventListener('scroll', handleScroll)
     }
   }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
+*/
+
+  const avatarUrl = publicUserProfile?.avatars?.[0]?.url
+  const aboutMe = publicUserProfile?.aboutMe
+  const publicUserName = publicUserProfile?.userName
+  const followingCount = publicUserProfile?.userMetadata.following
+  const followersCount = publicUserProfile?.userMetadata.followers
+  const publicationsCount = publicUserProfile?.userMetadata.publications
+  const isFollowing = false // Заглушка, пока нет запроса
 
   return (
     <div className={s.page}>
@@ -176,9 +219,17 @@ export const Profile = () => {
           </div>
         </div>
       </div>
+
       {allPosts.length > 0 && <Posts posts={allPosts} />}
-      {isFetchingPublicPosts && <div>Loader...</div>}
-      <ModalPost onClose={closeModal} open={modalIsOpen} />
+      {(isFetchingPublicPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+
+      {isMyProfile && (
+        <div ref={observerRef} style={{ height: '1px' }}>
+          {/* trigger for infinite scroll */}
+        </div>
+      )}
+
+      {/* <ModalPost onClose={closeModal} open={modalIsOpen} /> */}
     </div>
   )
 }
