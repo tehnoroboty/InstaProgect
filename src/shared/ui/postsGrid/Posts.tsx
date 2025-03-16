@@ -45,7 +45,7 @@ export const Posts = ({ posts }: Props) => {
 
         return (
           <div className={s.image} key={post.id} onClick={() => onClickPostHandler(post.id)}>
-            <Carousel list={post.images} renderItem={renderImgCarousel} size={'small'} />
+            <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
           </div>
         )
       })}

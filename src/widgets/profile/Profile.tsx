@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -23,7 +23,6 @@ export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  const observerRef = useRef<HTMLDivElement | null>(null)
   const params = useParams() as { userId: string }
 
   const { data: meData } = useMeQuery()
@@ -97,44 +96,40 @@ export const Profile = () => {
     }
   }, [publicPosts, isMyProfile])
 
-  const hasNextPage = useCallback(() => {
-    if (isMyProfile && myPosts) {
-      return myPosts.page < myPosts.pagesCount
-    }
-
-    return false
-  }, [isMyProfile, myPosts])
-
-  const isEndReached = !hasNextPage()
-
   // бесконечный скролл только для личного профиля
   useEffect(() => {
     if (!isMyProfile) {
       return
     }
 
-    const observer = new IntersectionObserver(
-      entries => {
-        const target = entries[0]
+    const scrollEl = document.querySelector('main')
 
-        if (target.isIntersecting && hasNextPage()) {
-          setPageNumber(prev => prev + 1)
-        }
-      },
-      { rootMargin: '100px' }
-    )
-    const currentRef = observerRef.current
-
-    if (currentRef) {
-      observer.observe(currentRef)
+    if (!scrollEl) {
+      return
     }
+
+    const handleScroll = () => {
+      const totalCount = myPosts?.totalCount ?? pageSize
+
+      setPageNumber(prevPage => {
+        if (
+          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
+          !isFetchingMyPosts &&
+          Math.ceil(totalCount / pageSize) > pageNumber
+        ) {
+          return prevPage + 1
+        }
+
+        return prevPage
+      })
+    }
+
+    scrollEl.addEventListener('scroll', handleScroll)
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef)
-      }
+      scrollEl.removeEventListener('scroll', handleScroll)
     }
-  }, [hasNextPage, isMyProfile])
+  }, [myPosts, isFetchingMyPosts, pageNumber, isMyProfile, pageSize])
 
   useEffect(() => {
     setMyAllPosts([])
@@ -210,13 +205,6 @@ export const Profile = () => {
 
       {postsToShow.length && <Posts posts={postsToShow} />}
       {isLoading && <div>Loader...</div>}
-
-      {isMyProfile && !isEndReached && (
-        <div ref={observerRef} style={{ height: '1px' }}>
-          {/* trigger for infinite scroll */}
-        </div>
-      )}
-
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
