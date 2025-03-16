@@ -2,6 +2,7 @@
 'use client'
 import * as React from 'react'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Bookmark,
@@ -19,13 +20,16 @@ import {
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsModalOpen, setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { AddPost } from '@/src/widgets/addPost/AddPost'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
+import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 export const NavigationPanel = () => {
   const { data, isLoading, isSuccess } = useMeQuery()
-  const [showAddPost, setShowAddPost] = useState(false)
+  const isOpenModal = useSelector(selectIsModalOpen)
+  const dispatch = useDispatch()
 
   if (!isSuccess || !data) {
     return null
@@ -33,7 +37,7 @@ export const NavigationPanel = () => {
   const userId = data.userId
 
   const createNewPost = () => {
-    setShowAddPost(true)
+    dispatch(setIsModalOpen({ isOpen: true }))
   }
 
   const menuItems: MenuItemsType = {
@@ -75,22 +79,7 @@ export const NavigationPanel = () => {
     <>
       <MenuMobile items={menuItems.mainActions} />
       <Sidebar items={menuItems} />
-      {showAddPost && <AddPost />}
+      {isOpenModal && <AddPost />}
     </>
   )
-}
-
-//types
-
-export type MenuItemsType = {
-  additional: MenuItemType[]
-  mainActions: MenuItemType[]
-  usersActions: MenuItemType[]
-}
-export type MenuItemType = {
-  href?: string
-  icon: React.ComponentType
-  iconActive?: React.ComponentType
-  onClick?: () => void
-  title: string
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
@@ -13,6 +14,7 @@ import {
 } from '@/src/shared/model/api/postsApi'
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -35,6 +37,7 @@ type Props = {
 export const PublishPhoto = ({ photos }: Props) => {
   const { data: userProfile } = useGetUserProfileQuery()
   const openModal = useBoolean(true)
+  const dispatch = useDispatch()
   const router = useRouter()
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
@@ -187,7 +190,7 @@ export const PublishPhoto = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => openModal.setFalse()}
+        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />
