@@ -2,10 +2,7 @@ import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/pos
 import { ImageType } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
-import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
-import { StaticImageData } from 'next/image'
-// eslint-disable-next-line no-duplicate-imports
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import { useSearchParams } from 'next/navigation'
 
 import s from './modalPost.module.scss'
@@ -24,8 +21,8 @@ export default function ModalPost(props: Props) {
   const { onClose, open } = props
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId') ?? 10
-  const { data: post } = useGetPostQuery({ postId: +postId })
-  const { data: comments } = useGetCommentsQuery({ postId: +postId })
+  const { data: post } = useGetPostQuery({ postId: Number(postId) })
+  const { data: comments } = useGetCommentsQuery({ postId: Number(postId) })
 
   if (!post) {
     return null

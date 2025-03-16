@@ -1,9 +1,9 @@
+import { Profile } from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetPublicUserProfileArgs,
   GetPublicUserProfileResponse,
 } from '@/src/shared/model/api/types'
-import { Profile } from '@/src/entities/user/types'
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
