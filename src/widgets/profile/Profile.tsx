@@ -10,6 +10,7 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
+import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
@@ -120,113 +121,48 @@ export const Profile = () => {
   }, [isMyProfile])
 
   /*
-  // бесконечный скролл
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return
-    }
-    const scrollEl = document.querySelector('main')
+      // бесконечный скролл
+      useEffect(() => {
+        if (!isAuthenticated) {
+          return
+        }
+        const scrollEl = document.querySelector('main')
 
-    if (!scrollEl) {
-      return
-    }
-
-    const handleScroll = () => {
-      const totalCount = publicPosts?.totalCount ?? pageSize
-
-      setPageNumber(prevPage => {
-        if (
-          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-          !isFetchingPublicPosts &&
-          Math.ceil(totalCount / pageSize) > pageNumber
-        ) {
-          return prevPage + 1
+        if (!scrollEl) {
+          return
         }
 
-        return prevPage
-      })
-    }
+        const handleScroll = () => {
+          const totalCount = publicPosts?.totalCount ?? pageSize
 
-    scrollEl.addEventListener('scroll', handleScroll)
+          setPageNumber(prevPage => {
+            if (
+              scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
+              !isFetchingPublicPosts &&
+              Math.ceil(totalCount / pageSize) > pageNumber
+            ) {
+              return prevPage + 1
+            }
 
-    return () => {
-      scrollEl.removeEventListener('scroll', handleScroll)
-    }
-  }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
-*/
+            return prevPage
+          })
+        }
 
-  const avatarUrl = publicUserProfile?.avatars?.[0]?.url
-  const aboutMe = publicUserProfile?.aboutMe
-  const publicUserName = publicUserProfile?.userName
-  const followingCount = publicUserProfile?.userMetadata.following
-  const followersCount = publicUserProfile?.userMetadata.followers
-  const publicationsCount = publicUserProfile?.userMetadata.publications
-  const isFollowing = false // Заглушка, пока нет запроса
+        scrollEl.addEventListener('scroll', handleScroll)
+
+        return () => {
+          scrollEl.removeEventListener('scroll', handleScroll)
+        }
+      }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
+    */
 
   return (
     <div className={s.page}>
-      <div className={s.profileContainer}>
-        <AvatarBox size={'xl'} src={avatarUrl} />
-        <div className={s.profileDetails}>
-          <div className={s.container}>
-            <div className={s.profileInfo}>
-              <div className={s.userNameContainer}>
-                <Typography as={'h1'} option={'h1'}>
-                  {publicUserName}
-                </Typography>
-              </div>
-              <div className={s.followersStats}>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {followingCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Following'}
-                  </Typography>
-                </div>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {followersCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Followers'}
-                  </Typography>
-                </div>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {publicationsCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Publications'}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-            <div className={s.buttonsBlock}>
-              {isMyProfile && <Button variant={'secondary'}>{'Profile Settings'}</Button>}
-              {!isMyProfile &&
-                (isFollowing ? (
-                  <Button variant={'primary'}>{'unFollow'}</Button>
-                ) : (
-                  <Button variant={'primary'}>{'Follow'}</Button>
-                ))}
-              {!isMyProfile && <Button variant={'secondary'}>{'Send Message'}</Button>}
-            </div>
-          </div>
-          <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
-            {aboutMe}
-          </Typography>
-        </div>
-      </div>
-
+      <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
       {allPosts.length > 0 && <Posts posts={allPosts} />}
       {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
 
-      {isMyProfile && (
-        <div ref={observerRef} style={{ height: '1px' }}>
-          {/* trigger for infinite scroll */}
-        </div>
-      )}
+      {isMyProfile && <div ref={observerRef} style={{ height: '1px' }}></div>}
 
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
