@@ -32,7 +32,7 @@ export const Posts = ({ posts }: Props) => {
 
   const renderImgCarousel = (img: ImageType) => {
     return (
-      <Image alt={'Post image'} className={s.carouselImg} height={300} src={img.url} width={300} />
+      <Image alt={'Post image'} className={s.carouselImg} height={228} src={img.url} width={234} />
     )
   }
 
