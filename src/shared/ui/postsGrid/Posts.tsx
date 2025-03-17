@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 
+import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
@@ -39,13 +40,19 @@ export const Posts = ({ posts }: Props) => {
   return (
     <div className={s.postsGrid}>
       {posts.map(post => {
-        if (post.images.length < 1) {
-          return null
-        }
-
         return (
           <div className={s.image} key={post.id} onClick={() => onClickPostHandler(post.id)}>
-            <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
+            {post.images.length > 0 ? (
+              <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
+            ) : (
+              // <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
+              <div className={s.notFound}>
+                <ImageNotFound height={194} width={199} />
+                <div>
+                  <b>No Image</b>
+                </div>
+              </div>
+            )}
           </div>
         )
       })}
