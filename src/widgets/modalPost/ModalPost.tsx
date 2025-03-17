@@ -16,7 +16,7 @@ type Props = {
 export default function ModalPost(props: Props) {
   const { onClose, open } = props
   const searchParams = useSearchParams()
-  const postId = searchParams.get('postId') ?? 10
+  const postId = searchParams.get('postId')
   const { data: post } = useGetPostQuery({ postId: Number(postId) })
   const { data: comments } = useGetCommentsQuery({ postId: Number(postId) })
 
