@@ -35,14 +35,15 @@ export const Carousel = <T,>(props: Props<T>) => {
     }
   }, [disableSwipe])
 
-  const handleStopPropagation = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) =>
+  const handleStopPropagation = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
     e.stopPropagation()
+  }
 
   return (
     <Swiper
       className={classNames}
       loop={hasMoreThanOneItem}
-      modules={[Navigation, Pagination]}
+      modules={[Pagination]}
       navigation={{
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
@@ -66,12 +67,18 @@ export const Carousel = <T,>(props: Props<T>) => {
         <>
           <Button
             className={s.buttonPrev}
-            onClick={handleStopPropagation}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slidePrev()
+            }}
             variant={'transparent'}
           ></Button>
           <Button
             className={s.buttonNext}
-            onClick={handleStopPropagation}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slideNext()
+            }}
             variant={'transparent'}
           ></Button>
           <div className={s.pagination} onClick={handleStopPropagation}></div>

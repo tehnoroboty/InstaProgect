@@ -33,14 +33,7 @@ export const Posts = ({ posts }: Props) => {
 
   const renderImgCarousel = (img: ImageType, index: number) => {
     return (
-      <Image
-        alt={'Post image'}
-        className={s.carouselImg}
-        height={228}
-        priority={index === 0}
-        src={img.url}
-        width={234}
-      />
+      <Image alt={'Post image'} height={228} priority={index === 0} src={img.url} width={234} />
     )
   }
 
