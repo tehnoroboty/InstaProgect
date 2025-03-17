@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react'
+import { MouseEvent, ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -35,6 +35,9 @@ export const Carousel = <T,>(props: Props<T>) => {
     }
   }, [disableSwipe])
 
+  const handleStopPropagation = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) =>
+    e.stopPropagation()
+
   return (
     <Swiper
       className={classNames}
@@ -61,9 +64,17 @@ export const Carousel = <T,>(props: Props<T>) => {
       ))}
       {hasMoreThanOneItem && (
         <>
-          <Button className={s.buttonPrev} variant={'transparent'}></Button>
-          <Button className={s.buttonNext} variant={'transparent'}></Button>
-          <div className={s.pagination}></div>
+          <Button
+            className={s.buttonPrev}
+            onClick={handleStopPropagation}
+            variant={'transparent'}
+          ></Button>
+          <Button
+            className={s.buttonNext}
+            onClick={handleStopPropagation}
+            variant={'transparent'}
+          ></Button>
+          <div className={s.pagination} onClick={handleStopPropagation}></div>
         </>
       )}
     </Swiper>

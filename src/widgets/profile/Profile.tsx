@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -19,8 +19,8 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const [allPosts, setAllPosts] = useState<Item[]>([])
-  const observerRef = useRef<HTMLDivElement | null>(null)
+  const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
+  const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
   const params = useParams() as { userId: string }
 
   const { data: meData } = useMeQuery()
@@ -63,7 +63,7 @@ export const Profile = () => {
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
-      pageSize,
+      // pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
       userId: Number(params.userId),
@@ -75,92 +75,71 @@ export const Profile = () => {
     profileId: Number(params.userId),
   })
 
-  // собираем посты в зависимости от профиля
+  // собираем посты в Личный профиль
   useEffect(() => {
     if (isMyProfile && myPosts?.items) {
-      setAllPosts(prev => {
+      setMyAllPosts(prev => {
         const existingIds = new Set(prev.map(post => post.id))
         const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
 
         return [...prev, ...newItems]
       })
-    } else if (!isMyProfile && publicPosts?.items) {
-      setAllPosts(publicPosts.items) // Публичные — только одна порция
     }
   }, [myPosts, publicPosts, isMyProfile])
 
+  //собираем посты в Публичный профиль
+  useEffect(() => {
+    if (!isMyProfile && publicPosts?.items) {
+      setPublicAllPosts(publicPosts.items)
+    }
+  }, [publicPosts, isMyProfile])
+
+  // бесконечный скролл только для личного профиля
   useEffect(() => {
     if (!isMyProfile) {
       return
     }
 
-    // бесконечный скролл только для личного профиля
-    const observer = new IntersectionObserver(
-      entries => {
-        const target = entries[0]
+    const scrollEl = document.querySelector('main')
 
-        if (target.isIntersecting) {
-          setPageNumber(prev => prev + 1)
-        }
-      },
-      { rootMargin: '100px' }
-    )
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current)
+    if (!scrollEl) {
+      return
     }
+
+    const handleScroll = () => {
+      const totalCount = myPosts?.totalCount ?? pageSize
+
+      setPageNumber(prevPage => {
+        if (
+          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
+          !isFetchingMyPosts &&
+          Math.ceil(totalCount / pageSize) > pageNumber
+        ) {
+          return prevPage + 1
+        }
+
+        return prevPage
+      })
+    }
+
+    scrollEl.addEventListener('scroll', handleScroll)
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current)
-      }
+      scrollEl.removeEventListener('scroll', handleScroll)
     }
-  }, [isMyProfile])
+  }, [myPosts, isFetchingMyPosts, pageNumber, isMyProfile, pageSize])
 
-  /*
-      // бесконечный скролл
-      useEffect(() => {
-        if (!isAuthenticated) {
-          return
-        }
-        const scrollEl = document.querySelector('main')
-
-        if (!scrollEl) {
-          return
-        }
-
-        const handleScroll = () => {
-          const totalCount = publicPosts?.totalCount ?? pageSize
-
-          setPageNumber(prevPage => {
-            if (
-              scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-              !isFetchingPublicPosts &&
-              Math.ceil(totalCount / pageSize) > pageNumber
-            ) {
-              return prevPage + 1
-            }
-
-            return prevPage
-          })
-        }
-
-        scrollEl.addEventListener('scroll', handleScroll)
-
-        return () => {
-          scrollEl.removeEventListener('scroll', handleScroll)
-        }
-      }, [publicPosts, isFetchingPublicPosts, pageNumber, isAuthenticated, pageSize])
-    */
-
+  useEffect(() => {
+    setMyAllPosts([])
+    setPublicAllPosts([])
+    setPageNumber(1)
+  }, [params.userId])
+    const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
   return (
     <div className={s.page}>
       <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
-      {allPosts.length > 0 && <Posts posts={allPosts} />}
+        {postsToShow.length && <Posts posts={postsToShow} />}
       {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
-
-      {isMyProfile && <div ref={observerRef} style={{ height: '1px' }}></div>}
-
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
