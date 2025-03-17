@@ -17,8 +17,12 @@ export default function ModalPost(props: Props) {
   const { onClose, open } = props
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
-  const { data: post } = useGetPostQuery({ postId: Number(postId) })
-  const { data: comments } = useGetCommentsQuery({ postId: Number(postId) })
+  const numericPostId = postId ? Number(postId) : null
+  const { data: post } = useGetPostQuery({ postId: numericPostId! }, { skip: !numericPostId })
+  const { data: comments } = useGetCommentsQuery(
+    { postId: numericPostId! },
+    { skip: !numericPostId }
+  )
 
   if (!post) {
     return null
