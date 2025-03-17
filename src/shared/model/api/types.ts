@@ -170,3 +170,25 @@ export type GetPublicUserPostsResponse = {
   totalCount: number
   totalUsers: number
 }
+
+export type Comment = {
+  answerCount: number
+  content: string
+  createdAt: string
+  from: {
+    avatars: { url: string }[] | Avatar[]
+    id: number
+    username: string
+  }
+  id: number
+  isLiked: boolean
+  likeCount: number
+  postId: number
+}
+
+export type GetCommentsResponse = {
+  items: Comment[]
+  pageSize: number
+  totalCount: number
+  totalUsers: number
+}

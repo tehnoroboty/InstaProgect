@@ -2,15 +2,11 @@ import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/pos
 import { ImageType } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
-import Image, { StaticImageData } from 'next/image'
+import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 
 import s from './modalPost.module.scss'
-
-type ListType = {
-  id: string
-  img: StaticImageData | string
-}
 
 type Props = {
   onClose: () => void
@@ -31,8 +27,7 @@ export default function ModalPost(props: Props) {
   const renderItem = (item: ImageType) => (
     <Image alt={'post'} height={300} src={item.url} width={300} />
   )
-
-  console.log(comments)
+  const commentsData = comments?.items ?? []
 
   return (
     <>
@@ -43,7 +38,7 @@ export default function ModalPost(props: Props) {
           ) : (
             renderItem(post.images[0])
           )}
-          {/*<ModalCommentsSection avatars={} commentsData={commentsData} post={post} />*/}
+          <ModalCommentsSection commentsData={commentsData} post={post} />
         </div>
       </Dialog>
     </>

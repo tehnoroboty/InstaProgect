@@ -15,7 +15,7 @@ type Avatar = {
 }
 
 type Props = {
-  avatars?: Avatar[]
+  avatars?: { url: string }[] | Avatar[]
   likesCount?: number
 } & ComponentPropsWithoutRef<'div'>
 

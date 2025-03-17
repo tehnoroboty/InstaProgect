@@ -1,12 +1,12 @@
 import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
+  GetCommentsResponse,
   GetMyPostsArgs,
   GetMyPostsResponse,
   GetPublicUserPostsArgs,
   GetPublicUserPostsResponse,
   ImageType,
-  Item,
   RequestPostsType,
   ResponsePostsType,
 } from '@/src/shared/model/api/types'
@@ -33,10 +33,10 @@ export const postsApi = baseApi.injectEndpoints({
         url: 'posts',
       }),
     }),
-    getComments: builder.query<Post, { postId: number }>({
+    getComments: builder.query<GetCommentsResponse, { postId: number }>({
       query: ({ postId }) => ({
         method: 'GET',
-        url: `/posts/id/${postId}/comments`,
+        url: `/posts/${postId}/comments`,
       }),
     }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
