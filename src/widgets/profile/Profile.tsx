@@ -134,11 +134,12 @@ export const Profile = () => {
     setPublicAllPosts([])
     setPageNumber(1)
   }, [params.userId])
-    const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
+  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
+
   return (
     <div className={s.page}>
       <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
-        {postsToShow.length && <Posts posts={postsToShow} />}
+      {postsToShow.length && <Posts posts={postsToShow} />}
       {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>

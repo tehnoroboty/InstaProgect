@@ -25,7 +25,7 @@ export default function ModalPost(props: Props) {
   }
   const isCarousel = post.images.length > 1
   const renderItem = (item: ImageType) => (
-    <Image alt={'post'} height={300} src={item.url} width={300} />
+    <Image alt={'post'} className={s.image} height={490} src={item.url} width={562} />
   )
   const commentsData = comments?.items ?? []
 
