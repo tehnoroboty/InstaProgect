@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { useUpdatePostMutation } from '@/src/shared/model/api/postsApi'
+import { CustomerError } from '@/src/shared/model/api/types'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
@@ -14,16 +16,16 @@ import Image from 'next/image'
 
 import s from '@/src/widgets/editPost/editPost.module.scss'
 
-import Picture from './slider.jpg'
-
 type Props = {
+  imgSrc: string
   postId: number
 }
 
-export const EditPost = ({ postId }: Props) => {
+export const EditPost = ({ imgSrc, postId }: Props) => {
   const [showDialog, setShowDialog] = useState(true)
   const [error, setError] = useState<string | undefined>(undefined)
   const [text, setText] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const [updatePost, { isError, isLoading, isSuccess }] = useUpdatePostMutation()
 
@@ -35,10 +37,10 @@ export const EditPost = ({ postId }: Props) => {
         },
         postId,
       }).unwrap() // unwrap() для обработки ошибок
-
-      console.log('Пост успешно обновлен')
     } catch (error) {
-      console.error('Ошибка при обновлении поста:', error)
+      const err = error as CustomerError
+
+      setErrorMessage(err.data?.messages[0].message)
     }
   }
 
@@ -52,6 +54,7 @@ export const EditPost = ({ postId }: Props) => {
 
   return (
     <>
+      {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
       <Dialog className={s.modal} isSimple onClose={toggleModalHandler} open={showDialog}>
         <div className={s.header}>
           <Title asChild>
@@ -66,7 +69,7 @@ export const EditPost = ({ postId }: Props) => {
 
         <div className={s.container}>
           <div className={s.photoBox}>
-            <Image alt={'picture'} src={Picture} />
+            <Image alt={'picture'} src={imgSrc} />
           </div>
           <div className={s.descriptionBox}>
             <UserAvatarName
@@ -78,7 +81,7 @@ export const EditPost = ({ postId }: Props) => {
               className={s.addPublication}
               error={error}
               label={'Add publication descriptions'}
-              maxLength={5}
+              maxLength={500}
               onChange={handleTextChange}
               placeholder={''}
               setError={setError}
