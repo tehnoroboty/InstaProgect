@@ -41,7 +41,7 @@ export const Carousel = <T,>(props: Props<T>) => {
   return (
     <Swiper
       className={classNames}
-      loop
+      loop={hasMoreThanOneItem}
       modules={[Navigation, Pagination]}
       navigation={{
         nextEl: `.${s.buttonNext}`,
