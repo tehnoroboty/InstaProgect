@@ -37,8 +37,12 @@ export default function ModalPost(props: Props) {
     setIsEditing(true)
   }
 
+  const handleExitEdit = () => {
+    setIsEditing(false)
+  }
+
   if (isEditing) {
-    return <EditPost />
+    return <EditPost onExitEdit={handleExitEdit} postId={15} />
   }
 
   return (

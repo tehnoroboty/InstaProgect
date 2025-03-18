@@ -11,21 +11,23 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { ClosePostModal } from '@/src/widgets/editPost/closePostModal/ClosePostModal'
 import { Title } from '@radix-ui/react-dialog'
 import Image from 'next/image'
 
 import s from '@/src/widgets/editPost/editPost.module.scss'
 
 type Props = {
-  imgSrc: string
+  imgSrc?: string
+  onExitEdit: () => void // Колбэк для выхода из режима редактирования
   postId: number
 }
 
-export const EditPost = ({ imgSrc, postId }: Props) => {
-  const [showDialog, setShowDialog] = useState(true)
+export const EditPost = ({ imgSrc = '', onExitEdit, postId }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined)
   const [text, setText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [exitModal, setExitModal] = useState(false)
 
   const [updatePost, { isError, isLoading, isSuccess }] = useUpdatePostMutation()
 
@@ -36,7 +38,7 @@ export const EditPost = ({ imgSrc, postId }: Props) => {
           description: text,
         },
         postId,
-      }).unwrap() // unwrap() для обработки ошибок
+      }).unwrap()
     } catch (error) {
       const err = error as CustomerError
 
@@ -44,25 +46,30 @@ export const EditPost = ({ imgSrc, postId }: Props) => {
     }
   }
 
-  const toggleModalHandler = () => {
-    setShowDialog(!showDialog)
-  }
-
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.currentTarget.value)
+  }
+
+  const handleClose = () => {
+    setExitModal(false) // Закрываем ExitModal
+    onExitEdit() // Возвращаемся к ModalPost
   }
 
   return (
     <>
       {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
-      <Dialog className={s.modal} isSimple onClose={toggleModalHandler} open={showDialog}>
+      <Dialog className={s.modal} isSimple onClose={() => setExitModal(true)} open>
         <div className={s.header}>
           <Title asChild>
             <Typography as={'h1'} option={'h1'}>
               {'Edit Post'}
             </Typography>
           </Title>
-          <Button className={s.closeButton} onClick={() => {}} variant={'transparent'}>
+          <Button
+            className={s.closeButton}
+            onClick={() => setExitModal(true)}
+            variant={'transparent'}
+          >
             <CloseIcon className={s.closeIcon} color={'white'} />
           </Button>
         </div>
@@ -93,6 +100,16 @@ export const EditPost = ({ imgSrc, postId }: Props) => {
           </div>
         </div>
       </Dialog>
+      <ClosePostModal
+        modalMessage={
+          'Do you really want to finish editing? If you close the changes you have made will not be saved.'
+        }
+        modalTitle={'Close Post'}
+        onClickNo={() => setExitModal(false)}
+        onCloseModal={() => setExitModal(false)}
+        onCloseParentModal={handleClose}
+        open={exitModal}
+      />
     </>
   )
 }
