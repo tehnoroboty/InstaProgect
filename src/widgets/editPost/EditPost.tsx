@@ -46,10 +46,6 @@ export const EditPost = ({ imgSrc = '', onExitEdit, postId }: Props) => {
     }
   }
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.currentTarget.value)
-  }
-
   const handleClose = () => {
     setExitModal(false) // Закрываем ExitModal
     onExitEdit() // Возвращаемся к ModalPost
@@ -86,13 +82,11 @@ export const EditPost = ({ imgSrc = '', onExitEdit, postId }: Props) => {
             />
             <TextAreaWithValidation
               className={s.addPublication}
-              error={error}
               label={'Add publication descriptions'}
               maxLength={500}
-              onChange={handleTextChange}
+              onErrorChange={setError}
+              onTextChange={setText}
               placeholder={''}
-              setError={setError}
-              value={text}
             />
             <Button className={s.saveChangesBtn} disabled={!!error} onClick={onSaveChanges}>
               {'Save Changes'}
