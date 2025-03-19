@@ -1,21 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 
 import { Button } from '../button/Button'
 
 const meta = {
   argTypes: { disabled: { control: 'boolean' } },
   args: {
-    error: undefined,
     label: 'Описание',
     maxLength: 10,
-    onChange: () => {},
+    onErrorChange: () => {},
+    onTextChange: () => {},
     placeholder: 'Введите описание',
-    setError: () => {},
-    value: '',
   },
   component: TextAreaWithValidation,
   tags: ['autodocs'],
@@ -25,67 +24,20 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Default: Story = {}
+
+export const WithErrorAndText: Story = {
   render: args => {
     const [text, setText] = useState('')
     const [error, setError] = useState<string | undefined>(undefined)
-
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.currentTarget.value)
-    }
-
-    return (
-      <TextAreaWithValidation
-        {...args}
-        error={error}
-        onChange={handleChange}
-        setError={setError}
-        value={text}
-      />
-    )
-  },
-}
-
-export const WithError: Story = {
-  render: args => {
-    const [text, setText] = useState('This text exceeds the maximum length.')
-    const [error, setError] = useState<string | undefined>(undefined)
-
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.currentTarget.value)
-    }
-
-    return (
-      <TextAreaWithValidation
-        {...args}
-        error={error}
-        onChange={handleChange}
-        setError={setError}
-        value={text}
-      />
-    )
-  },
-}
-
-export const WithButton: Story = {
-  render: args => {
-    const [text, setText] = useState('')
-    const [error, setError] = useState<string | undefined>(undefined)
-
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.currentTarget.value)
-    }
 
     return (
       <>
-        <TextAreaWithValidation
-          {...args}
-          error={error}
-          onChange={handleChange}
-          setError={setError}
-          value={text}
-        />
-        <Button disabled={!!error}>Button</Button>
+        <TextAreaWithValidation maxLength={5} onErrorChange={setError} onTextChange={setText} />
+        <Button disabled={!!error} style={{ margin: '20px 0' }}>
+          Button
+        </Button>
+        <Typography option={'regular_text16'}>{`Text: ${text}`}</Typography>
       </>
     )
   },
