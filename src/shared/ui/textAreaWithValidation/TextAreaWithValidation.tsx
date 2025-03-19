@@ -1,36 +1,45 @@
 'use client'
-import React, { ChangeEvent, ComponentProps, forwardRef, useEffect } from 'react'
+import React, { ChangeEvent, ComponentProps, forwardRef, useState } from 'react'
 
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 
 type Props = {
-  error: string | undefined
   maxLength: number
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
-  setError: (error: string | undefined) => void
-  value: string
-} & ComponentProps<typeof TextArea>
+  onErrorChange?: (error: string | undefined) => void
+  onTextChange?: (text: string) => void
+} & Omit<ComponentProps<typeof TextArea>, 'onChange' | 'value'>
 
 export const TextAreaWithValidation = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
-  const { error, maxLength, onChange, setError, value, ...rest } = props
+  const { maxLength, onErrorChange, onTextChange, ...rest } = props
 
-  useEffect(() => {
+  const [error, setError] = useState<string | undefined>(undefined)
+  const [textValue, setTextValue] = useState('')
+
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.currentTarget.value
+
+    setTextValue(newValue)
+
+    onTextChange?.(newValue)
+
     const newError =
-      value.length > maxLength
+      newValue.length > maxLength
         ? `The maximum length should be no more than ${maxLength} characters`
         : undefined
 
     setError(newError)
-  }, [value, setError, maxLength])
+
+    onErrorChange?.(newError)
+  }
 
   return (
     <TextArea
       {...rest}
       error={error}
       maxLength={maxLength}
-      onChange={onChange}
+      onChange={handleTextChange}
       ref={ref}
-      value={value}
+      value={textValue}
     />
   )
 })

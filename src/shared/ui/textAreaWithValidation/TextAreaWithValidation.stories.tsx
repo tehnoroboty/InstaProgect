@@ -3,11 +3,19 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 
 import { Button } from '../button/Button'
 
 const meta = {
-  args: { maxLength: 10 },
+  argTypes: { disabled: { control: 'boolean' } },
+  args: {
+    label: 'Описание',
+    maxLength: 10,
+    onErrorChange: () => {},
+    onTextChange: () => {},
+    placeholder: 'Введите описание',
+  },
   component: TextAreaWithValidation,
   tags: ['autodocs'],
   title: 'Components/TextAreaWithValidation',
@@ -18,23 +26,18 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 
-export const WithOnErrorChange: Story = {
-  args: {
-    label: 'Комментарий',
-    maxLength: 10,
-    placeholder: 'Введите комментарий',
-  },
+export const WithErrorAndText: Story = {
   render: args => {
+    const [text, setText] = useState('')
     const [error, setError] = useState<string | undefined>(undefined)
-
-    const handleErrorChange = (error: string | undefined) => {
-      setError(error)
-    }
 
     return (
       <>
-        <TextAreaWithValidation maxLength={5} onErrorChange={handleErrorChange} />
-        <Button disabled={!!error}>Button</Button>
+        <TextAreaWithValidation maxLength={5} onErrorChange={setError} onTextChange={setText} />
+        <Button disabled={!!error} style={{ margin: '20px 0' }}>
+          Button
+        </Button>
+        <Typography option={'regular_text16'}>{`Text: ${text}`}</Typography>
       </>
     )
   },
