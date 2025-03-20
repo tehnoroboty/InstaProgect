@@ -4,6 +4,7 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { FormType, schema } from '@/src/features/login/validators'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLoginMutation } from '@/src/shared/model/api/authApi'
 import { LoginError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -41,7 +42,7 @@ export default function Login() {
     try {
       await login(formData).unwrap()
 
-      router.push(`/`)
+      router.push(AuthRoutes.HOME)
     } catch (err) {
       const { data } = err as LoginError
 
