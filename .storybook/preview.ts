@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react'
+import type { Decorator, Preview } from '@storybook/react'
 import '@/src/shared/styles/index.scss'
 
 import '@fontsource-variable/inter'
@@ -12,6 +12,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    nextjs: {
+      appDirectory: true,
     },
   },
 }
