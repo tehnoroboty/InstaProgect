@@ -47,14 +47,9 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
-              {!modalTitle && (
-                <DropdownPost
-                  className={s.dropdownPost}
-                  isFollowedBy={false}
-                  isOurPost
-                  onEdit={onEdit}
-                />
-              )}
+              {/*{!modalTitle && (*/}
+              {/*  // <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />*/}
+              {/*)}*/}
               <Close
                 className={clsx(
                   s.IconButton,

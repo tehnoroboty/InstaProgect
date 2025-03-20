@@ -4,7 +4,7 @@
 
   width: 100%;
   min-width: 564px;
-  height: 100%;
+  height: 490px;
   max-height: 481px;
   padding: 11px 0;
 
@@ -20,6 +20,7 @@
 
 .commentsBody {
   overflow: auto;
+  flex-grow: 1;
   max-height: 336px;
   padding: 19px 23px 8px 24px;
 }

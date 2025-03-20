@@ -1,9 +1,10 @@
-'use client'
-
-import React, { ReactNode, useState } from 'react'
-
+import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
+import { ImageType } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
+import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
+import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import {
   ModalCommentsSection,
   ModalCommentsSectionProps,
@@ -13,50 +14,41 @@ import { StaticImageData } from 'next/image'
 
 import s from './modalPost.module.scss'
 
-type ListType = {
-  id: string
-  img: StaticImageData | string
+type Props = {
+  onClose: () => void
+  open: boolean
 }
 
-type Props = {
-  list: ListType[]
-  renderItem: (item: ListType) => ReactNode
-} & ModalCommentsSectionProps
-
 export default function ModalPost(props: Props) {
-  const { avatars, commentsData, list, post, renderItem } = props
+  const { onClose, open } = props
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId')
+  const numericPostId = postId ? Number(postId) : null
+  const { data: post } = useGetPostQuery({ postId: numericPostId! }, { skip: !numericPostId })
+  const { data: comments } = useGetCommentsQuery(
+    { postId: numericPostId! },
+    { skip: !numericPostId }
+  )
 
-  const [showDialog, setShowDialog] = useState(true)
-  const [isEditing, setIsEditing] = useState(false)
-
-  const toggleModalHandler = () => {
-    setShowDialog(!showDialog)
+  if (!post) {
+    return null
   }
-
-  const handleEditPost = () => {
-    setIsEditing(true)
-  }
-
-  const handleExitEdit = () => {
-    setIsEditing(false)
-  }
-
-  if (isEditing) {
-    return <EditPost onExitEdit={handleExitEdit} postId={15} />
-  }
+  const isCarousel = post.images.length > 1
+  const renderItem = (item: ImageType) => (
+    <Image alt={'post'} className={s.image} height={490} src={item.url} width={562} />
+  )
+  const commentsData = comments?.items ?? []
 
   return (
     <>
-      <Dialog
-        className={s.dialog}
-        closeClassName={s.closeClassName}
-        onClose={toggleModalHandler}
-        onEdit={handleEditPost}
-        open={showDialog}
-      >
+      <Dialog className={s.dialog} closeClassName={s.closeClassName} onClose={onClose} open={open}>
         <div className={s.container}>
-          <Carousel list={list} renderItem={renderItem} size={'large'} />
-          <ModalCommentsSection avatars={avatars} commentsData={commentsData} post={post} />
+          {isCarousel ? (
+            <Carousel list={post.images} renderItem={renderItem} size={'large'} />
+          ) : (
+            renderItem(post.images[0])
+          )}
+          <ModalCommentsSection commentsData={commentsData} post={post} />
         </div>
       </Dialog>
     </>

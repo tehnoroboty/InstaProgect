@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react'
+import { MouseEvent, ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -35,11 +35,15 @@ export const Carousel = <T,>(props: Props<T>) => {
     }
   }, [disableSwipe])
 
+  const handleStopPropagation = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+    e.stopPropagation()
+  }
+
   return (
     <Swiper
       className={classNames}
-      loop
-      modules={[Navigation, Pagination]}
+      loop={hasMoreThanOneItem}
+      modules={[Pagination]}
       navigation={{
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
@@ -61,9 +65,23 @@ export const Carousel = <T,>(props: Props<T>) => {
       ))}
       {hasMoreThanOneItem && (
         <>
-          <Button className={s.buttonPrev} variant={'transparent'}></Button>
-          <Button className={s.buttonNext} variant={'transparent'}></Button>
-          <div className={s.pagination}></div>
+          <Button
+            className={s.buttonPrev}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slidePrev()
+            }}
+            variant={'transparent'}
+          ></Button>
+          <Button
+            className={s.buttonNext}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slideNext()
+            }}
+            variant={'transparent'}
+          ></Button>
+          <div className={s.pagination} onClick={handleStopPropagation}></div>
         </>
       )}
     </Swiper>

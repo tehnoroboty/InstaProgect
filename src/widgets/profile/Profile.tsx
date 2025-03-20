@@ -1,163 +1,147 @@
 'use client'
-
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
+import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
 import { Item, SortDirection } from '@/src/shared/model/api/types'
-import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
-import { Button } from '@/src/shared/ui/button/Button'
+import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
-import { Typography } from '@/src/shared/ui/typography/Typography'
-import Image from 'next/image'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
+import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-import { profileData } from './data'
-
-const PAGESIZE = 6
-const SORTBY = 'createdAt'
-const SORTDIRECTION: SortDirection = 'desc'
+const AUTH_PAGE_SIZE = 6
+const PUBLIC_PAGE_SIZE = 8
+const SORT_BY = 'createdAt'
+const SORT_DIRECTION: SortDirection = 'desc'
 
 export const Profile = () => {
-  const [pageNumber, setPageNumber] = useState(1)
-  const [allPosts, setAllPosts] = useState<Item[]>([])
-  const { data } = useMeQuery()
-  const userName = data?.userName
+  const [pageNumber, setPageNumber] = useState<number>(1)
+  const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
+  const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
+  const params = useParams() as { userId: string }
 
-  const { data: posts, isFetching } = useGetMyPostsQuery(
+  const { data: meData } = useMeQuery()
+  const isAuthenticated = !!meData
+  const userId = meData?.userId
+
+  const searchParams = useSearchParams()
+  const userName = meData?.userName
+  const postId = searchParams.get('postId')
+  const router = useRouter()
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const isMyProfile = isAuthenticated && Number(params.userId) === userId
+  const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
+
+  const closeModal = useCallback(() => {
+    setModalIsOpen(false)
+    router.replace(`/profile/${params.userId}`)
+  }, [router, params.userId])
+
+  useEffect(() => {
+    if (postId) {
+      setModalIsOpen(true)
+    } else {
+      closeModal()
+    }
+  }, [closeModal, postId])
+
+  const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,
-      pageSize: PAGESIZE,
-      sortBy: SORTBY,
-      sortDirection: SORTDIRECTION,
+      pageSize,
+      sortBy: SORT_BY,
+      sortDirection: SORT_DIRECTION,
       userName: userName ?? '',
     },
-    { skip: !userName }
+    { skip: !isMyProfile }
   )
 
+  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
+    {
+      // endCursorPostId: '456', // Или undefined для первой страницы
+      // pageSize,
+      sortBy: SORT_BY,
+      sortDirection: SORT_DIRECTION,
+      userId: Number(params.userId),
+    },
+    { skip: isMyProfile }
+  )
+
+  const { data: publicUserProfile } = useGetPublicUserProfileQuery({
+    profileId: Number(params.userId),
+  })
+
+  // собираем посты в Личный профиль
   useEffect(() => {
-    if (posts?.items?.length) {
-      setAllPosts(prev => [...prev, ...posts.items])
+    if (isMyProfile && myPosts?.items) {
+      setMyAllPosts(prev => {
+        const existingIds = new Set(prev.map(post => post.id))
+        const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
+
+        return [...prev, ...newItems]
+      })
     }
-  }, [posts])
+  }, [myPosts, publicPosts, isMyProfile])
 
+  //собираем посты в Публичный профиль
   useEffect(() => {
-    const scrollEl = document.querySelector('section')
+    if (!isMyProfile && publicPosts?.items) {
+      setPublicAllPosts(publicPosts.items)
+    }
+  }, [publicPosts, isMyProfile])
 
-    if (scrollEl) {
-      const handleScroll = () => {
-        const totalCount = posts?.totalCount ?? PAGESIZE
+  // бесконечный скролл только для личного профиля
+  useEffect(() => {
+    if (!isMyProfile) {
+      return
+    }
 
+    const scrollEl = document.querySelector('main')
+
+    if (!scrollEl) {
+      return
+    }
+
+    const handleScroll = () => {
+      const totalCount = myPosts?.totalCount ?? pageSize
+
+      setPageNumber(prevPage => {
         if (
           scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-          !isFetching &&
-          Math.ceil(totalCount / PAGESIZE) > pageNumber
+          !isFetchingMyPosts &&
+          Math.ceil(totalCount / pageSize) > pageNumber
         ) {
-          setPageNumber(prev => prev + 1)
+          return prevPage + 1
         }
-      }
 
-      scrollEl.addEventListener('scroll', handleScroll)
-
-      return () => {
-        scrollEl.removeEventListener('scroll', handleScroll)
-      }
+        return prevPage
+      })
     }
-  }, [posts, isFetching])
 
-  const onClickHandler = () => {}
+    scrollEl.addEventListener('scroll', handleScroll)
+
+    return () => {
+      scrollEl.removeEventListener('scroll', handleScroll)
+    }
+  }, [myPosts, isFetchingMyPosts, pageNumber, isMyProfile, pageSize])
+
+  useEffect(() => {
+    setMyAllPosts([])
+    setPublicAllPosts([])
+    setPageNumber(1)
+  }, [params.userId])
+  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
 
   return (
     <div className={s.page}>
-      <div className={s.profileContainer}>
-        <AvatarBox size={'xl'} />
-        <div className={s.profileDetails}>
-          <div className={s.container}>
-            <div className={s.profileInfo}>
-              <div className={s.userNameContainer}>
-                <Typography as={'h1'} option={'h1'}>
-                  {profileData.firstName}
-                </Typography>
-                <Typography as={'h1'} option={'h1'}>
-                  {profileData.lastName}
-                </Typography>
-              </div>
-              <div className={s.followersStats}>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.followingCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Following'}
-                  </Typography>
-                </div>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.followersCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Followers'}
-                  </Typography>
-                </div>
-                <div className={s.followersStatItem}>
-                  <Typography as={'span'} option={'bold_text14'}>
-                    {profileData.publicationsCount}
-                  </Typography>
-                  <Typography as={'span'} option={'regular_text14'}>
-                    {'Publications'}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-            <div className={s.buttonsBlock}>
-              {/*
-              {false && (
-                <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                  {'Profile Settings'}
-                </Button>
-              )}
-*/}
-              {/*
-              {true && (
-                <>
-                  <Button onClick={onClickHandler} type={'button'} variant={'primary'}>
-                    {'Follow'}
-                  </Button>
-                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                    {'Send Message'}
-                  </Button>
-                </>
-              )}
-*/}
-              {true && (
-                <>
-                  <Button onClick={onClickHandler} type={'button'} variant={'bordered'}>
-                    {'Unfollow'}
-                  </Button>
-                  <Button onClick={onClickHandler} type={'button'} variant={'secondary'}>
-                    {'Send Message'}
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-          <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
-            {profileData.aboutMe}
-          </Typography>
-        </div>
-      </div>
-      {allPosts.length > 0 && (
-        <Posts
-          posts={allPosts}
-          renderItem={post => {
-            if (post.images.length !== 0) {
-              return <Image alt={'Post image'} height={300} src={post.images[0].url} width={300} />
-            }
-          }}
-        />
-      )}
-      {isFetching && <div>Loader...</div>}
+      <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
+      {postsToShow.length && <Posts posts={postsToShow} />}
+      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+      <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
 }
