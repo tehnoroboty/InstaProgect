@@ -142,13 +142,25 @@ export const ModalCommentsSection = ({
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <UserAvatarName url={avatarOwner} username={userName} />
+        <UserAvatarName
+          linkHref={`/profile/${post.ownerId}`}
+          url={avatarOwner}
+          username={userName}
+        />
         <div className={s.postMenu}>
           {<DropdownPost isFollowedBy={false} isOurPost onEdit={handleEditPost} />}
         </div>
       </div>
 
       <div className={s.commentsBody}>
+        <div className={s.description}>
+          <UserAvatarName
+            linkHref={`/profile/${post.ownerId}`}
+            url={avatarOwner}
+            username={userName}
+          />
+          <Typography>{post.description}</Typography>
+        </div>
         {commentsData
           ?.map(el => (
             <div className={s.usersCommentBody} key={el.id}>
