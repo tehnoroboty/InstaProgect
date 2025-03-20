@@ -42,3 +42,18 @@ export const WithErrorAndText: Story = {
     )
   },
 }
+
+export const WithValue: Story = {
+  render: args => {
+    const [error, setError] = useState<string | undefined>(undefined)
+
+    return (
+      <>
+        <TextAreaWithValidation maxLength={5} onErrorChange={setError} value={'qqq'} />
+        <Button disabled={!!error} style={{ margin: '20px 0' }}>
+          Button
+        </Button>
+      </>
+    )
+  },
+}
