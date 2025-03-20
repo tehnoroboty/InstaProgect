@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -50,6 +52,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
   const openModal = useBoolean(true)
   const showPublishPhoto = useBoolean()
   const showCroppingPhoto = useBoolean()
+  const dispatch = useDispatch()
 
   const [editedPhotos, setEditedPhotos] = useState<string[]>(photos)
 
@@ -157,7 +160,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => openModal.setFalse()}
+        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />
