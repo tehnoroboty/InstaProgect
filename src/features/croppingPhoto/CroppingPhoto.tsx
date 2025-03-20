@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Cropper from 'react-easy-crop'
+import { useDispatch } from 'react-redux'
 
 import { applyCropToAllPhotos } from '@/src/features/croppingPhoto/applyCropToAllPhotos'
 import { PhotoPreview } from '@/src/features/croppingPhoto/photoPreview/PhotoPreview'
@@ -14,6 +15,7 @@ import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -31,6 +33,7 @@ type Props = {
 }
 export const CroppingPhoto = ({ photos }: Props) => {
   const openModal = useBoolean(true)
+  const dispatch = useDispatch()
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
   const showAddPost = useBoolean()
@@ -229,7 +232,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => openModal.setFalse()}
+        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />

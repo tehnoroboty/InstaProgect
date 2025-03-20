@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { NavigationPanel } from '@/src/widgets/navigationPanel/NavigationPanel'
+import { StoreWrapper } from '../../shared/model/store/StoreWrapper'
+import { NavigationPanel } from './NavigationPanel'
 
 const meta = {
   component: NavigationPanel,
+  decorators: [story => <StoreWrapper>{story()}</StoreWrapper>],
   tags: ['autodocs'],
   title: 'Components/NavigationPanel',
 } satisfies Meta<typeof NavigationPanel>

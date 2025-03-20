@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
@@ -12,6 +13,8 @@ import {
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
+import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -23,17 +26,19 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import { Title } from '@radix-ui/react-dialog'
+import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
 
 type Props = {
-  avatarOwner?: string
   photos: string[]
-  userName?: string
 }
 
-export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' }: Props) => {
+export const PublishPhoto = ({ photos }: Props) => {
+  const { data: userProfile } = useGetUserProfileQuery()
   const openModal = useBoolean(true)
+  const dispatch = useDispatch()
+  const router = useRouter()
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -70,7 +75,7 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
 
         await addPost(publishData).unwrap()
         openModal.setFalse()
-        alert('ok')
+        router.push('/profile')
       } else {
         console.warn('No files were uploaded successfully.')
       }
@@ -144,7 +149,10 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
           </div>
           <div className={s.descriptionBox}>
             <div className={s.publicationBox}>
-              <UserAvatarName url={avatarOwner} username={userName} />
+              <UserAvatarName
+                url={userProfile?.avatars[0]?.url || ''}
+                username={`${userProfile?.userName}`}
+              />
               <TextArea
                 className={s.addPublication}
                 label={'Add publication descriptions'}
@@ -182,7 +190,7 @@ export const PublishPhoto = ({ avatarOwner = '', photos, userName = 'User Name' 
       </Dialog>
       <ExitModal
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => openModal.setFalse()}
+        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />

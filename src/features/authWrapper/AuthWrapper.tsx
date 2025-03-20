@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { useRouter } from 'next/navigation'
@@ -21,7 +22,7 @@ export const AuthWrapper = (props: Props) => {
   useEffect(() => {
     if (isSuccess) {
       if (login) {
-        router.push('/')
+        router.push(AuthRoutes.HOME)
       }
     }
   }, [isSuccess])

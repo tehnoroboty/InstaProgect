@@ -9,7 +9,12 @@ import {
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<{ images: Image }, { file: File }>({
+    createImageForPost: builder.mutation<
+      { images: Image },
+      {
+        file: File
+      }
+    >({
       query: ({ file }) => {
         const formData = new FormData()
 
@@ -23,6 +28,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
+      invalidatesTags: ['POSTS'],
       query: body => ({
         body,
         method: 'POST',
@@ -30,6 +36,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
+      providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
         params: {

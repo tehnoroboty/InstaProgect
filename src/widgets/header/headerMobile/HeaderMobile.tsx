@@ -33,7 +33,7 @@ export const HeaderMobile = (props: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
   const id = useId()
-
+  
   const route = useRouter()
 
   const onClickHandler = () => {
@@ -43,7 +43,7 @@ export const HeaderMobile = (props: Props) => {
   const onLogoutConfirm = async () => {
     await logout().unwrap()
     setIsModalOpen(false)
-    route.push(AuthRoutes.LOGIN)
+    route.push(AuthRoutes.HOME)
   }
 
   const menuHeaderMobile: MenuItemType[] = [
