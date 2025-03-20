@@ -5,12 +5,6 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import {
-  ModalCommentsSection,
-  ModalCommentsSectionProps,
-} from '@/src/widgets/commentsSection/ModalCommentsSection'
-import { EditPost } from '@/src/widgets/editPost/EditPost'
-import { StaticImageData } from 'next/image'
 
 import s from './modalPost.module.scss'
 
@@ -48,7 +42,7 @@ export default function ModalPost(props: Props) {
           ) : (
             renderItem(post.images[0])
           )}
-          <ModalCommentsSection commentsData={commentsData} post={post} />
+          <ModalCommentsSection commentsData={commentsData} post={post} postId={numericPostId!} />
         </div>
       </Dialog>
     </>

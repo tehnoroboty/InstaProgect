@@ -11,6 +11,7 @@ import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
+import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 
@@ -78,12 +79,14 @@ export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: CommentType[]
   post: Post
+  postId: number
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
   post,
+  postId,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
@@ -120,11 +123,29 @@ export const ModalCommentsSection = ({
       }
     })
 
+  const [isEditing, setIsEditing] = useState(false)
+
+  const handleEditPost = () => {
+    setIsEditing(true)
+  }
+
+  const handleExitEdit = () => {
+    setIsEditing(false)
+  }
+
+  if (isEditing) {
+    return (
+      <EditPost onExitEdit={handleExitEdit} postDescription={post.description} postId={postId} />
+    )
+  }
+
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <UserAvatarName url={avatarOwner} username={userName} />
-        <div className={s.postMenu}>{<DropdownPost isFollowedBy={false} isOurPost />}</div>
+        <div className={s.postMenu}>
+          {<DropdownPost isFollowedBy={false} isOurPost onEdit={handleEditPost} />}
+        </div>
       </div>
 
       <div className={s.commentsBody}>

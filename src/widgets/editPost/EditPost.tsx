@@ -20,10 +20,11 @@ import s from '@/src/widgets/editPost/editPost.module.scss'
 type Props = {
   imgSrc?: string
   onExitEdit: () => void // Колбэк для выхода из режима редактирования
+  postDescription: string
   postId: number
 }
 
-export const EditPost = ({ imgSrc = '', onExitEdit, postId }: Props) => {
+export const EditPost = ({ imgSrc = '', onExitEdit, postDescription = '', postId }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined)
   const [text, setText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -87,6 +88,7 @@ export const EditPost = ({ imgSrc = '', onExitEdit, postId }: Props) => {
               onErrorChange={setError}
               onTextChange={setText}
               placeholder={''}
+              value={postDescription}
             />
             <Button className={s.saveChangesBtn} disabled={!!error} onClick={onSaveChanges}>
               {'Save Changes'}

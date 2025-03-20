@@ -92,5 +92,5 @@ export const {
   useGetMyPostsQuery,
   useGetPostQuery,
   useGetPublicUserPostsQuery,
-    useUpdatePostMutation,
+  useUpdatePostMutation,
 } = postsApi
