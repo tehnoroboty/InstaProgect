@@ -151,7 +151,7 @@ export const PublishPhoto = ({ photos }: Props) => {
             <div className={s.publicationBox}>
               <UserAvatarName
                 url={userProfile?.avatars[0]?.url || ''}
-                username={`${userProfile?.firstName} ${userProfile?.lastName}`}
+                username={`${userProfile?.userName}`}
               />
               <TextArea
                 className={s.addPublication}
