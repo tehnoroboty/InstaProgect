@@ -28,7 +28,7 @@ export const Posts = ({ posts }: Props) => {
   const params = useParams() as { userId: string }
 
   const onClickPostHandler = (postId: number) => {
-    router.replace(`/profile/${params.userId}?postId=${postId}`)
+    router.replace(`/profile/${params.userId}?postId=${postId}`, { scroll: false })
   }
 
   const renderImgCarousel = (img: ImageType, index: number) => {
@@ -45,7 +45,6 @@ export const Posts = ({ posts }: Props) => {
             {post.images.length > 0 ? (
               <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
             ) : (
-              // <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
               <div className={s.notFound}>
                 <ImageNotFound height={194} width={199} />
                 <div>
