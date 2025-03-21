@@ -58,22 +58,22 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
 
-    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
-      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
-        const baseUrl = `/public-posts/user/${userId}`
-        const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
+    /*    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+          query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
+            const baseUrl = `/public-posts/user/${userId}`
+            const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
 
-        return {
-          method: 'GET',
-          params: {
-            pageSize,
-            sortBy,
-            sortDirection,
+            return {
+              method: 'GET',
+              params: {
+                pageSize,
+                sortBy,
+                sortDirection,
+              },
+              url: `${baseUrl}${cursorSegment}`,
+            }
           },
-          url: `${baseUrl}${cursorSegment}`,
-        }
-      },
-    }),
+        }),*/
   }),
 })
 
@@ -83,5 +83,5 @@ export const {
   useGetCommentsQuery,
   useGetMyPostsQuery,
   useGetPostQuery,
-  useGetPublicUserPostsQuery,
+  //useGetPublicUserPostsQuery,
 } = postsApi

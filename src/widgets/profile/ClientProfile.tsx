@@ -1,45 +1,58 @@
 'use client'
+
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
-import { Item, SortDirection } from '@/src/shared/model/api/types'
-import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetMyPostsQuery } from '@/src/shared/model/api/postsApi'
+import {
+  GetPublicUserPostsResponse,
+  GetPublicUserProfileResponse,
+  Item,
+} from '@/src/shared/model/api/types'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-const AUTH_PAGE_SIZE = 6
-const PUBLIC_PAGE_SIZE = 8
-const SORT_BY = 'createdAt'
-const SORT_DIRECTION: SortDirection = 'desc'
+type Props = {
+  publicPosts: GetPublicUserPostsResponse
+  publicUserProfile: GetPublicUserProfileResponse
+  searchParams: { postId?: string }
+  userId: number
+}
 
-export const Profile = () => {
+const AUTH_PAGE_SIZE = 6
+const SORT_BY = 'createdAt'
+const SORT_DIRECTION = 'desc'
+
+export default function ClientProfile({
+  publicPosts,
+  publicUserProfile,
+  searchParams,
+  userId,
+}: Props) {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
-  const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  const params = useParams() as { userId: string }
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const { data: meData } = useMeQuery()
   const isAuthenticated = !!meData
-  const myUserId = meData?.userId
+  const meUserId = meData?.userId
   const meUserName = meData?.userName
+  const postId = searchParams.postId
 
-  const searchParams = useSearchParams()
-  const postId = searchParams.get('postId')
   const router = useRouter()
-  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const isMyProfile = isAuthenticated && meUserId === userId
+  const pageSize = AUTH_PAGE_SIZE
 
-  const isMyProfile = isAuthenticated && Number(params.userId) === myUserId
-  const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
+  const postsToShow = isMyProfile ? myAllPosts : publicPosts.items
 
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
-    router.replace(`/profile/${params.userId}`)
-  }, [router, params.userId])
+    router.replace(`/profile/${userId}`)
+  }, [router, userId])
 
   useEffect(() => {
     if (postId) {
@@ -60,22 +73,7 @@ export const Profile = () => {
     { skip: !isMyProfile }
   )
 
-  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
-    {
-      // endCursorPostId: '456', // Или undefined для первой страницы
-      // pageSize,
-      sortBy: SORT_BY,
-      sortDirection: SORT_DIRECTION,
-      userId: Number(params.userId),
-    },
-    { skip: isMyProfile }
-  )
-
-  const { data: publicUserProfile } = useGetPublicUserProfileQuery({
-    profileId: Number(params.userId),
-  })
-
-  // собираем посты в Личный профиль
+  // Собираем посты для личного профиля
   useEffect(() => {
     if (isMyProfile && myPosts?.items) {
       setMyAllPosts(prev => {
@@ -85,16 +83,9 @@ export const Profile = () => {
         return [...prev, ...newItems]
       })
     }
-  }, [myPosts, publicPosts, isMyProfile])
+  }, [myPosts, isMyProfile])
 
-  //собираем посты в Публичный профиль
-  useEffect(() => {
-    if (!isMyProfile && publicPosts?.items) {
-      setPublicAllPosts(publicPosts.items)
-    }
-  }, [publicPosts, isMyProfile])
-
-  // бесконечный скролл только для личного профиля
+  // Бесконечный скролл для личного профиля
   useEffect(() => {
     if (!isMyProfile) {
       return
@@ -113,7 +104,7 @@ export const Profile = () => {
         if (
           scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
           !isFetchingMyPosts &&
-          Math.ceil(totalCount / pageSize) > pageNumber
+          Math.ceil(totalCount / pageSize) > prevPage
         ) {
           return prevPage + 1
         }
@@ -129,18 +120,11 @@ export const Profile = () => {
     }
   }, [myPosts, isFetchingMyPosts, pageNumber, isMyProfile, pageSize])
 
-  useEffect(() => {
-    setMyAllPosts([])
-    setPublicAllPosts([])
-    setPageNumber(1)
-  }, [params.userId])
-  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
-
   return (
     <div className={s.page}>
       <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
-      {postsToShow.length && <Posts posts={postsToShow} />}
-      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+      {postsToShow.length ? <Posts posts={postsToShow} /> : <div>Нет постов</div>}
+      {isFetchingMyPosts && isMyProfile && <div>Loader...</div>}
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )
