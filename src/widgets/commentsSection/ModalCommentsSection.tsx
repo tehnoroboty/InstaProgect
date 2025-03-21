@@ -14,6 +14,7 @@ import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
+import Link from 'next/link'
 
 import s from './modalCommentsSection.module.scss'
 
@@ -142,24 +143,37 @@ export const ModalCommentsSection = ({
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <UserAvatarName
-          linkHref={`/profile/${post.ownerId}`}
-          url={avatarOwner}
-          username={userName}
-        />
+        <Link href={`/profile/${post.ownerId}`}>
+          <UserAvatarName url={avatarOwner} username={userName} />
+        </Link>
         <div className={s.postMenu}>
           {<DropdownPost isFollowedBy={false} isOurPost onEdit={handleEditPost} />}
         </div>
       </div>
 
       <div className={s.commentsBody}>
+        {/*<div className={s.description}>*/}
+        {/*  <UserAvatarName*/}
+        {/*    className={s.avatarNameDescription}*/}
+        {/*    linkHref={`/profile/${post.ownerId}`}*/}
+        {/*    url={avatarOwner}*/}
+        {/*    username={userName}*/}
+        {/*  />*/}
+        {/*  <Typography>{post.description}</Typography>*/}
+        {/*</div>*/}
+        <div className={s.smallAva}>
+          <Link className={s.userAva} href={`/profile/${post.ownerId}`}>
+            <AvatarBox size={'xs'} src={avatarOwner} />
+          </Link>
+        </div>
         <div className={s.description}>
-          <UserAvatarName
-            linkHref={`/profile/${post.ownerId}`}
-            url={avatarOwner}
-            username={userName}
-          />
+          <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
+            {userName}
+          </Typography>
           <Typography>{post.description}</Typography>
+          <Typography className={s.timeAgo} lineHeights={'s'} size={'xs'} weight={'regular'}>
+            {timeSince(createdAt)}
+          </Typography>
         </div>
         {commentsData
           ?.map(el => (
