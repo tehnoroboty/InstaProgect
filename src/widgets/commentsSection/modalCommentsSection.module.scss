@@ -25,6 +25,29 @@
   padding: 19px 23px 8px 24px;
 }
 
+.descriptionBox {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.description {
+  overflow: hidden;
+
+  box-sizing: border-box;
+  max-width: 100%;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.userNameContent {
+  display: flex;
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
 .postActions {
   padding: 11px 23px 7px 24px;
 }
@@ -134,7 +157,7 @@
   background: none;
 }
 
-.userNameComment {
+.userName {
   display: inline-flex;
   margin-right: 5px;
 }

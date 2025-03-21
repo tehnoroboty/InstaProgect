@@ -152,28 +152,23 @@ export const ModalCommentsSection = ({
       </div>
 
       <div className={s.commentsBody}>
-        {/*<div className={s.description}>*/}
-        {/*  <UserAvatarName*/}
-        {/*    className={s.avatarNameDescription}*/}
-        {/*    linkHref={`/profile/${post.ownerId}`}*/}
-        {/*    url={avatarOwner}*/}
-        {/*    username={userName}*/}
-        {/*  />*/}
-        {/*  <Typography>{post.description}</Typography>*/}
-        {/*</div>*/}
-        <div className={s.smallAva}>
-          <Link className={s.userAva} href={`/profile/${post.ownerId}`}>
-            <AvatarBox size={'xs'} src={avatarOwner} />
-          </Link>
-        </div>
-        <div className={s.description}>
-          <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
-            {userName}
-          </Typography>
-          <Typography>{post.description}</Typography>
-          <Typography className={s.timeAgo} lineHeights={'s'} size={'xs'} weight={'regular'}>
-            {timeSince(createdAt)}
-          </Typography>
+        <div className={s.descriptionBox}>
+          <div className={s.smallAva}>
+            <Link className={s.userAva} href={`/profile/${post.ownerId}`}>
+              <AvatarBox size={'xs'} src={avatarOwner} />
+            </Link>
+          </div>
+          <div>
+            <div className={s.userNameContent}>
+              <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
+                {userName}
+              </Typography>
+              <Typography className={s.description}>{post.description}</Typography>
+            </div>
+            <Typography className={s.timeAgo} lineHeights={'s'} size={'xs'} weight={'regular'}>
+              {timeSince(createdAt)}
+            </Typography>
+          </div>
         </div>
         {commentsData
           ?.map(el => (
@@ -182,7 +177,7 @@ export const ModalCommentsSection = ({
                 <AvatarBox className={s.smallAva} size={'xs'} src={el.from.avatars[0].url} />
               </div>
               <div className={s.userComment}>
-                <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
+                <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
                   {el.from.username}
                 </Typography>
                 <Typography as={'span'} size={'s'} weight={'regular'}>
