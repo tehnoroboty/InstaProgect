@@ -42,7 +42,7 @@ export default function ModalPost(props: Props) {
           ) : (
             renderItem(post.images[0])
           )}
-          <ModalCommentsSection commentsData={commentsData} post={post} postId={numericPostId!} />
+          <ModalCommentsSection commentsData={commentsData} post={post} />
         </div>
       </Dialog>
     </>

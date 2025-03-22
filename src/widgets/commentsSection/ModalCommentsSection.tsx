@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 
+import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
+import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
@@ -20,54 +22,6 @@ import s from './modalCommentsSection.module.scss'
 
 import { Button } from '../../shared/ui/button/Button'
 
-// post type
-type Image = {
-  createdAt: string
-  fileSize: number
-  height: number
-  uploadId: string
-  url: string
-  width: number
-}
-
-type Owner = {
-  firstName: string
-  lastName: string
-}
-
-type Post = {
-  avatarOwner: string
-  avatarWhoLikes: boolean
-  createdAt: string
-  description: string
-  id: number
-  images: Image[]
-  isLiked: boolean
-  likesCount: number
-  location: string
-  owner: Owner
-  ownerId: number
-  updatedAt: string
-  userName: string
-}
-
-export type CommentType = {
-  answerCount: number
-  content: string
-  createdAt: string
-  from: UserType
-  id: number
-  isLiked: boolean
-  likeCount: number
-  postId: number
-}
-
-export type UserType = {
-  avatars: { url: string }[]
-  id: number
-  username: string
-}
-
 type Avatar = {
   createdAt: string
   fileSize: number
@@ -78,20 +32,18 @@ type Avatar = {
 
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
-  commentsData: CommentType[]
+  commentsData: Comment[]
   post: Post
-  postId: number
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
   post,
-  postId,
 }: ModalCommentsSectionProps) => {
-  const { avatarOwner, createdAt, userName } = post
+  const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   // Состояние для комментариев
-  const [comments, setComments] = useState<CommentType[]>(commentsData)
+  const [comments, setComments] = useState<Comment[]>(commentsData)
 
   const handleLikeComment = (commentId: number) => {
     // Обновляем состояние лайка для конкретного комментария
@@ -135,15 +87,13 @@ export const ModalCommentsSection = ({
   }
 
   if (isEditing) {
-    return (
-      <EditPost onExitEdit={handleExitEdit} postDescription={post.description} postId={postId} />
-    )
+    return <EditPost onExitEdit={handleExitEdit} postDescription={description} postId={postId} />
   }
 
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
-        <Link href={`/profile/${post.ownerId}`}>
+        <Link href={`/profile/${ownerId}`}>
           <UserAvatarName url={avatarOwner} username={userName} />
         </Link>
         <div className={s.postMenu}>
@@ -154,16 +104,18 @@ export const ModalCommentsSection = ({
       <div className={s.commentsBody}>
         <div className={s.descriptionBox}>
           <div className={s.smallAva}>
-            <Link className={s.userAva} href={`/profile/${post.ownerId}`}>
+            <Link href={`/profile/${ownerId}`}>
               <AvatarBox size={'xs'} src={avatarOwner} />
             </Link>
           </div>
           <div>
             <div className={s.userNameContent}>
-              <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-                {userName}
-              </Typography>
-              <Typography className={s.description}>{post.description}</Typography>
+              <Link href={`/profile/${ownerId}`}>
+                <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
+                  {userName}
+                </Typography>
+              </Link>
+              <Typography className={s.description}>{description}</Typography>
             </div>
             <Typography className={s.timeAgo} lineHeights={'s'} size={'xs'} weight={'regular'}>
               {timeSince(createdAt)}
