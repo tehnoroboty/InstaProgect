@@ -103,7 +103,11 @@ export const ModalCommentsSection = ({
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <Link href={`/profile/${ownerId}`}>
-          <UserAvatarName url={avatarOwner} username={userName} />
+          <UserAvatarName
+            url={avatarOwner}
+            username={userName}
+            usernameClassName={s.userAvatarName}
+          />
         </Link>
         <div className={s.postMenu}>
           {<DropdownPost isFollowedBy={false} isOurPost onEdit={handleEditPost} />}
@@ -119,12 +123,14 @@ export const ModalCommentsSection = ({
           </div>
           <div>
             <div className={s.userNameContent}>
-              <Link href={`/profile/${ownerId}`}>
+              <Link className={s.userNameLink} href={`/profile/${ownerId}`}>
                 <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
                   {userName}
                 </Typography>
               </Link>
-              <Typography className={s.description}>{description}</Typography>
+              <Typography as={'span'} className={s.description}>
+                {description}
+              </Typography>
             </div>
             <Typography className={s.timeAgo} lineHeights={'s'} size={'xs'} weight={'regular'}>
               {timeSince(createdAt)}

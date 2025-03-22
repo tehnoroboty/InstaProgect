@@ -18,6 +18,16 @@
   padding: 0 23px 11px 24px;
 }
 
+.userAvatarName {
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
 .commentsBody {
   overflow: auto;
   flex-grow: 1;
@@ -43,7 +53,6 @@
 }
 
 .userNameContent {
-  display: flex;
   max-width: 100%;
   margin-bottom: 5px;
 }
@@ -138,8 +147,10 @@
 }
 
 .heartOutlineIcon {
-  &:hover path {
-    opacity: 0.5;
+  @media (hover: hover) {
+    &:hover path {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -160,6 +171,13 @@
 .userName {
   display: inline-flex;
   margin-right: 5px;
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 }
 
 .postDate {
