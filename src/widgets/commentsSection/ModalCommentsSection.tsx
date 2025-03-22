@@ -87,7 +87,16 @@ export const ModalCommentsSection = ({
   }
 
   if (isEditing) {
-    return <EditPost onExitEdit={handleExitEdit} postDescription={description} postId={postId} />
+    return (
+      <EditPost
+        avatarOwner={avatarOwner}
+        imgSrc={post.images[0].url}
+        onExitEdit={handleExitEdit}
+        postDescription={description}
+        postId={postId}
+        userName={userName}
+      />
+    )
   }
 
   return (

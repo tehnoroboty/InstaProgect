@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { useUpdatePostMutation } from '@/src/shared/model/api/postsApi'
-import { CustomerError } from '@/src/shared/model/api/types'
+import { CustomerError, ImageType } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -18,13 +18,22 @@ import Image from 'next/image'
 import s from '@/src/widgets/editPost/editPost.module.scss'
 
 type Props = {
+  avatarOwner: string
   imgSrc?: string
   onExitEdit: () => void // Колбэк для выхода из режима редактирования
   postDescription: string
   postId: number
+  userName: string
 }
 
-export const EditPost = ({ imgSrc = '', onExitEdit, postDescription = '', postId }: Props) => {
+export const EditPost = ({
+  avatarOwner = '',
+  imgSrc = '',
+  onExitEdit,
+  postDescription = '',
+  postId,
+  userName = 'userName',
+}: Props) => {
   const [error, setError] = useState<string | undefined>(undefined)
   const [text, setText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -73,14 +82,10 @@ export const EditPost = ({ imgSrc = '', onExitEdit, postDescription = '', postId
 
         <div className={s.container}>
           <div className={s.photoBox}>
-            <Image alt={'picture'} src={imgSrc} />
+            <Image alt={'picture'} layout={'fill'} objectFit={'cover'} src={imgSrc} />
           </div>
           <div className={s.descriptionBox}>
-            <UserAvatarName
-              className={s.userAvatarName}
-              url={'avatarOwner'}
-              username={'userName'}
-            />
+            <UserAvatarName className={s.userAvatarName} url={avatarOwner} username={userName} />
             <TextAreaWithValidation
               className={s.addPublication}
               label={'Add publication descriptions'}
