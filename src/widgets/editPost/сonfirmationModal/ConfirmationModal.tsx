@@ -2,7 +2,7 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 
-import s from './closePostModal.module.scss'
+import s from './сonfirmationModal.module.scss'
 
 type Props = {
   modalMessage: string
@@ -13,7 +13,7 @@ type Props = {
   open: boolean
 }
 
-export const ClosePostModal = ({
+export const ConfirmationModal = ({
   modalMessage,
   modalTitle,
   onClickNo,

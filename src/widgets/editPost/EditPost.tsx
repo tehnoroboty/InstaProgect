@@ -11,7 +11,7 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
-import { ClosePostModal } from '@/src/widgets/editPost/closePostModal/ClosePostModal'
+import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
 import { Title } from '@radix-ui/react-dialog'
 import Image from 'next/image'
 
@@ -35,7 +35,7 @@ export const EditPost = ({
   userName = 'userName',
 }: Props) => {
   const [error, setError] = useState<string | undefined>(undefined)
-  const [text, setText] = useState('')
+  const [text, setText] = useState(postDescription)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [exitModal, setExitModal] = useState(false)
 
@@ -54,28 +54,36 @@ export const EditPost = ({
 
       setErrorMessage(err.data?.messages[0].message)
     }
+    onExitEdit()
   }
 
-  const handleClose = () => {
+  const onCloseConfirmationModal = () => {
     setExitModal(false) // Закрываем ExitModal
     onExitEdit() // Возвращаемся к ModalPost
+  }
+
+  const handleCloseEditPost = () => {
+    // Проверяем, изменилось ли описание
+    if (text === postDescription) {
+      // Если описание не изменилось, просто закрываем модальное окно
+      onExitEdit()
+    } else {
+      // Если описание изменилось, показываем модальное окно ClosePostModal
+      setExitModal(true)
+    }
   }
 
   return (
     <>
       {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
-      <Dialog className={s.modal} isSimple onClose={() => setExitModal(true)} open>
+      <Dialog className={s.modal} isSimple onClose={handleCloseEditPost} open>
         <div className={s.header}>
           <Title asChild>
             <Typography as={'h1'} option={'h1'}>
               {'Edit Post'}
             </Typography>
           </Title>
-          <Button
-            className={s.closeButton}
-            onClick={() => setExitModal(true)}
-            variant={'transparent'}
-          >
+          <Button className={s.closeButton} onClick={handleCloseEditPost} variant={'transparent'}>
             <CloseIcon className={s.closeIcon} color={'white'} />
           </Button>
         </div>
@@ -101,14 +109,14 @@ export const EditPost = ({
           </div>
         </div>
       </Dialog>
-      <ClosePostModal
+      <ConfirmationModal
         modalMessage={
           'Do you really want to finish editing? If you close the changes you have made will not be saved.'
         }
         modalTitle={'Close Post'}
         onClickNo={() => setExitModal(false)}
         onCloseModal={() => setExitModal(false)}
-        onCloseParentModal={handleClose}
+        onCloseParentModal={onCloseConfirmationModal}
         open={exitModal}
       />
     </>
