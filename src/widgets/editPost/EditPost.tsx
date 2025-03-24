@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { useUpdatePostMutation } from '@/src/shared/model/api/postsApi'
-import { CustomerError, ImageType } from '@/src/shared/model/api/types'
+import { CustomerError } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -34,43 +34,36 @@ export const EditPost = ({
   postId,
   userName = 'userName',
 }: Props) => {
-  const [error, setError] = useState<string | undefined>(undefined)
+  const [validationError, setValidationError] = useState<string | undefined>(undefined)
   const [text, setText] = useState(postDescription)
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [exitModal, setExitModal] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
 
   const [updatePost, { isError, isLoading, isSuccess }] = useUpdatePostMutation()
 
-  const onSaveChanges = async () => {
+  const handleSaveChanges = async () => {
     try {
       await updatePost({
-        model: {
-          description: text,
-        },
+        model: { description: text },
         postId,
       }).unwrap()
+      onExitEdit()
     } catch (error) {
       const err = error as CustomerError
 
       setErrorMessage(err.data?.messages[0].message)
     }
-    onExitEdit()
   }
 
-  const onCloseConfirmationModal = () => {
-    setExitModal(false) // Закрываем ExitModal
+  const handleConfirmClose = () => {
+    setShowConfirmation(false) // Закрываем ExitModal
     onExitEdit() // Возвращаемся к ModalPost
   }
 
   const handleCloseEditPost = () => {
-    // Проверяем, изменилось ли описание
-    if (text === postDescription) {
-      // Если описание не изменилось, просто закрываем модальное окно
-      onExitEdit()
-    } else {
-      // Если описание изменилось, показываем модальное окно ClosePostModal
-      setExitModal(true)
-    }
+    const hasChanges = text !== postDescription
+
+    hasChanges ? setShowConfirmation(true) : onExitEdit()
   }
 
   return (
@@ -98,12 +91,16 @@ export const EditPost = ({
               className={s.addPublication}
               label={'Add publication descriptions'}
               maxLength={500}
-              onErrorChange={setError}
+              onErrorChange={setValidationError}
               onTextChange={setText}
               placeholder={''}
               value={postDescription}
             />
-            <Button className={s.saveChangesBtn} disabled={!!error} onClick={onSaveChanges}>
+            <Button
+              className={s.saveChangesBtn}
+              disabled={!!validationError}
+              onClick={handleSaveChanges}
+            >
               {'Save Changes'}
             </Button>
           </div>
@@ -114,10 +111,10 @@ export const EditPost = ({
           'Do you really want to finish editing? If you close the changes you have made will not be saved.'
         }
         modalTitle={'Close Post'}
-        onClickNo={() => setExitModal(false)}
-        onCloseModal={() => setExitModal(false)}
-        onCloseParentModal={onCloseConfirmationModal}
-        open={exitModal}
+        onClickNo={() => setShowConfirmation(false)}
+        onCloseModal={() => setShowConfirmation(false)}
+        onCloseParentModal={handleConfirmClose}
+        open={showConfirmation}
       />
     </>
   )
