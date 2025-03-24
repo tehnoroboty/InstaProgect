@@ -5,12 +5,12 @@ import * as Slider from '@radix-ui/react-slider'
 
 import s from './slider.module.scss'
 
-type Props = {
+export type PropsSlider = {
   setVolume: (value: number) => void
   zoom: number
 }
 
-export const SliderComponent = ({ setVolume, zoom }: Props) => {
+export const SliderComponent = ({ setVolume, zoom }: PropsSlider) => {
   const [value, setValue] = useState([zoom])
 
   const handleSliderChange = (newValue: number[]) => {

@@ -17,6 +17,7 @@ import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem
 import { SelectLanguage } from '@/src/shared/ui/select/SelectLanguage/SelectLanguage'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import s from './headerMobile.module.scss'
@@ -42,7 +43,7 @@ export const HeaderMobile = (props: Props) => {
   const onLogoutConfirm = async () => {
     await logout().unwrap()
     setIsModalOpen(false)
-    route.push(AuthRoutes.LOGIN)
+    route.push(AuthRoutes.HOME)
   }
 
   const menuHeaderMobile: MenuItemType[] = [
@@ -83,9 +84,11 @@ export const HeaderMobile = (props: Props) => {
 
   return (
     <div className={s.container}>
-      <Typography as={'h1'} option={'Large'}>
-        {title}
-      </Typography>
+      <Link href={AuthRoutes.HOME}>
+        <Typography as={'h1'} option={'Large'}>
+          {title}
+        </Typography>
+      </Link>
       <div className={s.headerActions}>
         <SelectLanguage />
         {isLoggedIn && (

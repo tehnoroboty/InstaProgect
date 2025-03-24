@@ -28,6 +28,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
+      invalidatesTags: ['POSTS'],
       query: body => ({
         body,
         method: 'POST',
@@ -41,6 +42,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
+      providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
         params: {
