@@ -1,10 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import {PublicProfileTypes} from "@/src/entities/user/types";
-import {GetMyPostsResponse} from "@/src/shared/model/api/types";
-import {PublicProfile} from "@/src/widgets/profile/PublicProfile/PublicProfile";
+import {Post} from '@/src/entities/post/types';
+import {PublicProfileTypes} from '@/src/entities/user/types';
+import {GetMyPostsResponse} from '@/src/shared/model/api/types';
+import {PublicProfile} from '@/src/widgets/profile/PublicProfile/PublicProfile';
 
 type Params = {
+    postId?: string,
     userId: string,
 }
 type Props = {
@@ -29,15 +31,28 @@ const getUserPosts = async (userId: string): Promise<GetMyPostsResponse> => {
     return await res.json()
 }
 
+const getUserPost = async (postId: number): Promise<Post> => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`)
+
+
+    const data = await res.json();
+
+    return data;
+}
+
 
 export default async function PublicProfilePage({params}: Props) {
 
     const userProfile = await getUserProfile(params.userId)
     const userPosts = await getUserPosts(params.userId)
+    const post = params.postId
+        ? await getUserPost(Number(params.postId))
+        : null;
 
 
     return <>
-        <PublicProfile userPosts = {userPosts} userProfile = {userProfile}/>
+        <PublicProfile post={post} userPosts={userPosts}
+                       userProfile={userProfile}/>
     </>
 
 
