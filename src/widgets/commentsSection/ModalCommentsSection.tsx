@@ -33,12 +33,14 @@ type Avatar = {
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
+  onPostUpdated?: () => void
   post: Post
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
+  onPostUpdated,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
@@ -92,6 +94,7 @@ export const ModalCommentsSection = ({
         avatarOwner={avatarOwner}
         imgSrc={post.images[0].url}
         onExitEdit={handleExitEdit}
+        onPostUpdated={onPostUpdated}
         postDescription={description}
         postId={postId}
         userName={userName}

@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { ImageType } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -18,11 +20,22 @@ export default function ModalPost(props: Props) {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const numericPostId = postId ? Number(postId) : null
-  const { data: post } = useGetPostQuery({ postId: numericPostId! }, { skip: !numericPostId })
+  const { data: post, refetch: refetchPost } = useGetPostQuery(
+    { postId: numericPostId! },
+    { skip: !numericPostId }
+  )
   const { data: comments } = useGetCommentsQuery(
     { postId: numericPostId! },
     { skip: !numericPostId }
   )
+
+  // const handlePostUpdated = useCallback(async () => {
+  //   try {
+  //     await refetchPost().unwrap()
+  //   } catch (error) {
+  //     console.error('Failed to refetch post:', error)
+  //   }
+  // }, [refetchPost])
 
   if (!post) {
     return null
@@ -42,7 +55,11 @@ export default function ModalPost(props: Props) {
           ) : (
             renderItem(post.images[0])
           )}
-          <ModalCommentsSection commentsData={commentsData} post={post} />
+          <ModalCommentsSection
+            commentsData={commentsData}
+            // onPostUpdated={handlePostUpdated}
+            post={post}
+          />
         </div>
       </Dialog>
     </>

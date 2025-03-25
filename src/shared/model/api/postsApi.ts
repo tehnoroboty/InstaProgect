@@ -78,6 +78,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
+      invalidatesTags: (res, err, { postId }) => [{ id: postId, type: 'POSTS' }],
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
