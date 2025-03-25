@@ -12,8 +12,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-const AUTH_PAGE_SIZE = 6
-const PUBLIC_PAGE_SIZE = 8
+const AUTH_PAGE_SIZE = 8
+const PUBLIC_PAGE_SIZE = 12
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
 
@@ -21,24 +21,28 @@ export const Profile = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  const params = useParams() as { userId: string }
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const { data: meData } = useMeQuery()
   const isAuthenticated = !!meData
+  const userName = meData?.userName
   const userId = meData?.userId
 
+  const params = useParams() as { userId: string }
+
   const searchParams = useSearchParams()
-  const userName = meData?.userName
   const postId = searchParams.get('postId')
+
   const router = useRouter()
-  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const isMyProfile = isAuthenticated && Number(params.userId) === userId
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
+  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
+
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
-    router.replace(`/profile/${params.userId}`)
+    router.replace(`/profile/${params.userId}`, { scroll: false })
   }, [router, params.userId])
 
   useEffect(() => {
@@ -134,13 +138,13 @@ export const Profile = () => {
     setPublicAllPosts([])
     setPageNumber(1)
   }, [params.userId])
-  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
 
   return (
     <div className={s.page}>
       <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
       {postsToShow.length && <Posts posts={postsToShow} />}
       {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
+
       <ModalPost onClose={closeModal} open={modalIsOpen} />
     </div>
   )

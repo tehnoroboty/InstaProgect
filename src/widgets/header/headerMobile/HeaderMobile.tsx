@@ -33,7 +33,7 @@ export const HeaderMobile = (props: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
   const id = useId()
-
+  
   const route = useRouter()
 
   const onClickHandler = () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
@@ -46,6 +46,16 @@ export const ModalCommentsSection = ({
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<Comment[]>(commentsData)
+  const textArea = useRef<HTMLTextAreaElement>(null)
+
+  const hendleChangeHeight = () => {
+    if (textArea.current) {
+      textArea.current.style.height = '24px'
+      const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
+
+      textArea.current.style.height = textAreaHeight + 'px'
+    }
+  }
 
   const handleLikeComment = (commentId: number) => {
     // Обновляем состояние лайка для конкретного комментария
@@ -201,7 +211,13 @@ export const ModalCommentsSection = ({
       </div>
       <div className={s.addComment}>
         <div className={s.textareaWrapper}>
-          <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+          <TextArea
+            className={s.textarea}
+            label={''}
+            onChange={hendleChangeHeight}
+            placeholder={'Add a Comment...'}
+            ref={textArea}
+          />
         </div>
         <Button variant={'transparent'}>{'Publish'}</Button>
       </div>

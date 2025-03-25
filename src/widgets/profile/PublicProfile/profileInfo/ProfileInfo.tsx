@@ -1,4 +1,4 @@
-import { GetPublicUserProfileResponse } from '@/src/shared/model/api/types'
+import { PublicProfileTypes } from '@/src/entities/user/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -6,14 +6,14 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import s from './profileInfo.module.scss'
 
 type Props = {
-  isMyProfile: boolean
-  publicUserProfile: GetPublicUserProfileResponse | undefined
+  publicUserProfile: PublicProfileTypes | undefined
 }
 
-export const ProfileInfo = ({ isMyProfile, publicUserProfile }: Props) => {
+export const ProfileInfo = ({ publicUserProfile }: Props) => {
   if (!publicUserProfile) {
     return null
   }
+
   const avatarUrl = publicUserProfile?.avatars?.[0]?.url
   const aboutMe = publicUserProfile?.aboutMe
   const publicUserName = publicUserProfile?.userName
@@ -59,16 +59,6 @@ export const ProfileInfo = ({ isMyProfile, publicUserProfile }: Props) => {
               </div>
             </div>
           </div>
-          {/*<div className = {s.buttonsBlock}>*/}
-          {/*    {isMyProfile && <Button variant = {'secondary'}>{'Profile Settings'}</Button>}*/}
-          {/*    {!isMyProfile &&*/}
-          {/*        // (isFollowing ? (*/}
-          {/*        //     <Button variant = {'primary'}>{'unFollow'}</Button>*/}
-          {/*        // ) : (*/}
-          {/*        //     <Button variant = {'primary'}>{'Follow'}</Button>*/}
-          {/*        // ))}*/}
-          {/*    {!isMyProfile && <Button variant = {'secondary'}>{'Send Message'}</Button>}*/}
-          {/*</div>*/}
         </div>
         <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
           {aboutMe}
