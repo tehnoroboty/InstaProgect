@@ -143,6 +143,10 @@ export type GetPublicUserProfileResponse = {
   userName: string
 }
 
+export type UpdatePostModel = {
+  description: string
+}
+
 type Avatar = {
   createdAt: string
   fileSize: number

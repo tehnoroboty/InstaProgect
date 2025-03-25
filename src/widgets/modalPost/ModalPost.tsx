@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
-import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
@@ -27,8 +26,9 @@ export default function ModalPost(props: Props) {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const numericPostId = postId ? Number(postId) : null
+
   const { data: myProfile } = useGetUserProfileQuery()
-  const { data: authPost } = useGetPostQuery(
+  const { data: authPost, refetch: refetchPost } = useGetPostQuery(
     { postId: numericPostId! },
     { skip: !numericPostId || !!props.publicPost }
   )
@@ -49,6 +49,14 @@ export default function ModalPost(props: Props) {
 
   const post = props.publicPost ? props.publicPost : authPost
   const comments = props.publicPost ? props.publicComments : authComments
+
+  const handlePostUpdated = useCallback(async () => {
+    try {
+      await refetchPost().unwrap()
+    } catch (error) {
+      console.error('Failed to refetch post:', error)
+    }
+  }, [refetchPost])
 
   if (!post) {
     return null
@@ -71,6 +79,7 @@ export default function ModalPost(props: Props) {
           <ModalCommentsSection
             commentsData={commentsData}
             isMyPost={isMyPost}
+            onPostUpdated={handlePostUpdated}
             post={post}
             postPublicStatus={postPublicStatus}
           />

@@ -9,16 +9,12 @@ import {
   ImageType,
   RequestPostsType,
   ResponsePostsType,
+  UpdatePostModel,
 } from '@/src/shared/model/api/types'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<
-      { images: ImageType },
-      {
-        file: File
-      }
-    >({
+    createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
 
@@ -81,6 +77,14 @@ export const postsApi = baseApi.injectEndpoints({
         }
       },
     }),
+    updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
+      invalidatesTags: (res, err, { postId }) => [{ id: postId, type: 'POSTS' }],
+      query: ({ model, postId }) => ({
+        body: model,
+        method: 'PUT',
+        url: `/posts/${postId}`,
+      }),
+    }),
   }),
 })
 
@@ -91,4 +95,5 @@ export const {
   useGetMyPostsQuery,
   useGetPostQuery,
   useGetPublicUserPostsQuery,
+  useUpdatePostMutation,
 } = postsApi

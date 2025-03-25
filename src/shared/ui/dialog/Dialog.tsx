@@ -14,6 +14,7 @@ export type DialogProps = {
   isSimple?: boolean
   modalTitle?: string
   onClose: () => void
+  onEdit?: () => void
   open: boolean
 } & ComponentPropsWithoutRef<'div'>
 
@@ -25,6 +26,7 @@ export const Dialog = ({
   isSimple = false,
   modalTitle,
   onClose,
+  onEdit,
   open,
   ...rest
 }: DialogProps) => {
