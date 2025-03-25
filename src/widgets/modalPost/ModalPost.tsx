@@ -29,13 +29,13 @@ export default function ModalPost(props: Props) {
     { skip: !numericPostId }
   )
 
-  // const handlePostUpdated = useCallback(async () => {
-  //   try {
-  //     await refetchPost().unwrap()
-  //   } catch (error) {
-  //     console.error('Failed to refetch post:', error)
-  //   }
-  // }, [refetchPost])
+  const handlePostUpdated = useCallback(async () => {
+    try {
+      await refetchPost().unwrap()
+    } catch (error) {
+      console.error('Failed to refetch post:', error)
+    }
+  }, [refetchPost])
 
   if (!post) {
     return null
@@ -57,7 +57,7 @@ export default function ModalPost(props: Props) {
           )}
           <ModalCommentsSection
             commentsData={commentsData}
-            // onPostUpdated={handlePostUpdated}
+            onPostUpdated={handlePostUpdated}
             post={post}
           />
         </div>
