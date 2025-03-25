@@ -3,7 +3,7 @@ import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
   GetMyPostsArgs,
-  GetMyPostsResponse,
+  GetPostsResponse,
   GetPublicUserPostsArgs,
   GetPublicUserPostsResponse,
   ImageType,
@@ -45,7 +45,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}/comments`,
       }),
     }),
-    getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
+    getMyPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
       providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',

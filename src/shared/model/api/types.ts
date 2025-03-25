@@ -74,7 +74,7 @@ export type GetMyPostsArgs = {
   userName: string
 }
 
-export type GetMyPostsResponse = {
+export type GetPostsResponse = {
   items: Item[]
   page: number
   pageSize: number
