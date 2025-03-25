@@ -33,15 +33,19 @@ type Avatar = {
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
+  isMyPost: boolean
   onPostUpdated?: () => void
   post: Post
+  postPublicStatus: boolean
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
+  isMyPost,
   onPostUpdated,
   post,
+  postPublicStatus,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   // Состояние для комментариев
@@ -123,7 +127,7 @@ export const ModalCommentsSection = ({
           />
         </Link>
         <div className={s.postMenu}>
-          {<DropdownPost isFollowedBy={false} isOurPost onEdit={handleEditPost} />}
+          {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} onEdit={handleEditPost} />}
         </div>
       </div>
 
