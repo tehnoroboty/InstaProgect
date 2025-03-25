@@ -1,9 +1,6 @@
-import { useCallback } from 'react'
-
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
-
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
@@ -81,8 +78,8 @@ export default function ModalPost(props: Props) {
           )}
           <ModalCommentsSection
             commentsData={commentsData}
-            onPostUpdated={handlePostUpdated}
             isMyPost={isMyPost}
+            onPostUpdated={handlePostUpdated}
             post={post}
             postPublicStatus={postPublicStatus}
           />
