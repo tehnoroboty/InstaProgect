@@ -1,0 +1,54 @@
+
+.profileContainer {
+  display: flex;
+  gap: clamp(15px, 20vw, 40px);
+  align-items: center;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: space-between;
+
+  width: 80%;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+.userNameContainer {
+  display: flex;
+  gap: 1%
+}
+
+.followersStats {
+  display: flex;
+  gap: clamp(10px, 10vh, 50px)
+}
+
+.profileDescription {
+  overflow-wrap: break-word;
+
+}
+
+.followersStatItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonsBlock {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}

@@ -6,6 +6,12 @@ export type Avatar = {
   width: number
 }
 
+type UserMetadata = {
+  followers: number
+  following: number
+  publications: number
+}
+
 export type Profile = {
   aboutMe: string
   avatars: Avatar[]
@@ -17,5 +23,14 @@ export type Profile = {
   id: number
   lastName: string
   region: string
+  userName: string
+}
+
+export type PublicProfileTypes = {
+  aboutMe: string
+  avatars: Avatar[]
+  hasPaymentSubscription: boolean
+  id: number
+  userMetadata: UserMetadata
   userName: string
 }

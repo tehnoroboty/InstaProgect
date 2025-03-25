@@ -87,7 +87,7 @@ export type Item = {
   createdAt: string
   description: string
   id: number
-  images: Image[]
+  images: ImageType[]
   isLiked: boolean
   likesCount: number
   location?: any
@@ -102,7 +102,7 @@ type Owner = {
   lastName?: any
 }
 
-export type Image = {
+export type ImageType = {
   createdAt: string
   fileSize: number
   height: number
@@ -122,7 +122,7 @@ export type ResponsePostsType = {
   createdAt: string
   description: string
   id: number
-  images: Image[]
+  images: ImageType[]
   isLiked: boolean
   likesCount: number
   location: string
@@ -130,4 +130,65 @@ export type ResponsePostsType = {
   ownerId: number
   updatedAt: string
   userName: string
+}
+export type GetPublicUserProfileArgs = {
+  profileId: number
+}
+export type GetPublicUserProfileResponse = {
+  aboutMe: string
+  avatars: Avatar[]
+  hasPaymentSubscription: boolean
+  id: number
+  userMetadata: UserMetadata
+  userName: string
+}
+
+type Avatar = {
+  createdAt: string
+  fileSize: number
+  height: number
+  url: string
+  width: number
+}
+
+export type UserMetadata = {
+  followers: number
+  following: number
+  publications: number
+}
+
+export type GetPublicUserPostsArgs = {
+  endCursorPostId?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  userId: number
+}
+export type GetPublicUserPostsResponse = {
+  items: Item[]
+  pageSize: number
+  totalCount: number
+  totalUsers: number
+}
+
+export type Comment = {
+  answerCount: number
+  content: string
+  createdAt: string
+  from: {
+    avatars: { url: string }[] | Avatar[]
+    id: number
+    username: string
+  }
+  id: number
+  isLiked: boolean
+  likeCount: number
+  postId: number
+}
+
+export type GetCommentsResponse = {
+  items: Comment[]
+  pageSize: number
+  totalCount: number
+  totalUsers: number
 }

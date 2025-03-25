@@ -1,8 +1,12 @@
+import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
+  GetCommentsResponse,
   GetMyPostsArgs,
   GetMyPostsResponse,
-  Image,
+  GetPublicUserPostsArgs,
+  GetPublicUserPostsResponse,
+  ImageType,
   RequestPostsType,
   ResponsePostsType,
 } from '@/src/shared/model/api/types'
@@ -10,7 +14,7 @@ import {
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     createImageForPost: builder.mutation<
-      { images: Image },
+      { images: ImageType },
       {
         file: File
       }
@@ -35,6 +39,12 @@ export const postsApi = baseApi.injectEndpoints({
         url: 'posts',
       }),
     }),
+    getComments: builder.query<GetCommentsResponse, { postId: number }>({
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/${postId}/comments`,
+      }),
+    }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
       providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
@@ -48,8 +58,37 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${userName}`,
       }),
     }),
+    getPost: builder.query<Post, { postId: number }>({
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/id/${postId}`,
+      }),
+    }),
+
+    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
+        const baseUrl = `/public-posts/user/${userId}`
+        const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
+
+        return {
+          method: 'GET',
+          params: {
+            pageSize,
+            sortBy,
+            sortDirection,
+          },
+          url: `${baseUrl}${cursorSegment}`,
+        }
+      },
+    }),
   }),
 })
 
-export const { useCreateImageForPostMutation, useCreateNewPostMutation, useGetMyPostsQuery } =
-  postsApi
+export const {
+  useCreateImageForPostMutation,
+  useCreateNewPostMutation,
+  useGetCommentsQuery,
+  useGetMyPostsQuery,
+  useGetPostQuery,
+  useGetPublicUserPostsQuery,
+} = postsApi

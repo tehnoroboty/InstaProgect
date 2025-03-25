@@ -2,20 +2,26 @@
   width: 100%;
   max-width: 972px;
   padding: 0;
+}
 
+.dialog > div {
+  height: 100%;
 }
 
 .container {
-  overflow-y: auto; /* Прокрутка только для контента */
+  overflow-y: auto;
   display: flex;
-  flex: 1; /* Занимает всё доступное пространство */
+  flex: 1;
   gap: 20px;
-  align-items: center;
   justify-content: center;
 
-  & > div {
+  height: 100%;
+
+  & > img,
+  & > div, {
     width: 50%;
     min-width: auto;
+    height: 490px;
   }
 }
 
