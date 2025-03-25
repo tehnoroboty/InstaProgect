@@ -145,7 +145,7 @@ export const ModalCommentsSection = ({
                   {userName}
                 </Typography>
               </Link>
-              <Typography as={'span'} className={s.description}>
+              <Typography as={'div'} className={s.description}>
                 {description}
               </Typography>
             </div>

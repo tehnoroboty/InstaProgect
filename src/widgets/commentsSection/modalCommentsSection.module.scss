@@ -45,8 +45,12 @@
 
 .description {
   overflow: hidden;
+
   box-sizing: border-box;
+  width:400px;
   max-width: 100%;
+
+  word-wrap: break-word;
 }
 
 .userNameContent {
