@@ -16,7 +16,7 @@ import { Dropdown } from '@/src/shared/ui/dropdown/Dropdown'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
 import { SelectLanguage } from '@/src/shared/ui/select/SelectLanguage/SelectLanguage'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
+import { MenuItemType } from '@/src/widgets/navigationPanel/types'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -33,7 +33,7 @@ export const HeaderMobile = (props: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
   const id = useId()
-  
+
   const route = useRouter()
 
   const onClickHandler = () => {

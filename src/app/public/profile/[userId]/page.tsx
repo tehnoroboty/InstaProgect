@@ -2,11 +2,7 @@ import React from 'react';
 
 import {Post} from '@/src/entities/post/types';
 import {PublicProfileTypes} from '@/src/entities/user/types';
-import {
-    GetCommentsResponse,
-    GetMyPostsResponse
-} from '@/src/shared/model/api/types';
-import ModalPost from '@/src/widgets/modalPost/ModalPost';
+import {GetCommentsResponse, GetPostsResponse} from '@/src/shared/model/api/types';
 import {PublicProfile} from '@/src/widgets/profile/PublicProfile/PublicProfile';
 
 
@@ -19,7 +15,7 @@ const getUserProfile = async (userId: string): Promise<PublicProfileTypes> => {
     return await res.json()
 }
 
-const getUserPosts = async (userId: string): Promise<GetMyPostsResponse> => {
+const getUserPosts = async (userId: string): Promise<GetPostsResponse> => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/user/${userId}`, {
         cache: 'no-store',
     })
@@ -34,9 +30,7 @@ const getUserPost = async (postId: number) => {
         cache: 'no-store',
     })
 
-    const data = await res.json()
-
-    return data
+    return await res.json()
 }
 
 const getUserComments = async (postId: number) => {
@@ -44,10 +38,7 @@ const getUserComments = async (postId: number) => {
         cache: 'no-store',
     })
 
-    const data = await res.json()
-
-
-    return data
+    return await res.json()
 }
 
 export default async function PublicProfilePage(props: {
