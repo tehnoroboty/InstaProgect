@@ -1,4 +1,3 @@
-import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
@@ -13,7 +12,12 @@ import {
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
+    createImageForPost: builder.mutation<
+      { images: ImageType },
+      {
+        file: File
+      }
+    >({
       query: ({ file }) => {
         const formData = new FormData()
 
@@ -27,6 +31,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
+      invalidatesTags: ['POSTS'],
       query: body => ({
         body,
         method: 'POST',
@@ -40,6 +45,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getMyPosts: builder.query<GetMyPostsResponse, GetMyPostsArgs>({
+      providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
         params: {

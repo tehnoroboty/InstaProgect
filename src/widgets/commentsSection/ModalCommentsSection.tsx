@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
@@ -49,6 +49,7 @@ type Post = {
   userName: string
 }
 
+// comment type
 export type CommentType = {
   answerCount: number
   content: string
@@ -74,24 +75,26 @@ type Avatar = {
   width: number
 }
 
-export type ModalCommentsSectionProps = {
-  avatars?: Avatar[]
+type Props = {
+  avatars: Avatar[]
   commentsData: CommentType[]
-  isMyPost: boolean
   post: Post
-  postPublicStatus: boolean
 }
 
-export const ModalCommentsSection = ({
-  avatars,
-  commentsData,
-  isMyPost,
-  post,
-  postPublicStatus,
-}: ModalCommentsSectionProps) => {
+export const ModalCommentsSection = ({ avatars, commentsData, post }: Props) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<CommentType[]>(commentsData)
+  const textArea = useRef<HTMLTextAreaElement>(null)
+
+  const hendleChangeHeight = () => {
+    if (textArea.current) {
+      textArea.current.style.height = '24px'
+      const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
+
+      textArea.current.style.height = textAreaHeight + 'px'
+    }
+  }
 
   const handleLikeComment = (commentId: number) => {
     // Обновляем состояние лайка для конкретного комментария
@@ -108,107 +111,79 @@ export const ModalCommentsSection = ({
     )
   }
 
-  const avatarsData =
-    avatars ??
-    commentsData.map(item => {
-      if (item.from.avatars.length < 1) {
-        return {
-          createdAt: '2025-02-19T11:58:19.531Z',
-          fileSize: 300,
-          height: 300,
-          url: 'https://example.com/image1.jpg',
-          width: 300,
-        }
-      } else {
-        return item.from.avatars[0]
-      }
-    })
-
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <UserAvatarName url={avatarOwner} username={userName} />
-        {!postPublicStatus && (
-          <div className={s.postMenu}>
-            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} />}
-          </div>
-        )}
+        <div className={s.postMenu}>{<DropdownPost isFollowedBy={false} isOurPost />}</div>
       </div>
 
       <div className={s.commentsBody}>
-        {commentsData
-          ?.map(el => (
-            <div className={s.usersCommentBody} key={el.id}>
-              <div className={s.userAva}>
-                <AvatarBox className={s.smallAva} size={'xs'} src={el.from.avatars[0].url} />
-              </div>
-              <div className={s.userComment}>
-                <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
-                  {el.from.username}
+        {comments?.map(el => (
+          <div className={s.usersCommentBody} key={el.id}>
+            <div className={s.userAva}>
+              <AvatarBox className={s.smallAva} size={'xs'} src={el.from.avatars[0].url} />
+            </div>
+            <div className={s.userComment}>
+              <Typography as={'h3'} className={s.userNameComment} size={'s'} weight={'bold'}>
+                {el.from.username}
+              </Typography>
+              <Typography as={'span'} size={'s'} weight={'regular'}>
+                {el.content}
+              </Typography>
+              <div className={s.userCommentBottom}>
+                <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
+                  {timeSince(el.createdAt)}
                 </Typography>
-                <Typography as={'span'} size={'s'} weight={'regular'}>
-                  {el.content}
+                <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
+                  {`Like: ${el.likeCount}`}
                 </Typography>
-                <div className={s.userCommentBottom}>
-                  <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                    {timeSince(el.createdAt)}
-                  </Typography>
-                  <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
-                    {`Like: ${el.likeCount}`}
-                  </Typography>
-                  {!postPublicStatus && (
-                    <Button className={s.answerButton} variant={'transparent'}>
-                      {'Answer'}
-                    </Button>
-                  )}
-                </div>
+                <Button className={s.answerButton} variant={'transparent'}>
+                  {'Answer'}
+                </Button>
               </div>
-              {!postPublicStatus && (
-                <div className={s.heartIconWrapper}>
-                  {el.isLiked ? (
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(el.id)}
-                      title={'Unlike'}
-                      variant={'transparent'}
-                    >
-                      <Heart className={clsx(s.heartIcon, s.red)} />
-                    </Button>
-                  ) : (
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(el.id)}
-                      title={'Like'}
-                      variant={'transparent'}
-                    >
-                      <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                    </Button>
-                  )}
-                </div>
+            </div>
+            <div className={s.heartIconWrapper}>
+              {el.isLiked ? (
+                <Button
+                  className={s.iconButton}
+                  onClick={() => handleLikeComment(el.id)}
+                  title={'Unlike'}
+                  variant={'transparent'}
+                >
+                  <Heart className={clsx(s.heartIcon, s.red)} />
+                </Button>
+              ) : (
+                <Button
+                  className={s.iconButton}
+                  onClick={() => handleLikeComment(el.id)}
+                  title={'Like'}
+                  variant={'transparent'}
+                >
+                  <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
+                </Button>
               )}
             </div>
-          ))
-          .reverse()}
+          </div>
+        ))}
       </div>
       <div className={s.postActions}>
-        {!postPublicStatus && (
-          <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        )}
-        <PostLikesBox
-          avatars={avatarsData}
-          className={s.postLikesBox}
-          likesCount={post.likesCount}
-        />
+        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        <PostLikesBox avatars={avatars} className={s.postLikesBox} likesCount={10} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      {!postPublicStatus && (
-        <div className={s.addComment}>
-          <div className={s.textareaWrapper}>
-            <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
+      <div className={s.addComment}>
+        <div className={s.textareaWrapper}>
+          <TextArea
+            className={s.textarea}
+            label={''}
+            onChange={hendleChangeHeight}
+            placeholder={'Add a Comment...'}
+            ref={textArea}
+          />
         </div>
-      )}
+        <Button variant={'transparent'}>{'Publish'}</Button>
+      </div>
     </div>
   )
 }
