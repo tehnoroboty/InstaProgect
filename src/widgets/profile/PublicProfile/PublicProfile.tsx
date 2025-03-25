@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
@@ -7,6 +7,7 @@ import { GetCommentsResponse, GetMyPostsResponse } from '@/src/shared/model/api/
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/PublicProfile/profileInfo/ProfileInfo'
+import { useSearchParams } from 'next/navigation'
 
 import s from '../myProfile.module.scss'
 
@@ -19,13 +20,19 @@ type Props = {
 
 export const PublicProfile = ({ publicComments, publicPost, userPosts, userProfile }: Props) => {
   const { items: posts } = userPosts
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId')
   const [modalPublicPost, setModalPublicPost] = useState<boolean>(true)
+
+  useEffect(() => {
+    setModalPublicPost(!!postId)
+  }, [postId])
 
   return (
     <div className={s.page}>
       <ProfileInfo publicUserProfile={userProfile} />
-      {posts.length && <Posts posts={posts} />}
-      {publicPost && publicComments && (
+      {posts.length && <Posts posts={posts} publicPost={publicPost} />}
+      {publicPost && publicComments && modalPublicPost && (
         <ModalPost
           onClose={() => setModalPublicPost(false)}
           open={modalPublicPost}

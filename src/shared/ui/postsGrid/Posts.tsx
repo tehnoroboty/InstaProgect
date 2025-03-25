@@ -23,13 +23,19 @@ type PostType = {
 
 type Props = {
   posts: PostType[]
+  publicPost: Post | null
 }
 
-export const Posts = ({ posts }: Props) => {
+export const Posts = ({ posts, publicPost }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {
-    router.replace(`/profile/${params.userId}?postId=${postId}`, { scroll: false })
+    const basePath = publicPost ? '/public/profile' : '/profile'
+    const method = publicPost ? 'replace' : 'push'
+
+    router[method](`${basePath}/${params.userId}?postId=${postId}`, {
+      scroll: false,
+    })
   }
 
   const renderImgCarousel = (img: ImageType, index: number) => {

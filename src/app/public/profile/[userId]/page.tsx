@@ -63,10 +63,9 @@ export default async function PublicProfilePage(props: {
 
     if (query) {
         try {
-            post = await getUserPost(Number(query));
-            if (post) {
-                comments = await getUserComments(Number(query));
-            }
+            [post, comments] = await Promise.all([
+                getUserPost(Number(query)),
+                getUserComments(Number(query))])
         } catch (error) {
             console.error('Failed to fetch post:', error);
         }
