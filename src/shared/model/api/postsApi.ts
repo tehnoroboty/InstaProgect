@@ -1,3 +1,4 @@
+import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
