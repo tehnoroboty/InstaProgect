@@ -77,13 +77,17 @@ type Avatar = {
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: CommentType[]
+  isMyPost: boolean
   post: Post
+  postPublicStatus: boolean
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
+  isMyPost,
   post,
+  postPublicStatus,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, userName } = post
   // Состояние для комментариев
@@ -124,7 +128,11 @@ export const ModalCommentsSection = ({
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
         <UserAvatarName url={avatarOwner} username={userName} />
-        <div className={s.postMenu}>{<DropdownPost isFollowedBy={false} isOurPost />}</div>
+        {!postPublicStatus && (
+          <div className={s.postMenu}>
+            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} />}
+          </div>
+        )}
       </div>
 
       <div className={s.commentsBody}>
@@ -148,38 +156,44 @@ export const ModalCommentsSection = ({
                   <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
                     {`Like: ${el.likeCount}`}
                   </Typography>
-                  <Button className={s.answerButton} variant={'transparent'}>
-                    {'Answer'}
-                  </Button>
+                  {!postPublicStatus && (
+                    <Button className={s.answerButton} variant={'transparent'}>
+                      {'Answer'}
+                    </Button>
+                  )}
                 </div>
               </div>
-              <div className={s.heartIconWrapper}>
-                {el.isLiked ? (
-                  <Button
-                    className={s.iconButton}
-                    onClick={() => handleLikeComment(el.id)}
-                    title={'Unlike'}
-                    variant={'transparent'}
-                  >
-                    <Heart className={clsx(s.heartIcon, s.red)} />
-                  </Button>
-                ) : (
-                  <Button
-                    className={s.iconButton}
-                    onClick={() => handleLikeComment(el.id)}
-                    title={'Like'}
-                    variant={'transparent'}
-                  >
-                    <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                  </Button>
-                )}
-              </div>
+              {!postPublicStatus && (
+                <div className={s.heartIconWrapper}>
+                  {el.isLiked ? (
+                    <Button
+                      className={s.iconButton}
+                      onClick={() => handleLikeComment(el.id)}
+                      title={'Unlike'}
+                      variant={'transparent'}
+                    >
+                      <Heart className={clsx(s.heartIcon, s.red)} />
+                    </Button>
+                  ) : (
+                    <Button
+                      className={s.iconButton}
+                      onClick={() => handleLikeComment(el.id)}
+                      title={'Like'}
+                      variant={'transparent'}
+                    >
+                      <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           ))
           .reverse()}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        {!postPublicStatus && (
+          <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        )}
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
@@ -187,12 +201,14 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      <div className={s.addComment}>
-        <div className={s.textareaWrapper}>
-          <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+      {!postPublicStatus && (
+        <div className={s.addComment}>
+          <div className={s.textareaWrapper}>
+            <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+          </div>
+          <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
-        <Button variant={'transparent'}>{'Publish'}</Button>
-      </div>
+      )}
     </div>
   )
 }

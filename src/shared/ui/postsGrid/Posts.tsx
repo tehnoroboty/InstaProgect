@@ -22,16 +22,12 @@ type PostType = {
 }
 
 type Props = {
-  post: Post | null
   posts: PostType[]
 }
 
-export const Posts = ({ post, posts }: Props) => {
+export const Posts = ({ posts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
-
-  console.log(post)
-
   const onClickPostHandler = (postId: number) => {
     router.replace(`/profile/${params.userId}?postId=${postId}`, { scroll: false })
   }

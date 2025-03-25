@@ -2,16 +2,12 @@ import React from 'react';
 
 import {Post} from '@/src/entities/post/types';
 import {PublicProfileTypes} from '@/src/entities/user/types';
-import {GetMyPostsResponse} from '@/src/shared/model/api/types';
+import {
+    GetCommentsResponse,
+    GetMyPostsResponse
+} from '@/src/shared/model/api/types';
+import ModalPost from '@/src/widgets/modalPost/ModalPost';
 import {PublicProfile} from '@/src/widgets/profile/PublicProfile/PublicProfile';
-
-type Params = {
-    postId?: string,
-    userId: string,
-}
-type Props = {
-    params: Params
-}
 
 
 const getUserProfile = async (userId: string): Promise<PublicProfileTypes> => {
@@ -31,27 +27,56 @@ const getUserPosts = async (userId: string): Promise<GetMyPostsResponse> => {
     return await res.json()
 }
 
-const getUserPost = async (postId: number): Promise<Post> => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`)
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
+const getUserPost = async (postId: number) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`, {
+        cache: 'no-store',
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
-    return data;
+    return data
 }
 
+const getUserComments = async (postId: number) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}/comments`, {
+        cache: 'no-store',
+    })
 
-export default async function PublicProfilePage({params}: Props) {
+    const data = await res.json()
 
-    const userProfile = await getUserProfile(params.userId)
-    const userPosts = await getUserPosts(params.userId)
-    const post = params.postId
-        ? await getUserPost(Number(params.postId))
-        : null;
+
+    return data
+}
+
+export default async function PublicProfilePage(props: {
+    params: { userId: string }, searchParams: SearchParams,
+}) {
+
+    const userProfile = await getUserProfile(props.params.userId)
+    const userPosts = await getUserPosts(props.params.userId)
+    const searchParams = await props.searchParams
+    const query = searchParams.postId
+    let post: Post | null = null;
+    let comments: GetCommentsResponse | null = null;
+
+    if (query) {
+        try {
+            post = await getUserPost(Number(query));
+            if (post) {
+                comments = await getUserComments(Number(query));
+            }
+        } catch (error) {
+            console.error('Failed to fetch post:', error);
+        }
+    }
+
 
 
     return <>
-        <PublicProfile post={post} userPosts={userPosts}
+        <PublicProfile publicComments={comments} publicPost={post}
+                       userPosts={userPosts}
                        userProfile={userProfile}/>
     </>
 

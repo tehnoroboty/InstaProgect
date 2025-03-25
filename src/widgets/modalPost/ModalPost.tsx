@@ -1,5 +1,10 @@
+import { useEffect, useState } from 'react'
+
+import { Post } from '@/src/entities/post/types'
+import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { ImageType } from '@/src/shared/model/api/types'
+import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
+import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
@@ -11,18 +16,39 @@ import s from './modalPost.module.scss'
 type Props = {
   onClose: () => void
   open: boolean
+  publicComments: GetCommentsResponse
+  publicPost: Post
 }
 
 export default function ModalPost(props: Props) {
   const { onClose, open } = props
+  const [postPublicStatus, setPostPublicStatus] = useState<boolean>(true)
+  const [isMyPost, setIsMyPost] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const numericPostId = postId ? Number(postId) : null
-  const { data: post } = useGetPostQuery({ postId: numericPostId! }, { skip: !numericPostId })
-  const { data: comments } = useGetCommentsQuery(
+  const { data: myProfile } = useGetUserProfileQuery()
+  const { data: authPost } = useGetPostQuery(
     { postId: numericPostId! },
-    { skip: !numericPostId }
+    { skip: !numericPostId || !!props.publicPost }
   )
+  const { data: authComments } = useGetCommentsQuery(
+    { postId: numericPostId! },
+    { skip: !numericPostId || !!props.publicPost }
+  )
+
+  useEffect(() => {
+    setPostPublicStatus(!authPost)
+  }, [authPost])
+
+  useEffect(() => {
+    const newValue = myProfile?.id === authPost?.ownerId
+
+    setIsMyPost(prev => (prev !== newValue ? newValue : prev))
+  }, [myProfile, authPost])
+
+  const post = props.publicPost ? props.publicPost : authPost
+  const comments = props.publicPost ? props.publicComments : authComments
 
   if (!post) {
     return null
@@ -42,7 +68,12 @@ export default function ModalPost(props: Props) {
           ) : (
             renderItem(post.images[0])
           )}
-          <ModalCommentsSection commentsData={commentsData} post={post} />
+          <ModalCommentsSection
+            commentsData={commentsData}
+            isMyPost={isMyPost}
+            post={post}
+            postPublicStatus={postPublicStatus}
+          />
         </div>
       </Dialog>
     </>
