@@ -157,26 +157,39 @@ export const ModalCommentsSection = ({
         {commentsData
           ?.map(el => (
             <div className={s.usersCommentBody} key={el.id}>
-              <div className={s.userAva}>
-                <AvatarBox className={s.smallAva} size={'xs'} src={el.from.avatars[0].url} />
-              </div>
-              <div className={s.userComment}>
-                <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-                  {el.from.username}
-                </Typography>
-                <Typography as={'span'} size={'s'} weight={'regular'}>
-                  {el.content}
-                </Typography>
-                <div className={s.userCommentBottom}>
-                  <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                    {timeSince(el.createdAt)}
+              <div className={s.usersCommentBodyBox}>
+                <div className={s.userAva}>
+                  <AvatarBox
+                    className={s.smallAva}
+                    size={'xs'}
+                    src={el.from.avatars?.[0]?.url || ''}
+                  />
+                </div>
+                <div className={s.userComment}>
+                  <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
+                    {el.from.username}
                   </Typography>
-                  <Typography lineHeights={'s'} size={'xs'} weight={'semi-bold'}>
-                    {`Like: ${el.likeCount}`}
+                  <Typography
+                    as={'div'}
+                    className={s.userCommentTypography}
+                    size={'s'}
+                    weight={'regular'}
+                  >
+                    {el.content}
                   </Typography>
-                  <Button className={s.answerButton} variant={'transparent'}>
-                    {'Answer'}
-                  </Button>
+                  <div className={s.userCommentBottom}>
+                    <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
+                      {timeSince(el.createdAt)}
+                    </Typography>
+                    <Typography
+                      lineHeights={'s'}
+                      size={'xs'}
+                      weight={'semi-bold'}
+                    >{`Like: ${el.likeCount}`}</Typography>
+                    <Button className={s.answerButton} variant={'transparent'}>
+                      {'Answer'}
+                    </Button>
+                  </div>
                 </div>
               </div>
               <div className={s.heartIconWrapper}>

@@ -31,7 +31,11 @@
 }
 
 .commentsBody {
-  flex-grow: 1;
+  scrollbar-color: rgb(255 255 255 / 30%) transparent; // Цвет полосы прокрутки
+  scrollbar-width: thin; // Для Firefox (необязательно)
+
+  overflow-y: auto; // Добавляет вертикальную прокрутку при переполнении
+  //flex-grow: 1;
   max-height: 336px;
   padding: 19px 23px 8px 24px;
   border-bottom: 1px solid var(--dark-100);
@@ -106,15 +110,30 @@
   display: flex;
   align-items: start;
   justify-content: space-between;
+  max-width: 80%;
 
   &:not(:last-child) {
     margin-bottom: 15px;
   }
 }
 
+.usersCommentBodyBox{
+  display: flex;
+  justify-content: space-between;
+}
+
 .userComment {
   margin-right: auto;
   margin-left: 12px;
+}
+
+.userCommentTypography{
+  width: 400px; // Ограничивает ширину, чтобы не выходил за пределы родителя
+  max-width: 100%;
+
+  word-wrap: break-word; // Разрывает длинные слова, если нет пробелов
+  overflow-wrap: break-word; // Альтернативное свойство для переноса
+  white-space: normal; // Обеспечивает перенос строк
 }
 
 .userCommentBottom {
