@@ -15,8 +15,8 @@ import s from './modalPost.module.scss'
 type Props = {
   onClose: () => void
   open: boolean
-  publicComments: GetCommentsResponse
-  publicPost: Post
+  publicComments?: GetCommentsResponse
+  publicPost?: Post
 }
 
 export default function ModalPost(props: Props) {

@@ -126,9 +126,11 @@ export const ModalCommentsSection = ({
             usernameClassName={s.userAvatarName}
           />
         </Link>
-        <div className={s.postMenu}>
-          {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} onEdit={handleEditPost} />}
-        </div>
+        {!postPublicStatus && (
+          <div className={s.postMenu}>
+            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} />}
+          </div>
+        )}
       </div>
 
       <div className={s.commentsBody}>
@@ -179,33 +181,37 @@ export const ModalCommentsSection = ({
                   </Button>
                 </div>
               </div>
-              <div className={s.heartIconWrapper}>
-                {el.isLiked ? (
-                  <Button
-                    className={s.iconButton}
-                    onClick={() => handleLikeComment(el.id)}
-                    title={'Unlike'}
-                    variant={'transparent'}
-                  >
-                    <Heart className={clsx(s.heartIcon, s.red)} />
-                  </Button>
-                ) : (
-                  <Button
-                    className={s.iconButton}
-                    onClick={() => handleLikeComment(el.id)}
-                    title={'Like'}
-                    variant={'transparent'}
-                  >
-                    <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                  </Button>
-                )}
-              </div>
+              {!postPublicStatus && (
+                <div className={s.heartIconWrapper}>
+                  {el.isLiked ? (
+                    <Button
+                      className={s.iconButton}
+                      onClick={() => handleLikeComment(el.id)}
+                      title={'Unlike'}
+                      variant={'transparent'}
+                    >
+                      <Heart className={clsx(s.heartIcon, s.red)} />
+                    </Button>
+                  ) : (
+                    <Button
+                      className={s.iconButton}
+                      onClick={() => handleLikeComment(el.id)}
+                      title={'Like'}
+                      variant={'transparent'}
+                    >
+                      <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           ))
           .reverse()}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        {!postPublicStatus && (
+          <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        )}
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
@@ -213,18 +219,14 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      <div className={s.addComment}>
-        <div className={s.textareaWrapper}>
-          <TextArea
-            className={s.textarea}
-            label={''}
-            onChange={hendleChangeHeight}
-            placeholder={'Add a Comment...'}
-            ref={textArea}
-          />
+      {!postPublicStatus && (
+        <div className={s.addComment}>
+          <div className={s.textareaWrapper}>
+            <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+          </div>
+          <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
-        <Button variant={'transparent'}>{'Publish'}</Button>
-      </div>
+      )}
     </div>
   )
 }

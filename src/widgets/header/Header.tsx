@@ -20,11 +20,11 @@ export const Header = (props: Props) => {
   const router = useRouter()
   const { data, isLoading, isSuccess } = useMeQuery()
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (!isSuccess && !isLoading) {
       router.push(AuthRoutes.HOME)
     }
-  }, [isSuccess, isLoading])
+  }, [isSuccess, isLoading])*/
 
   return (
     <header {...rest} className={s.header}>
