@@ -128,7 +128,7 @@ export const ModalCommentsSection = ({
         </Link>
         {!postPublicStatus && (
           <div className={s.postMenu}>
-            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} />}
+            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} onEdit={handleEditPost} />}
           </div>
         )}
       </div>
