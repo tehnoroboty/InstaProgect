@@ -23,14 +23,15 @@ type PostType = {
 type Props = {
   posts: PostType[]
   publicPost?: Post | null
+  publicPosts?: any
 }
 
-export const Posts = ({ posts, publicPost }: Props) => {
+export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {
-    const basePath = publicPost ? '/public/profile' : '/profile'
-    const method = publicPost ? 'replace' : 'push'
+    const basePath = publicPosts ? '/public/profile' : '/profile'
+    const method = publicPosts ? 'replace' : 'push'
 
     router[method](`${basePath}/${params.userId}?postId=${postId}`, {
       scroll: false,
