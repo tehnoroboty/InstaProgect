@@ -22,7 +22,7 @@ type PostType = {
 
 type Props = {
   posts: PostType[]
-  publicPost: Post | null
+  publicPost?: Post | null
 }
 
 export const Posts = ({ posts, publicPost }: Props) => {
