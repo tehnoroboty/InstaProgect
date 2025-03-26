@@ -31,7 +31,7 @@ export const PublicProfile = ({ publicComments, publicPost, userPosts, userProfi
   return (
     <div className={s.page}>
       <ProfileInfo publicUserProfile={userProfile} />
-      {posts.length && <Posts posts={posts} publicPost={publicPost} />}
+      {posts.length && <Posts posts={posts} publicPost={publicPost} publicPosts={userPosts} />}
       {publicPost && publicComments && modalPublicPost && (
         <ModalPost
           onClose={() => setModalPublicPost(false)}
