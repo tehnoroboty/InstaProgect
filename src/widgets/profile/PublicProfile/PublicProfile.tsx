@@ -7,7 +7,7 @@ import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/ty
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/PublicProfile/profileInfo/ProfileInfo'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import s from '../myProfile.module.scss'
 
@@ -20,7 +20,9 @@ type Props = {
 
 export const PublicProfile = ({ publicComments, publicPost, userPosts, userProfile }: Props) => {
   const { items: posts } = userPosts
+  const router = useRouter()
   const searchParams = useSearchParams()
+  const pathName = usePathname()
   const postId = searchParams.get('postId')
   const [modalPublicPost, setModalPublicPost] = useState<boolean>(true)
 
@@ -34,7 +36,10 @@ export const PublicProfile = ({ publicComments, publicPost, userPosts, userProfi
       {posts.length && <Posts posts={posts} publicPost={publicPost} publicPosts={userPosts} />}
       {publicPost && publicComments && modalPublicPost && (
         <ModalPost
-          onClose={() => setModalPublicPost(false)}
+          onClose={() => {
+            setModalPublicPost(false)
+            router.push(pathName)
+          }}
           open={modalPublicPost}
           publicComments={publicComments}
           publicPost={publicPost}
