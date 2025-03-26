@@ -1,10 +1,9 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { Post } from '@/src/entities/post/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
-import { GetCommentsResponse, Item, SortDirection } from '@/src/shared/model/api/types'
+import { Item, SortDirection } from '@/src/shared/model/api/types'
 import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
