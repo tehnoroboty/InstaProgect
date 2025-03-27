@@ -7,16 +7,10 @@ import {
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    getPublicUserProfile: builder.query<GetPublicUserProfileResponse, GetPublicUserProfileArgs>({
-      query: ({ profileId }) => ({
-        method: 'GET',
-        url: `/public-user/profile/${profileId}`,
-      }),
-    }),
-    getUserProfile: builder.query<Profile, void>({
+    getMyProfile: builder.query<Profile, void>({
       query: () => '/users/profile',
     }),
   }),
 })
 
-export const { useGetPublicUserProfileQuery, useGetUserProfileQuery } = usersApi
+export const { useGetMyProfileQuery } = usersApi

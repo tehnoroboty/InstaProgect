@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Post } from '@/src/entities/post/types'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
-import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
@@ -27,7 +27,7 @@ export default function ModalPost(props: Props) {
   const postId = searchParams.get('postId')
   const numericPostId = postId ? Number(postId) : null
 
-  const { data: myProfile } = useGetUserProfileQuery()
+  const { data: myProfile } = useGetMyProfileQuery()
   const { data: authPost, refetch: refetchPost } = useGetPostQuery(
     { postId: numericPostId! },
     { skip: !numericPostId || !!props.publicPost }
