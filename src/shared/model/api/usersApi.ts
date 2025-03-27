@@ -1,16 +1,15 @@
 import { Profile } from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import {
-  GetPublicUserProfileArgs,
-  GetPublicUserProfileResponse,
-} from '@/src/shared/model/api/types'
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getMyProfile: builder.query<Profile, void>({
       query: () => '/users/profile',
     }),
+    getUserProfile: builder.query<any, string>({
+      query: userName => `/users/${userName}`,
+    }),
   }),
 })
 
-export const { useGetMyProfileQuery } = usersApi
+export const { useGetMyProfileQuery, useGetUserProfileQuery } = usersApi

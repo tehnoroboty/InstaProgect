@@ -11,7 +11,7 @@ import {
   Item,
   SortDirection,
 } from '@/src/shared/model/api/types'
-import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
@@ -38,17 +38,21 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const params = useParams()
+  const userId = params.userId
 
   const { data: meData } = useMeQuery()
   const { data: myProfile } = useGetMyProfileQuery()
-  const params = useParams()
-  const userId = params.userId
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const router = useRouter()
   const authProfile = !!meData
   const isMyProfile = myProfile?.id === Number(userId)
-  const profile = authProfile && isMyProfile ? myProfile : publicProfileNoAuth.profile
+  const { data: userProfile } = useGetUserProfileQuery(publicProfileNoAuth.profile.userName, {
+    skip: !meData || isMyProfile,
+  })
+  const authUserProfile = isMyProfile ? myProfile : userProfile
+  const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
 
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
@@ -73,7 +77,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
-      userName: profile.userName ?? '',
+      userName: myProfile?.userName || '',
     },
     { skip: !isMyProfile }
   )
@@ -83,9 +87,9 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       // pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
-      userId: Number(params.userId),
+      userName: publicProfileNoAuth.profile.userName,
     },
-    { skip: isMyProfile }
+    { skip: !meData || isMyProfile }
   )
 
   // собираем посты в Личный профиль

@@ -166,7 +166,7 @@ export type GetPublicUserPostsArgs = {
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection
-  userId: number
+  userName: string
 }
 export type GetPublicUserPostsResponse = {
   items: Item[]

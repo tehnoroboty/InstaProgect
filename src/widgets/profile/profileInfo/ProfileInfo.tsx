@@ -18,10 +18,13 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const avatarUrl = profile?.avatars?.[0]?.url
   const aboutMe = profile?.aboutMe
-  const userName = profile.userName
-  const followingCount = /*publicUserProfile?.userMetadata.following*/ 0
-  const followersCount = /*publicUserProfile?.userMetadata.followers*/ 0
-  const publicationsCount = /*publicUserProfile?.userMetadata.publications*/ 0
+  const userName = profile?.userName
+  const followingCount =
+    !authProfile && 'userMetadata' in profile ? profile.userMetadata.following : 0
+  const followersCount =
+    !authProfile && 'userMetadata' in profile ? profile.userMetadata.followers : 0
+  const publicationsCount =
+    !authProfile && 'userMetadata' in profile ? profile.userMetadata.publications : 0
 
   return (
     <div className={s.profileContainer}>
