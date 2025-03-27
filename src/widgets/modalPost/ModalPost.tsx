@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
@@ -27,15 +27,12 @@ export default function ModalPost(props: Props) {
   const postId = searchParams.get('postId')
   const numericPostId = postId ? Number(postId) : null
 
+  const queryParams = { postId: numericPostId! }
+  const queryOptions = { skip: !numericPostId || !!props.publicPost }
+
   const { data: myProfile } = useGetUserProfileQuery()
-  const { data: authPost } = useGetPostQuery(
-    { postId: numericPostId! },
-    { skip: !numericPostId || !!props.publicPost }
-  )
-  const { data: authComments } = useGetCommentsQuery(
-    { postId: numericPostId! },
-    { skip: !numericPostId || !!props.publicPost }
-  )
+  const { data: authPost } = useGetPostQuery(queryParams, queryOptions)
+  const { data: authComments } = useGetCommentsQuery(queryParams, queryOptions)
 
   useEffect(() => {
     setPostPublicStatus(!authPost)
@@ -49,14 +46,6 @@ export default function ModalPost(props: Props) {
 
   const post = props.publicPost ? props.publicPost : authPost
   const comments = props.publicPost ? props.publicComments : authComments
-
-  // const handlePostUpdated = useCallback(async () => {
-  //   try {
-  //     await refetchPost().unwrap()
-  //   } catch (error) {
-  //     console.error('Failed to refetch post:', error)
-  //   }
-  // }, [refetchPost])
 
   if (!post) {
     return null

@@ -50,7 +50,7 @@ export const ModalCommentsSection = ({
   const [comments, setComments] = useState<Comment[]>(commentsData)
   const textArea = useRef<HTMLTextAreaElement>(null)
 
-  const hendleChangeHeight = () => {
+  const handleChangeHeight = () => {
     if (textArea.current) {
       textArea.current.style.height = '24px'
       const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
@@ -232,7 +232,12 @@ export const ModalCommentsSection = ({
       {!postPublicStatus && (
         <div className={s.addComment}>
           <div className={s.textareaWrapper}>
-            <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+            <TextArea
+              className={s.textarea}
+              label={''}
+              onChange={handleChangeHeight}
+              placeholder={'Add a Comment...'}
+            />
           </div>
           <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
