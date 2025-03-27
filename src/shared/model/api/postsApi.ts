@@ -80,6 +80,24 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POSTS' }],
+      // Добавляем optimistic update:
+      async onQueryStarted({ model, postId }, { dispatch, getState, queryFulfilled }) {
+        // Получаем текущее состояние поста
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getPost', { postId }, draft => {
+            if (draft) {
+              draft.description = model.description
+            }
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          // Если запрос не удался - откатываем изменения
+          patchResult.undo()
+        }
+      },
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
