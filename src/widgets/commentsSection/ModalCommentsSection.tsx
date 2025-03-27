@@ -34,7 +34,6 @@ export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
   isMyPost: boolean
-  onPostUpdated?: () => void
   post: Post
   postPublicStatus: boolean
 }
@@ -43,7 +42,6 @@ export const ModalCommentsSection = ({
   avatars,
   commentsData,
   isMyPost,
-  onPostUpdated,
   post,
   postPublicStatus,
 }: ModalCommentsSectionProps) => {
@@ -108,7 +106,6 @@ export const ModalCommentsSection = ({
         avatarOwner={avatarOwner}
         imgSrc={post.images[0].url}
         onExitEdit={handleExitEdit}
-        onPostUpdated={onPostUpdated}
         postDescription={description}
         postId={postId}
         userName={userName}

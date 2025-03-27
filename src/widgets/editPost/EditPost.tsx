@@ -21,7 +21,6 @@ type Props = {
   avatarOwner: string
   imgSrc?: string
   onExitEdit: () => void // Колбэк для выхода из режима редактирования
-  onPostUpdated?: () => void
   postDescription: string
   postId: number
   userName: string
@@ -31,7 +30,6 @@ export const EditPost = ({
   avatarOwner = '',
   imgSrc = '',
   onExitEdit,
-  onPostUpdated,
   postDescription = '',
   postId,
   userName = 'userName',
@@ -49,7 +47,6 @@ export const EditPost = ({
         model: { description: text },
         postId,
       }).unwrap()
-      onPostUpdated?.()
       onExitEdit()
     } catch (error) {
       const err = error as CustomerError

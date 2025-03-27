@@ -28,7 +28,7 @@ export default function ModalPost(props: Props) {
   const numericPostId = postId ? Number(postId) : null
 
   const { data: myProfile } = useGetUserProfileQuery()
-  const { data: authPost, refetch: refetchPost } = useGetPostQuery(
+  const { data: authPost } = useGetPostQuery(
     { postId: numericPostId! },
     { skip: !numericPostId || !!props.publicPost }
   )
@@ -50,13 +50,13 @@ export default function ModalPost(props: Props) {
   const post = props.publicPost ? props.publicPost : authPost
   const comments = props.publicPost ? props.publicComments : authComments
 
-  const handlePostUpdated = useCallback(async () => {
-    try {
-      await refetchPost().unwrap()
-    } catch (error) {
-      console.error('Failed to refetch post:', error)
-    }
-  }, [refetchPost])
+  // const handlePostUpdated = useCallback(async () => {
+  //   try {
+  //     await refetchPost().unwrap()
+  //   } catch (error) {
+  //     console.error('Failed to refetch post:', error)
+  //   }
+  // }, [refetchPost])
 
   if (!post) {
     return null
@@ -79,7 +79,6 @@ export default function ModalPost(props: Props) {
           <ModalCommentsSection
             commentsData={commentsData}
             isMyPost={isMyPost}
-            onPostUpdated={handlePostUpdated}
             post={post}
             postPublicStatus={postPublicStatus}
           />

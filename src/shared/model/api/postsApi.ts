@@ -55,6 +55,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPost: builder.query<Post, { postId: number }>({
+      providesTags: (result, error, { postId }) => [{ id: postId, type: 'POSTS' }],
       query: ({ postId }) => ({
         method: 'GET',
         url: `/posts/id/${postId}`,
@@ -78,7 +79,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
-      invalidatesTags: (res, err, { postId }) => [{ id: postId, type: 'POSTS' }],
+      invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POSTS' }],
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
