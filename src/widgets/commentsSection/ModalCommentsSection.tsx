@@ -56,10 +56,9 @@ export const ModalCommentsSection = ({
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const textArea = useRef<HTMLTextAreaElement>(null)
 
-  const [removePost, { isError, isLoading, isSuccess }] = useRemovePostMutation()
+  const [removePost, { isLoading }] = useRemovePostMutation()
 
   const router = useRouter()
-
   const params = useParams()
 
   const hendleChangeHeight = () => {
@@ -128,7 +127,6 @@ export const ModalCommentsSection = ({
 
   const onRemovePost = () => {
     removePost({ postId })
-    console.log('isSuccess', isSuccess)
     setIsOpen(false)
     router.replace(`/profile/${params.userId}`, { scroll: false })
   }
