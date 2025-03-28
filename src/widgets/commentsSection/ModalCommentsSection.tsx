@@ -19,6 +19,7 @@ import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
 
@@ -56,6 +57,10 @@ export const ModalCommentsSection = ({
   const textArea = useRef<HTMLTextAreaElement>(null)
 
   const [removePost, { isError, isLoading, isSuccess }] = useRemovePostMutation()
+
+  const router = useRouter()
+
+  const params = useParams()
 
   const hendleChangeHeight = () => {
     if (textArea.current) {
@@ -123,9 +128,9 @@ export const ModalCommentsSection = ({
 
   const onRemovePost = () => {
     removePost({ postId })
-    if (isSuccess) {
-      setIsOpen(false)
-    }
+    console.log('isSuccess', isSuccess)
+    setIsOpen(false)
+    router.replace(`/profile/${params.userId}`, { scroll: false })
   }
 
   return (
