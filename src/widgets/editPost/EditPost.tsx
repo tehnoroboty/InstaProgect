@@ -8,6 +8,7 @@ import { CustomerError } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
@@ -21,7 +22,6 @@ type Props = {
   avatarOwner: string
   imgSrc?: string
   onExitEdit: () => void // Колбэк для выхода из режима редактирования
-  onPostUpdated?: () => void
   postDescription: string
   postId: number
   userName: string
@@ -31,7 +31,6 @@ export const EditPost = ({
   avatarOwner = '',
   imgSrc = '',
   onExitEdit,
-  onPostUpdated,
   postDescription = '',
   postId,
   userName = 'userName',
@@ -41,7 +40,7 @@ export const EditPost = ({
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const [updatePost, { isError, isLoading, isSuccess }] = useUpdatePostMutation()
+  const [updatePost, { isError, isLoading }] = useUpdatePostMutation()
 
   const handleSaveChanges = async () => {
     try {
@@ -49,7 +48,6 @@ export const EditPost = ({
         model: { description: text },
         postId,
       }).unwrap()
-      onPostUpdated?.()
       onExitEdit()
     } catch (error) {
       const err = error as CustomerError
@@ -73,6 +71,11 @@ export const EditPost = ({
     <>
       {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
       <Dialog className={s.modal} isSimple onClose={handleCloseEditPost} open>
+        {isLoading && (
+          <div className={s.loader}>
+            <Loader />
+          </div>
+        )}
         <div className={s.header}>
           <Title asChild>
             <Typography as={'h1'} option={'h1'}>
@@ -101,7 +104,7 @@ export const EditPost = ({
             />
             <Button
               className={s.saveChangesBtn}
-              disabled={!!validationError}
+              disabled={!!validationError || isLoading}
               onClick={handleSaveChanges}
             >
               {'Save Changes'}
