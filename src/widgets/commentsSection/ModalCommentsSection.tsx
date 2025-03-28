@@ -37,7 +37,6 @@ export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
   isMyPost: boolean
-  onPostUpdated?: () => void
   post: Post
   postPublicStatus: boolean
 }
@@ -46,7 +45,6 @@ export const ModalCommentsSection = ({
   avatars,
   commentsData,
   isMyPost,
-  onPostUpdated,
   post,
   postPublicStatus,
 }: ModalCommentsSectionProps) => {
@@ -61,7 +59,7 @@ export const ModalCommentsSection = ({
   const router = useRouter()
   const params = useParams()
 
-  const hendleChangeHeight = () => {
+  const handleChangeHeight = () => {
     if (textArea.current) {
       textArea.current.style.height = '24px'
       const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
@@ -117,7 +115,6 @@ export const ModalCommentsSection = ({
         avatarOwner={avatarOwner}
         imgSrc={post.images[0].url}
         onExitEdit={handleExitEdit}
-        onPostUpdated={onPostUpdated}
         postDescription={description}
         postId={postId}
         userName={userName}
@@ -259,7 +256,12 @@ export const ModalCommentsSection = ({
       {!postPublicStatus && (
         <div className={s.addComment}>
           <div className={s.textareaWrapper}>
-            <TextArea className={s.textarea} label={''} placeholder={'Add a Comment...'} />
+            <TextArea
+              className={s.textarea}
+              label={''}
+              onChange={handleChangeHeight}
+              placeholder={'Add a Comment...'}
+            />
           </div>
           <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
