@@ -77,6 +77,14 @@ export const postsApi = baseApi.injectEndpoints({
         }
       },
     }),
+    removePost: builder.mutation<void, { postId: number }>({
+      invalidatesTags: ['POSTS'],
+      query: ({ postId }) => ({
+        method: 'DELETE',
+        url: `/posts/${postId}`,
+      }),
+    }),
+
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (res, err, { postId }) => [{ id: postId, type: 'POSTS' }],
       query: ({ model, postId }) => ({
@@ -95,5 +103,6 @@ export const {
   useGetMyPostsQuery,
   useGetPostQuery,
   useGetPublicUserPostsQuery,
+  useRemovePostMutation,
   useUpdatePostMutation,
 } = postsApi

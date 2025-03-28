@@ -1,13 +1,15 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
+import { useRemovePostMutation } from '@/src/shared/model/api/postsApi'
 import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
+import { Dialog } from '@/src/shared/ui/dialog'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -50,7 +52,10 @@ export const ModalCommentsSection = ({
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   // Состояние для комментариев
   const [comments, setComments] = useState<Comment[]>(commentsData)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const textArea = useRef<HTMLTextAreaElement>(null)
+
+  const [removePost, { isError, isLoading, isSuccess }] = useRemovePostMutation()
 
   const hendleChangeHeight = () => {
     if (textArea.current) {
@@ -116,6 +121,13 @@ export const ModalCommentsSection = ({
     )
   }
 
+  const onRemovePost = () => {
+    removePost({ postId })
+    if (isSuccess) {
+      setIsOpen(false)
+    }
+  }
+
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
@@ -128,7 +140,16 @@ export const ModalCommentsSection = ({
         </Link>
         {!postPublicStatus && (
           <div className={s.postMenu}>
-            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} onEdit={handleEditPost} />}
+            {
+              <DropdownPost
+                isFollowedBy={false}
+                isOurPost={isMyPost}
+                onEdit={handleEditPost}
+                onRemove={() => {
+                  setIsOpen(true)
+                }}
+              />
+            }
           </div>
         )}
       </div>
@@ -240,6 +261,32 @@ export const ModalCommentsSection = ({
           <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
       )}
+
+      <Dialog
+        className={s.modal}
+        modalTitle={'Delete Post'}
+        onClose={() => setIsOpen(false)}
+        open={isOpen}
+      >
+        <div className={s.contentModal}>
+          <Typography as={'span'} option={'regular_text16'}>
+            {`Are you sure you want to delete this post?`}
+          </Typography>
+          <div className={s.modalActions}>
+            <Button
+              className={s.btnModal}
+              disabled={isLoading}
+              onClick={onRemovePost}
+              variant={'secondary'}
+            >
+              {'Yes'}
+            </Button>
+            <Button className={s.btnModal} onClick={() => setIsOpen(false)} variant={'primary'}>
+              {'No'}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   )
 }
