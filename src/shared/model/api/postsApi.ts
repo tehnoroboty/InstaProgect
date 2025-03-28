@@ -78,7 +78,53 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     removePost: builder.mutation<void, { postId: number }>({
-      invalidatesTags: (res, err, { postId }) => [{ id: postId, type: 'POSTS' }],
+      invalidatesTags: ['POSTS'],
+
+      async onQueryStarted({ postId }, { dispatch, getState, queryFulfilled }) {
+        // Получаем состояние RTK Query
+        const state = getState()[postsApi.reducerPath]
+        const args = state?.queries?.['getMyPosts']?.originalArgs as GetMyPostsArgs
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getMyPosts', args, state => {
+            state.items = state.items.filter(post => post.id !== postId)
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+
+        /*
+                const state = getState()[postsApi.reducerPath]
+        
+                // Достаём параметры последнего запроса к getMyPosts
+                const args = state?.queries?.['getMyPosts']?.originalArgs as GetMyPostsArgs | undefined
+        
+                // Если `args` отсутствует или в нём нет `userName`, прерываем обновление кэша
+                if (!args) {
+                  return
+                }
+        
+                // Объявляем `patchResult` заранее
+                let patchResult: ReturnType<typeof dispatch> | null = null
+        
+                try {
+                  // Оптимистически удаляем пост из кэша
+                  patchResult = dispatch(
+                    postsApi.util.updateQueryData('getMyPosts', args, draft => {
+                      draft.items = draft.items.filter(post => post.id !== postId)
+                    })
+                  )
+        
+                  // Дожидаемся выполнения запроса
+                  await queryFulfilled
+                } catch {
+                  ;() => {}
+                }
+        */
+      },
       query: ({ postId }) => ({
         method: 'DELETE',
         url: `/posts/${postId}`,
