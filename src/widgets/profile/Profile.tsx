@@ -19,7 +19,7 @@ import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
-import s from './myProfile.module.scss'
+import s from './profile.module.scss'
 
 const AUTH_PAGE_SIZE = 8
 const PUBLIC_PAGE_SIZE = 12

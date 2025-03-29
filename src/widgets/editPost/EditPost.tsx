@@ -12,7 +12,7 @@ import { Loader } from '@/src/shared/ui/loader/Loader'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
-import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
+import { ConfirmationModal } from '@/src/shared/ui/сonfirmationModal/ConfirmationModal'
 import { Title } from '@radix-ui/react-dialog'
 import Image from 'next/image'
 
@@ -119,7 +119,7 @@ export const EditPost = ({
         modalTitle={'Close Post'}
         onClickNo={() => setShowConfirmation(false)}
         onCloseModal={() => setShowConfirmation(false)}
-        onCloseParentModal={handleConfirmClose}
+        onPrimaryAction={handleConfirmClose}
         open={showConfirmation}
       />
     </>

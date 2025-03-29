@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Post } from '@/src/entities/post/types'
+import { Avatar } from '@/src/entities/user/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { useRemovePostMutation } from '@/src/shared/model/api/postsApi'
+import { postsApi, useRemovePostMutation } from '@/src/shared/model/api/postsApi'
 import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -14,6 +16,7 @@ import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { ConfirmationModal } from '@/src/shared/ui/сonfirmationModal/ConfirmationModal'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
@@ -24,14 +27,6 @@ import { useParams, useRouter } from 'next/navigation'
 import s from './modalCommentsSection.module.scss'
 
 import { Button } from '../../shared/ui/button/Button'
-
-type Avatar = {
-  createdAt: string
-  fileSize: number
-  height: number
-  url: string
-  width: number
-}
 
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
@@ -49,12 +44,13 @@ export const ModalCommentsSection = ({
   postPublicStatus,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-  // Состояние для комментариев
   const [comments, setComments] = useState<Comment[]>(commentsData)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const textArea = useRef<HTMLTextAreaElement>(null)
 
   const [removePost, { isLoading }] = useRemovePostMutation()
+
+  const dispatch = useDispatch()
 
   const router = useRouter()
   const params = useParams()
@@ -122,10 +118,20 @@ export const ModalCommentsSection = ({
     )
   }
 
-  const onRemovePost = () => {
-    removePost({ postId })
+  const onRemovePost = async () => {
+    await removePost({ postId, userName })
     setIsOpen(false)
-    router.replace(`/profile/${params.userId}`, { scroll: false })
+
+    // 🔄 Очищаем кэш и загружаем первую страницу заново
+    dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
+
+    // 🔀 Переход на профиль пользователя
+    router.push(`/profile/${params.userId}`, { scroll: false })
+  }
+
+  const handleConfirmClose = async () => {
+    setIsOpen(false) // Закрываем Modal
+    await onRemovePost()
   }
 
   return (
@@ -266,32 +272,14 @@ export const ModalCommentsSection = ({
           <Button variant={'transparent'}>{'Publish'}</Button>
         </div>
       )}
-
-      <Dialog
-        className={s.modal}
+      <ConfirmationModal
+        modalMessage={'Are you sure you want to delete this post?'}
         modalTitle={'Delete Post'}
-        onClose={() => setIsOpen(false)}
+        onClickNo={() => setIsOpen(false)}
+        onCloseModal={() => setIsOpen(false)}
+        onPrimaryAction={handleConfirmClose}
         open={isOpen}
-      >
-        <div className={s.contentModal}>
-          <Typography as={'span'} option={'regular_text16'}>
-            {`Are you sure you want to delete this post?`}
-          </Typography>
-          <div className={s.modalActions}>
-            <Button
-              className={s.btnModal}
-              disabled={isLoading}
-              onClick={onRemovePost}
-              variant={'secondary'}
-            >
-              {'Yes'}
-            </Button>
-            <Button className={s.btnModal} onClick={() => setIsOpen(false)} variant={'primary'}>
-              {'No'}
-            </Button>
-          </div>
-        </div>
-      </Dialog>
+      />
     </div>
   )
 }

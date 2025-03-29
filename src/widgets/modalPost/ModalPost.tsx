@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
+import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
@@ -51,9 +52,20 @@ export default function ModalPost(props: Props) {
     return null
   }
   const isCarousel = post.images.length > 1
-  const renderItem = (item: ImageType) => (
-    <Image alt={'post'} className={s.image} height={490} src={item.url} width={562} />
-  )
+  const renderItem = (item: ImageType) => {
+    return item?.url ? (
+      <Image alt={'post'} className={s.image} height={490} src={item.url} width={562} />
+    ) : (
+      <div className={s.notFound}>
+        <div className={s.notFoundBox}>
+          <ImageNotFound height={194} width={199} />
+          <p>
+            <b>No Image</b>
+          </p>
+        </div>
+      </div>
+    )
+  }
   const commentsData = comments?.items ?? []
 
   return (

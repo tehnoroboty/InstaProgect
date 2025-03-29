@@ -165,7 +165,7 @@ export type UpdatePostModel = {
   description: string
 }
 
-type Avatar = {
+export type Avatar = {
   createdAt: string
   fileSize: number
   height: number

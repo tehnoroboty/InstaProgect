@@ -9,6 +9,7 @@ import {
   ImageType,
   RequestPostsType,
   ResponsePostsType,
+  SortDirection,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
 
@@ -42,7 +43,8 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getMyPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
-      providesTags: ['POSTS'],
+      // providesTags: ['POSTS'],
+      providesTags: (result, error, { userName }) => [{ id: userName, type: 'POSTS' }],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
         params: {
@@ -78,53 +80,39 @@ export const postsApi = baseApi.injectEndpoints({
         }
       },
     }),
-    removePost: builder.mutation<void, { postId: number }>({
-      invalidatesTags: ['POSTS'],
+    removePost: builder.mutation<void, { postId: number; userName: string }>({
+      // invalidatesTags: ['POSTS'],
+      invalidatesTags: (result, error, { userName }) => [{ id: userName, type: 'POSTS' }],
+      // ✅ Инвалидируем только посты этого пользователя
 
-      async onQueryStarted({ postId }, { dispatch, getState, queryFulfilled }) {
-        // Получаем состояние RTK Query
-        const state = getState()[postsApi.reducerPath]
-        const args = state?.queries?.['getMyPosts']?.originalArgs as GetMyPostsArgs
+      async onQueryStarted({ postId, userName }, { dispatch, queryFulfilled }) {
+        const args = {
+          pageNumber: 1,
+          pageSize: 10,
+          sortBy: 'createdAt',
+          sortDirection: 'desc' as SortDirection,
+          userName,
+        }
+
         const patchResult = dispatch(
-          postsApi.util.updateQueryData('getMyPosts', args, state => {
-            state.items = state.items.filter(post => post.id !== postId)
+          postsApi.util.updateQueryData('getMyPosts', args, draft => {
+            // draft.items = draft.items.filter(post => post.id !== postId)
+            const index = draft.items.findIndex(post => post.id === postId)
+
+            if (index !== -1) {
+              draft.items.splice(index, 1)
+            }
           })
         )
 
         try {
           await queryFulfilled
+          dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
+          // ✅ Теперь инвалидируем только кэш этого пользователя
         } catch {
-          patchResult.undo()
+          // Если запрос завершился с ошибкой, откатываем изменения в кэше
+          patchResult?.undo()
         }
-
-        /*
-                const state = getState()[postsApi.reducerPath]
-        
-                // Достаём параметры последнего запроса к getMyPosts
-                const args = state?.queries?.['getMyPosts']?.originalArgs as GetMyPostsArgs | undefined
-        
-                // Если `args` отсутствует или в нём нет `userName`, прерываем обновление кэша
-                if (!args) {
-                  return
-                }
-        
-                // Объявляем `patchResult` заранее
-                let patchResult: ReturnType<typeof dispatch> | null = null
-        
-                try {
-                  // Оптимистически удаляем пост из кэша
-                  patchResult = dispatch(
-                    postsApi.util.updateQueryData('getMyPosts', args, draft => {
-                      draft.items = draft.items.filter(post => post.id !== postId)
-                    })
-                  )
-        
-                  // Дожидаемся выполнения запроса
-                  await queryFulfilled
-                } catch {
-                  ;() => {}
-                }
-        */
       },
       query: ({ postId }) => ({
         method: 'DELETE',
@@ -135,7 +123,7 @@ export const postsApi = baseApi.injectEndpoints({
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POSTS' }],
       // Добавляем optimistic update:
-      async onQueryStarted({ model, postId }, { dispatch, getState, queryFulfilled }) {
+      async onQueryStarted({ model, postId }, { dispatch, queryFulfilled }) {
         // Получаем текущее состояние поста
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPost', { postId }, draft => {

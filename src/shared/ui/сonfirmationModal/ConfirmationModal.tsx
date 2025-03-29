@@ -9,7 +9,7 @@ type Props = {
   modalTitle: string
   onClickNo: () => void
   onCloseModal: () => void
-  onCloseParentModal: () => void
+  onPrimaryAction: () => void
   open: boolean
 }
 
@@ -18,12 +18,12 @@ export const ConfirmationModal = ({
   modalTitle,
   onClickNo,
   onCloseModal,
-  onCloseParentModal,
+  onPrimaryAction,
   open,
 }: Props) => {
   const onClickYes = () => {
     onCloseModal()
-    onCloseParentModal()
+    onPrimaryAction()
   }
 
   return (
