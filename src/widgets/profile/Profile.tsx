@@ -83,7 +83,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       sortDirection: SORT_DIRECTION,
       userName: myProfile?.userName || '',
     },
-    { skip: !meData || !isMyProfile }
+    { skip: !meData || userProfile }
   )
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
@@ -98,7 +98,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   // собираем посты в Личный профиль
   useEffect(() => {
-    if (authProfile && isMyProfile && myPosts?.items) {
+    if (isMyProfile && myPosts?.items) {
       setMyAllPosts(prev => {
         const existingIds = new Set(prev.map(post => post.id))
         const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
@@ -106,7 +106,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
         return [...prev, ...newItems]
       })
     }
-  }, [myPosts, publicPosts, isMyProfile])
+  }, [myPosts, publicPosts, isMyProfile, params])
 
   //собираем посты в Публичный профиль
   useEffect(() => {
