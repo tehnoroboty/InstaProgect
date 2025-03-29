@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
@@ -14,7 +14,9 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import {
-  PinturaDefaultImageWriterResult,
+  type ColorMatrix,
+  type Filter,
+  type PinturaDefaultImageWriterResult,
   createDefaultImageReader,
   createDefaultImageWriter,
   filterInvert,
@@ -42,6 +44,17 @@ const editorConfig = {
     ...plugin_filter_locale_en_gb,
   },
 }
+
+const customFilterFunctions: Record<string, Filter> = {
+  ...plugin_filter_defaults.filterFunctions,
+  blue: (): ColorMatrix => [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0],
+  invert: filterInvert,
+}
+
+const customFilterOptions = [
+  ...plugin_filter_defaults.filterOptions,
+  ['Custom', [['blue', 'Custom']]],
+]
 
 type Props = {
   photos: string[]
@@ -88,14 +101,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
 
   return (
     <>
-      <Dialog
-        className={s.modal}
-        isSimple
-        onClose={() => {
-          exitModal.setTrue()
-        }}
-        open={openModal.value}
-      >
+      <Dialog className={s.modal} isSimple onClose={exitModal.setTrue} open={openModal.value}>
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
             <ArrowIosBackOutline color={'white'} />
@@ -120,17 +126,8 @@ export const FilteringPhoto = ({ photos }: Props) => {
                 return (
                   <PinturaEditor
                     {...editorConfig}
-                    filterFunctions={{
-                      ...plugin_filter_defaults.filterFunctions,
-                      blue: () => {
-                        return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-                      },
-                      invert: filterInvert,
-                    }}
-                    filterOptions={[
-                      ...plugin_filter_defaults.filterOptions,
-                      ['Custom', [['blue', 'Blue']]],
-                    ]}
+                    filterFunctions={customFilterFunctions}
+                    filterOptions={customFilterOptions}
                     onProcess={res => handleEditorProcess(res, index)}
                     src={photo}
                   />
@@ -141,17 +138,8 @@ export const FilteringPhoto = ({ photos }: Props) => {
           ) : (
             <PinturaEditor
               {...editorConfig}
-              filterFunctions={{
-                ...plugin_filter_defaults.filterFunctions,
-                blue: () => {
-                  return [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0]
-                },
-                invert: filterInvert,
-              }}
-              filterOptions={[
-                ...plugin_filter_defaults.filterOptions,
-                ['Custom', [['blue', 'Blue']]],
-              ]}
+              filterFunctions={customFilterFunctions}
+              filterOptions={customFilterOptions}
               onProcess={res => handleEditorProcess(res, 0)}
               src={photos[0]}
             />
@@ -159,7 +147,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
-        onCloseModal={() => exitModal.setFalse()}
+        onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}

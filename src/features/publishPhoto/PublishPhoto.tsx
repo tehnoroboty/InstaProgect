@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
-import Pin from '@/src/shared/assets/componentsIcons/PinOutline'
+import PinIcon from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { AppRoutes } from '@/src/shared/lib/constants/routing'
 import {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
@@ -26,6 +27,7 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import { Title } from '@radix-ui/react-dialog'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
@@ -46,7 +48,7 @@ export const PublishPhoto = ({ photos }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [addPhotosForPost, { isError: isErrorForPhoto, isLoading: isLoadingForPhoto }] =
     useCreateImageForPostMutation()
-  const [addPost, { isError, isLoading, isSuccess }] = useCreateNewPostMutation()
+  const [addPost, { isError, isLoading }] = useCreateNewPostMutation()
 
   const onClickPublishHandler = async () => {
     try {
@@ -57,7 +59,7 @@ export const PublishPhoto = ({ photos }: Props) => {
         files.map(file => addPhotosForPost({ file }).unwrap())
       )
 
-      const uploudIds = uploadResults
+      const uploadIds = uploadResults
         .map(result => {
           if (result.images && Array.isArray(result.images)) {
             return result.images.map(image => ({ uploadId: image.uploadId }))
@@ -67,15 +69,15 @@ export const PublishPhoto = ({ photos }: Props) => {
         })
         .flat()
 
-      if (uploudIds.length > 0) {
+      if (uploadIds.length > 0) {
         const publishData: RequestPostsType = {
-          childrenMetadata: uploudIds,
+          childrenMetadata: uploadIds,
           description: value,
         }
 
         await addPost(publishData).unwrap()
         openModal.setFalse()
-        router.push('/profile')
+        router.push(AppRoutes.PROFILE)
       } else {
         console.warn('No files were uploaded successfully.')
       }
@@ -106,14 +108,7 @@ export const PublishPhoto = ({ photos }: Props) => {
     <>
       {isError ||
         (isErrorForPhoto && <Alerts message={errorMessage} position={'fixed'} type={'error'} />)}
-      <Dialog
-        className={s.modal}
-        isSimple
-        onClose={() => {
-          exitModal.setTrue()
-        }}
-        open={openModal.value}
-      >
+      <Dialog className={s.modal} isSimple onClose={exitModal.setTrue} open={openModal.value}>
         {isLoading ||
           (isLoadingForPhoto && (
             <div className={s.loading}>
@@ -140,11 +135,27 @@ export const PublishPhoto = ({ photos }: Props) => {
             {photos.length > 1 ? (
               <Carousel
                 list={photos}
-                renderItem={photo => <img alt={'photo'} className={s.photoImg} src={photo} />}
+                renderItem={photo => (
+                  <Image
+                    alt={'photo'}
+                    className={s.photoImg}
+                    fill
+                    key={photo}
+                    layout={'responsive'}
+                    objectFit={'cover'}
+                    src={photo}
+                  />
+                )}
                 size={'small'}
               />
             ) : (
-              <img alt={'photo'} className={s.photoImg} src={photos[0]} />
+              <Image
+                alt={'photo'}
+                className={s.photoImg}
+                fill
+                objectFit={'cover'}
+                src={photos[0]}
+              />
             )}
           </div>
           <div className={s.descriptionBox}>
@@ -165,7 +176,7 @@ export const PublishPhoto = ({ photos }: Props) => {
             <div className={s.locationBox}>
               <div className={s.inputContainer}>
                 <Input className={s.addLocation} label={'Add location'} />
-                <Pin className={s.pinIcon} />
+                <PinIcon className={s.pinIcon} />
               </div>
 
               <div className={s.selectedLocation}>
@@ -189,7 +200,7 @@ export const PublishPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
-        onCloseModal={() => exitModal.setFalse()}
+        onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
