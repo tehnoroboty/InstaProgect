@@ -1,44 +1,13 @@
 import { Post } from '@/src/entities/post/types'
-import { PublicProfileTypes } from '@/src/entities/user/types'
-import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
+import { GetCommentsResponse } from '@/src/shared/model/api/types'
 import { Profile } from '@/src/widgets/profile/Profile'
-
-const getUserProfile = async (userId: string): Promise<PublicProfileTypes> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-user/profile/${userId}`, {
-    cache: 'no-store',
-  })
-
-  return await res.json()
-}
-
-const getUserPosts = async (userId: string): Promise<GetPostsResponse> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/user/${userId}`, {
-    cache: 'no-store',
-  })
-
-  return await res.json()
-}
-
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
-
-const getUserPost = async (postId: number) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`, {
-    cache: 'no-store',
-  })
-
-  return await res.json()
-}
-
-const getUserComments = async (postId: number) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}/comments`,
-    {
-      cache: 'no-store',
-    }
-  )
-
-  return await res.json()
-}
+import {
+  SearchParams,
+  getUserComments,
+  getUserPost,
+  getUserPosts,
+  getUserProfile,
+} from '@/src/widgets/profile/getPublicProfile'
 
 export default async function ProfilePage(props: {
   params: { userId: string }

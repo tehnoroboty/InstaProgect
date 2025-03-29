@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { Profile, PublicProfileTypes } from '@/src/entities/user/types'
-import { GetPublicUserProfileResponse } from '@/src/shared/model/api/types'
+import { PublicProfileTypes } from '@/src/entities/user/types'
+import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -11,7 +11,7 @@ import s from './profileInfo.module.scss'
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: Profile | PublicProfileTypes
+  profile: GetProfileWithFollowType | PublicProfileTypes
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
@@ -20,11 +20,17 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
   const followingCount =
-    !authProfile && 'userMetadata' in profile ? profile.userMetadata.following : 0
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.following
+      : ((profile as GetProfileWithFollowType)?.followingCount ?? 0)
   const followersCount =
-    !authProfile && 'userMetadata' in profile ? profile.userMetadata.followers : 0
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.followers
+      : ((profile as GetProfileWithFollowType)?.followersCount ?? 0)
   const publicationsCount =
-    !authProfile && 'userMetadata' in profile ? profile.userMetadata.publications : 0
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.publications
+      : ((profile as GetProfileWithFollowType)?.publicationsCount ?? 0)
 
   return (
     <div className={s.profileContainer}>

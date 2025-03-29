@@ -15,6 +15,8 @@ import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
+import { Slider } from '@radix-ui/react-slider'
+import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
@@ -42,15 +44,18 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   const userId = params.userId
 
   const { data: meData } = useMeQuery()
-  const { data: myProfile } = useGetMyProfileQuery()
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const router = useRouter()
   const authProfile = !!meData
-  const isMyProfile = myProfile?.id === Number(userId)
+  const isMyProfile = meData?.userId === Number(userId)
   const { data: userProfile } = useGetUserProfileQuery(publicProfileNoAuth.profile.userName, {
     skip: !meData || isMyProfile,
   })
+  const { data: myProfile } = useGetUserProfileQuery(meData?.userName ?? '', {
+    skip: !meData || userProfile,
+  })
+
   const authUserProfile = isMyProfile ? myProfile : userProfile
   const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
 
@@ -79,7 +84,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       sortDirection: SORT_DIRECTION,
       userName: myProfile?.userName || '',
     },
-    { skip: !isMyProfile }
+    { skip: !meData || !isMyProfile }
   )
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
@@ -94,7 +99,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   // собираем посты в Личный профиль
   useEffect(() => {
-    if (isMyProfile && myPosts?.items) {
+    if (authProfile && isMyProfile && myPosts?.items) {
       setMyAllPosts(prev => {
         const existingIds = new Set(prev.map(post => post.id))
         const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
@@ -106,7 +111,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   //собираем посты в Публичный профиль
   useEffect(() => {
-    if (!isMyProfile && publicPosts?.items) {
+    if (authProfile && !isMyProfile && publicPosts?.items) {
       setPublicAllPosts(publicPosts.items)
     }
   }, [publicPosts, isMyProfile])
@@ -153,12 +158,20 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   }, [params.userId])
 
   return (
-    <div className={s.page}>
+    <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
-      {postsToShow.length && <Posts posts={postsToShow} />}
+      <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
       {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
 
-      <ModalPost onClose={closeModal} open={modalIsOpen} />
+      <ModalPost
+        {...(!authProfile &&
+          publicProfileNoAuth && {
+            publicComments: publicProfileNoAuth.comments,
+            publicPost: publicProfileNoAuth.post,
+          })}
+        onClose={closeModal}
+        open={modalIsOpen}
+      />
     </div>
   )
 }
