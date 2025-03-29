@@ -12,6 +12,7 @@ import {
   SortDirection,
 } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
@@ -48,12 +49,18 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   const router = useRouter()
   const authProfile = !!meData
   const isMyProfile = meData?.userId === Number(userId)
-  const { data: userProfile } = useGetUserProfileQuery(publicProfileNoAuth.profile.userName, {
-    skip: !meData || isMyProfile,
-  })
-  const { data: myProfile } = useGetUserProfileQuery(meData?.userName ?? '', {
-    skip: !meData || !isMyProfile,
-  })
+  const { data: userProfile, isFetching: isFetchingUserProfile } = useGetUserProfileQuery(
+    publicProfileNoAuth.profile.userName,
+    {
+      skip: !meData || isMyProfile,
+    }
+  )
+  const { data: myProfile, isFetching: isFetchingMyProfile } = useGetUserProfileQuery(
+    meData?.userName ?? '',
+    {
+      skip: !meData || !isMyProfile,
+    }
+  )
 
   const authUserProfile = isMyProfile ? myProfile : userProfile
   const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
@@ -156,12 +163,18 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     setPageNumber(1)
   }, [params.userId])
 
+  if (isFetchingMyPosts || isFetchingPublicPosts || isFetchingMyProfile || isFetchingUserProfile) {
+    return (
+      <div className={s.loaging}>
+        <Loader />
+      </div>
+    )
+  }
+
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
       <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
-      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
-
       <ModalPost
         {...(!authProfile &&
           publicProfileNoAuth && {
