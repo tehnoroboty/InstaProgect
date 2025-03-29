@@ -77,7 +77,8 @@ export const baseQueryWithReauth: BaseQueryFn<
           // window.location.href = '/'
         }
       } finally {
-        // release must be called once the mutex should be released again.
+        // release must be called once the mutex should be released
+        // again.
         release()
       }
     } else {
@@ -94,5 +95,5 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithReauth, // Используем кастомный baseQuery
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
-  tagTypes: ['ME', 'POSTS'],
+  tagTypes: ['ME', 'POSTS', 'FOLLOWING'],
 })
