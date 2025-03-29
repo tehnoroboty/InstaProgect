@@ -153,7 +153,7 @@ export const ModalCommentsSection = ({
             </Typography>
           </div>
         </div>
-        {commentsData
+        {comments
           ?.map(el => (
             <div className={s.usersCommentBody} key={el.id}>
               <div className={s.usersCommentBodyBox}>

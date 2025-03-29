@@ -11,11 +11,10 @@ import {
   Item,
   SortDirection,
 } from '@/src/shared/model/api/types'
-import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
-import { Slider } from '@radix-ui/react-slider'
 import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
@@ -53,7 +52,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     skip: !meData || isMyProfile,
   })
   const { data: myProfile } = useGetUserProfileQuery(meData?.userName ?? '', {
-    skip: !meData || userProfile,
+    skip: !meData || !isMyProfile,
   })
 
   const authUserProfile = isMyProfile ? myProfile : userProfile
