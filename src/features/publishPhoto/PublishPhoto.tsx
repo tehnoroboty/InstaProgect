@@ -75,7 +75,7 @@ export const PublishPhoto = ({ photos }: Props) => {
 
         await addPost(publishData).unwrap()
         openModal.setFalse()
-        router.push('/profile')
+        router.push(`/profile/${userProfile?.id}`)
       } else {
         console.warn('No files were uploaded successfully.')
       }
