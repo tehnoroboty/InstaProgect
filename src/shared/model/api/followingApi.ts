@@ -1,5 +1,4 @@
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { usersApi } from '@/src/shared/model/api/usersApi'
 
 export const followingApi = baseApi.injectEndpoints({
   endpoints: builder => ({

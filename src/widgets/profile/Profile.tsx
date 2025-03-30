@@ -163,17 +163,10 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     setPageNumber(1)
   }, [params.userId])
 
-  if (isFetchingMyPosts || isFetchingPublicPosts || isFetchingMyProfile || isFetchingUserProfile) {
-    return (
-      <div className={s.loaging}>
-        <Loader />
-      </div>
-    )
-  }
-
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
+      {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
       <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
       <ModalPost
         {...(!authProfile &&
