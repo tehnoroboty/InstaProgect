@@ -74,6 +74,24 @@ export type GetMyPostsArgs = {
   userName: string
 }
 
+export type GetProfileWithFollowType = {
+  aboutMe: string
+  avatars: Avatar[]
+  city: string
+  country: string
+  dateOfBirth: string
+  firstName: string
+  followersCount: number
+  followingCount: number
+  id: number
+  isFollowedBy: true
+  isFollowing: true
+  lastName: string
+  publicationsCount: number
+  region: string
+  userName: string
+}
+
 export type GetPostsResponse = {
   items: Item[]
   page: number
@@ -166,7 +184,7 @@ export type GetPublicUserPostsArgs = {
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection
-  userId: number
+  userName: string
 }
 export type GetPublicUserPostsResponse = {
   items: Item[]

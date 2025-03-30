@@ -13,7 +13,7 @@ import {
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
-import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
 import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -35,7 +35,7 @@ type Props = {
 }
 
 export const PublishPhoto = ({ photos }: Props) => {
-  const { data: userProfile } = useGetUserProfileQuery()
+  const { data: userProfile } = useGetMyProfileQuery()
   const openModal = useBoolean(true)
   const dispatch = useDispatch()
   const router = useRouter()
@@ -75,7 +75,7 @@ export const PublishPhoto = ({ photos }: Props) => {
 
         await addPost(publishData).unwrap()
         openModal.setFalse()
-        router.push('/profile')
+        router.push(`/profile/${userProfile?.id}`)
       } else {
         console.warn('No files were uploaded successfully.')
       }
