@@ -11,29 +11,40 @@ import s from './generationInformation.module.scss'
 export const GenerationInformation = () => {
   return (
     <form className={s.page}>
-      <div className={s.photoBox}>
-        <AvatarBox />
-        <Button variant={'bordered'}>{'Add a Profile Photo'}</Button>
-      </div>
-      <div className={s.informationBox}>
-        <Input important label={'userName'} />
-        <Input important label={'First Name'} />
-        <Input important label={'Last Name'} />
-        <Input label={'Date of birth'} />
-        <div className={s.selectBox}>
-          <SelectBox
-            label={'Select your country'}
-            options={[]}
-            placeholder={'Country'}
-            size={'large'}
-          />
-          <SelectBox label={'Select your city'} options={[]} placeholder={'City'} size={'large'} />
+      <div className={s.inputsContainer}>
+        <div className={s.photoBox}>
+          <AvatarBox />
+          <Button variant={'bordered'}>{'Add a Profile Photo'}</Button>
         </div>
-        <TextArea label={'About Me'} />
+        <div className={s.informationBox}>
+          <Input important label={'userName'} />
+          <Input important label={'First Name'} />
+          <Input important label={'Last Name'} />
+          <Input label={'Date of birth'} />
+          <div className={s.selectBox}>
+            <SelectBox
+              className={s.select}
+              label={'Select your country'}
+              options={[]}
+              placeholder={'Country'}
+              size={'large'}
+            />
+            <SelectBox
+              className={s.select}
+              label={'Select your city'}
+              options={[]}
+              placeholder={'City'}
+              size={'large'}
+            />
+          </div>
+          <TextArea label={'About Me'} />
+        </div>
       </div>
       <div className={s.otherBox}>
         <hr className={s.hr} />
-        <Button disabled>{'Save Changes'}</Button>
+        <Button className={s.button} disabled>
+          {'Save Changes'}
+        </Button>
       </div>
     </form>
   )
