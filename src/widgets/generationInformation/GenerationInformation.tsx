@@ -2,6 +2,7 @@
 
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
+import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
 import { Input } from '@/src/shared/ui/input'
 import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
@@ -17,10 +18,10 @@ export const GenerationInformation = () => {
           <Button variant={'bordered'}>{'Add a Profile Photo'}</Button>
         </div>
         <div className={s.informationBox}>
-          <Input important label={'userName'} />
-          <Input important label={'First Name'} />
-          <Input important label={'Last Name'} />
-          <Input label={'Date of birth'} />
+          <Input important label={'userName'} placeholder={''} />
+          <Input important label={'First Name'} placeholder={''} />
+          <Input important label={'Last Name'} placeholder={''} />
+          <DatePicker label={'Date of birth'} />
           <div className={s.selectBox}>
             <SelectBox
               className={s.select}
@@ -37,7 +38,7 @@ export const GenerationInformation = () => {
               size={'large'}
             />
           </div>
-          <TextArea label={'About Me'} />
+          <TextArea label={'About Me'} labelClassName={s.labelClassName} />
         </div>
       </div>
       <div className={s.otherBox}>

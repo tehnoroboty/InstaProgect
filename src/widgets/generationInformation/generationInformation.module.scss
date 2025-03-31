@@ -36,7 +36,7 @@
 }
 
 .select {
-border: 1px solid red;
+  border: 1px solid red;
 }
 
 .otherBox {
@@ -52,3 +52,8 @@ border: 1px solid red;
   display: block;
   margin-left: auto;
 }
+
+.labelClassName {
+    color: var(--light-900);
+  }
+
