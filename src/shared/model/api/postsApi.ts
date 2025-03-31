@@ -63,8 +63,8 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
-      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => {
-        const baseUrl = `/public-posts/user/${userId}`
+      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userName }) => {
+        const baseUrl = `posts/${userName}`
         const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
 
         return {

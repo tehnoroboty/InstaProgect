@@ -1,25 +1,52 @@
-import { GetPublicUserProfileResponse } from '@/src/shared/model/api/types'
+import { useState } from 'react'
+
+import { PublicProfileTypes } from '@/src/entities/user/types'
+import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
+import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { useRouter } from 'next/navigation'
 
 import s from './profileInfo.module.scss'
 
 type Props = {
+  authProfile: boolean
   isMyProfile: boolean
-  publicUserProfile: GetPublicUserProfileResponse | undefined
+  profile: GetProfileWithFollowType | PublicProfileTypes
 }
 
-export const ProfileInfo = ({ isMyProfile, publicUserProfile }: Props) => {
-  if (!publicUserProfile) {
-    return null
+export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
+  const router = useRouter()
+  const [follow] = useFollowMutation()
+  const [unFollow] = useUnFollowMutation()
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    (profile as GetProfileWithFollowType)?.isFollowing ?? false
+  )
+  const avatarUrl = profile?.avatars?.[0]?.url
+  const aboutMe = profile?.aboutMe
+  const userName = profile?.userName
+  const followingCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.following
+      : ((profile as GetProfileWithFollowType)?.followingCount ?? 0)
+  const followersCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.followers
+      : ((profile as GetProfileWithFollowType)?.followersCount ?? 0)
+  const publicationsCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.publications
+      : ((profile as GetProfileWithFollowType)?.publicationsCount ?? 0)
+
+  const onClickFollowingHandler = async () => {
+    if (!isFollowing) {
+      await follow(profile.id).unwrap()
+    } else {
+      await unFollow(profile.id).unwrap()
+    }
+    setIsFollowing(prev => !prev)
   }
-  const avatarUrl = publicUserProfile?.avatars?.[0]?.url
-  const aboutMe = publicUserProfile?.aboutMe
-  const publicUserName = publicUserProfile?.userName
-  const followingCount = publicUserProfile?.userMetadata.following
-  const followersCount = publicUserProfile?.userMetadata.followers
-  const publicationsCount = publicUserProfile?.userMetadata.publications
 
   return (
     <div className={s.profileContainer}>
@@ -29,7 +56,7 @@ export const ProfileInfo = ({ isMyProfile, publicUserProfile }: Props) => {
           <div className={s.profileInfo}>
             <div className={s.userNameContainer}>
               <Typography as={'h1'} option={'h1'}>
-                {publicUserName}
+                {userName}
               </Typography>
             </div>
             <div className={s.followersStats}>
@@ -59,16 +86,24 @@ export const ProfileInfo = ({ isMyProfile, publicUserProfile }: Props) => {
               </div>
             </div>
           </div>
-          {/*<div className = {s.buttonsBlock}>*/}
-          {/*    {isMyProfile && <Button variant = {'secondary'}>{'Profile Settings'}</Button>}*/}
-          {/*    {!isMyProfile &&*/}
-          {/*        // (isFollowing ? (*/}
-          {/*        //     <Button variant = {'primary'}>{'unFollow'}</Button>*/}
-          {/*        // ) : (*/}
-          {/*        //     <Button variant = {'primary'}>{'Follow'}</Button>*/}
-          {/*        // ))}*/}
-          {/*    {!isMyProfile && <Button variant = {'secondary'}>{'Send Message'}</Button>}*/}
-          {/*</div>*/}
+          <div className={s.buttonsBlock}>
+            {authProfile &&
+              (isMyProfile ? (
+                <Button
+                  onClick={() => router.push(`/profile/${profile.id}/settings`)}
+                  variant={'secondary'}
+                >
+                  {'Profile Settings'}
+                </Button>
+              ) : (
+                <>
+                  <Button onClick={onClickFollowingHandler} variant={'primary'}>
+                    {isFollowing ? 'Unfollow' : 'Follow'}
+                  </Button>
+                  <Button variant={'secondary'}>Send Message</Button>
+                </>
+              ))}
+          </div>
         </div>
         <Typography as={'p'} className={s.profileDescription} option={'regular_text16'}>
           {aboutMe}

@@ -3,5 +3,16 @@
   flex-direction: column;
   gap: clamp(10px, 15vh, 40px);
   height: fit-content;
+}
 
+.noAuthPage {
+  width: 80%;
+  margin: auto;
+}
+
+.loaging {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }

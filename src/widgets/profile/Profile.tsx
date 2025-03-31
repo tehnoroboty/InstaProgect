@@ -1,13 +1,22 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { Post } from '@/src/entities/post/types'
+import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
-import { Item, SortDirection } from '@/src/shared/model/api/types'
-import { useGetPublicUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import {
+  GetCommentsResponse,
+  GetPostsResponse,
+  Item,
+  SortDirection,
+} from '@/src/shared/model/api/types'
+import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
+import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
@@ -17,25 +26,45 @@ const PUBLIC_PAGE_SIZE = 12
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
 
-export const Profile = () => {
+type Props = {
+  publicProfileNoAuth: {
+    comments: GetCommentsResponse | null
+    post: Post | null
+    posts: GetPostsResponse
+    profile: PublicProfileTypes
+  }
+}
+
+export const Profile = ({ publicProfileNoAuth }: Props) => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const params = useParams()
+  const userId = params.userId
 
   const { data: meData } = useMeQuery()
-  const isAuthenticated = !!meData
-  const userName = meData?.userName
-  const userId = meData?.userId
-
-  const params = useParams() as { userId: string }
-
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
-
   const router = useRouter()
+  const authProfile = !!meData
+  const isMyProfile = meData?.userId === Number(userId)
+  const { data: userProfile, isFetching: isFetchingUserProfile } = useGetUserProfileQuery(
+    publicProfileNoAuth.profile.userName,
+    {
+      skip: !meData || isMyProfile,
+    }
+  )
+  const { data: myProfile, isFetching: isFetchingMyProfile } = useGetUserProfileQuery(
+    meData?.userName ?? '',
+    {
+      skip: !meData || !isMyProfile,
+    }
+  )
 
-  const isMyProfile = isAuthenticated && Number(params.userId) === userId
+  const authUserProfile = isMyProfile ? myProfile : userProfile
+  const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
+
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
   const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
@@ -59,25 +88,20 @@ export const Profile = () => {
       pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
-      userName: userName ?? '',
+      userName: myProfile?.userName || '',
     },
-    { skip: !isMyProfile }
+    { skip: !meData || userProfile }
   )
-
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
       // pageSize,
       sortBy: SORT_BY,
       sortDirection: SORT_DIRECTION,
-      userId: Number(params.userId),
+      userName: publicProfileNoAuth.profile.userName,
     },
-    { skip: isMyProfile }
+    { skip: !meData || isMyProfile }
   )
-
-  const { data: publicUserProfile } = useGetPublicUserProfileQuery({
-    profileId: Number(params.userId),
-  })
 
   // собираем посты в Личный профиль
   useEffect(() => {
@@ -89,11 +113,11 @@ export const Profile = () => {
         return [...prev, ...newItems]
       })
     }
-  }, [myPosts, publicPosts, isMyProfile])
+  }, [myPosts, publicPosts, isMyProfile, params])
 
   //собираем посты в Публичный профиль
   useEffect(() => {
-    if (!isMyProfile && publicPosts?.items) {
+    if (authProfile && !isMyProfile && publicPosts?.items) {
       setPublicAllPosts(publicPosts.items)
     }
   }, [publicPosts, isMyProfile])
@@ -140,12 +164,19 @@ export const Profile = () => {
   }, [params.userId])
 
   return (
-    <div className={s.page}>
-      <ProfileInfo isMyProfile={isMyProfile} publicUserProfile={publicUserProfile} />
-      {postsToShow.length && <Posts posts={postsToShow} />}
-      {(isFetchingMyPosts || isFetchingPublicPosts) && <div>Loader...</div>}
-
-      <ModalPost onClose={closeModal} open={modalIsOpen} />
+    <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
+      <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
+      {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
+      <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
+      <ModalPost
+        {...(!authProfile &&
+          publicProfileNoAuth && {
+            publicComments: publicProfileNoAuth.comments,
+            publicPost: publicProfileNoAuth.post,
+          })}
+        onClose={closeModal}
+        open={modalIsOpen}
+      />
     </div>
   )
 }
