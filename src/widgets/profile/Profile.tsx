@@ -1,5 +1,6 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
@@ -12,7 +13,6 @@ import {
   SortDirection,
 } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
-import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
@@ -21,7 +21,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-const AUTH_PAGE_SIZE = 8
+const AUTH_PAGE_SIZE = 3
 const PUBLIC_PAGE_SIZE = 12
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
@@ -36,6 +36,8 @@ type Props = {
 }
 
 export const Profile = ({ publicProfileNoAuth }: Props) => {
+  const { inView, ref } = useInView({ threshold: 1 })
+
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
@@ -92,6 +94,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     },
     { skip: !meData || userProfile }
   )
+
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
@@ -122,40 +125,15 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     }
   }, [publicPosts, isMyProfile])
 
+  const totalCount = myPosts?.totalCount ?? pageSize
+  const hasMorePosts = Math.ceil(totalCount / pageSize) > pageNumber
+
   // бесконечный скролл только для личного профиля
   useEffect(() => {
-    if (!isMyProfile) {
-      return
+    if (hasMorePosts && inView && isMyProfile && !isFetchingMyPosts) {
+      setPageNumber(prevPage => prevPage + 1)
     }
-
-    const scrollEl = document.querySelector('main')
-
-    if (!scrollEl) {
-      return
-    }
-
-    const handleScroll = () => {
-      const totalCount = myPosts?.totalCount ?? pageSize
-
-      setPageNumber(prevPage => {
-        if (
-          scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.offsetHeight + 150 &&
-          !isFetchingMyPosts &&
-          Math.ceil(totalCount / pageSize) > pageNumber
-        ) {
-          return prevPage + 1
-        }
-
-        return prevPage
-      })
-    }
-
-    scrollEl.addEventListener('scroll', handleScroll)
-
-    return () => {
-      scrollEl.removeEventListener('scroll', handleScroll)
-    }
-  }, [myPosts, isFetchingMyPosts, pageNumber, isMyProfile, pageSize])
+  }, [inView, isFetchingMyPosts, isMyProfile])
 
   useEffect(() => {
     setMyAllPosts([])
@@ -168,6 +146,16 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
       {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
       <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
+      {isMyProfile && hasMorePosts && (
+        <button
+          className={s.loadMoreButton}
+          disabled={isFetchingMyPosts}
+          onClick={() => setPageNumber(prev => prev + 1)}
+          ref={ref}
+        >
+          {isFetchingMyPosts ? 'Загрузка...' : 'Загрузить ещё'}
+        </button>
+      )}
       <ModalPost
         {...(!authProfile &&
           publicProfileNoAuth && {
