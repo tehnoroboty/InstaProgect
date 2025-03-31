@@ -1,16 +1,16 @@
 .postsGrid {
-  display: grid;
-  grid-auto-flow: row dense;
-  grid-gap: 12px;
-  grid-template-columns: repeat(auto-fill, 234px);
-  justify-content: space-between;
-
-  height: fit-content;
+  //display: grid;
+  //grid-gap: 12px;
+  //grid-template-columns: repeat(4, 1fr);
+  //grid-template-rows: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .image {
-  width: 100%;
-  text-align: center;
+  aspect-ratio: 234/228;
+  width: calc(25% - 12px);
 }
 
 .notFound {
@@ -25,4 +25,27 @@
   border-radius: 10px;
 
   color: var(--dark-500);
+}
+
+.postImage {
+  width: 100%;
+  height: 100%;
+}
+
+@media (width <= 924px) {
+  .image {
+    width: calc(33% - 12px);
+  }
+}
+
+@media (width <= 698px) {
+  .image {
+    width: calc(50% - 12px);
+  }
+}
+
+@media (width <= 524px) {
+  .image {
+    width: calc(100%);
+  }
 }

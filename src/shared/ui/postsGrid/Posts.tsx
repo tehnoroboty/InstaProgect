@@ -26,7 +26,7 @@ type Props = {
   publicPosts?: any
 }
 
-export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
+export const Posts = ({ posts, publicPosts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {
@@ -38,9 +38,9 @@ export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
     })
   }
 
-  const renderImgCarousel = (img: ImageType, index: number) => {
+  const renderImgCarousel = (img: ImageType) => {
     return (
-      <Image alt={'Post image'} height={228} priority={index === 0} src={img.url} width={234} />
+      <Image alt={'Post image'} className={s.postImage} height={228} src={img.url} width={234} />
     )
   }
 
@@ -49,15 +49,18 @@ export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
       {posts.map(post => {
         return (
           <div className={s.image} key={post.id} onClick={() => onClickPostHandler(post.id)}>
-            {post.images.length > 0 ? (
-              <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
+            {post.images.length === 0 ? (
+              <ImageNotFound className={s.postImage} height={194} width={199} />
+            ) : post.images.length === 1 ? (
+              <Image
+                alt={'Post image'}
+                className={s.postImage}
+                height={228}
+                src={post.images[0].url}
+                width={234}
+              />
             ) : (
-              <div className={s.notFound}>
-                <ImageNotFound height={194} width={199} />
-                <div>
-                  <b>No Image</b>
-                </div>
-              </div>
+              <Carousel list={post.images} renderItem={renderImgCarousel} />
             )}
           </div>
         )

@@ -1,7 +1,7 @@
 import { MouseEvent, ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
-import { Navigation, Pagination } from 'swiper/modules'
+import { Pagination } from 'swiper/modules'
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 
 // eslint-disable-next-line import/extensions
@@ -12,6 +12,7 @@ import s from './carousel.module.scss'
 import { Button } from '../button/Button'
 
 type Props<T> = {
+  className?: string
   disableSwipe?: boolean
   list: T[]
   onChange?: (index: number) => void
@@ -20,9 +21,9 @@ type Props<T> = {
 }
 
 export const Carousel = <T,>(props: Props<T>) => {
-  const { disableSwipe, list, onChange, renderItem, size = 'large' } = props
+  const { className, disableSwipe, list, onChange, renderItem, size = 'large' } = props
   const hasMoreThanOneItem = list.length > 1
-  const classNames = clsx(s.carousel, s[size])
+  const classNames = clsx(s.carousel, s[size], className)
   const swiperRef = useRef<SwiperRef | null>(null)
 
   useEffect(() => {
