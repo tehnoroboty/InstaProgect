@@ -15,6 +15,10 @@ export type Options = {
 
 type Props = {
   /**
+   * If true, displays the select in compact pagination style
+   */
+  isPagination?: boolean
+  /**
    * The text of the label for the select. If omitted, the label is not displayed.
    */
   label?: string
@@ -26,23 +30,17 @@ type Props = {
    * The text that is displayed if nothing is selected.
    */
   placeholder?: string
-  /**
-   * The size of the select. It can be 'large = 358px', 'medium = 330px' or 'small = 234px'. Affects the width of the select.
-   */
-  size?: 'large' | 'medium' | 'small'
 } & ComponentPropsWithoutRef<'button'>
 
 /** Ui kit SelectBox component */
 export const SelectBox = ({
   className,
+  isPagination = false,
   label,
-  options,
+  options = [],
   placeholder = options.length > 0 ? options[0].value : 'Select',
-  size,
   ...rest
 }: Props) => {
-  const isPagination = options.every(option => !isNaN(Number(option.value)))
-
   const renderOptions = (options: Options[]) =>
     options.map(item => (
       <SelectItem isPagination={isPagination} key={item.value} value={item.value}>
@@ -51,7 +49,7 @@ export const SelectBox = ({
     ))
 
   return (
-    <div className={clsx(size && styles[size], className)}>
+    <div className={clsx(styles.container, className)}>
       <Select.Root>
         <Select.Group>
           {label && <Select.Label className={styles.label}>{label}</Select.Label>}

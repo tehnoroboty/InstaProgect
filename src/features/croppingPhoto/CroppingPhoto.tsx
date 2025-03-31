@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { useDispatch } from 'react-redux'
 
