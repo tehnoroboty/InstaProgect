@@ -10,13 +10,12 @@ import { format } from 'date-fns'
 
 import s from './datePicker.module.scss'
 
-import { Button } from '../button/Button'
-
 type Props = {
   label?: string
+  value?: string
 }
 
-export const DatePicker = ({ label }: Props) => {
+export const DatePicker = ({ label, value }: Props) => {
   const [date, setDate] = useState<Date | undefined>()
 
   return (
