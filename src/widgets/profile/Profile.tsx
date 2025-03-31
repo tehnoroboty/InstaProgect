@@ -12,7 +12,6 @@ import {
   SortDirection,
 } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
-import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
@@ -40,30 +39,29 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const params = useParams()
-  const userId = params.userId
 
-  const { data: meData } = useMeQuery()
+  const params = useParams<{ userId: string }>()
+
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
+
   const router = useRouter()
+
+  const { data: meData } = useMeQuery()
   const authProfile = !!meData
-  const isMyProfile = meData?.userId === Number(userId)
-  const { data: userProfile, isFetching: isFetchingUserProfile } = useGetUserProfileQuery(
-    publicProfileNoAuth.profile.userName,
-    {
-      skip: !meData || isMyProfile,
-    }
-  )
-  const { data: myProfile, isFetching: isFetchingMyProfile } = useGetUserProfileQuery(
-    meData?.userName ?? '',
-    {
-      skip: !meData || !isMyProfile,
-    }
-  )
+  const isMyProfile = meData?.userId === Number(params.userId)
+
+  const { data: userProfile } = useGetUserProfileQuery(publicProfileNoAuth.profile.userName, {
+    skip: !meData || isMyProfile,
+  })
+  const { data: myProfile } = useGetUserProfileQuery(meData?.userName ?? '', {
+    skip: !meData || !isMyProfile,
+  })
 
   const authUserProfile = isMyProfile ? myProfile : userProfile
-  const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
+  const profile = authProfile
+    ? (authUserProfile ?? publicProfileNoAuth.profile)
+    : publicProfileNoAuth.profile
 
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
 
@@ -90,8 +88,10 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       sortDirection: SORT_DIRECTION,
       userName: myProfile?.userName || '',
     },
-    { skip: !meData || userProfile }
+    { skip: !meData || !!userProfile }
   )
+
+  console.log('myPosts', myPosts)
   const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы

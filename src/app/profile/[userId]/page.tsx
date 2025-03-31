@@ -8,7 +8,8 @@ import {
   getUserPosts,
   getUserProfile,
 } from '@/src/widgets/profile/getPublicProfile'
-
+//https://example.com/profile/123?postId=456
+//{ params: { userId: '123' }, searchParams: { postId: '456' }}
 export default async function ProfilePage(props: {
   params: { userId: string }
   searchParams: SearchParams

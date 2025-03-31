@@ -81,11 +81,12 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     removePost: builder.mutation<void, { postId: number; userName: string }>({
-      // invalidatesTags: ['POSTS'],
-      invalidatesTags: (result, error, { userName }) => [{ id: userName, type: 'POSTS' }],
+      invalidatesTags: ['POSTS'],
+      // invalidatesTags: (result, error, { userName }) => [{ id: userName, type: 'POSTS' }],
       // ✅ Инвалидируем только посты этого пользователя
 
       async onQueryStarted({ postId, userName }, { dispatch, queryFulfilled }) {
+        debugger
         const args = {
           pageNumber: 1,
           pageSize: 10,
@@ -107,7 +108,7 @@ export const postsApi = baseApi.injectEndpoints({
 
         try {
           await queryFulfilled
-          dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
+          // dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
           // ✅ Теперь инвалидируем только кэш этого пользователя
         } catch {
           // Если запрос завершился с ошибкой, откатываем изменения в кэше

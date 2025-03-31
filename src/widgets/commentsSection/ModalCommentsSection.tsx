@@ -123,7 +123,7 @@ export const ModalCommentsSection = ({
     setIsOpen(false)
 
     // 🔄 Очищаем кэш и загружаем первую страницу заново
-    dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
+    // dispatch(postsApi.util.invalidateTags([{ id: userName, type: 'POSTS' }]))
 
     // 🔀 Переход на профиль пользователя
     router.push(`/profile/${params.userId}`, { scroll: false })

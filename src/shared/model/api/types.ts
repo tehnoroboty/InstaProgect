@@ -149,17 +149,6 @@ export type ResponsePostsType = {
   updatedAt: string
   userName: string
 }
-export type GetPublicUserProfileArgs = {
-  profileId: number
-}
-export type GetPublicUserProfileResponse = {
-  aboutMe: string
-  avatars: Avatar[]
-  hasPaymentSubscription: boolean
-  id: number
-  userMetadata: UserMetadata
-  userName: string
-}
 
 export type UpdatePostModel = {
   description: string
