@@ -3,6 +3,14 @@ import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
+    deleteProfileAvatar: builder.mutation<void, void>({
+      query: () => {
+        return {
+          method: 'DELETE',
+          url: 'users/profile/avatar',
+        }
+      },
+    }),
     getMyProfile: builder.query<Profile, void>({
       query: () => '/users/profile',
     }),
@@ -13,4 +21,5 @@ export const usersApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetMyProfileQuery, useGetUserProfileQuery } = usersApi
+export const { useDeleteProfileAvatarMutation, useGetMyProfileQuery, useGetUserProfileQuery } =
+  usersApi

@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    .closeBtn {
+    .deleteBtn {
       all: unset;
 
       cursor: pointer;
@@ -72,6 +72,10 @@
     }
   }
 
+}
+
+.disabledDeleteBtn{
+  background-color: var(--danger-900);
 }
 
 .informationBox {

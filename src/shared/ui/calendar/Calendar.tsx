@@ -16,6 +16,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
+      captionLayout={'dropdown'}
       className={clsx('p-3', className)}
       classNames={{
         caption: 'flex justify-center pt-1 relative items-center',
@@ -63,7 +64,9 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
           <ArrowIosForwardOutline className={clsx('h-4 w-4', className)} {...props} />
         ),
       }}
+      fromYear={1900}
       showOutsideDays={showOutsideDays}
+      toDate={new Date()}
       {...props}
     />
   )
