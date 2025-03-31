@@ -7,3 +7,7 @@ export enum AuthRoutes {
   RECOVERY = '/auth/recovery',
   REGISTRATION = '/auth/registration',
 }
+
+export enum AppRoutes {
+  PROFILE = '/profile',
+}

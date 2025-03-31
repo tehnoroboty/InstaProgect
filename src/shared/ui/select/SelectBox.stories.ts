@@ -33,14 +33,6 @@ export const Label: Story = {
   },
 }
 
-export const LabelSize: Story = {
-  args: {
-    label: 'Some label',
-    placeholder: 'Value',
-    size: 'medium',
-  },
-}
-
 export const IsDisabled: Story = {
   args: {
     disabled: true,
@@ -51,6 +43,7 @@ export const IsDisabled: Story = {
 
 export const isPagination: Story = {
   args: {
+    isPagination: true,
     options: [
       { value: '10', valueTitle: '10' },
       { value: '20', valueTitle: '20' },
