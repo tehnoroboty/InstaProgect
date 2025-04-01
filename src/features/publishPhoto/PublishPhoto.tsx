@@ -135,27 +135,11 @@ export const PublishPhoto = ({ photos }: Props) => {
             {photos.length > 1 ? (
               <Carousel
                 list={photos}
-                renderItem={photo => (
-                  <Image
-                    alt={'photo'}
-                    className={s.photoImg}
-                    fill
-                    key={photo}
-                    layout={'responsive'}
-                    objectFit={'cover'}
-                    src={photo}
-                  />
-                )}
+                renderItem={photo => <img alt={'photo'} className={s.photoImg} src={photo} />}
                 size={'small'}
               />
             ) : (
-              <Image
-                alt={'photo'}
-                className={s.photoImg}
-                fill
-                objectFit={'cover'}
-                src={photos[0]}
-              />
+              <img alt={'photo'} className={s.photoImg} src={photos[0]} />
             )}
           </div>
           <div className={s.descriptionBox}>
