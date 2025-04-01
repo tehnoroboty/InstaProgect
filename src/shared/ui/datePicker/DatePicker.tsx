@@ -6,17 +6,19 @@ import CalendarOutline from '@/src/shared/assets/componentsIcons/CalendarOutline
 import { Calendar } from '@/src/shared/ui/calendar/Calendar'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
+import clsx from 'clsx'
 import { format, parseISO } from 'date-fns'
 
 import s from './datePicker.module.scss'
 
 type Props = {
+  error?: boolean
   label?: string
   onSelect?: (value?: Date) => void
   value?: string
 }
 
-export const DatePicker = ({ label, onSelect, value }: Props) => {
+export const DatePicker = ({ error, label, onSelect, value }: Props) => {
   const [date, setDate] = useState<Date | undefined>()
 
   const onSelectHandler = (selectedDate: Date | undefined) => {
@@ -35,11 +37,11 @@ export const DatePicker = ({ label, onSelect, value }: Props) => {
       )}
       <Popover>
         <PopoverTrigger asChild>
-          <button className={s.datePickerBtn} type={'button'}>
-            <Typography as={'span'} option={'regular_text16'}>
+          <button className={clsx(s.datePickerBtn, { [s.errorBtn]: error })} type={'button'}>
+            <Typography as={'span'} className={error ? s.error : ''} option={'regular_text16'}>
               {date ? format(date, 'dd.MM.yyyy') : '00.00.0000'}
             </Typography>
-            <CalendarOutline />
+            <CalendarOutline className={error ? s.error : ''} />
           </button>
         </PopoverTrigger>
         <PopoverContent align={'start'} className={s.content} side={'bottom'}>

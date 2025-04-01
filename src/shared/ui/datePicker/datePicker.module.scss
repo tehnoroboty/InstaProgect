@@ -21,6 +21,11 @@
   }
 }
 
+.errorBtn{
+  border: 1px solid var(--danger-500);
+}
+
+
 .content {
   pointer-events: auto;
 
@@ -43,4 +48,8 @@
 .datePickerContainer {
   display: flex;
   flex-direction: column;
+}
+
+.error {
+  color: var(--danger-500);
 }

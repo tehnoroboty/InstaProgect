@@ -12,8 +12,9 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Input } from '@/src/shared/ui/input'
-import { SelectBox } from '@/src/shared/ui/select/SelectBox'
+import { Options, SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -22,13 +23,13 @@ import s from './generationInformation.module.scss'
 
 export const GenerationInformation = () => {
   const { data: MyProfile, isFetching } = useGetMyProfileQuery()
+  const [countrys, setCountries] = useState<Options[]>([])
   const {
     formState: { errors, isValid },
     getValues,
     handleSubmit,
     register,
     reset,
-    setError,
     setValue,
     trigger,
   } = useForm<FormType>({
@@ -44,6 +45,29 @@ export const GenerationInformation = () => {
   })
 
   useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await fetch('https://api.guap.ru/data/get-intcountries', {
+          cache: 'no-store',
+        })
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
+
+        const data = await res.json()
+        const items = data.map(item => item.TitleEn)
+
+        setCountries(items)
+      } catch (err) {
+        console.error('Error fetching countries:', err)
+      }
+    }
+
+    fetchCountries()
+  }, [])
+
+  useEffect(() => {
     reset({
       aboutMe: MyProfile?.aboutMe || '',
       dateOfBirth: MyProfile?.dateOfBirth || '',
@@ -54,6 +78,7 @@ export const GenerationInformation = () => {
   }, [MyProfile, isFetching, reset])
 
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
+  const [errorAge, setErrorAge] = useState<boolean>(false)
   const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteProfileAvatarMutation()
 
   const deleteAvatarHandler = async () => {
@@ -67,14 +92,25 @@ export const GenerationInformation = () => {
   }
   const onSelectDate = (date: Date | undefined) => {
     if (date) {
-      setValue('dateOfBirth', date.toISOString())
-      console.log(date)
+      const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+      const nowDate = new Date().getFullYear()
+      const selectedDate = utcDate.getFullYear()
+      const age = nowDate - selectedDate
+
+      if (age < 13) {
+        setErrorAge(true)
+      } else {
+        setErrorAge(false)
+        setValue('dateOfBirth', utcDate.toISOString())
+      }
+    } else {
+      return
     }
   }
 
-  const onSubmit: SubmitHandler<FormType> = async formData => {
-    console.log(formData)
-  }
+  console.log(countrys)
+
+  const onSubmit: SubmitHandler<FormType> = async formData => {}
 
   return (
     <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
@@ -121,13 +157,21 @@ export const GenerationInformation = () => {
             })}
             error={errors.lastName?.message}
           />
-          <DatePicker
-            label={'Date of birth'}
-            onSelect={date => onSelectDate(date)}
-            value={MyProfile?.dateOfBirth}
-          />
+          <div>
+            <DatePicker
+              error={errorAge}
+              label={'Date of birth'}
+              onSelect={date => onSelectDate(date)}
+              value={MyProfile?.dateOfBirth}
+            />
+            {errorAge && (
+              <Typography as={'span'} className={s.error}>
+                {'A user under 13 cannot create a profile. Privacy Policy'}
+              </Typography>
+            )}
+          </div>
           <div className={s.selectBox}>
-            <SelectBox label={'Select your country'} options={[]} placeholder={'Country'} />
+            <SelectBox label={'Select your country'} options={countrys} placeholder={'Country'} />
             <SelectBox label={'Select your city'} options={[]} placeholder={'City'} />
           </div>
           <TextArea
