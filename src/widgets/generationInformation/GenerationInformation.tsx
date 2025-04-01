@@ -25,7 +25,6 @@ export const GenerationInformation = () => {
   const { data: MyProfile, isFetching } = useGetMyProfileQuery()
   const [countrys, setCountries] = useState<Options[]>([])
 
-  console.log(countrys)
   const {
     formState: { errors, isValid },
     getValues,
