@@ -19,11 +19,13 @@ type Props = {
    */
   isPagination?: boolean
   /**
-   * The text of the label for the select. If omitted, the label is not displayed.
+   * The text of the label for the select. If omitted, the label is not
+   * displayed.
    */
   label?: string
   /**
-   * An array of options to choose from. Each option must contain a 'value' and a 'value Title' (displayed text).
+   * An array of options to choose from. Each option must contain a 'value'
+   * and a 'value Title' (displayed text).
    */
   options: Options[]
   /**

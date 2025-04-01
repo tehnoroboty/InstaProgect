@@ -24,6 +24,8 @@ import s from './generationInformation.module.scss'
 export const GenerationInformation = () => {
   const { data: MyProfile, isFetching } = useGetMyProfileQuery()
   const [countrys, setCountries] = useState<Options[]>([])
+
+  console.log(countrys)
   const {
     formState: { errors, isValid },
     getValues,
@@ -56,7 +58,10 @@ export const GenerationInformation = () => {
         }
 
         const data = await res.json()
-        const items = data.map(item => item.TitleEn)
+        const items = data.map((item: any) => ({
+          value: item.ItemId,
+          valueTitle: item.TitleEn,
+        }))
 
         setCountries(items)
       } catch (err) {
@@ -107,8 +112,6 @@ export const GenerationInformation = () => {
       return
     }
   }
-
-  console.log(countrys)
 
   const onSubmit: SubmitHandler<FormType> = async formData => {}
 
