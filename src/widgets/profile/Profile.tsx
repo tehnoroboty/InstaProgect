@@ -14,6 +14,7 @@ import {
 } from '@/src/shared/model/api/types'
 import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import clsx from 'clsx'
@@ -147,14 +148,9 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
       <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
       {isMyProfile && hasMorePosts && (
-        <button
-          className={s.loadMoreButton}
-          disabled={isFetchingMyPosts}
-          onClick={() => setPageNumber(prev => prev + 1)}
-          ref={ref}
-        >
-          {isFetchingMyPosts ? 'Загрузка...' : 'Загрузить ещё'}
-        </button>
+        <div className={s.loadMore} ref={ref}>
+          {isFetchingMyPosts && <Typography option={'bold_text16'}>Loading...</Typography>}
+        </div>
       )}
       <ModalPost
         {...(!authProfile &&
