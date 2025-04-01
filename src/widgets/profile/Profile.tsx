@@ -45,7 +45,6 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const params = useParams()
-  const userId = params.userId
 
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
@@ -96,7 +95,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     { skip: !meData || !!userProfile }
   )
 
-  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
+  const { data: publicPosts } = useGetPublicUserPostsQuery(
     {
       // endCursorPostId: '456', // Или undefined для первой страницы
       // pageSize,
@@ -134,7 +133,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     if (hasMorePosts && inView && isMyProfile && !isFetchingMyPosts) {
       setPageNumber(prevPage => prevPage + 1)
     }
-  }, [inView, isFetchingMyPosts, isMyProfile])
+  }, [hasMorePosts, inView, isFetchingMyPosts, isMyProfile])
 
   useEffect(() => {
     setMyAllPosts([])
@@ -145,7 +144,6 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
-      {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
       <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
       {isMyProfile && hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
