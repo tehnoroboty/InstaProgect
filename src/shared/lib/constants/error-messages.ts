@@ -1,8 +1,17 @@
 export const ERROR_MESSAGES = {
+  ABOUT_ME: {
+    MAX: 'Max 200 characters long',
+  },
   EMAIL: {
     FORMAT: 'The email must match the format example@example.com',
     INVALID: 'Invalid email address',
     REQUIRED: 'Email is required',
+  },
+  FIRST_NAME: {
+    FORMAT: 'Invalid name',
+    MAX: 'Max 50 characters long',
+    MIN: 'Min 1 characters long',
+    REQUIRED: 'Enter name',
   },
   PASSWORD: {
     CONFIRM: 'Confirm your password',

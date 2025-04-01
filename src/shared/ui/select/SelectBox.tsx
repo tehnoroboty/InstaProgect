@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { ComponentPropsWithoutRef, useState } from 'react'
 
 import Arrow from '@/src/shared/assets/componentsIcons/ArrowIosDownOutline'
 import * as Select from '@radix-ui/react-select'
@@ -19,11 +19,13 @@ type Props = {
    */
   isPagination?: boolean
   /**
-   * The text of the label for the select. If omitted, the label is not displayed.
+   * The text of the label for the select. If omitted, the label is not
+   * displayed.
    */
   label?: string
   /**
-   * An array of options to choose from. Each option must contain a 'value' and a 'value Title' (displayed text).
+   * An array of options to choose from. Each option must contain a 'value'
+   * and a 'value Title' (displayed text).
    */
   options: Options[]
   /**
@@ -48,9 +50,11 @@ export const SelectBox = ({
       </SelectItem>
     ))
 
+  const [value, setValue] = useState(options[0]?.valueTitle)
+
   return (
     <div className={clsx(styles.container, className)}>
-      <Select.Root>
+      <Select.Root onValueChange={setValue} value={value}>
         <Select.Group>
           {label && <Select.Label className={styles.label}>{label}</Select.Label>}
           <Select.Trigger
@@ -62,7 +66,7 @@ export const SelectBox = ({
             {...rest}
             aria-label={placeholder}
           >
-            <Select.Value placeholder={placeholder} />
+            <Select.Value aria-label={value} placeholder={placeholder} />
             <Select.Icon asChild>
               <Arrow className={clsx(styles.icon, isPagination && styles.iconSmall)} />
             </Select.Icon>
