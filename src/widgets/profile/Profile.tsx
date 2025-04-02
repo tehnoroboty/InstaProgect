@@ -84,6 +84,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     }
   }, [closeModal, postId])
 
+  //TODO
   const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
     {
       pageNumber,

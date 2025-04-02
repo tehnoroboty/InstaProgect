@@ -88,7 +88,7 @@ export const postsApi = baseApi.injectEndpoints({
       async onQueryStarted({ postId, userName }, { dispatch, queryFulfilled }) {
         debugger
         const args = {
-          pageNumber: 1,
+          // pageNumber: 1,
           pageSize: 10,
           sortBy: 'createdAt',
           sortDirection: 'desc' as SortDirection,
@@ -96,7 +96,7 @@ export const postsApi = baseApi.injectEndpoints({
         }
 
         const patchResult = dispatch(
-          postsApi.util.updateQueryData('getMyPosts', args, draft => {
+          postsApi.util.updateQueryData('getPublicUserPosts', args, draft => {
             // draft.items = draft.items.filter(post => post.id !== postId)
             const index = draft.items.findIndex(post => post.id === postId)
 
