@@ -10,6 +10,7 @@ import {
 } from '@/src/widgets/profile/getPublicProfile'
 
 export default async function ProfilePage(props: {
+  //нужны только посты
   params: { userId: string }
   searchParams: SearchParams
 }) {
