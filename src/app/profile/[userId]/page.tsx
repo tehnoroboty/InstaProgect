@@ -16,25 +16,28 @@ export default async function ProfilePage(props: {
 }) {
   const userProfile = await getUserProfile(props.params.userId)
   const userPosts = await getUserPosts(props.params.userId)
-  const searchParams = await props.searchParams
+  const searchParams = props.searchParams
   const query = searchParams.postId
   let post: Post | null = null
   let comments: GetCommentsResponse | null = null
 
   if (query) {
     try {
-      ;[post, comments] = await Promise.all([
+      const results = await Promise.all([
         getUserPost(Number(query)),
         getUserComments(Number(query)),
       ])
+
+      post = results[0]
+      comments = results[1]
     } catch (error) {
       console.error('Failed to fetch post:', error)
     }
   }
 
   const publicProfileNoAuth = {
-    comments: comments,
-    post: post,
+    comments,
+    post,
     posts: userPosts,
     profile: userProfile,
   }

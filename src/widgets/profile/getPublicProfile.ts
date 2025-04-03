@@ -17,7 +17,8 @@ export const getUserPosts = async (userId: string): Promise<GetPostsResponse> =>
   return await res.json()
 }
 
-export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+// export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+export type SearchParams = { [key: string]: string | string[] | undefined }
 
 export const getUserPost = async (postId: number) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`, {
