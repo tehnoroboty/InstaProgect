@@ -180,7 +180,7 @@ export type UserMetadata = {
 }
 
 export type GetPublicUserPostsArgs = {
-  endCursorPostId?: number
+  endCursorPostId?: null | number
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection

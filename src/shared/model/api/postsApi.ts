@@ -42,7 +42,6 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getMyPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
-      providesTags: ['POSTS'],
       query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
         method: 'GET',
         params: {
@@ -63,6 +62,7 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+      providesTags: ['POSTS'],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userName }) => {
         const baseUrl = `posts/${userName}`
         const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
@@ -77,6 +77,27 @@ export const postsApi = baseApi.injectEndpoints({
           url: `${baseUrl}${cursorSegment}`,
         }
       },
+      /*
+            // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
+            // Refetch when the page arg changes
+            forceRefetch({ currentArg, previousArg }) {
+              return currentArg !== previousArg
+            },
+            // Мерж данных в кэш
+            // Always merge incoming data to the cache entry
+            merge: (currentCache, newItems) => {
+              currentCache.items.push(...newItems.items)
+              currentCache.totalCount += newItems.totalCount // Обновляем общий счетчик постов
+            },
+            // Обработка ответа от сервера
+            // Only have one cache entry because the arg always maps to one string
+            serializeQueryArgs: ({ endpointName }) => {
+              return endpointName
+            },
+            transformResponse: (response: any, meta, arg) => {
+              return response.results
+            },
+      */
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POSTS' }],
