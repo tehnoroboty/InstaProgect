@@ -15,11 +15,11 @@ type Props = {
   error?: boolean
   label?: string
   onSelect?: (value?: Date) => void
-  value?: string
+  value?: any
 }
 
 export const DatePicker = ({ error, label, onSelect, value }: Props) => {
-  const [date, setDate] = useState<Date | undefined>()
+  const [date, setDate] = useState<Date | undefined>(value)
 
   const onSelectHandler = (selectedDate: Date | undefined) => {
     setDate(selectedDate)

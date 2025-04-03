@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef } from 'react'
 
 import Arrow from '@/src/shared/assets/componentsIcons/ArrowIosDownOutline'
 import * as Select from '@radix-ui/react-select'
@@ -23,6 +23,7 @@ type Props = {
    * displayed.
    */
   label?: string
+  onChangeValue?: (value: string) => void
   /**
    * An array of options to choose from. Each option must contain a 'value'
    * and a 'value Title' (displayed text).
@@ -39,22 +40,21 @@ export const SelectBox = ({
   className,
   isPagination = false,
   label,
+  onChangeValue,
   options = [],
   placeholder = options.length > 0 ? options[0].value : 'Select',
   ...rest
 }: Props) => {
   const renderOptions = (options: Options[]) =>
     options.map(item => (
-      <SelectItem isPagination={isPagination} key={item.value} value={item.value}>
+      <SelectItem isPagination={isPagination} key={item.value} value={item.valueTitle}>
         {item.valueTitle}
       </SelectItem>
     ))
 
-  const [value, setValue] = useState(options[0]?.valueTitle)
-
   return (
     <div className={clsx(styles.container, className)}>
-      <Select.Root onValueChange={setValue} value={value}>
+      <Select.Root onValueChange={value => onChangeValue?.(value)}>
         <Select.Group>
           {label && <Select.Label className={styles.label}>{label}</Select.Label>}
           <Select.Trigger
@@ -66,7 +66,7 @@ export const SelectBox = ({
             {...rest}
             aria-label={placeholder}
           >
-            <Select.Value aria-label={value} placeholder={placeholder} />
+            <Select.Value placeholder={placeholder} />
             <Select.Icon asChild>
               <Arrow className={clsx(styles.icon, isPagination && styles.iconSmall)} />
             </Select.Icon>
