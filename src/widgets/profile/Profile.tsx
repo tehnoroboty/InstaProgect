@@ -120,7 +120,6 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     },
     { skip: needInitPostsInStore }
   )
-
   // собираем посты в Личный профиль
   /*
     useEffect(() => {
@@ -190,6 +189,8 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       closeModal()
     }
   }, [closeModal, postId])
+
+  console.log('data: ', publicPosts)
 
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
