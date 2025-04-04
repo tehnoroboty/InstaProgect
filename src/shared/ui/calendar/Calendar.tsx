@@ -17,7 +17,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
-      captionLayout={'dropdown'}
+      // captionLayout={'dropdown'}
       className={clsx(s.calendarContainer, className)}
       classNames={{
         caption: s.caption,
@@ -25,7 +25,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         cell: s.cell,
         day: s.day,
         day_disabled: s.dayDisabled,
-        day_hidden: 'invisible',
+        day_hidden: s.dayHidden,
         day_outside: s.dayOutside,
         day_range_end: 'day-range-end',
         day_range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
