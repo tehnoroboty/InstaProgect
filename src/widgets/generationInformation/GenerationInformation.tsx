@@ -23,6 +23,7 @@ import { fetchCountriesAndCities } from '@/src/widgets/generationInformation/fet
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
+import { myParseInt } from 'next/dist/server/lib/utils'
 
 import s from './generationInformation.module.scss'
 
@@ -34,8 +35,8 @@ export const GenerationInformation = () => {
   const [countrysWithCity, setCountrysWithCity] = useState<ResponseTypeCountys>()
   const [countrys, setCountries] = useState<Options[]>([])
   const [cites, setCites] = useState<Options[]>([])
-  const [selectedCountry, setSelectedCountry] = useState<string>()
-  const [selectedCity, setSelectedCity] = useState<string>()
+  const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
+  const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
   const [updateProfile, { isLoading: isLoadingUpdate }] = usePutUserProfileMutation()
 
   console.log(selectedCountry)
@@ -95,8 +96,8 @@ export const GenerationInformation = () => {
       lastName: MyProfile?.lastName || '',
       userName: MyProfile?.userName || '',
     })
-    setSelectedCountry(MyProfile?.country)
-    setSelectedCity(MyProfile?.city)
+    setSelectedCountry(MyProfile?.country || '')
+    setSelectedCity(MyProfile?.city || '')
   }, [MyProfile, isFetching, reset])
 
   const deleteAvatarHandler = async () => {
@@ -246,14 +247,14 @@ export const GenerationInformation = () => {
                 onChangeValue={onSelectCountyHandler}
                 options={countrys}
                 placeholder={'Country'}
-                value={selectedCountry}
+                value={selectedCountry || MyProfile?.country || ''}
               />
               <SelectBox
                 label={'Select your city'}
                 onChangeValue={onSelectCityHandler}
                 options={cites}
                 placeholder={'City'}
-                value={selectedCity}
+                value={selectedCity || MyProfile?.city || ''}
               />
             </div>
             <TextArea
