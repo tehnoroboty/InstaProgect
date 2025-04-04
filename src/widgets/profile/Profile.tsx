@@ -44,7 +44,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   // const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   // const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  const [allPosts, setAllPosts] = useState<Item[]>([])
+  // const [allPosts, setAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const params = useParams()
@@ -78,7 +78,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
   // const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
-  const postsToShow = allPosts
+  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
 
   const { data: dataPostsFromCache, originalArgs } = useAppSelector(state =>
     postsApi.endpoints.getPublicUserPosts.select()(state)
@@ -189,6 +189,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       closeModal()
     }
   }, [closeModal, postId])
+  console.log('dataPostsFromCache', dataPostsFromCache)
 
   console.log('data: ', publicPosts)
 

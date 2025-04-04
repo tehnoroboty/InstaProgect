@@ -68,7 +68,21 @@ export const postsApi = baseApi.injectEndpoints({
       },
       // Always merge incoming data to the cache entry
       merge: (currentCache, newItems) => {
+        // Если кэша ещё нет — просто копируем всё
+        if (!currentCache || !currentCache.items) {
+          return Object.assign(currentCache, {
+            items: [...newItems.items],
+            pageSize: newItems.pageSize,
+            totalCount: newItems.totalCount,
+            totalUsers: newItems.totalUsers,
+          })
+        }
+
+        // Если кэш есть — добавляем новые items, обновляем мета
         currentCache.items.push(...newItems.items)
+        currentCache.pageSize = newItems.pageSize
+        currentCache.totalCount = newItems.totalCount
+        currentCache.totalUsers = newItems.totalUsers
       },
       // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
       providesTags: ['POSTS'],
