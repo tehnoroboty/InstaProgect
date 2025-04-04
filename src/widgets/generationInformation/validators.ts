@@ -4,7 +4,9 @@ import { z } from 'zod'
 
 export const schema = z.object({
   aboutMe: z.string().max(200, ERROR_MESSAGES.ABOUT_ME.MAX),
-  dateOfBirth: z.string(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+  dateOfBirth: z.string().optional(),
   firstName: z
     .string()
     .nonempty(ERROR_MESSAGES.FIRST_NAME.REQUIRED)

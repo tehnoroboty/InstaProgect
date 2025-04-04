@@ -12,14 +12,38 @@ export const usersApi = baseApi.injectEndpoints({
       },
     }),
     getMyProfile: builder.query<Profile, void>({
+      providesTags: ['PROFILE'],
       query: () => '/users/profile',
     }),
     getUserProfile: builder.query<any, string>({
       providesTags: ['FOLLOWING'],
       query: userName => `/users/${userName}`,
     }),
+    putUserProfile: builder.mutation<any, any>({
+      invalidatesTags: ['PROFILE'],
+      query: ({ aboutMe, city, country, dateOfBirth, firstName, lastName, region, userName }) => {
+        return {
+          body: {
+            aboutMe,
+            city,
+            country,
+            dateOfBirth,
+            firstName,
+            lastName,
+            region,
+            userName,
+          },
+          method: 'PUT',
+          url: 'users/profile',
+        }
+      },
+    }),
   }),
 })
 
-export const { useDeleteProfileAvatarMutation, useGetMyProfileQuery, useGetUserProfileQuery } =
-  usersApi
+export const {
+  useDeleteProfileAvatarMutation,
+  useGetMyProfileQuery,
+  useGetUserProfileQuery,
+  usePutUserProfileMutation,
+} = usersApi

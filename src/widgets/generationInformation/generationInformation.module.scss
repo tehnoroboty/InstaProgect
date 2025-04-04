@@ -4,6 +4,13 @@
   width: 100%;
 }
 
+.pageLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
 .inputsContainer {
   display: flex;
   gap: clamp(30px, 5vw, 40px);
@@ -74,7 +81,7 @@
 
 }
 
-.disabledDeleteBtn{
+.disabledDeleteBtn {
   background-color: var(--danger-900);
 }
 
@@ -94,7 +101,7 @@
   width: 100%;
 }
 
-.error{
+.error {
   color: var(--danger-500);
 }
 

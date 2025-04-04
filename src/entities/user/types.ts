@@ -34,3 +34,15 @@ export type PublicProfileTypes = {
   userMetadata: UserMetadata
   userName: string
 }
+
+export type ResponseTypeCountys = {
+  data: CountrysType[]
+  error: boolean
+  msg: string
+}
+export type CountrysType = {
+  cities: Array<string>
+  country: string
+  iso2: string
+  iso3: string
+}
