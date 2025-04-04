@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 import { Post } from '@/src/entities/post/types'
@@ -44,7 +44,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   // const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
   // const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  // const [allPosts, setAllPosts] = useState<Item[]>([])
+  const [allPosts, setAllPosts] = useState<Item[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const params = useParams()
@@ -78,7 +78,7 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
 
   const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
   // const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
-  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
+  const postsToShow = allPosts
 
   const { data: dataPostsFromCache, originalArgs } = useAppSelector(state =>
     postsApi.endpoints.getPublicUserPosts.select()(state)
@@ -141,13 +141,21 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
   }, [publicPosts, isMyProfile])
 
   */
-  const postForRender = publicPosts?.items || publicProfileNoAuth.posts.items
+  const postForRender = publicPosts || publicProfileNoAuth.posts.items
 
   useEffect(() => {
     if (postForRender.length > 0) {
       setAllPosts(prev => (isMyProfile ? [...prev, ...postForRender] : postForRender))
     }
   }, [postForRender, isMyProfile])
+
+  /*  const memoizedPosts = useMemo(() => {
+      return isMyProfile ? [...allPosts, ...postForRender] : postForRender
+    }, [allPosts, postForRender, isMyProfile])
+  
+    useEffect(() => {
+      setAllPosts(memoizedPosts)
+    }, [memoizedPosts])*/
 
   useEffect(() => {
     setAllPosts([]) // Clear posts on user change
@@ -165,17 +173,20 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     }, [inView, isFetchingPublicPosts, isMyProfile])
   */
 
-  // бесконечный скролл только для личного профиля
-  const totalCount = publicPosts?.totalCount ?? pageSize
-  const lastPostId = publicPosts?.items?.[publicPosts.items?.length - 1]?.id ?? undefined // ID последнего поста в списке
-  const hasMorePosts = (publicPosts?.items?.length ?? 0) < totalCount
+  /*
+    // бесконечный скролл только для личного профиля
+    const totalCount = publicProfileNoAuth.posts?.totalCount ?? pageSize
+    const lastPostId =
+      publicProfileNoAuth.posts?.items?.[publicProfileNoAuth.posts.items?.length - 1]?.id ?? undefined // ID последнего поста в списке
+    const hasMorePosts = (publicProfileNoAuth.posts?.items?.length ?? 0) < totalCount
 
-  // Infinite scroll for My Profile only
-  useEffect(() => {
-    if (hasMorePosts && inView && isMyProfile && !isFetchingPublicPosts && lastPostId) {
-      setEndCursorPostId(lastPostId) // Обновляем endCursorPostId для загрузки следующей страницы
-    }
-  }, [hasMorePosts, inView, isFetchingPublicPosts, isMyProfile, lastPostId])
+    // Infinite scroll for My Profile only
+    useEffect(() => {
+      if (hasMorePosts && inView && isMyProfile && !isFetchingPublicPosts && lastPostId) {
+        setEndCursorPostId(lastPostId) // Обновляем endCursorPostId для загрузки следующей страницы
+      }
+    }, [hasMorePosts, inView, isFetchingPublicPosts, isMyProfile, lastPostId])
+  */
 
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
@@ -189,20 +200,39 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
       closeModal()
     }
   }, [closeModal, postId])
+  console.log('needInitPostsInStore', needInitPostsInStore)
+
   console.log('dataPostsFromCache', dataPostsFromCache)
 
   console.log('data: ', publicPosts)
+  console.log('Props: ', publicProfileNoAuth.posts.items)
+
+  const onClickNext = () => {
+    const posts = dataPostsFromCache ?? []
+    const totalCount = publicProfileNoAuth.posts?.totalCount ?? pageSize
+
+    const lastPostId = posts[posts.length - 1]?.id
+
+    const hasMorePosts = posts.length < totalCount
+
+    if (hasMorePosts && lastPostId) {
+      setEndCursorPostId(lastPostId)
+    }
+  }
 
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
       {isFetchingPublicPosts && <div>Loading ...</div>}
-      <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
-      {isMyProfile && hasMorePosts && (
+      <Posts posts={allPosts} />
+      {/*{isMyProfile && hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
           {isFetchingPublicPosts && <Typography option={'bold_text16'}>Loading...</Typography>}
         </div>
-      )}
+      )}*/}
+      <button onClick={onClickNext} type={'button'}>
+        NEXT
+      </button>
       <ModalPost
         {...(!authProfile &&
           publicProfileNoAuth && {

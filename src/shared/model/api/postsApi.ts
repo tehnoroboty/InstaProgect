@@ -61,32 +61,19 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
 
-    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+    // getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
+    getPublicUserPosts: builder.query<any[], GetPublicUserPostsArgs>({
       // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
       },
+      // Мерж данных в кэш
       // Always merge incoming data to the cache entry
       merge: (currentCache, newItems) => {
-        // Если кэша ещё нет — просто копируем всё
-        if (!currentCache || !currentCache.items) {
-          return Object.assign(currentCache, {
-            items: [...newItems.items],
-            pageSize: newItems.pageSize,
-            totalCount: newItems.totalCount,
-            totalUsers: newItems.totalUsers,
-          })
-        }
-
-        // Если кэш есть — добавляем новые items, обновляем мета
-        currentCache.items.push(...newItems.items)
-        currentCache.pageSize = newItems.pageSize
-        currentCache.totalCount = newItems.totalCount
-        currentCache.totalUsers = newItems.totalUsers
+        currentCache.push(...newItems)
       },
       // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
       providesTags: ['POSTS'],
-      // Мерж данных в кэш
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userName }) => {
         const baseUrl = `posts/${userName}`
         const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
@@ -101,13 +88,17 @@ export const postsApi = baseApi.injectEndpoints({
           url: `${baseUrl}${cursorSegment}`,
         }
       },
+      // какие бы не приходили query пораметры смотри только на URL и пихай все в один большой кэш
       // Обработка ответа от сервера
       // Only have one cache entry because the arg always maps to one string
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
       },
-      transformResponse: (response: GetPublicUserPostsResponse, meta, arg) => {
-        return response
+      //а раз я использую transformResponse: (response: GetPublicUserPostsResponse, meta, arg) => {
+      //     return response.items
+      //   },
+      transformResponse: (response: any, meta, arg) => {
+        return response.items
       },
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
