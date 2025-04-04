@@ -33,6 +33,7 @@ type Props = {
    * The text that is displayed if nothing is selected.
    */
   placeholder?: string
+  value?: any
 } & ComponentPropsWithoutRef<'button'>
 
 /** Ui kit SelectBox component */
@@ -43,6 +44,7 @@ export const SelectBox = ({
   onChangeValue,
   options = [],
   placeholder = options.length > 0 ? options[0].value : 'Select',
+  value,
   ...rest
 }: Props) => {
   const renderOptions = (options: Options[]) =>
@@ -54,7 +56,7 @@ export const SelectBox = ({
 
   return (
     <div className={clsx(styles.container, className)}>
-      <Select.Root onValueChange={value => onChangeValue?.(value)}>
+      <Select.Root onValueChange={value => onChangeValue?.(value)} value={value}>
         <Select.Group>
           {label && <Select.Label className={styles.label}>{label}</Select.Label>}
           <Select.Trigger

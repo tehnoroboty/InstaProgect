@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { ResponseTypeCountys } from '@/src/entities/user/types'
 import { CustomerError } from '@/src/shared/model/api/types'
 import {
   useDeleteProfileAvatarMutation,
@@ -30,12 +31,14 @@ export const GenerationInformation = () => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
   const [errorAge, setErrorAge] = useState<boolean>(false)
   const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteProfileAvatarMutation()
-  const [countrysWithCity, setCountrysWithCity] = useState<ResponseType>()
+  const [countrysWithCity, setCountrysWithCity] = useState<ResponseTypeCountys>()
   const [countrys, setCountries] = useState<Options[]>([])
   const [cites, setCites] = useState<Options[]>([])
   const [selectedCountry, setSelectedCountry] = useState<string>()
   const [selectedCity, setSelectedCity] = useState<string>()
   const [updateProfile, { isLoading: isLoadingUpdate }] = usePutUserProfileMutation()
+
+  console.log(selectedCountry)
 
   const {
     formState: { errors, isValid },
@@ -92,6 +95,8 @@ export const GenerationInformation = () => {
       lastName: MyProfile?.lastName || '',
       userName: MyProfile?.userName || '',
     })
+    setSelectedCountry(MyProfile?.country)
+    setSelectedCity(MyProfile?.city)
   }, [MyProfile, isFetching, reset])
 
   const deleteAvatarHandler = async () => {
@@ -241,12 +246,14 @@ export const GenerationInformation = () => {
                 onChangeValue={onSelectCountyHandler}
                 options={countrys}
                 placeholder={'Country'}
+                value={selectedCountry}
               />
               <SelectBox
                 label={'Select your city'}
                 onChangeValue={onSelectCityHandler}
                 options={cites}
                 placeholder={'City'}
+                value={selectedCity}
               />
             </div>
             <TextArea
@@ -286,17 +293,4 @@ export const GenerationInformation = () => {
       </Dialog>
     </>
   )
-}
-
-type ResponseType = {
-  data: CountrysType[]
-  error: boolean
-  msg: string
-}
-
-type CountrysType = {
-  cities: Array<string>
-  country: string
-  iso2: string
-  iso3: string
 }
