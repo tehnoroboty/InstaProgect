@@ -1,16 +1,17 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { ResponseTypeCountys } from '@/src/entities/user/types'
+import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
 import { CustomerError } from '@/src/shared/model/api/types'
 import {
   useDeleteProfileAvatarMutation,
   useGetMyProfileQuery,
   usePutUserProfileMutation,
 } from '@/src/shared/model/api/usersApi'
-import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
@@ -19,11 +20,13 @@ import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Options, SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { fetchCountriesAndCities } from '@/src/widgets/generationInformation/fetchCountriesAndCities'
+import {
+  fetchCitiesForCountry,
+  fetchCountriesAndCities,
+} from '@/src/widgets/generationInformation/fetchCountriesAndCities'
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
 import { zodResolver } from '@hookform/resolvers/zod'
-import clsx from 'clsx'
-import { myParseInt } from 'next/dist/server/lib/utils'
+import Link from 'next/link'
 
 import s from './generationInformation.module.scss'
 
@@ -38,11 +41,12 @@ export const GenerationInformation = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
   const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
   const [updateProfile, { isLoading: isLoadingUpdate }] = usePutUserProfileMutation()
-
-  console.log(selectedCountry)
+  const [alertMessage, setAlertMessage] = useState<null | string>(null)
+  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
 
   const {
     formState: { errors, isValid },
+    getValues,
     handleSubmit,
     register,
     reset,
@@ -69,20 +73,7 @@ export const GenerationInformation = () => {
 
   useEffect(() => {
     if (selectedCountry && countrysWithCity) {
-      const fetchCitiesForCountry = async () => {
-        const res = countrysWithCity.data.find(item => item.country === selectedCountry)
-
-        if (res) {
-          const items = res.cities.map((city: any) => ({
-            value: city,
-            valueTitle: city,
-          }))
-
-          setCites(items)
-        }
-      }
-
-      fetchCitiesForCountry()
+      fetchCitiesForCountry(countrysWithCity, selectedCountry, setCites)
     }
   }, [selectedCountry])
 
@@ -104,7 +95,8 @@ export const GenerationInformation = () => {
     try {
       await deleteAvatar().unwrap()
     } catch (error) {
-      console.error(error)
+      setAlertMessage('Error! Server is not available!')
+      setAlertType('error')
     } finally {
       setDeleteModal(false)
     }
@@ -134,7 +126,6 @@ export const GenerationInformation = () => {
       setCites([])
     }
   }
-
   const onSelectCityHandler = (value: string) => {
     setSelectedCity(value)
     setValue('city', value)
@@ -142,6 +133,12 @@ export const GenerationInformation = () => {
       setCites([])
     }
   }
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target
+
+    sessionStorage.setItem(name, JSON.stringify(value))
+  }
+
   const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoadingUpdate
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
@@ -158,6 +155,9 @@ export const GenerationInformation = () => {
       }
 
       await updateProfile(registrationData).unwrap()
+
+      setAlertMessage('Your settings are saved!')
+      setAlertType('success')
     } catch (err) {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
@@ -168,6 +168,8 @@ export const GenerationInformation = () => {
           type: 'manual',
         })
         console.log(error)
+        setAlertMessage('Error! Server is not available!')
+        setAlertType('error')
       }
     }
   }
@@ -182,31 +184,29 @@ export const GenerationInformation = () => {
 
   return (
     <>
+      {alertMessage && alertType && <Alerts message={alertMessage} type={alertType} />}
       <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
         <div className={s.inputsContainer}>
-          <div className={s.photoBox}>
-            <div className={s.avatarContainer}>
-              <AvatarBox className={s.avatar} src={MyProfile?.avatars[0]?.url ?? ''} />
-              {MyProfile?.avatars[0]?.url && (
-                <button
-                  className={clsx(s.deleteBtn, { [s.disabledBtnDelete]: isLoadingDelete })}
-                  disabled={isLoadingDelete}
-                  onClick={() => setDeleteModal(true)}
-                  type={'button'}
-                ></button>
-              )}
-            </div>
-            <Button type={'button'} variant={'bordered'}>
-              {'Add a Profile Photo'}
-            </Button>
-          </div>
+          <AvatarContainerSettings
+            deleteModal={() => setDeleteModal(true)}
+            isLoadingDelete={isLoadingDelete}
+            myProfileAvatars={MyProfile?.avatars}
+          />
           <div className={s.informationBox}>
             <Input
               important
               label={'userName'}
               placeholder={''}
               {...register('userName', {
-                onBlur: () => trigger('userName'),
+                onBlur: () => {
+                  trigger('userName'),
+                    handleInputChange({
+                      target: {
+                        name: 'userName',
+                        value: getValues('userName'),
+                      },
+                    })
+                },
               })}
               error={errors.userName?.message}
             />
@@ -237,7 +237,10 @@ export const GenerationInformation = () => {
               />
               {errorAge && (
                 <Typography as={'span'} className={s.error}>
-                  {'A user under 13 cannot create a profile. Privacy Policy'}
+                  {'A user under 13 cannot create a profile'}
+                  <Link className={s.link} href={'/privacy-policy'}>
+                    {' Privacy Policy '}
+                  </Link>
                 </Typography>
               )}
             </div>
