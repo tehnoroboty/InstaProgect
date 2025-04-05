@@ -6,9 +6,10 @@ export const usersApi = baseApi.injectEndpoints({
     getMyProfile: builder.query<Profile, void>({
       query: () => '/users/profile',
     }),
-    getUserProfile: builder.query<any, string>({
-      providesTags: ['FOLLOWING'],
-      query: userName => `/users/${userName}`,
+    // TODO: types for getUserProfile
+    getUserProfile: builder.query<any, number>({
+      providesTags: ['USER_PROFILE'],
+      query: profileId => `/public-user/profile/${profileId}`,
     }),
   }),
 })

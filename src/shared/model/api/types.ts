@@ -67,11 +67,11 @@ export type MeResponse = {
 export type SortDirection = 'asc' | 'desc'
 
 export type GetMyPostsArgs = {
-  pageNumber?: number
+  endCursorPostId?: number
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection
-  userName: string
+  userId: number
 }
 
 export type GetProfileWithFollowType = {
