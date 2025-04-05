@@ -7,7 +7,8 @@ import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBac
 import ArrowIosForwardOutline from '@/src/shared/assets/componentsIcons/ArrowIosForwardOutline'
 import clsx from 'clsx'
 
-// import 'react-day-picker/dist/style.css'
+import 'react-day-picker/dist/style.css'
+
 import s from './calendar.module.scss'
 
 import { Button } from '../button/Button'
@@ -17,7 +18,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
-      // captionLayout={'dropdown'}
+      captionLayout={'dropdown'}
       className={clsx(s.calendarContainer, className)}
       classNames={{
         caption: s.caption,
@@ -44,16 +45,14 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         table: s.table,
         ...classNames,
       }}
-      components={
-        {
-          // IconLeft: ({ className, ...props }) => (
-          //   <ArrowIosBackOutline className={clsx('h-4 w-4', className)} {...props} />
-          // ),
-          // IconRight: ({ className, ...props }) => (
-          //   <ArrowIosForwardOutline className={clsx('h-4 w-4', className)} {...props} />
-          // ),
-        }
-      }
+      // components={{
+      //   IconLeft: ({ className, ...props }) => (
+      //     <ArrowIosBackOutline className={clsx('h-4 w-4', className)} {...props} />
+      //   ),
+      //   IconRight: ({ className, ...props }) => (
+      //     <ArrowIosForwardOutline className={clsx('h-4 w-4', className)} {...props} />
+      //   ),
+      // }}
       fromYear={1900}
       // pagedNavigation
       showOutsideDays={showOutsideDays}
