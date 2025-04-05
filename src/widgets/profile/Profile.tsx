@@ -1,18 +1,19 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {useMeQuery} from '@/src/shared/model/api/authApi'
 import {
     SortDirection,
 } from '@/src/shared/model/api/types'
 import {ProfileInfo} from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import clsx from 'clsx'
-import {useParams} from 'next/navigation'
+import {useParams, useRouter, useSearchParams} from 'next/navigation'
 
 import s from './myProfile.module.scss'
 import {useGetUserProfileQuery} from "@/src/shared/model/api/usersApi";
-import {useGetPostsQuery} from "@/src/shared/model/api/postsApi";
+import {useGetCommentsQuery, useGetPostQuery, useGetPostsQuery} from "@/src/shared/model/api/postsApi";
 import {Posts} from "@/src/shared/ui/postsGrid/Posts";
 import {useInView} from "react-intersection-observer";
+import ModalPost from "@/src/widgets/modalPost/ModalPost";
 
 const AUTH_PAGE_SIZE = 8
 const PUBLIC_PAGE_SIZE = 12
@@ -25,21 +26,22 @@ type Props = {}
 export const Profile = (props: Props) => {
     const {inView, ref} = useInView({threshold: 1})
     const params = useParams<{ userId: string }>()
-
+    const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+    const [lastPostId, setLastPostId] = useState<number | null>(null)
+    const router = useRouter()
     const {data: meData} = useMeQuery()
     const authProfile = !!meData
-
+    const searchParams = useSearchParams()
+    const postId = searchParams.get('postId')
     const isMyProfile = meData?.userId === Number(params.userId)
-
     // получаем информацию профайл
-    const {data: profile, isFetching: isFetchingUserProfile} = useGetUserProfileQuery(
+    const {data: profile,} = useGetUserProfileQuery(
         Number(params.userId),
         // {
         //     skip: !meData || isMyProfile,
         // }
     )
 
-    const [lastPostId, setLastPostId] = useState<number | null>(null)
 
     // получаем посты
     const {data: posts, isFetching: isFetchingPosts} = useGetPostsQuery(
@@ -51,7 +53,6 @@ export const Profile = (props: Props) => {
             sortDirection: SORT_DIRECTION,
         },
     )
-    console.log(posts)
     const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
     const postsCount = posts?.items.length ?? totalCount
     const hasMorePosts = totalCount > postsCount
@@ -64,6 +65,27 @@ export const Profile = (props: Props) => {
         }
     }, [inView, isFetchingPosts, isMyProfile])
 
+    // получаем пост по ID
+    const {data: post, isFetching: isFetchingPost} = useGetPostQuery({postId: Number(postId)},
+        {
+            skip: modalIsOpen,
+        })
+    // получаем комменты по ID
+    const {data: comments, isFetching: isFetchingComments} = useGetCommentsQuery({postId: Number(postId)}, {
+        skip: modalIsOpen,
+    })
+
+    const closeModal = useCallback(() => {
+        setModalIsOpen(false)
+        router.replace(`/profile/${params.userId}`, {scroll: false})
+    }, [router, params.userId])
+    useEffect(() => {
+        if (postId) {
+            setModalIsOpen(true)
+        } else {
+            closeModal()
+        }
+    }, [closeModal, postId])
     return (
         <div className = {clsx(s.page, [!authProfile && s.noAuthPage])}>
             <ProfileInfo authProfile = {authProfile} isMyProfile = {isMyProfile} profile = {profile}/>
@@ -73,6 +95,12 @@ export const Profile = (props: Props) => {
                 <div className = {s.loadMore} ref = {ref}>
                 </div>
             )}
+            <ModalPost
+                publicPost = {post}
+                publicComments = {comments}
+                onClose = {closeModal}
+                open = {modalIsOpen}
+            />
         </div>
     )
 }

@@ -35,6 +35,7 @@ export const postsApi = baseApi.injectEndpoints({
             }),
         }),
         getComments: builder.query<GetCommentsResponse, { postId: number }>({
+            providesTags: ['COMMENTS'],
             query: ({postId}) => ({
                 method: 'GET',
                 url: `/posts/${postId}/comments`,
