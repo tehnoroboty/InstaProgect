@@ -1,3 +1,5 @@
+import { ResponseTypeCountys } from '@/src/entities/user/types'
+
 export const fetchCountriesAndCities = async (
   setCountrysWithCity: Function,
   setCountries: Function
@@ -21,5 +23,22 @@ export const fetchCountriesAndCities = async (
     setCountries(items)
   } catch (err) {
     console.error('Error fetching countries:', err)
+  }
+}
+
+export const fetchCitiesForCountry = async (
+  countrysWithCity: ResponseTypeCountys,
+  selectedCountry: string,
+  setCites: Function
+) => {
+  const res = countrysWithCity.data.find(item => item.country === selectedCountry)
+
+  if (res) {
+    const items = res.cities.map((city: any) => ({
+      value: city,
+      valueTitle: city,
+    }))
+
+    setCites(items)
   }
 }

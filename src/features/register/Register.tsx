@@ -149,11 +149,11 @@ export const Register = () => {
             label={
               <>
                 {'I agree to the '}
-                <Link className={s.link} href={'/auth/terms-of-service'}>
+                <Link className={s.link} href={'/terms-of-service'}>
                   {' Terms  of  Service '}
                 </Link>
                 {' and '}
-                <Link className={s.link} href={'/auth/privacy-policy'}>
+                <Link className={s.link} href={'/privacy-policy'}>
                   {' Privacy Policy '}
                 </Link>
               </>
