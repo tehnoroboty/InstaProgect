@@ -4,7 +4,6 @@ import {
     GetCommentsResponse,
     GetMyPostsArgs,
     GetPostsResponse,
-    GetPublicUserPostsArgs,
     ImageType,
     RequestPostsType,
     ResponsePostsType,
@@ -49,7 +48,7 @@ export const postsApi = baseApi.injectEndpoints({
                 currentCache.items.push(...newItems.items)
             },
             // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
-            providesTags: ['POSTS'],
+            providesTags: (res) => (res ? res.items.map(({id}) => ({type: "POSTS", id})) : ["POSTS"]),
             query: ({endCursorPostId, pageSize, sortBy, sortDirection, userId}) => ({
                 method: 'GET',
                 params: {
@@ -67,73 +66,14 @@ export const postsApi = baseApi.injectEndpoints({
             },
         }),
         getPost: builder.query<Post, { postId: number }>({
-            providesTags: (result, error, {postId}) => [{id: postId, type: 'POSTS'}],
+            providesTags: (res) => (res ? [{type: "POST", id: res.id}] : ["POST"]),
             query: ({postId}) => ({
                 method: 'GET',
                 url: `/posts/id/${postId}`,
             }),
         }),
-
-        // getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
-        getPublicUserPosts: builder.query<any[], GetPublicUserPostsArgs>({
-            // Refetch when the page arg changes
-            forceRefetch({currentArg, previousArg}) {
-                return currentArg !== previousArg
-            },
-            // Мерж данных в кэш
-            // Always merge incoming data to the cache entry
-            merge: (currentCache, newItems) => {
-                currentCache.push(...newItems)
-            },
-            // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
-            providesTags: ['POSTS'],
-            query: ({endCursorPostId, pageSize, sortBy, sortDirection, userName}) => {
-                const baseUrl = `posts/${userName}`
-                const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
-
-                return {
-                    method: 'GET',
-                    params: {
-                        pageSize,
-                        sortBy,
-                        sortDirection,
-                    },
-                    url: `${baseUrl}${cursorSegment}`,
-                }
-            },
-            // какие бы не приходили query пораметры смотри только на URL и пихай все в один большой кэш
-            // Обработка ответа от сервера
-            // Only have one cache entry because the arg always maps to one string
-            serializeQueryArgs: ({endpointName}) => {
-                return endpointName
-            },
-            //а раз я использую transformResponse: (response: GetPublicUserPostsResponse, meta, arg) => {
-            //     return response.items
-            //   },
-            transformResponse: (response: any, meta, arg) => {
-                return response.items
-            },
-        }),
         updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
-            invalidatesTags: (result, err, {postId}) => [{id: postId, type: 'POSTS'}],
-            // Добавляем optimistic update:
-            async onQueryStarted({model, postId}, {dispatch, getState, queryFulfilled}) {
-                // Получаем текущее состояние поста
-                const patchResult = dispatch(
-                    postsApi.util.updateQueryData('getPost', {postId}, draft => {
-                        if (draft) {
-                            draft.description = model.description
-                        }
-                    })
-                )
-
-                try {
-                    await queryFulfilled
-                } catch {
-                    // Если запрос не удался - откатываем изменения
-                    patchResult.undo()
-                }
-            },
+            invalidatesTags: (result, err, {postId}) => [{id: postId, type: 'POST'}],
             query: ({model, postId}) => ({
                 body: model,
                 method: 'PUT',
@@ -148,7 +88,6 @@ export const {
     useCreateNewPostMutation,
     useGetCommentsQuery,
     useGetPostQuery,
-    useGetPublicUserPostsQuery,
     useUpdatePostMutation,
     useGetPostsQuery,
 } = postsApi
