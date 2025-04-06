@@ -70,18 +70,18 @@
 
   width: 32px;
   height: 32px;
-  margin: 0;
-  padding: 0;
-  border: none;
   border-radius: 50%;
 
-  font-weight: 400;
-  color: var(--color-light-100);
+  color: var(--light-100);
 
-  background: transparent;
+  // Убираем стандартный hover библиотеки
+  &:hover {
+    background-color: var(--primary-700) !important;
+  }
 
   &:hover {
-    background: var(--color-dark-500);
+    color: var(--light-100);
+    background-color: var(--primary-700);
   }
 
   &[aria-selected] {
@@ -90,23 +90,12 @@
 }
 
 .dayDisabled {
-  //cursor: not-allowed;
-  color: var(--color-dark-300);
-  opacity: 0.5;
+  //color: red;
+  opacity: 1 !important;
 }
 
 .dayHidden {
-  visibility: hidden;
-}
-
-.dayOutside {
-  color: var(--light-900);
-
-  &[aria-selected] {
-    color: var(--light-900);
-
-    //background-color: rgba(var(--color-accent-rgb), 0.5);
-  }
+  //visibility: hidden;
 }
 
 .dayRangeMiddle {
@@ -118,42 +107,62 @@
 
 .daySelected {
   color: var(--light-100);
-  background: var(--primary-900);
+  background-color: var(--primary-900);
 
   &:hover {
-    background: var(--primary-700);
+    background-color: var(--primary-700);
   }
 
   &:focus {
     border: 2px solid var(--primary-300);
+  }
+}
 
-    //background-color: transparent;
+.dayWeekend {
+  color: var(--danger-300, #f23d61);
+  transition: all 0.3s ease;
+
+  &:focus {
+    border: 2px solid var(--primary-300, #4c8dff);
+  }
+
+  &:active {
+    background-color: var(--primary-900);
+  }
+
+  &[aria-selected] {
+    border: none;
+    background-color: var(--primary-900);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--danger-300, #f23d61);
+      background-color: var(--primary-700);
+    }
   }
 }
 
 .dayToday {
   color: var(--primary-500);
+}
 
-  //background: var(--color-dark-300);
+.dayOutside {
+  color: var(--light-900);
+
+  &[aria-selected] {
+    color: var(--light-900);
+  }
 }
 
 // Заголовки дней недели
-//.headCell {
-//  width: 32px;
-//  border-radius: 6px;
-//
-//  font-size: 12px;
-//  font-weight: 400;
-//  color: var(--color-muted-foreground);
-//}
-
 .headCell {
   width: 32px;
   padding: 4px 0;
 
   font-size: 12px;
   font-weight: 400;
-  color: var(--color-light-900);
+  color: var(--light-900);
   text-align: center;
 }
 
@@ -237,14 +246,16 @@
       padding: 0;
       font-size: 16px;
       line-height: 150%;
-      color: var(--light-900, #8d9094);
+
+      //color: var(--light-900, #8d9094);
     }
   }
 
   tbody td {
     font-size: 16px;
     line-height: 150%;
-    color: var(--light-900, #8d9094);
+
+    //color: var(--light-900, #8d9094);
   }
 
   //margin-top: 8px;

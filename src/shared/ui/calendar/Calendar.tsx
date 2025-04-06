@@ -7,7 +7,7 @@ import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBac
 import ArrowIosForwardOutline from '@/src/shared/assets/componentsIcons/ArrowIosForwardOutline'
 import clsx from 'clsx'
 
-import 'react-day-picker/dist/style.css'
+import 'react-day-picker/src/style.css'
 
 import s from './calendar.module.scss'
 
@@ -45,6 +45,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         table: s.table,
         ...classNames,
       }}
+      // }}
+      fromYear={1900}
       // components={{
       //   IconLeft: ({ className, ...props }) => (
       //     <ArrowIosBackOutline className={clsx('h-4 w-4', className)} {...props} />
@@ -52,11 +54,12 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       //   IconRight: ({ className, ...props }) => (
       //     <ArrowIosForwardOutline className={clsx('h-4 w-4', className)} {...props} />
       //   ),
-      // }}
-      fromYear={1900}
+      modifiers={{ weekend: { dayOfWeek: [0, 6] } }}
+      modifiersClassNames={{ weekend: s.dayWeekend }}
       // pagedNavigation
       showOutsideDays={showOutsideDays}
       toDate={new Date()}
+      weekStartsOn={1}
       {...props}
     />
   )
