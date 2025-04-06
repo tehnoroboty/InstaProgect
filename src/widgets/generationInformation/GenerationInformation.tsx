@@ -27,11 +27,15 @@ import {
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './generationInformation.module.scss'
 
 export const GenerationInformation = () => {
   const { data: MyProfile, isFetching } = useGetMyProfileQuery()
+  const router = useRouter()
+  const params = useSearchParams()
+  const isFormDirty = params.get('isFormDirty')
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
   const [errorAge, setErrorAge] = useState<boolean>(false)
   const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteProfileAvatarMutation()
@@ -45,7 +49,7 @@ export const GenerationInformation = () => {
   const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
 
   const {
-    formState: { errors, isValid },
+    formState: { errors, isDirty, isValid },
     getValues,
     handleSubmit,
     register,
@@ -78,7 +82,8 @@ export const GenerationInformation = () => {
   }, [selectedCountry])
 
   useEffect(() => {
-    reset({
+    // Базовые значения из MyProfile (если есть)
+    const baseValues = {
       aboutMe: MyProfile?.aboutMe || '',
       city: MyProfile?.city || '',
       country: MyProfile?.country || '',
@@ -86,10 +91,70 @@ export const GenerationInformation = () => {
       firstName: MyProfile?.firstName || '',
       lastName: MyProfile?.lastName || '',
       userName: MyProfile?.userName || '',
-    })
-    setSelectedCountry(MyProfile?.country || '')
-    setSelectedCity(MyProfile?.city || '')
+    }
+
+    // Если форма "грязная" (были изменения), берем изменения из
+    // sessionStorage
+    if (isFormDirty === 'true') {
+      const formUpdates: Partial<FormType> = {}
+
+      // Поля формы, которые могут быть в sessionStorage
+      const formFields: Array<keyof FormType> = [
+        'userName',
+        'firstName',
+        'lastName',
+        'dateOfBirth',
+        'country',
+        'city',
+        'aboutMe',
+      ]
+
+      formFields.forEach(field => {
+        const storedValue = sessionStorage.getItem(field)
+
+        if (storedValue !== null) {
+          // Особый случай для даты
+          if (field === 'dateOfBirth') {
+            try {
+              const date = new Date(JSON.parse(storedValue))
+
+              formUpdates[field] = date.toISOString()
+            } catch {
+              // Если не удалось распарсить, оставляем значение
+              // из MyProfile
+            }
+          } else {
+            formUpdates[field] = storedValue
+          }
+        }
+      })
+
+      // Сливаем базовые значения и изменения из storage
+      reset({
+        ...baseValues,
+        ...formUpdates,
+      })
+
+      // Обновляем выбранные страну/город
+      if (formUpdates.country !== undefined) {
+        setSelectedCountry(formUpdates.country)
+      }
+      if (formUpdates.city !== undefined) {
+        setSelectedCity(formUpdates.city)
+      }
+    } else {
+      // Если форма чистая, просто используем данные из MyProfile
+      reset(baseValues)
+      setSelectedCountry(MyProfile?.country || '')
+      setSelectedCity(MyProfile?.city || '')
+    }
   }, [MyProfile, isFetching, reset])
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target
+
+    sessionStorage.setItem(name, value)
+  }
 
   const deleteAvatarHandler = async () => {
     try {
@@ -113,6 +178,7 @@ export const GenerationInformation = () => {
       } else {
         setErrorAge(false)
         setValue('dateOfBirth', utcDate.toISOString())
+        sessionStorage.setItem('dateOfBirth', JSON.stringify(date))
       }
     } else {
       return
@@ -122,6 +188,7 @@ export const GenerationInformation = () => {
   const onSelectCountyHandler = (value: string) => {
     setSelectedCountry(value)
     setValue('country', value)
+    sessionStorage.setItem('country', value)
     if (!value) {
       setCites([])
     }
@@ -129,15 +196,24 @@ export const GenerationInformation = () => {
   const onSelectCityHandler = (value: string) => {
     setSelectedCity(value)
     setValue('city', value)
+    sessionStorage.setItem('city', value)
     if (!value) {
       setCites([])
     }
   }
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target
 
-    sessionStorage.setItem(name, JSON.stringify(value))
-  }
+  useEffect(() => {
+    if (isFetching) {
+      sessionStorage.clear()
+
+      return
+    }
+    if (isDirty) {
+      router.push(`/profile/${MyProfile?.id}/settings?isFormDirty=true`)
+    } else {
+      router.push(`/profile/${MyProfile?.id}/settings`)
+    }
+  }, [isDirty, isFetching])
 
   const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoadingUpdate
 
@@ -155,7 +231,7 @@ export const GenerationInformation = () => {
       }
 
       await updateProfile(registrationData).unwrap()
-
+      sessionStorage.clear()
       setAlertMessage('Your settings are saved!')
       setAlertType('success')
     } catch (err) {
@@ -215,7 +291,15 @@ export const GenerationInformation = () => {
               label={'First Name'}
               placeholder={''}
               {...register('firstName', {
-                onBlur: () => trigger('firstName'),
+                onBlur: () => {
+                  trigger('firstName'),
+                    handleInputChange({
+                      target: {
+                        name: 'firstName',
+                        value: getValues('firstName'),
+                      },
+                    })
+                },
               })}
               error={errors.firstName?.message}
             />
@@ -224,7 +308,15 @@ export const GenerationInformation = () => {
               label={'Last Name'}
               placeholder={''}
               {...register('lastName', {
-                onBlur: () => trigger('lastName'),
+                onBlur: () => {
+                  trigger('lastName'),
+                    handleInputChange({
+                      target: {
+                        name: 'lastName',
+                        value: getValues('lastName'),
+                      },
+                    })
+                },
               })}
               error={errors.lastName?.message}
             />
