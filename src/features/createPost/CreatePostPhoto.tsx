@@ -28,7 +28,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
 
   const isOpen = useSelector(modalType === 'photo' ? selectIsPhotoModalOpen : selectIsPostModalOpen)
 
-  const [openModal, setOpenModel] = useState<boolean>(isOpen)
+  const [openModal, setOpenModel] = useState<boolean>(true)
   const [additionalModal, setAdditionalModal] = useState<boolean>(false)
 
   const closeModal = () => {
@@ -70,7 +70,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
     <div>
       <Dialog
         className={s.modal}
-        modalTitle={'Add Photo'}
+        modalTitle={modalType === 'photo' ? 'Add a Profile Photo' : 'Add Photo'}
         onClose={closeStateModal}
         open={openModal}
       >
