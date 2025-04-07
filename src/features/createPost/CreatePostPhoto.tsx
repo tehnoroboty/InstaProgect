@@ -25,11 +25,17 @@ type Props = {
 
 export const CreatePostPhoto = ({ download, modalType }: Props) => {
   const dispatch = useDispatch()
-  const [additionalModal, setAdditionalModal] = useState<boolean>(false)
 
   const isOpen = useSelector(modalType === 'photo' ? selectIsPhotoModalOpen : selectIsPostModalOpen)
 
+  const [openModal, setOpenModel] = useState<boolean>(isOpen)
+  const [additionalModal, setAdditionalModal] = useState<boolean>(false)
+
   const closeModal = () => {
+    setOpenModel(false)
+  }
+
+  const closeStateModal = () => {
     const action =
       modalType === 'photo'
         ? setIsPhotoModalOpen({ isOpen: false })
@@ -55,7 +61,6 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
         setAdditionalModal(true)
       } else {
         download(fileUrl)
-        debugger
         closeModal()
       }
     },
@@ -63,7 +68,12 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
 
   return (
     <div>
-      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={closeModal} open={isOpen}>
+      <Dialog
+        className={s.modal}
+        modalTitle={'Add Photo'}
+        onClose={closeStateModal}
+        open={openModal}
+      >
         <div className={s.content}>
           <div className={s.imageBox}>
             <ImageOutline height={48} width={48} />

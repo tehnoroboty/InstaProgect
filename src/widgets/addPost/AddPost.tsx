@@ -13,7 +13,7 @@ export const AddPost = () => {
     return setPhotos(prevPhotos => [...prevPhotos, photo])
   }
 
-  console.log(photos)
+  console.log(photos.length)
 
   return (
     <>
