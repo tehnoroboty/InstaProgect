@@ -28,9 +28,9 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_disabled: s.dayDisabled,
         day_hidden: s.dayHidden,
         day_outside: s.dayOutside,
-        day_range_end: 'day-range-end',
-        day_range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
-        day_range_start: 'day-range-start',
+        // day_range_end: 'day-range-end',
+        // day_range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
+        // day_range_start: 'day-range-start',
         day_selected: s.daySelected,
         day_today: s.dayToday,
         head_cell: s.headCell,
@@ -45,15 +45,16 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         table: s.table,
         ...classNames,
       }}
-      // }}
-      fromYear={1900}
+      //   ),
+      fixedWeeks
       // components={{
       //   IconLeft: ({ className, ...props }) => (
       //     <ArrowIosBackOutline className={clsx('h-4 w-4', className)} {...props} />
       //   ),
       //   IconRight: ({ className, ...props }) => (
       //     <ArrowIosForwardOutline className={clsx('h-4 w-4', className)} {...props} />
-      //   ),
+      // }}
+      fromYear={1900}
       modifiers={{ weekend: { dayOfWeek: [0, 6] } }}
       modifiersClassNames={{ weekend: s.dayWeekend }}
       // pagedNavigation

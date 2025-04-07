@@ -1,5 +1,3 @@
-// Calendar.module.scss
-
 .calendarContainer {
   margin: 0;
   padding: 7px 12px;
@@ -11,8 +9,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  //margin-bottom: 12px;
 }
 
 .captionLabel {
@@ -49,22 +45,6 @@
 }
 
 // Стили дней
-//.day {
-//  width: 32px;
-//  height: 32px;
-//  padding: 0;
-//  font-weight: 400;
-//
-//  &:hover {
-//    color: var(--color-primary-foreground);
-//    background-color: var(--color-primary);
-//  }
-//
-//  &[aria-selected] {
-//    opacity: 1;
-//  }
-//}
-
 .day {
   cursor: pointer;
 
@@ -74,56 +54,12 @@
 
   color: var(--light-100);
 
-  // Убираем стандартный hover библиотеки
-  &:hover {
-    background-color: var(--primary-700) !important;
-  }
-
-  &:hover {
-    color: var(--light-100);
-    background-color: var(--primary-700);
-  }
-
-  &[aria-selected] {
-    opacity: 1;
-  }
-}
-
-.dayDisabled {
-  //color: red;
-  opacity: 1 !important;
-}
-
-.dayHidden {
-  //visibility: hidden;
-}
-
-.dayRangeMiddle {
-  &[aria-selected] {
-    color: var(--color-accent-foreground);
-    background-color: var(--color-accent);
-  }
-}
-
-.daySelected {
-  color: var(--light-100);
-  background-color: var(--primary-900);
-
-  &:hover {
-    background-color: var(--primary-700);
-  }
-
-  &:focus {
-    border: 2px solid var(--primary-300);
-  }
-}
-
-.dayWeekend {
-  color: var(--danger-300, #f23d61);
   transition: all 0.3s ease;
 
-  &:focus {
-    border: 2px solid var(--primary-300, #4c8dff);
+  &:focus-visible:not([disabled]) {
+    border: 2px solid var(--primary-300);
+    color: var(--light-100);
+    background-color: transparent;
   }
 
   &:active {
@@ -131,26 +67,82 @@
   }
 
   &[aria-selected] {
-    border: none;
-    background-color: var(--primary-900);
+    //opacity: 1;
   }
 
   @media (hover: hover) {
     &:hover {
-      color: var(--danger-300, #f23d61);
-      background-color: var(--primary-700);
+      background-color: var(--primary-700) !important;
     }
   }
 }
 
+.dayWeekend {
+  color: var(--danger-300, #f23d61);
+
+  &:focus-visible:not([disabled]) {
+    color: var(--danger-300, #f23d61);
+  }
+
+  &[aria-selected] {
+    color: var(--danger-300, #f23d61);
+  }
+}
+
+.day[disabled]:not(.daySelected) {
+  opacity: 1;
+}
+
 .dayToday {
+  font-weight: 700;
   color: var(--primary-500);
+
+  &[aria-selected] {
+    color: var(--light-100);
+  }
+
+  &:focus-visible:not([disabled]) {
+    color: var(--primary-300);
+  }
+
+  &:active {
+    color: var(--light-100);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--primary-100);
+    }
+  }
+}
+
+//.dayDisabled {
+//  opacity: 1 !important;
+//}
+
+.dayHidden {
+  //visibility: hidden;
+}
+
+//.dayRangeMiddle {
+//  &[aria-selected] {
+//    color: var(--color-accent-foreground);
+//    background-color: var(--color-accent);
+//  }
+//}
+
+.daySelected {
+  background-color: var(--primary-900);
 }
 
 .dayOutside {
   color: var(--light-900);
 
   &[aria-selected] {
+    color: var(--light-100);
+  }
+
+  &:focus-visible:not([disabled]) {
     color: var(--light-900);
   }
 }
