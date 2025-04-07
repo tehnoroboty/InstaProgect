@@ -1,31 +1,41 @@
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
-import { selectIsModalOpen, setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import {
+  selectIsPhotoModalOpen,
+  selectIsPostModalOpen,
+  setIsPhotoModalOpen,
+  setIsPostModalOpen,
+} from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { errorMaxPhoto } from '@/src/widgets/addPost/data'
 
-import s from './createPost.module.scss'
+import s from './createPostPhoto.module.scss'
+
+type ModalType = 'photo' | 'post'
 
 type Props = {
   download: (photo: string) => void
+  modalType: ModalType
 }
 
-export const CreatePost = ({ download }: Props) => {
+export const CreatePostPhoto = ({ download, modalType }: Props) => {
   const dispatch = useDispatch()
-  const [openModal, setOpenModel] = useState<boolean>(true)
   const [additionalModal, setAdditionalModal] = useState<boolean>(false)
 
-  const closeModal = () => {
-    setOpenModel(false)
-  }
+  const isOpen = useSelector(modalType === 'photo' ? selectIsPhotoModalOpen : selectIsPostModalOpen)
 
-  const closeStateModal = () => {
-    dispatch(setIsModalOpen({ isOpen: false }))
+  const closeModal = () => {
+    const action =
+      modalType === 'photo'
+        ? setIsPhotoModalOpen({ isOpen: false })
+        : setIsPostModalOpen({ isOpen: false })
+
+    dispatch(action)
   }
 
   const onCloseAdditionalModal = () => setAdditionalModal(false)
@@ -52,12 +62,7 @@ export const CreatePost = ({ download }: Props) => {
 
   return (
     <div>
-      <Dialog
-        className={s.modal}
-        modalTitle={'Add Photo'}
-        onClose={closeStateModal}
-        open={openModal}
-      >
+      <Dialog className={s.modal} modalTitle={'Add Photo'} onClose={closeModal} open={isOpen}>
         <div className={s.content}>
           <div className={s.imageBox}>
             <ImageOutline height={48} width={48} />

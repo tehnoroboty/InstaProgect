@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Avatar } from '@/src/entities/user/types'
-import { CreatePost } from '@/src/features/createPost/CreatePost'
+import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
+import { selectIsPhotoModalOpen, setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import clsx from 'clsx'
@@ -21,18 +23,23 @@ export const AvatarContainerSettings = ({
   isLoadingDelete,
   myProfileAvatars,
 }: Props) => {
-  const [isModalOpen, setIsModalOpen] = useState(false) // Состояние для управления открытием модалки
   const [newAvatar, setNewAvatar] = useState<null | string>(null) // Состояние для хранения загруженного фото
+  const dispatch = useDispatch()
+  const isPhotoModalOpen = useSelector(selectIsPhotoModalOpen)
 
   // Открытие модалки для выбора фото
   const handleAddPhoto = () => {
-    setIsModalOpen(true)
+    dispatch(setIsPhotoModalOpen({ isOpen: true }))
+  }
+
+  const handleClosePhotoModal = () => {
+    dispatch(setIsPhotoModalOpen({ isOpen: false }))
   }
 
   // Функция для обновления аватара (когда пользователь выбрал фото)
   const handlePhotoSelect = (photoUrl: string) => {
     setNewAvatar(photoUrl) // Устанавливаем загруженное фото
-    setIsModalOpen(false) // Закрываем модалку
+    handleClosePhotoModal()
   }
 
   return (
@@ -51,7 +58,7 @@ export const AvatarContainerSettings = ({
       <Button onClick={handleAddPhoto} type={'button'} variant={'bordered'}>
         {'Add a Profile Photo'}
       </Button>
-      {isModalOpen && <CreatePost download={handlePhotoSelect} />}
+      {isPhotoModalOpen && <CreatePostPhoto download={handlePhotoSelect} modalType={'photo'} />}
     </div>
   )
 }

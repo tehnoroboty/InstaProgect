@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-import { CreatePost } from '@/src/features/createPost/CreatePost'
+import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 
 export const AddPost = () => {
@@ -13,7 +13,7 @@ export const AddPost = () => {
 
   return (
     <>
-      <CreatePost download={createPhoto} />
+      <CreatePostPhoto download={createPhoto} modalType={'post'} />
       {photos.length !== 0 && <CroppingPhoto photos={photos} />}
     </>
   )

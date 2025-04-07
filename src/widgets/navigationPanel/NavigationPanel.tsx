@@ -20,7 +20,7 @@ import {
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { selectIsModalOpen, setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { selectIsPostModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { AddPost } from '@/src/widgets/addPost/AddPost'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
@@ -28,7 +28,7 @@ import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 export const NavigationPanel = () => {
   const { data, isLoading, isSuccess } = useMeQuery()
-  const isOpenModal = useSelector(selectIsModalOpen)
+  const isPostModalOpen = useSelector(selectIsPostModalOpen)
   const dispatch = useDispatch()
 
   if (!isSuccess || !data) {
@@ -37,7 +37,7 @@ export const NavigationPanel = () => {
   const userId = data.userId
 
   const createNewPost = () => {
-    dispatch(setIsModalOpen({ isOpen: true }))
+    dispatch(setIsPostModalOpen({ isOpen: true }))
   }
 
   const menuItems: MenuItemsType = {
@@ -79,7 +79,7 @@ export const NavigationPanel = () => {
     <>
       <MenuMobile items={menuItems.mainActions} />
       <Sidebar items={menuItems} />
-      {isOpenModal && <AddPost />}
+      {isPostModalOpen && <AddPost />}
     </>
   )
 }
