@@ -26,6 +26,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_outside: s.dayOutside,
         day_selected: s.daySelected,
         day_today: s.dayToday,
+        dropdown_month: s.dropdownMonth,
+        dropdown_year: s.dropdownYear,
         head_cell: s.headCell,
         head_row: s.headRow,
         month: s.month,
