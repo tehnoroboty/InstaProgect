@@ -1,30 +1,24 @@
 'use client'
 
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { ResponseTypeCountys } from '@/src/entities/user/types'
 import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
 import { CustomerError } from '@/src/shared/model/api/types'
-import {
-  useDeleteProfileAvatarMutation,
-  useGetMyProfileQuery,
-  usePutUserProfileMutation,
-} from '@/src/shared/model/api/usersApi'
+import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
-import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
-import { Options, SelectBox } from '@/src/shared/ui/select/SelectBox'
+import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import {
-  fetchCitiesForCountry,
-  fetchCountriesAndCities,
-} from '@/src/widgets/generationInformation/fetchCountriesAndCities'
+import { useAvatar } from '@/src/widgets/generationInformation/hooks/useAvatar'
+import { useCountryCityData } from '@/src/widgets/generationInformation/hooks/useCountryCityData'
+import { useDateSelection } from '@/src/widgets/generationInformation/hooks/useDateSelection'
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
+import { ProfileInputsSettings } from '@/src/widgets/settingsInputs/ProfileInputsSettings'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -33,21 +27,7 @@ import s from './generationInformation.module.scss'
 
 export const GenerationInformation = () => {
   const { data: MyProfile, isFetching } = useGetMyProfileQuery()
-  const router = useRouter()
-  const params = useSearchParams()
-  const isFormDirty = params.get('isFormDirty')
-  const [deleteModal, setDeleteModal] = useState<boolean>(false)
-  const [errorAge, setErrorAge] = useState<boolean>(false)
-  const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteProfileAvatarMutation()
-  const [countrysWithCity, setCountrysWithCity] = useState<ResponseTypeCountys>()
-  const [countrys, setCountries] = useState<Options[]>([])
-  const [cites, setCites] = useState<Options[]>([])
-  const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
-  const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
   const [updateProfile, { isLoading: isLoadingUpdate }] = usePutUserProfileMutation()
-  const [alertMessage, setAlertMessage] = useState<null | string>(null)
-  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
-
   const {
     formState: { errors, isDirty, isValid },
     getValues,
@@ -70,19 +50,21 @@ export const GenerationInformation = () => {
     mode: 'onChange',
     resolver: zodResolver(schema),
   })
+  const router = useRouter()
+  const params = useSearchParams()
+  const isFormDirty = params.get('isFormDirty')
+  const [alertMessage, setAlertMessage] = useState<null | string>(null)
+  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
+  const { deleteAvatarHandler, deleteModal, isLoadingDelete, setDeleteModal } = useAvatar(
+    setAlertMessage,
+    setAlertType
+  )
+  const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
+  const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
+  const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
+  const { errorAge, onSelectDate } = useDateSelection(setValue)
 
   useEffect(() => {
-    fetchCountriesAndCities(setCountrysWithCity, setCountries)
-  }, [])
-
-  useEffect(() => {
-    if (selectedCountry && countrysWithCity) {
-      fetchCitiesForCountry(countrysWithCity, selectedCountry, setCites)
-    }
-  }, [selectedCountry])
-
-  useEffect(() => {
-    // Базовые значения из MyProfile (если есть)
     const baseValues = {
       aboutMe: MyProfile?.aboutMe || '',
       city: MyProfile?.city || '',
@@ -93,12 +75,8 @@ export const GenerationInformation = () => {
       userName: MyProfile?.userName || '',
     }
 
-    // Если форма "грязная" (были изменения), берем изменения из
-    // sessionStorage
     if (isFormDirty === 'true') {
       const formUpdates: Partial<FormType> = {}
-
-      // Поля формы, которые могут быть в sessionStorage
       const formFields: Array<keyof FormType> = [
         'userName',
         'firstName',
@@ -113,15 +91,13 @@ export const GenerationInformation = () => {
         const storedValue = sessionStorage.getItem(field)
 
         if (storedValue !== null) {
-          // Особый случай для даты
           if (field === 'dateOfBirth') {
             try {
               const date = new Date(JSON.parse(storedValue))
 
               formUpdates[field] = date.toISOString()
             } catch {
-              // Если не удалось распарсить, оставляем значение
-              // из MyProfile
+              // Если не удалось распарсить, оставляем значение из MyProfile
             }
           } else {
             formUpdates[field] = storedValue
@@ -129,13 +105,8 @@ export const GenerationInformation = () => {
         }
       })
 
-      // Сливаем базовые значения и изменения из storage
-      reset({
-        ...baseValues,
-        ...formUpdates,
-      })
+      reset({ ...baseValues, ...formUpdates })
 
-      // Обновляем выбранные страну/город
       if (formUpdates.country !== undefined) {
         setSelectedCountry(formUpdates.country)
       }
@@ -143,7 +114,6 @@ export const GenerationInformation = () => {
         setSelectedCity(formUpdates.city)
       }
     } else {
-      // Если форма чистая, просто используем данные из MyProfile
       reset(baseValues)
       setSelectedCountry(MyProfile?.country || '')
       setSelectedCity(MyProfile?.city || '')
@@ -154,35 +124,6 @@ export const GenerationInformation = () => {
     const { name, value } = e.target
 
     sessionStorage.setItem(name, value)
-  }
-
-  const deleteAvatarHandler = async () => {
-    try {
-      await deleteAvatar().unwrap()
-    } catch (error) {
-      setAlertMessage('Error! Server is not available!')
-      setAlertType('error')
-    } finally {
-      setDeleteModal(false)
-    }
-  }
-  const onSelectDate = (date: Date | undefined) => {
-    if (date) {
-      const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-      const nowDate = new Date().getFullYear()
-      const selectedDate = utcDate.getFullYear()
-      const age = nowDate - selectedDate
-
-      if (age < 13) {
-        setErrorAge(true)
-      } else {
-        setErrorAge(false)
-        setValue('dateOfBirth', utcDate.toISOString())
-        sessionStorage.setItem('dateOfBirth', JSON.stringify(date))
-      }
-    } else {
-      return
-    }
   }
 
   const onSelectCountyHandler = (value: string) => {
@@ -214,8 +155,6 @@ export const GenerationInformation = () => {
       router.push(`/profile/${MyProfile?.id}/settings`)
     }
   }, [isDirty, isFetching])
-
-  const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoadingUpdate
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -250,7 +189,7 @@ export const GenerationInformation = () => {
     }
   }
 
-  if (isFetching) {
+  if (isFetching || !countrysWithCity) {
     return (
       <div className={s.pageLoading}>
         <Loader />
@@ -269,56 +208,12 @@ export const GenerationInformation = () => {
             myProfileAvatars={MyProfile?.avatars}
           />
           <div className={s.informationBox}>
-            <Input
-              important
-              label={'userName'}
-              placeholder={''}
-              {...register('userName', {
-                onBlur: () => {
-                  trigger('userName'),
-                    handleInputChange({
-                      target: {
-                        name: 'userName',
-                        value: getValues('userName'),
-                      },
-                    })
-                },
-              })}
-              error={errors.userName?.message}
-            />
-            <Input
-              important
-              label={'First Name'}
-              placeholder={''}
-              {...register('firstName', {
-                onBlur: () => {
-                  trigger('firstName'),
-                    handleInputChange({
-                      target: {
-                        name: 'firstName',
-                        value: getValues('firstName'),
-                      },
-                    })
-                },
-              })}
-              error={errors.firstName?.message}
-            />
-            <Input
-              important
-              label={'Last Name'}
-              placeholder={''}
-              {...register('lastName', {
-                onBlur: () => {
-                  trigger('lastName'),
-                    handleInputChange({
-                      target: {
-                        name: 'lastName',
-                        value: getValues('lastName'),
-                      },
-                    })
-                },
-              })}
-              error={errors.lastName?.message}
+            <ProfileInputsSettings
+              errors={errors}
+              getValues={getValues}
+              handleInputChange={handleInputChange}
+              register={register}
+              trigger={trigger}
             />
             <div>
               <DatePicker
@@ -364,7 +259,12 @@ export const GenerationInformation = () => {
         </div>
         <div className={s.otherBox}>
           <hr className={s.hr} />
-          <Button className={s.button} disabled={disabledButton} type={'submit'}>
+          <Button
+            className={s.button}
+            disabled={!isValid || Object.keys(errors).length > 0 || isLoadingUpdate}
+            type={'submit'}
+          >
+            {' '}
             {'Save Changes'}
           </Button>
         </div>
