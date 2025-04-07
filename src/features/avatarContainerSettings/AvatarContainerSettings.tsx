@@ -15,7 +15,6 @@ type Props = {
   deleteModal: () => void
   isLoadingDelete: boolean
   myProfileAvatars: Array<Avatar> | undefined
-  uploadAvatar: (file: File) => void
 }
 
 export const AvatarContainerSettings = ({

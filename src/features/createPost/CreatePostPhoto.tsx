@@ -55,6 +55,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
         setAdditionalModal(true)
       } else {
         download(fileUrl)
+        debugger
         closeModal()
       }
     },

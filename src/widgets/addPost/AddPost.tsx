@@ -8,8 +8,12 @@ export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
 
   const createPhoto = (photo: string) => {
-    setPhotos([...photos, photo])
+    debugger
+
+    return setPhotos(prevPhotos => [...prevPhotos, photo])
   }
+
+  console.log(photos)
 
   return (
     <>
