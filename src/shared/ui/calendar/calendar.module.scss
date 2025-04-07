@@ -29,19 +29,6 @@
     position: relative;
     z-index: 20;
   }
-
-  &:has([aria-selected]) {
-    background-color: var(--color-accent-500);
-
-    &.day-outside {
-      background-color: rgba(var(--color-accent-500-rgb), 0.5);
-    }
-
-    &.day-range-end {
-      border-top-right-radius: 50%;
-      border-bottom-right-radius: 50%;
-    }
-  }
 }
 
 // Стили дней
@@ -56,18 +43,18 @@
 
   transition: all 0.3s ease;
 
+  &:active {
+    background-color: var(--primary-900);
+  }
+
   &:focus-visible:not([disabled]) {
     border: 2px solid var(--primary-300);
     color: var(--light-100);
     background-color: transparent;
   }
 
-  &:active {
-    background-color: var(--primary-900);
-  }
-
   &[aria-selected] {
-    //opacity: 1;
+    color: var(--light-100);
   }
 
   @media (hover: hover) {
@@ -97,16 +84,12 @@
   font-weight: 700;
   color: var(--primary-500);
 
-  &[aria-selected] {
+  &:active {
     color: var(--light-100);
   }
 
   &:focus-visible:not([disabled]) {
     color: var(--primary-300);
-  }
-
-  &:active {
-    color: var(--light-100);
   }
 
   @media (hover: hover) {
@@ -121,27 +104,12 @@
   cursor: default;
 }
 
-.dayHidden {
-  //visibility: hidden;
-}
-
-//.dayRangeMiddle {
-//  &[aria-selected] {
-//    color: var(--color-accent-foreground);
-//    background-color: var(--color-accent);
-//  }
-//}
-
 .daySelected {
   background-color: var(--primary-900);
 }
 
 .dayOutside {
   color: var(--light-900);
-
-  &[aria-selected] {
-    color: var(--light-100);
-  }
 
   &:focus-visible:not([disabled]) {
     color: var(--light-900);
@@ -163,66 +131,17 @@
   display: flex;
 }
 
-// Контейнер месяца (The display: table property prevents flex-direction from having an effect.)
+// Контейнер месяца
 .month {
   display: flex;
   flex-direction: column;
   gap: 26px;
 }
 
-// Контейнеры месяцев (для multi-month)
-.months {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  @media (width >= 640px) {
-    flex-direction: row;
-    gap: 16px;
-  }
-}
-
-// Навигация
-.nav {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.navButton {
-  cursor: pointer;
-
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
-
-  opacity: 0.5;
-  background: transparent;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.navButtonNext {
-  position: absolute;
-
-  //right: 8px;
-}
-
-.navButtonPrev {
-  position: absolute;
-
-  //left: 8px;
-}
-
 // Строка дней
 .row {
   display: flex;
   width: 100%;
-
-  //margin-top: 8px;
   margin-top: 4px;
 }
 
@@ -239,17 +158,11 @@
       padding: 0;
       font-size: 16px;
       line-height: 150%;
-
-      //color: var(--light-900, #8d9094);
     }
   }
 
   tbody td {
     font-size: 16px;
     line-height: 150%;
-
-    //color: var(--light-900, #8d9094);
   }
-
-  //margin-top: 8px;
 }
