@@ -4,7 +4,7 @@ import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
-import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
@@ -30,7 +30,7 @@ export default function ModalPost(props: Props) {
   const numericPostId = postId ? Number(postId) : null
   const queryParams = { postId: numericPostId! }
   const queryOptions = { skip: !numericPostId || !props.publicPost }
-  const { data: profile } = useGetUserProfileQuery(Number(params.userId), {
+  const { data: profile } = useGetUserProfileByIdQuery(Number(params.userId), {
     skip: !Number(params.userId),
   })
   const { data: authPost } = useGetPostQuery(queryParams, queryOptions)

@@ -132,6 +132,7 @@ export type ImageType = {
 export type RequestPostsType = {
   childrenMetadata: { uploadId: string }[]
   description: string
+  userId: number
 }
 
 export type ResponsePostsType = {

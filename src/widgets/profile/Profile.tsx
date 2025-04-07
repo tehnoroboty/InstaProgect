@@ -9,7 +9,7 @@ import {
   useGetPostsQuery,
 } from '@/src/shared/model/api/postsApi'
 import { SortDirection } from '@/src/shared/model/api/types'
-import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
@@ -37,11 +37,12 @@ export const Profile = (props: Props) => {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
-  // получаем информацию профайл
-  const { data: profile } = useGetUserProfileQuery(Number(params.userId), {
-    skip: !Number(params.userId),
-  })
 
+  // получаем информацию профайл
+  const { data: myProfile } = useGetMyProfileQuery()
+  const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {
+    skip: !myProfile?.userName,
+  })
   // получаем посты
   const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
     endCursorPostId: lastPostId || undefined,
@@ -92,7 +93,9 @@ export const Profile = (props: Props) => {
 
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
-      <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
+      {profile && (
+        <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
+      )}
       {isFetchingPosts && <div>Loading ...</div>}
       {!posts ? <div>Пусто</div> : <Posts posts={posts.items} />}
       {isMyProfile && hasMorePosts && <div className={s.loadMore} ref={ref}></div>}

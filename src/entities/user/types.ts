@@ -34,3 +34,20 @@ export type PublicProfileTypes = {
   userMetadata: UserMetadata
   userName: string
 }
+export type ProfileByUserName = {
+  aboutMe: string
+  avatars: Avatar[]
+  city: string
+  country: string
+  followersCount: number
+  followingCount: number
+  isFollowedBy: boolean
+  isFollowing: boolean
+  publicationsCount: number
+  dateOfBirth: string
+  firstName: string
+  id: number
+  lastName: string
+  region: string
+  userName: string
+}

@@ -1,4 +1,4 @@
-import { PublicProfileTypes } from '@/src/entities/user/types'
+import { ProfileByUserName, PublicProfileTypes } from '@/src/entities/user/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -9,7 +9,7 @@ import s from './profileInfo.module.scss'
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: PublicProfileTypes
+  profile: PublicProfileTypes | ProfileByUserName
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
@@ -22,11 +22,18 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const avatarUrl = profile?.avatars?.[0]?.url
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
-  const followingCount = profile?.userMetadata.following
-
-  const followersCount = profile?.userMetadata.followers
-
-  const publicationsCount = profile?.userMetadata.publications
+  const followingCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.following
+      : ((profile as ProfileByUserName)?.followingCount ?? 0)
+  const followersCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.followers
+      : ((profile as ProfileByUserName)?.followersCount ?? 0)
+  const publicationsCount =
+    !authProfile && 'userMetadata' in profile
+      ? profile.userMetadata.publications
+      : ((profile as ProfileByUserName)?.publicationsCount ?? 0)
 
   const onClickFollowingHandler = async () => {
     // TODO: follow unfollow
