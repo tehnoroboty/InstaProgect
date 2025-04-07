@@ -90,7 +90,7 @@
 }
 
 .day[disabled]:not(.daySelected) {
-  opacity: 1;
+  opacity: 0.5;
 }
 
 .dayToday {
@@ -116,9 +116,10 @@
   }
 }
 
-//.dayDisabled {
-//  opacity: 1 !important;
-//}
+.dayDisabled {
+  pointer-events: none;
+  cursor: default;
+}
 
 .dayHidden {
   //visibility: hidden;
