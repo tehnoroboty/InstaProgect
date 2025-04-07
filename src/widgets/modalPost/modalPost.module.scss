@@ -17,7 +17,7 @@
   height: 100%;
 
   & > img,
-  & > div, {
+  & > div {
     width: 50%;
     min-width: auto;
     height: 490px;
@@ -27,7 +27,6 @@
     height: auto;
   }
 }
-
 
 .image {
   width: 100%;

@@ -1,13 +1,14 @@
-
 .itemTitle {
   color: var(--light-100);
 }
 
-.icon g, .icon path {
+.icon g,
+.icon path {
   fill: var(--light-100);
 }
 
-button.item, a.item {
+button.item,
+a.item {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -18,26 +19,27 @@ button.item, a.item {
   color: var(--light-100);
 
   &:active .itemTitle,
-  &:active .icon g, &:active .icon path {
+  &:active .icon g,
+  &:active .icon path {
     color: var(--primary-500);
     fill: var(--primary-500);
   }
 
-
   @media (hover: hover) {
     &:hover .itemTitle,
-    &:hover .icon g, &:hover .icon path {
+    &:hover .icon g,
+    &:hover .icon path {
       color: var(--primary-100);
       fill: var(--primary-100);
     }
   }
-
 }
 
 .active {
   color: var(--primary-500);
 
-  &.icon g, &.icon path {
+  &.icon g,
+  &.icon path {
     color: var(--primary-500);
     fill: var(--primary-500);
   }

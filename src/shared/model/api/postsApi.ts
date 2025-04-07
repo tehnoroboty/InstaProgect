@@ -64,7 +64,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPost: builder.query<Post, { postId: number }>({
-      forceRefetch: ({ currentArg, previousArg }) => currentArg?.postId !== previousArg?.postId,
+      // forceRefetch: ({ currentArg, previousArg }) => currentArg?.postId !== previousArg?.postId,
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
       query: ({ postId }) => ({
         method: 'GET',
@@ -72,9 +72,9 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
-      },
+      // forceRefetch({ currentArg, previousArg }) {
+      //   return currentArg !== previousArg
+      // },
       merge: (currentCache, newItems) => {
         currentCache.items.push(...newItems.items)
       },

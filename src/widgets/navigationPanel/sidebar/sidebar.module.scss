@@ -1,6 +1,6 @@
 .sidebar {
   overflow-y: auto;
-  width: max(220px,20%);
+  width: max(220px, 20%);
   border-right: 1px solid var(--dark-300);
   background-color: var(--dark-700);
 }
@@ -8,7 +8,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap:60px;
+  gap: 60px;
   align-items: center;
 
   width: 100%;
@@ -20,9 +20,8 @@
   margin-top: 120px;
 }
 
-
-@media  (width <=  768px) {
-  .container{
+@media (width <= 768px) {
+  .container {
     display: none;
   }
 }

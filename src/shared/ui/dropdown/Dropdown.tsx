@@ -1,5 +1,5 @@
 'use client'
-import {type ElementType, KeyboardEvent, type ReactNode, useId, useState} from 'react'
+import { type ElementType, KeyboardEvent, type ReactNode, useId, useState } from 'react'
 
 import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
@@ -46,7 +46,7 @@ export const Dropdown = <T extends DropdownMenuItems>(props: Props<T>) => {
     }
 
     return (
-      <DropdownMenu.Item className={s.dropdownItem} key={useId() } onKeyDown={onKeyDownHandler}>
+      <DropdownMenu.Item className={s.dropdownItem} key={useId()} onKeyDown={onKeyDownHandler}>
         {renderItem ? (
           renderItem(item)
         ) : (
