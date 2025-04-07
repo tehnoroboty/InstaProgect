@@ -26,7 +26,7 @@ export const postsApi = baseApi.injectEndpoints({
             },
         }),
         createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
-            invalidatesTags: ['POSTS'],
+            invalidatesTags: () => [{type: "POSTS"}],
             query: body => ({
                 body,
                 method: 'POST',
@@ -47,8 +47,8 @@ export const postsApi = baseApi.injectEndpoints({
             merge: (currentCache, newItems) => {
                 currentCache.items.push(...newItems.items)
             },
-            // Обновляем данные только при изменении аргументов (например, при изменении endCursorPostId)
-            providesTags: (res) => (res ? res.items.map(({id}) => ({type: "POSTS", id})) : ["POSTS"]),
+
+            providesTags: ["POSTS"],
             query: ({endCursorPostId, pageSize, sortBy, sortDirection, userId}) => ({
                 method: 'GET',
                 params: {
@@ -71,14 +71,53 @@ export const postsApi = baseApi.injectEndpoints({
                 method: 'GET',
                 url: `/posts/id/${postId}`,
             }),
+            forceRefetch: ({currentArg, previousArg}) =>
+                currentArg?.postId !== previousArg?.postId,
         }),
         updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
             invalidatesTags: (result, err, {postId}) => [{id: postId, type: 'POST'}],
+            async onQueryStarted({model, postId}, {dispatch, getState, queryFulfilled}) {
+                const patchResult = dispatch(
+                    postsApi.util.updateQueryData('getPost', {postId}, draft => {
+                        if (draft) {
+                            draft.description = model.description
+                        }
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch {
+                    patchResult.undo()
+                }
+            },
             query: ({model, postId}) => ({
                 body: model,
                 method: 'PUT',
                 url: `/posts/${postId}`,
             }),
+        }),
+        deletePost: builder.mutation<void, { postId: number, userId: number }>({
+            async onQueryStarted({postId, userId}, {dispatch, queryFulfilled}) {
+                const patchResult = dispatch(
+                    postsApi.util.updateQueryData('getPosts', {userId}, (draft) => {
+                        const index = draft.items.findIndex(post => post.id === postId);
+                        if (index !== -1) {
+                            draft.items.splice(index, 1);
+                        }
+                    })
+                );
+
+                try {
+                    await queryFulfilled; // Ждем завершения запроса
+                } catch {
+                    patchResult.undo(); // Если запрос не удался, откатываем изменения
+                }
+            },
+            query: ({postId}) => ({
+                method: 'DELETE',
+                url: `/posts/${postId}`,
+            }),
+
         }),
     }),
 })
@@ -90,4 +129,5 @@ export const {
     useGetPostQuery,
     useUpdatePostMutation,
     useGetPostsQuery,
+    useDeletePostMutation
 } = postsApi

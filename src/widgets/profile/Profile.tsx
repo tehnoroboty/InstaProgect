@@ -37,9 +37,9 @@ export const Profile = (props: Props) => {
     // получаем информацию профайл
     const {data: profile,} = useGetUserProfileQuery(
         Number(params.userId),
-        // {
-        //     skip: !meData || isMyProfile,
-        // }
+        {
+            skip: !Number(params.userId),
+        }
     )
 
 
@@ -52,6 +52,7 @@ export const Profile = (props: Props) => {
             sortBy: SORT_BY,
             sortDirection: SORT_DIRECTION,
         },
+        {refetchOnMountOrArgChange: true}
     )
     const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
     const postsCount = posts?.items.length ?? totalCount
@@ -64,15 +65,14 @@ export const Profile = (props: Props) => {
             }
         }
     }, [inView, isFetchingPosts, isMyProfile])
-
     // получаем пост по ID
     const {data: post, isFetching: isFetchingPost} = useGetPostQuery({postId: Number(postId)},
         {
-            skip: modalIsOpen,
+            skip: !postId,
         })
     // получаем комменты по ID
     const {data: comments, isFetching: isFetchingComments} = useGetCommentsQuery({postId: Number(postId)}, {
-        skip: modalIsOpen,
+        skip: !postId,
     })
 
     const closeModal = useCallback(() => {
@@ -86,6 +86,7 @@ export const Profile = (props: Props) => {
             closeModal()
         }
     }, [closeModal, postId])
+
     return (
         <div className = {clsx(s.page, [!authProfile && s.noAuthPage])}>
             <ProfileInfo authProfile = {authProfile} isMyProfile = {isMyProfile} profile = {profile}/>
