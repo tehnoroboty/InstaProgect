@@ -72,9 +72,9 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
-      // forceRefetch({ currentArg, previousArg }) {
-      //   return currentArg !== previousArg
-      // },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
       merge: (currentCache, newItems) => {
         currentCache.items.push(...newItems.items)
       },

@@ -43,16 +43,13 @@ export const Profile = (props: Props) => {
   })
 
   // получаем посты
-  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery(
-    {
-      endCursorPostId: lastPostId || undefined,
-      pageSize: AUTH_PAGE_SIZE,
-      sortBy: SORT_BY,
-      sortDirection: SORT_DIRECTION,
-      userId: Number(params.userId),
-    },
-    { refetchOnMountOrArgChange: true }
-  )
+  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
+    endCursorPostId: lastPostId || undefined,
+    pageSize: lastPostId ? 9 : AUTH_PAGE_SIZE,
+    sortBy: SORT_BY,
+    sortDirection: SORT_DIRECTION,
+    userId: Number(params.userId),
+  })
   const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
   const postsCount = posts?.items.length ?? totalCount
   const hasMorePosts = totalCount > postsCount
@@ -63,7 +60,8 @@ export const Profile = (props: Props) => {
         setLastPostId(posts.items[posts.items.length - 1].id)
       }
     }
-  }, [inView, isFetchingPosts, isMyProfile])
+  }, [inView])
+
   // получаем пост по ID
   const { data: post, isFetching: isFetchingPost } = useGetPostQuery(
     { postId: Number(postId) },
