@@ -38,6 +38,20 @@ export const usersApi = baseApi.injectEndpoints({
         }
       },
     }),
+    updateUserAvatar: builder.mutation<string, { file: File }>({
+      invalidatesTags: ['PROFILE'],
+      query: ({ file }) => {
+        const formData = new FormData()
+
+        formData.append('file', file)
+
+        return {
+          body: formData,
+          method: 'POST',
+          url: 'users/profile/avatar',
+        }
+      },
+    }),
   }),
 })
 
@@ -46,4 +60,5 @@ export const {
   useGetMyProfileQuery,
   useGetUserProfileQuery,
   usePutUserProfileMutation,
+  useUpdateUserAvatarMutation,
 } = usersApi

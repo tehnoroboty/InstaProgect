@@ -24,7 +24,7 @@ export const AvatarContainerSettings = ({
   isLoadingDelete,
   myProfileAvatars,
 }: Props) => {
-  const [newAvatar, setNewAvatar] = useState<null | string>(null) // Состояние для хранения загруженного фото
+  const [newAvatar, setNewAvatar] = useState<string[]>([]) // Состояние для хранения загруженного фото
   const dispatch = useDispatch()
   const isPhotoModalOpen = useSelector(selectIsPhotoModalOpen)
 
@@ -39,7 +39,7 @@ export const AvatarContainerSettings = ({
 
   // Функция для обновления аватара (когда пользователь выбрал фото)
   const handlePhotoSelect = (photoUrl: string) => {
-    setNewAvatar(photoUrl) // Устанавливаем загруженное фото
+    setNewAvatar([photoUrl]) // Устанавливаем загруженное фото
     handleClosePhotoModal()
   }
 
@@ -60,7 +60,7 @@ export const AvatarContainerSettings = ({
         {'Add a Profile Photo'}
       </Button>
       {isPhotoModalOpen && <CreatePostPhoto download={handlePhotoSelect} modalType={'photo'} />}
-      {newAvatar && <CroppingPhotoProfile photos={newAvatar} />}
+      {newAvatar.length > 0 && <CroppingPhotoProfile photos={newAvatar} />}
     </div>
   )
 }

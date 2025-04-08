@@ -3,27 +3,34 @@ import { useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { useDispatch } from 'react-redux'
 
+import { applyCropToAllPhotos } from '@/src/features/croppingPhoto/applyCropToAllPhotos'
 import { PhotoSettings } from '@/src/features/croppingPhoto/types'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { CustomerError } from '@/src/shared/model/api/types'
+import { useUpdateUserAvatarMutation } from '@/src/shared/model/api/usersApi'
 import { setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 
 import s from './croppingPhoto.module.scss'
 
 type Props = {
-  onSave: (croppedPhoto: string) => void
-  photo: string
+  photos: string[]
 }
-export const CroppingPhotoProfile = ({ onSave, photo }: Props) => {
-  const [openModal, setOpenModel] = useState<boolean>(true)
+export const CroppingPhotoProfile = ({ photos }: Props) => {
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
   const dispatch = useDispatch()
+
+  const openModal = useBoolean(true)
   const exitModal = useBoolean()
 
-  const closeStateModal = () => {
-    dispatch(setIsPhotoModalOpen({ isOpen: false }))
-  }
+  const photo = photos[0] ?? ''
+
+  const [localPhoto, setLocalPhoto] = useState<string>(photo)
 
   const [photoSettings, setPhotoSettings] = useState<PhotoSettings>({
     crop: { x: 0, y: 0 },
@@ -32,19 +39,57 @@ export const CroppingPhotoProfile = ({ onSave, photo }: Props) => {
     zoomLevel: 1,
   })
 
+  const [updateAvatar, { isError, isLoading }] = useUpdateUserAvatarMutation()
+
+  const closeStateModal = () => {
+    dispatch(setIsPhotoModalOpen({ isOpen: false }))
+  }
+
+  const onSaveClick = async () => {
+    try {
+      await applyCropToAllPhotos([localPhoto], { 0: photoSettings }, async updatedPhotos => {
+        setLocalPhoto(updatedPhotos[0])
+
+        const blob = await fetch(updatedPhotos[0]).then(res => res.blob())
+        const file = new File([blob], 'avatar.jpg', { type: blob.type })
+
+        await updateAvatar({ file }).unwrap()
+
+        openModal.setFalse()
+        dispatch(setIsPhotoModalOpen({ isOpen: false }))
+      })
+    } catch (error) {
+      const err = error as CustomerError
+      const errorMessage = err.data?.messages[0]
+
+      setErrorMessage(errorMessage?.message)
+    }
+  }
+
   const updatePhotoSettings = (updates: Partial<PhotoSettings>) => {
-    setPhotoSettings(prev => ({ ...prev, ...updates }))
+    setPhotoSettings(prev => ({
+      ...prev,
+      ...updates,
+    }))
   }
 
   return (
     <>
+      {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
+
       <Dialog
         className={s.modal}
         modalTitle={'Add a Profile Photo'}
         onClose={closeStateModal}
-        open={openModal}
+        open={openModal.value}
       >
-        <div className={s.content}>
+        {isLoading && (
+          <div className={s.loading}>
+            <Loader />
+          </div>
+        )}
+        {/*<div className={s.content}>*/}
+        <div className={s.contentModal}>
           <Cropper
             aspect={photoSettings.size}
             classes={{
@@ -53,23 +98,24 @@ export const CroppingPhotoProfile = ({ onSave, photo }: Props) => {
               mediaClassName: s.media,
             }}
             crop={photoSettings.crop}
-            image={photo}
+            image={localPhoto}
             maxZoom={2}
             minZoom={0.8}
             objectFit={'cover'}
-            onCropChange={newCrop => updatePhotoSettings({ crop: newCrop })}
+            onCropChange={crop => updatePhotoSettings({ crop })}
             onCropComplete={(_, croppedAreaPixels) => updatePhotoSettings({ croppedAreaPixels })}
             showGrid={false}
             zoom={photoSettings.zoomLevel}
           />
+          {/*</div>*/}
+          <Button className={s.saveBth} onClick={onSaveClick} variant={'transparent'}>
+            {'Save'}
+          </Button>
         </div>
-        <Button className={s.saveBth} onClick={handleNextClick} variant={'transparent'}>
-          {'Save'}
-        </Button>
       </Dialog>
       <ExitModal
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => dispatch(setIsPhotoModalOpen({ isOpen: false }))}
+        onCloseParentModal={closeStateModal}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />
