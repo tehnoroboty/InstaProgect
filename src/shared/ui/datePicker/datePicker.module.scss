@@ -1,4 +1,6 @@
 .datePickerBtn {
+  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,16 +17,28 @@
 
   background-color: var(--dark-700);
 
-  &:hover {
-    border-color: var(--light-900);
-    color: var(--light-900);
+  &:active {
+    border: 1px solid var(--dark-300);
+    background-color: var(--dark-500);
+  }
+
+  &:focus-visible {
+    border: 1px solid transparent;
+    background-color: var(--dark-500);
+    outline: 2px solid var(--primary-700);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border: 1px solid var(--dark-100);
+      background-color: var(--dark-500);
+    }
   }
 }
 
-.errorBtn{
+.errorBtn {
   border: 1px solid var(--danger-500);
 }
-
 
 .content {
   pointer-events: auto;
@@ -38,7 +52,7 @@
 
   color: var(--dark-100);
 
-  background-color: var(--dark-700);
+  background-color: var(--dark-500);
 }
 
 .label {
