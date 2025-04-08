@@ -29,7 +29,7 @@ export const postsApi = baseApi.injectEndpoints({
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
       invalidatesTags: ['POSTS'],
       async onQueryStarted({}, { dispatch, queryFulfilled, getState }) {
-        const patchResult = dispatch(dispatch(setLastPostId({ lastPostId: null })))
+        const patchResult = dispatch(setLastPostId({ lastPostId: null }))
         try {
           await queryFulfilled
         } catch {}
