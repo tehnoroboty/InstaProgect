@@ -17,6 +17,8 @@ import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
+import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const AUTH_PAGE_SIZE = 8
 const PUBLIC_PAGE_SIZE = 12
@@ -25,25 +27,24 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 type Props = {}
 
-// @ts-ignore
 export const Profile = (props: Props) => {
+  const dispatch = useDispatch()
   const { inView, ref } = useInView({ threshold: 1 })
   const params = useParams<{ userId: string }>()
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const [lastPostId, setLastPostId] = useState<null | number>(null)
   const router = useRouter()
   const { data: meData } = useMeQuery()
   const authProfile = !!meData
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
-
   // получаем информацию профайл
   const { data: myProfile } = useGetMyProfileQuery()
   const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {
     skip: !myProfile?.userName,
   })
   // получаем посты
+  const lastPostId = useSelector(selectLastPostId)
   const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
     endCursorPostId: lastPostId || undefined,
     pageSize: lastPostId ? 9 : AUTH_PAGE_SIZE,
@@ -57,12 +58,13 @@ export const Profile = (props: Props) => {
 
   useEffect(() => {
     if (hasMorePosts && inView && isMyProfile && !isFetchingPosts) {
-      if (posts) {
-        setLastPostId(posts.items[posts.items.length - 1].id)
+      if (posts?.items[posts.items.length - 1] === lastPostId) {
+        dispatch(setLastPostId({ lastPostId: null }))
+      } else {
+        dispatch(setLastPostId({ lastPostId: posts?.items[posts.items.length - 1]?.id }))
       }
     }
   }, [inView])
-
   // получаем пост по ID
   const { data: post, isFetching: isFetchingPost } = useGetPostQuery(
     { postId: Number(postId) },

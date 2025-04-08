@@ -9,6 +9,7 @@ import {
   ResponsePostsType,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
+import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -26,7 +27,13 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
-      invalidatesTags: () => [{ type: 'POSTS' }],
+      invalidatesTags: ['POSTS'],
+      async onQueryStarted({}, { dispatch, queryFulfilled, getState }) {
+        const patchResult = dispatch(dispatch(setLastPostId({ lastPostId: null })))
+        try {
+          await queryFulfilled
+        } catch {}
+      },
       query: body => ({
         body,
         method: 'POST',
@@ -64,7 +71,6 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPost: builder.query<Post, { postId: number }>({
-      // forceRefetch: ({ currentArg, previousArg }) => currentArg?.postId !== previousArg?.postId,
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
       query: ({ postId }) => ({
         method: 'GET',
@@ -76,9 +82,15 @@ export const postsApi = baseApi.injectEndpoints({
         return currentArg !== previousArg
       },
       merge: (currentCache, newItems) => {
-        currentCache.items.push(...newItems.items)
+        const intersection = currentCache.items.filter(obj1 =>
+          newItems.items.some(obj2 => obj1.id === obj2.id)
+        )
+        if (intersection.length === 0) {
+          currentCache.items.push(...newItems.items)
+        } else {
+          currentCache.items = newItems.items
+        }
       },
-
       providesTags: ['POSTS'],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
         method: 'GET',

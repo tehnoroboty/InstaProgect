@@ -31,6 +31,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
+import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 type Props = {
   photos: string[]
@@ -76,7 +77,9 @@ export const PublishPhoto = ({ photos }: Props) => {
         }
 
         await addPost(publishData).unwrap()
+
         openModal.setFalse()
+
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
       } else {
         console.warn('No files were uploaded successfully.')
