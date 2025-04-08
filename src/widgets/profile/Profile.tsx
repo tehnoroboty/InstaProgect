@@ -27,7 +27,7 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 type Props = {}
 
-export const Profile = (props: Props) => {
+export const Profile = (_props: Props) => {
   const dispatch = useDispatch()
   const { inView, ref } = useInView({ threshold: 1 })
   const params = useParams<{ userId: string }>()
@@ -66,14 +66,14 @@ export const Profile = (props: Props) => {
     }
   }, [inView])
   // получаем пост по ID
-  const { data: post, isFetching: isFetchingPost } = useGetPostQuery(
+  const { data: post } = useGetPostQuery(
     { postId: Number(postId) },
     {
       skip: !postId,
     }
   )
   // получаем комменты по ID
-  const { data: comments, isFetching: isFetchingComments } = useGetCommentsQuery(
+  const { data: comments } = useGetCommentsQuery(
     { postId: Number(postId) },
     {
       skip: !postId,
