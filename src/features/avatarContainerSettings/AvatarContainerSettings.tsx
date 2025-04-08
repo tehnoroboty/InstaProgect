@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Avatar } from '@/src/entities/user/types'
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
+import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
+import { CroppingPhotoProfile } from '@/src/features/croppingPhoto/CroppingPhotoProfile'
 import { selectIsPhotoModalOpen, setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -58,6 +60,7 @@ export const AvatarContainerSettings = ({
         {'Add a Profile Photo'}
       </Button>
       {isPhotoModalOpen && <CreatePostPhoto download={handlePhotoSelect} modalType={'photo'} />}
+      {newAvatar && <CroppingPhotoProfile photos={newAvatar} />}
     </div>
   )
 }
