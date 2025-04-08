@@ -1,0 +1,42 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.pageLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.box {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  height: clamp(120px, 3vh, 200px);
+  padding: 18px 24px;
+  border: 1px solid var(--dark-300);
+  border-radius: 2px;
+
+  background-color: var(--dark-500);
+}
+
+.btn {
+  display: flex;
+  gap:10px;
+  align-items: center;
+  justify-self: flex-end;
+}
+
+.content{
+  display: flex;
+  flex-direction: column;
+
+  span:first-child{
+    padding-bottom: 13px;
+  }
+  
+}
