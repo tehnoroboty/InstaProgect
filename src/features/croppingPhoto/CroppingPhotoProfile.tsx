@@ -80,7 +80,9 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
       <Dialog
         className={s.modal}
         modalTitle={'Add a Profile Photo'}
-        onClose={closeStateModal}
+        onClose={() => {
+          exitModal.setTrue()
+        }}
         open={openModal.value}
       >
         {isLoading && (
