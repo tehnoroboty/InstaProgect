@@ -3,18 +3,21 @@
 import * as React from 'react'
 import { DayPicker } from 'react-day-picker'
 
+import { ArrowIosBackOutline, ArrowIosForwardOutline } from '@/src/shared/assets/componentsIcons'
 import clsx from 'clsx'
 
 import 'react-day-picker/src/style.css'
 
 import s from './calendar.module.scss'
 
+import { Button } from '../button/Button'
+
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
-      captionLayout={'dropdown'}
+      captionLayout={'dropdown-buttons'}
       className={clsx(s.calendarContainer, className)}
       classNames={{
         caption: s.caption,
@@ -26,14 +29,27 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_outside: s.dayOutside,
         day_selected: s.daySelected,
         day_today: s.dayToday,
-        dropdown_month: s.dropdownMonth,
-        dropdown_year: s.dropdownYear,
+        dropdown_month: s.dropdownSelect,
+        dropdown_year: s.dropdownSelect,
         head_cell: s.headCell,
         head_row: s.headRow,
         month: s.month,
+        // nav: s.nav,
+        //nav_button: clsx(Button({ variant: 'transparent' }), s.navButton),
+        nav_button: s.navButton,
+        // nav_button_next: s.navButtonNext,
+        // nav_button_previous: s.navButtonPrev,
         row: s.row,
         table: s.table,
         ...classNames,
+      }}
+      components={{
+        IconLeft: ({ className, ...props }) => (
+          <ArrowIosBackOutline className={clsx(s.arrowIcon, className)} {...props} />
+        ),
+        IconRight: ({ className, ...props }) => (
+          <ArrowIosForwardOutline className={clsx(s.arrowIcon, className)} {...props} />
+        ),
       }}
       fixedWeeks
       fromYear={1900}
