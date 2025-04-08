@@ -10,8 +10,6 @@ import 'react-day-picker/src/style.css'
 
 import s from './calendar.module.scss'
 
-import { Button } from '../button/Button'
-
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
@@ -34,11 +32,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         head_cell: s.headCell,
         head_row: s.headRow,
         month: s.month,
-        // nav: s.nav,
-        //nav_button: clsx(Button({ variant: 'transparent' }), s.navButton),
         nav_button: s.navButton,
-        // nav_button_next: s.navButtonNext,
-        // nav_button_previous: s.navButtonPrev,
         row: s.row,
         table: s.table,
         ...classNames,
