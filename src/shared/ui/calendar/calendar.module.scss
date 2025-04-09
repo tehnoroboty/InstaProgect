@@ -146,9 +146,19 @@
 
 .dropdownSelect {
   cursor: pointer;
+
   position: relative;
+
   display: inline-flex;
   align-items: center;
+
+  transition: all 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 }
 
 // Заголовки дней недели
