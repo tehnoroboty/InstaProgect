@@ -8,7 +8,7 @@ import { PhotoSettings } from '@/src/features/croppingPhoto/types'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { CustomerError } from '@/src/shared/model/api/types'
 import { useUpdateUserAvatarMutation } from '@/src/shared/model/api/usersApi'
-import { setIsPhotoModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -101,8 +101,6 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
               }}
               crop={photoSettings.crop}
               image={localPhoto}
-              maxZoom={2}
-              minZoom={0.8}
               objectFit={'cover'}
               onCropChange={crop => updatePhotoSettings({ crop })}
               onCropComplete={(_, croppedAreaPixels) => updatePhotoSettings({ croppedAreaPixels })}

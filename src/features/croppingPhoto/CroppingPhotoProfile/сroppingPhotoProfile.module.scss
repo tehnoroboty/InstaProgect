@@ -1,7 +1,4 @@
 .modal {
-  display: flex;
-  flex-direction: column;
-
   width: 100%;
   max-width: 492px;
   height: fit-content;
@@ -18,7 +15,8 @@
   gap: clamp(30px, 6vh, 100px);
 
   height: fit-content;
-  border: 1px solid var(--primary-500);
+
+  //border: 1px solid var(--primary-500);
   border-radius: 2px;
 
   //padding-top: 72px;
@@ -30,7 +28,7 @@
 
 .contentModal {
   position: relative;
-  width: 70%;
+  width: 53%;
   height: 50vh;
   margin: 0 auto;
 
@@ -45,8 +43,7 @@
 
   background-color: rgb(0 0 0 / 50%); /* тёмный полупрозрачный фон */
 
-  mask-image: radial-gradient(circle at center, transparent 150px, black 160px);
-  mask-image: radial-gradient(circle at center, transparent 150px, black 160px);
+  mask-image: radial-gradient(circle at center, transparent 160px, black 160px);
 }
 
 .container {
