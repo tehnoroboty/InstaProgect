@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { ModalType } from '@/src/features/croppingPhoto/types'
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
 import {
@@ -15,8 +16,6 @@ import { Dialog } from '@/src/shared/ui/dialog'
 import { errorMaxPhoto } from '@/src/widgets/addPost/data'
 
 import s from './createPostPhoto.module.scss'
-
-type ModalType = 'photo' | 'post'
 
 type Props = {
   download: (photo: string) => void

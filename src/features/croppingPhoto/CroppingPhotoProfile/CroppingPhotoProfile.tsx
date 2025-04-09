@@ -8,14 +8,14 @@ import { PhotoSettings } from '@/src/features/croppingPhoto/types'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { CustomerError } from '@/src/shared/model/api/types'
 import { useUpdateUserAvatarMutation } from '@/src/shared/model/api/usersApi'
-import { setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { setIsPhotoModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 
-import s from './croppingPhoto.module.scss'
+import s from './сroppingPhotoProfile.module.scss'
 
 type Props = {
   photos: string[]
@@ -43,6 +43,7 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
 
   const closeStateModal = () => {
     dispatch(setIsPhotoModalOpen({ isOpen: false }))
+    openModal.setFalse()
   }
 
   const onSaveClick = async () => {
@@ -76,7 +77,11 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
   return (
     <>
       {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
-
+      {isLoading && (
+        <div className={s.loading}>
+          <Loader />
+        </div>
+      )}
       <Dialog
         className={s.modal}
         modalTitle={'Add a Profile Photo'}
@@ -85,37 +90,33 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
         }}
         open={openModal.value}
       >
-        {isLoading && (
-          <div className={s.loading}>
-            <Loader />
+        <div className={s.contentBox}>
+          <div className={s.contentModal}>
+            <Cropper
+              aspect={photoSettings.size}
+              classes={{
+                containerClassName: s.container,
+                cropAreaClassName: s.cropArea,
+                mediaClassName: s.media,
+              }}
+              crop={photoSettings.crop}
+              image={localPhoto}
+              maxZoom={2}
+              minZoom={0.8}
+              objectFit={'cover'}
+              onCropChange={crop => updatePhotoSettings({ crop })}
+              onCropComplete={(_, croppedAreaPixels) => updatePhotoSettings({ croppedAreaPixels })}
+              showGrid={false}
+              zoom={photoSettings.zoomLevel}
+            />
           </div>
-        )}
-        {/*<div className={s.content}>*/}
-        <div className={s.contentModal}>
-          <Cropper
-            aspect={photoSettings.size}
-            classes={{
-              containerClassName: s.container,
-              cropAreaClassName: s.cropArea,
-              mediaClassName: s.media,
-            }}
-            crop={photoSettings.crop}
-            image={localPhoto}
-            maxZoom={2}
-            minZoom={0.8}
-            objectFit={'cover'}
-            onCropChange={crop => updatePhotoSettings({ crop })}
-            onCropComplete={(_, croppedAreaPixels) => updatePhotoSettings({ croppedAreaPixels })}
-            showGrid={false}
-            zoom={photoSettings.zoomLevel}
-          />
-          {/*</div>*/}
-          <Button className={s.saveBth} onClick={onSaveClick} variant={'transparent'}>
-            {'Save'}
-          </Button>
         </div>
+        <Button className={s.saveBth} onClick={onSaveClick} variant={'primary'}>
+          {'Save'}
+        </Button>
       </Dialog>
       <ExitModal
+        modalType={'photo'}
         onCloseModal={() => exitModal.setFalse()}
         onCloseParentModal={closeStateModal}
         onSaveDraft={() => {}}
