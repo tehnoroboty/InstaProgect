@@ -42,6 +42,8 @@ export const AvatarContainerSettings = ({
     handleClosePhotoModal()
   }
 
+  console.log(isPhotoModalOpen)
+
   return (
     <div className={s.photoBox}>
       <div className={s.avatarContainer}>
@@ -59,7 +61,7 @@ export const AvatarContainerSettings = ({
         {'Add a Profile Photo'}
       </Button>
       {isPhotoModalOpen && <CreatePostPhoto download={handlePhotoSelect} modalType={'photo'} />}
-      {newAvatar.length > 0 && <CroppingPhotoProfile photos={newAvatar} />}
+      {newAvatar.length > 0 && <CroppingPhotoProfile key={newAvatar[0]} photos={newAvatar} />}
     </div>
   )
 }

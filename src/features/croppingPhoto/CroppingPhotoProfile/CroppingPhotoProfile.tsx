@@ -25,8 +25,8 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
 
   const dispatch = useDispatch()
 
-  const openModal = useBoolean(true)
-  const exitModal = useBoolean()
+  const [openModal, setOpenModal] = useState(true)
+  const [exitModal, setExitModal] = useState(false)
 
   const photo = photos[0] ?? ''
 
@@ -43,7 +43,7 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
 
   const closeStateModal = () => {
     dispatch(setIsPhotoModalOpen({ isOpen: false }))
-    openModal.setFalse()
+    setOpenModal(false)
   }
 
   const onSaveClick = async () => {
@@ -56,7 +56,7 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
 
         await updateAvatar({ file }).unwrap()
 
-        openModal.setFalse()
+        setOpenModal(false)
         dispatch(setIsPhotoModalOpen({ isOpen: false }))
       })
     } catch (error) {
@@ -86,9 +86,9 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
         className={s.modal}
         modalTitle={'Add a Profile Photo'}
         onClose={() => {
-          exitModal.setTrue()
+          setExitModal(true)
         }}
-        open={openModal.value}
+        open={openModal}
       >
         <div className={s.contentBox}>
           <div className={s.contentModal}>
@@ -115,10 +115,10 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         modalType={'photo'}
-        onCloseModal={() => exitModal.setFalse()}
+        onCloseModal={() => setExitModal(false)}
         onCloseParentModal={closeStateModal}
-        onSaveDraft={() => {}}
-        open={exitModal.value}
+        onSaveDraft={() => setExitModal(false)}
+        open={exitModal}
       />
     </>
   )

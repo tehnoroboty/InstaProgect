@@ -82,7 +82,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
               <input {...getInputProps()} />
               {'Select from Computer'}
             </Button>
-            <Button variant={'bordered'}>{'Open Draft'}</Button>
+            {modalType !== 'photo' && <Button variant={'bordered'}>{'Open Draft'}</Button>}
           </div>
         </div>
       </Dialog>
