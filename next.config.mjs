@@ -5,11 +5,8 @@ const nextConfig = {
             ? 'https://momenttify.store'
             : 'http://localhost:3000',
     },
-    images: {//TODO!: временное решение для тестов, потом удалить надо!
-        domains: [
-            'images.squarespace-cdn.com',
-            'catastic.pet',
-        ],
+    images: {
+        domains: ['staging-it-incubator.s3.eu-central-1.amazonaws.com']
     },
     webpack(config) {
         const fileLoaderRule = config.module.rules.find((rule) =>
