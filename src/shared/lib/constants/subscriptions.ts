@@ -9,7 +9,7 @@ export enum SelectedSubscriptionType {
   WEEKLY = 'WEEKLY',
 }
 
-export enum sistemPaymentType {
+export enum SistemPaymentType {
   CREDIT_CARD = 'CREDIT_CARD',
   PAYPAL = 'PAYPAL',
   SPRITE = 'STRIPE',

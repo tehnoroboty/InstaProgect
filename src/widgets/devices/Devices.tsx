@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { DeviceType } from '@/src/entities/devices'
+import { DeviceType } from '@/src/entities/devices/devices'
 import {
   Brave,
   Chrome,

@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/src/shared/assets/componentsIcons'
 import {
   SelectedSubscriptionType,
+  SistemPaymentType,
   SubscriptionType,
-  sistemPaymentType,
 } from '@/src/shared/lib/constants/subscriptions'
+import { useCreateSubscriptionMutation } from '@/src/shared/model/api/subscriptionsApi'
+import { ErrorDataType } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { CheckBox } from '@/src/shared/ui/checkbox/CheckBox'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
@@ -16,11 +18,16 @@ import clsx from 'clsx'
 import s from './accountManagement.module.scss'
 
 export const AccountManagement = () => {
+  const [paySubscription, { isError, isLoading: isLoadingPay, isSuccess }] =
+    useCreateSubscriptionMutation()
+  const [alertMessage, setAlertMessage] = useState<null | string>(null)
   const [selectedType, setSelectedType] = useState<SubscriptionType>(SubscriptionType.Personal)
   const [selectedSubscription, setSelectedSubscription] = useState<SelectedSubscriptionType>(
     SelectedSubscriptionType.DAY
   )
-  const [paymentSystem, setPaymentSystem] = useState<null | sistemPaymentType>(null)
+  const [paymentSystem, setPaymentSystem] = useState<SistemPaymentType>(
+    SistemPaymentType.CREDIT_CARD
+  )
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [modalChecked, setModalChecked] = useState(false)
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +36,28 @@ export const AccountManagement = () => {
 
   const handleSelectedSubscriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSubscription(event.currentTarget.value as SelectedSubscriptionType)
+  }
+  const onClickPayment = (sistemPayment: SistemPaymentType) => {
+    setOpenModal(true)
+    setPaymentSystem(sistemPayment)
+  }
+
+  const buySubscription = async () => {
+    try {
+      const dataForPay = {
+        amount: 0,
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        paymentType: paymentSystem,
+        typeSubscription: selectedSubscription,
+      }
+
+      const res = await paySubscription(dataForPay).unwrap()
+    } catch (err) {
+      const error = err as ErrorDataType
+
+      setAlertMessage(error.messages[0].message)
+      console.log(err)
+    }
   }
 
   return (
@@ -113,7 +142,7 @@ export const AccountManagement = () => {
           <div className={s.subscriptionPay}>
             <Button
               className={s.subscriptionPayBtn}
-              onClick={() => setOpenModal(true)}
+              onClick={() => onClickPayment(SistemPaymentType.PAYPAL)}
               variant={'bordered'}
             >
               <PaypalSvgrepoCom4 height={'100%'} viewBox={'-1 3 26 10'} width={'100%'} />
@@ -123,7 +152,9 @@ export const AccountManagement = () => {
             </Typography>
             <Button
               className={s.subscriptionPayBtn}
-              onClick={() => setOpenModal(true)}
+              onClick={() => {
+                onClickPayment(SistemPaymentType.SPRITE)
+              }}
               variant={'bordered'}
             >
               <StripeSvgrepoCom4 height={'100%'} viewBox={'0 3 24 10'} width={'100%'} />
@@ -150,7 +181,9 @@ export const AccountManagement = () => {
               labelProps={{ className: s.labelClass }}
               onChange={() => setModalChecked(!modalChecked)}
             />
-            <Button disabled={!modalChecked}>{'OK'}</Button>
+            <Button disabled={!modalChecked || isLoadingPay} onClick={buySubscription}>
+              {'OK'}
+            </Button>
           </div>
         </div>
       </Dialog>

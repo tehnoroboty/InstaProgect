@@ -1,4 +1,4 @@
-import { ResponseDevicesType } from '@/src/entities/devices'
+import { ResponseDevicesType } from '@/src/entities/devices/devices'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { BaseQueryArg } from '@reduxjs/toolkit/query'
 
