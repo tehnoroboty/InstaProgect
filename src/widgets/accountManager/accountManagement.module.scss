@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.dopBox{
+.dopBox {
   margin: 0 0 13px;
 }
 
@@ -14,7 +14,7 @@
   gap: 64px;
 
   height: fit-content;
-min-height: 120px;
+  min-height: 120px;
   margin-top: 18px;
   padding: 18px 24px;
   border: 1px solid var(--dark-300);
@@ -24,13 +24,13 @@ min-height: 120px;
 
 }
 
-.content{
+.content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.contentText{
+.contentText {
   font-family: var(--font-family), serif;
   font-size: var(--font-size-s);
   font-weight: var(--font-weight-semi-bold);
@@ -47,15 +47,15 @@ min-height: 120px;
   margin-top: 30px;
 }
 
-.subscriptionPay{
+.subscriptionPay {
   display: flex;
-  gap:54px;
+  gap: 54px;
   align-items: center;
-justify-self: flex-end;
+  justify-self: flex-end;
 
   padding-top: 24px;
 
-  .subscriptionPayBtn{
+  .subscriptionPayBtn {
     width: clamp(96px, 10vw, 150px);
     height: clamp(64px, 13vh, 120px);
     padding: 0;
@@ -63,4 +63,25 @@ justify-self: flex-end;
 
     background-color: var(--dark-500);
   }
+}
+
+.modal {
+  width: clamp(320px, 30vw, 800px);
+  min-width: 30%;
+}
+
+.labelClass {
+  text-transform: none;
+}
+
+.modalContent{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 24px;
+}
+
+.modalAction {
+  display: flex;
+  justify-content: space-between;
 }
