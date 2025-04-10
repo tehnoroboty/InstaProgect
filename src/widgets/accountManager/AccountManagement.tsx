@@ -75,29 +75,27 @@ export const AccountManagement = () => {
           </Typography>
           {currentSubscription.data.map(subscription => {
             return (
-              <>
-                <div className={clsx(s.box, s.dopBox)}>
-                  <div className={s.content}>
-                    <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
-                      {'Expire at'}
-                    </Typography>
-                    <Typography as={'span'} className={s.contentText}>
-                      {parseISOAndFormat(subscription.dateOfPayment)}
-                    </Typography>
-                  </div>
-                  <div className={s.content}>
-                    <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
-                      {'Next payment'}
-                    </Typography>
-                    <Typography as={'span'} className={s.contentText}>
-                      {parseISOAndFormat(subscription.endDateOfSubscription)}
-                    </Typography>
-                  </div>
+              <div className={clsx(s.box, s.dopBox)} key={subscription.subscriptionId}>
+                <div className={s.content}>
+                  <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
+                    {'Expire at'}
+                  </Typography>
+                  <Typography as={'span'} className={s.contentText}>
+                    {parseISOAndFormat(subscription.dateOfPayment)}
+                  </Typography>
                 </div>
-                <CheckBox checked={subscription.autoRenewal} label={'Auto-Renewal'} />
-              </>
+                <div className={s.content}>
+                  <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
+                    {'Next payment'}
+                  </Typography>
+                  <Typography as={'span'} className={s.contentText}>
+                    {parseISOAndFormat(subscription.endDateOfSubscription)}
+                  </Typography>
+                </div>
+              </div>
             )
           })}
+          <CheckBox label={'Auto-Renewal'} />
         </div>
       )}
 
