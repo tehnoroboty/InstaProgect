@@ -1,12 +1,14 @@
 'use client'
 
+import type { PublicPostsResponse } from '@/src/shared/model/api/posts/types'
+
 import { PropsWithChildren, useEffect } from 'react'
 
 import { publicPostsApi } from '@/src/shared/model/api/posts/publicPostsApi'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 
 type Props = {
-  posts: import('@/src/shared/model/api/posts/types').PublicPostsResponse
+  posts: PublicPostsResponse
   usersNumber: number
 } & PropsWithChildren
 
