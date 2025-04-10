@@ -15,7 +15,7 @@ import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
-import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -231,8 +231,9 @@ export const CroppingPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
+        modalType={'post'}
         onCloseModal={() => exitModal.setFalse()}
-        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
+        onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />

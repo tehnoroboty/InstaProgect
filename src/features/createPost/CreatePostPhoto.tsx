@@ -1,22 +1,32 @@
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { ModalType } from '@/src/features/croppingPhoto/types'
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
-import { selectIsModalOpen, setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import {
+  selectIsPhotoModalOpen,
+  selectIsPostModalOpen,
+  setIsPhotoModalOpen,
+  setIsPostModalOpen,
+} from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { errorMaxPhoto } from '@/src/widgets/addPost/data'
 
-import s from './createPost.module.scss'
+import s from './createPostPhoto.module.scss'
 
 type Props = {
   download: (photo: string) => void
+  modalType: ModalType
 }
 
-export const CreatePost = ({ download }: Props) => {
+export const CreatePostPhoto = ({ download, modalType }: Props) => {
   const dispatch = useDispatch()
+
+  const isOpen = useSelector(modalType === 'photo' ? selectIsPhotoModalOpen : selectIsPostModalOpen)
+
   const [openModal, setOpenModel] = useState<boolean>(true)
   const [additionalModal, setAdditionalModal] = useState<boolean>(false)
 
@@ -25,7 +35,12 @@ export const CreatePost = ({ download }: Props) => {
   }
 
   const closeStateModal = () => {
-    dispatch(setIsModalOpen({ isOpen: false }))
+    const action =
+      modalType === 'photo'
+        ? setIsPhotoModalOpen({ isOpen: false })
+        : setIsPostModalOpen({ isOpen: false })
+
+    dispatch(action)
   }
 
   const onCloseAdditionalModal = () => setAdditionalModal(false)
@@ -54,7 +69,7 @@ export const CreatePost = ({ download }: Props) => {
     <div>
       <Dialog
         className={s.modal}
-        modalTitle={'Add Photo'}
+        modalTitle={modalType === 'photo' ? 'Add a Profile Photo' : 'Add Photo'}
         onClose={closeStateModal}
         open={openModal}
       >
@@ -67,7 +82,7 @@ export const CreatePost = ({ download }: Props) => {
               <input {...getInputProps()} />
               {'Select from Computer'}
             </Button>
-            <Button variant={'bordered'}>{'Open Draft'}</Button>
+            {modalType !== 'photo' && <Button variant={'bordered'}>{'Open Draft'}</Button>}
           </div>
         </div>
       </Dialog>

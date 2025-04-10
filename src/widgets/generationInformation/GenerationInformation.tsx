@@ -206,6 +206,13 @@ export const GenerationInformation = () => {
             deleteModal={() => setDeleteModal(true)}
             isLoadingDelete={isLoadingDelete}
             myProfileAvatars={MyProfile?.avatars}
+            uploadAvatar={file => {
+              // Здесь загрузка файла через RTK Query или fetch/post
+              const formData = new FormData()
+
+              formData.append('file', file)
+              // dispatch(uploadAvatar(formData))
+            }}
           />
           <div className={s.informationBox}>
             <ProfileInputsSettings

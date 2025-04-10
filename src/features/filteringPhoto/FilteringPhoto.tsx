@@ -7,7 +7,7 @@ import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
-import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -148,7 +148,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         onCloseModal={exitModal.setFalse}
-        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
+        onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />
