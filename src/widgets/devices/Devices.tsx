@@ -15,6 +15,7 @@ import {
   Yandex,
 } from '@/src/shared/assets/componentsIcons'
 import LogOutOutline from '@/src/shared/assets/componentsIcons/LogOutOutline'
+import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import {
   useDeviceLogOutMutation,
   useDevicesQuery,
@@ -38,16 +39,6 @@ export const Devices = () => {
   const [otherDevices, setOtherDevices] = useState<DeviceType[]>([])
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [loadingDeviceId, setLoadingDeviceId] = useState<null | number>(null)
-
-  const parseISOAndFormat = (dateString: string) => {
-    const date = new Date(dateString)
-
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = date.getFullYear()
-
-    return `${day}.${month}.${year}`
-  }
 
   useEffect(() => {
     if (data) {

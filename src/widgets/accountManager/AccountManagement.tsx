@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/src/shared/assets/componentsIcons'
+import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import {
   SelectedSubscriptionType,
   SistemPaymentType,
   SubscriptionType,
 } from '@/src/shared/lib/constants/subscriptions'
-import { useCreateSubscriptionMutation } from '@/src/shared/model/api/subscriptionsApi'
+import {
+  useCreateSubscriptionMutation,
+  useCurrentPaymentsQuery,
+  useMyPaymentsQuery,
+} from '@/src/shared/model/api/subscriptionsApi'
 import { ErrorDataType } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { CheckBox } from '@/src/shared/ui/checkbox/CheckBox'
@@ -18,10 +23,12 @@ import clsx from 'clsx'
 import s from './accountManagement.module.scss'
 
 export const AccountManagement = () => {
-  const [paySubscription, { isError, isLoading: isLoadingPay, isSuccess }] =
-    useCreateSubscriptionMutation()
-  const [alertMessage, setAlertMessage] = useState<null | string>(null)
-  const [selectedType, setSelectedType] = useState<SubscriptionType>(SubscriptionType.Personal)
+  const { data } = useMyPaymentsQuery()
+  const { data: currentSubscription } = useCurrentPaymentsQuery()
+  const [paySubscription, { isLoading: isLoadingPay }] = useCreateSubscriptionMutation()
+  const [selectedType, setSelectedType] = useState<SubscriptionType>(
+    data ? SubscriptionType.Bisiness : SubscriptionType.Personal
+  )
   const [selectedSubscription, setSelectedSubscription] = useState<SelectedSubscriptionType>(
     SelectedSubscriptionType.DAY
   )
@@ -55,37 +62,45 @@ export const AccountManagement = () => {
     } catch (err) {
       const error = err as ErrorDataType
 
-      setAlertMessage(error.messages[0].message)
       console.log(err)
     }
   }
 
   return (
     <div className={s.page}>
-      <div className={s.container}>
-        <Typography as={'h3'} option={'h3'}>
-          {'Current Subscription:'}
-        </Typography>
-        <div className={clsx(s.box, s.dopBox)}>
-          <div className={s.content}>
-            <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
-              {'Expire at'}
-            </Typography>
-            <Typography as={'span'} className={s.contentText}>
-              {'22.02.25'} {/*заменить  значениями*/}
-            </Typography>
-          </div>
-          <div className={s.content}>
-            <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
-              {'Next payment'}
-            </Typography>
-            <Typography as={'span'} className={s.contentText}>
-              {'22.03.25'} {/*заменить значениями*/}
-            </Typography>
-          </div>
+      {currentSubscription && currentSubscription.data.length > 0 && (
+        <div className={s.container}>
+          <Typography as={'h3'} option={'h3'}>
+            {'Current Subscription:'}
+          </Typography>
+          {currentSubscription.data.map(subscription => {
+            return (
+              <>
+                <div className={clsx(s.box, s.dopBox)}>
+                  <div className={s.content}>
+                    <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
+                      {'Expire at'}
+                    </Typography>
+                    <Typography as={'span'} className={s.contentText}>
+                      {parseISOAndFormat(subscription.dateOfPayment)}
+                    </Typography>
+                  </div>
+                  <div className={s.content}>
+                    <Typography as={'span'} className={clsx(s.contentTitle, s.contentText)}>
+                      {'Next payment'}
+                    </Typography>
+                    <Typography as={'span'} className={s.contentText}>
+                      {parseISOAndFormat(subscription.endDateOfSubscription)}
+                    </Typography>
+                  </div>
+                </div>
+                <CheckBox checked={subscription.autoRenewal} label={'Auto-Renewal'} />
+              </>
+            )
+          })}
         </div>
-        <CheckBox label={'Auto-Renewal'} />
-      </div>
+      )}
+
       <div className={s.container}>
         <Typography as={'h3'} option={'h3'}>
           {'Account type:'}
