@@ -150,9 +150,9 @@ export const GenerationInformation = () => {
       return
     }
     if (isDirty) {
-      router.push(`/profile/${MyProfile?.id}/settings?isFormDirty=true`)
+      router.push(`/profile/${MyProfile?.id}/settings/general-information?isFormDirty=true`)
     } else {
-      router.push(`/profile/${MyProfile?.id}/settings`)
+      router.push(`/profile/${MyProfile?.id}/settings/general-information`)
     }
   }, [isDirty, isFetching])
 
