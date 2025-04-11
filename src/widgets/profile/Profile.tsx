@@ -8,7 +8,7 @@ import {
   useGetPostQuery,
   useGetPostsQuery,
 } from '@/src/shared/model/api/postsApi'
-import { SortDirection } from '@/src/shared/model/api/types'
+import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
@@ -18,17 +18,25 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { PublicProfileTypes } from '@/src/entities/user/types'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { Post } from '@/src/entities/post/types'
 
 const AUTH_PAGE_SIZE = 8
-const PUBLIC_PAGE_SIZE = 12
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
 
-type Props = {}
+type Props = {
+  profile?: {
+    comments: GetCommentsResponse | null
+    post: Post | null
+    posts: GetPostsResponse
+    profile: PublicProfileTypes
+  }
+}
 
-export const Profile = (_props: Props) => {
-  const dispatch = useDispatch()
+export const Profile = (props: Props) => {
+  const dispatch = useAppDispatch()
   const { inView, ref } = useInView({ threshold: 1 })
   const params = useParams<{ userId: string }>()
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
@@ -38,13 +46,14 @@ export const Profile = (_props: Props) => {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
+
   // получаем информацию профайл
   const { data: myProfile } = useGetMyProfileQuery()
   const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {
     skip: !myProfile?.userName,
   })
   // получаем посты
-  const lastPostId = useSelector(selectLastPostId)
+  const lastPostId = useAppSelector(selectLastPostId)
   const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
     endCursorPostId: lastPostId || undefined,
     pageSize: lastPostId ? 9 : AUTH_PAGE_SIZE,
@@ -93,20 +102,31 @@ export const Profile = (_props: Props) => {
     }
   }, [closeModal, postId])
 
+  const profileDataForRender = profile ? profile : props.profile?.profile
+  const PostsForRender = authProfile ? posts?.items : props.profile?.posts.items
+  const commentsForRender = authProfile ? comments : props.profile?.comments
+  const postForRender = authProfile ? post : props.profile?.post
+
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
-      {profile && (
-        <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
-      )}
-      {isFetchingPosts && <div>Loading ...</div>}
-      {!posts ? <div>Пусто</div> : <Posts posts={posts.items} />}
-      {isMyProfile && hasMorePosts && <div className={s.loadMore} ref={ref}></div>}
-      <ModalPost
-        onClose={closeModal}
-        open={modalIsOpen}
-        publicComments={comments}
-        publicPost={post}
+      <ProfileInfo
+        authProfile={authProfile}
+        isMyProfile={isMyProfile}
+        profile={profileDataForRender}
       />
+      {isFetchingPosts && <div>Loading ...</div>}
+      {!PostsForRender ? <div>Пусто</div> : <Posts posts={PostsForRender} />}
+      {isMyProfile && hasMorePosts && <div className={s.loadMore} ref={ref}></div>}
+      {commentsForRender && postForRender && (
+        <ModalPost
+          isMyPost={isMyProfile}
+          isAuth={authProfile}
+          onClose={closeModal}
+          open={modalIsOpen}
+          comments={commentsForRender}
+          post={postForRender}
+        />
+      )}
     </div>
   )
 }

@@ -9,10 +9,13 @@ import s from './profileInfo.module.scss'
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: PublicProfileTypes | ProfileByUserName
+  profile: PublicProfileTypes | ProfileByUserName | undefined
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
+  if (!profile) {
+    return
+  }
   const router = useRouter()
   // const [follow] = useFollowMutation()
   // const [unFollow] = useUnFollowMutation()

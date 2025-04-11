@@ -1,13 +1,12 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { postsApi, useDeletePostMutation } from '@/src/shared/model/api/postsApi'
+import { useDeletePostMutation } from '@/src/shared/model/api/postsApi'
 import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
@@ -39,7 +38,7 @@ export type ModalCommentsSectionProps = {
   commentsData: Comment[]
   isMyPost: boolean
   post: Post
-  postPublicStatus: boolean
+  isAuth: boolean
 }
 
 export const ModalCommentsSection = ({
@@ -47,7 +46,7 @@ export const ModalCommentsSection = ({
   commentsData,
   isMyPost,
   post,
-  postPublicStatus,
+  isAuth,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   const [comments, setComments] = useState<Comment[]>(commentsData)
@@ -64,7 +63,6 @@ export const ModalCommentsSection = ({
     }
   }
   const handleLikeComment = (commentId: number) => {
-    // Обновляем состояние лайка для конкретного комментария
     setComments(prevComments =>
       prevComments.map(comment =>
         comment.id === commentId
@@ -150,7 +148,7 @@ export const ModalCommentsSection = ({
             usernameClassName={s.userAvatarName}
           />
         </Link>
-        {!postPublicStatus && (
+        {isAuth && (
           <div className={s.postMenu}>
             {
               <DropdownPost
@@ -225,7 +223,7 @@ export const ModalCommentsSection = ({
                   </div>
                 </div>
               </div>
-              {!postPublicStatus && (
+              {!isAuth && (
                 <div className={s.heartIconWrapper}>
                   {el.isLiked ? (
                     <Button
@@ -253,9 +251,7 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        {!postPublicStatus && (
-          <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        )}
+        {!isAuth && <InteractionBar className={s.interactionBar} hasCommentIcon={false} />}
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
@@ -263,7 +259,7 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      {!postPublicStatus && (
+      {isAuth && (
         <div className={s.addComment}>
           <div className={s.textareaWrapper}>
             <TextArea

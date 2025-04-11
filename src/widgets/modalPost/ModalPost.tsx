@@ -1,56 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
-import { useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
-import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
+import { GetCommentsResponse, ImageType, Item } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
 import Image from 'next/image'
-import { useParams, useSearchParams } from 'next/navigation'
 
 import s from './modalPost.module.scss'
 
 type Props = {
+  isMyPost: boolean
+  isAuth: boolean
   onClose: () => void
   open: boolean
-  publicComments?: GetCommentsResponse | null
-  publicPost?: Post | null
+  comments?: GetCommentsResponse
+  post?: Post
 }
 
-export default function ModalPost(props: Props) {
-  const { onClose, open } = props
-  const [postPublicStatus, setPostPublicStatus] = useState<boolean>(true)
-  const [isMyPost, setIsMyPost] = useState<boolean>(false)
-  const params = useParams<{ userId: string }>()
-  const searchParams = useSearchParams()
-  const postId = searchParams.get('postId')
-  const numericPostId = postId ? Number(postId) : null
-  const queryParams = { postId: numericPostId! }
-  const queryOptions = { skip: !numericPostId || !props.publicPost }
-  const { data: profile } = useGetUserProfileByIdQuery(Number(params.userId), {
-    skip: !Number(params.userId),
-  })
-  const { data: authPost } = useGetPostQuery(queryParams, queryOptions)
-  const { data: authComments } = useGetCommentsQuery(queryParams, queryOptions)
-
-  useEffect(() => {
-    setPostPublicStatus(!authPost)
-  }, [authPost])
-
-  useEffect(() => {
-    const newValue = profile?.id === authPost?.ownerId
-
-    setIsMyPost(prev => (prev !== newValue ? newValue : prev))
-  }, [profile, authPost])
-  const post = props.publicPost ? props.publicPost : authPost
-  const comments = props.publicPost ? props.publicComments : authComments
-
+export default function ModalPost({ isMyPost, post, isAuth, open, comments, onClose }: Props) {
   if (!post) {
     return null
   }
+  console.log('isMyPost', isMyPost)
+  console.log('isAuth', isAuth)
   const isCarousel = post.images.length > 1
   const renderItem = (item: ImageType) => {
     return item ? (
@@ -79,7 +53,7 @@ export default function ModalPost(props: Props) {
             commentsData={commentsData}
             isMyPost={isMyPost}
             post={post}
-            postPublicStatus={postPublicStatus}
+            isAuth={isAuth}
           />
         </div>
       </Dialog>

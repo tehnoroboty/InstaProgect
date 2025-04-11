@@ -1,5 +1,6 @@
 import { PublicProfileTypes } from '@/src/entities/user/types'
-import { GetPostsResponse } from '@/src/shared/model/api/types'
+import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
+import { Post } from '@/src/entities/post/types'
 
 export const getUserProfile = async (userId: string): Promise<PublicProfileTypes> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-user/profile/${userId}`, {
@@ -20,7 +21,7 @@ export const getUserPosts = async (userId: string): Promise<GetPostsResponse> =>
 // export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 export type SearchParams = { [key: string]: string | string[] | undefined }
 
-export const getUserPost = async (postId: number) => {
+export const getUserPost = async (postId: number): Promise<Post> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}`, {
     cache: 'no-store',
   })
@@ -28,7 +29,7 @@ export const getUserPost = async (postId: number) => {
   return await res.json()
 }
 
-export const getUserComments = async (postId: number) => {
+export const getUserComments = async (postId: number): Promise<GetCommentsResponse> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/${postId}/comments`,
     {
