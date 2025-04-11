@@ -26,56 +26,56 @@ const mockTableData: TableData[] = [
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'Stripe',
-    price: '$10',
+    price: '10',
     subscription: '1 day',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'Stripe',
-    price: '$50',
+    price: '50',
     subscription: '7 days',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'Stripe',
-    price: '$100',
+    price: '100',
     subscription: '1 month',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'PayPal',
-    price: '$100',
+    price: '100',
     subscription: '1 month',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'PayPal',
-    price: '$50',
+    price: '50',
     subscription: '7 days',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'PayPal',
-    price: '$50',
+    price: '50',
     subscription: '7 days',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'PayPal',
-    price: '$50',
+    price: '50',
     subscription: '7 days',
   },
   {
     dateOfPayment: '12.12.2022',
     endDate: '12.12.2022',
     paymentType: 'PayPal',
-    price: '$100',
+    price: '100',
     subscription: '1 month',
   },
 ]
@@ -98,7 +98,7 @@ export const Default: Story = {
             <TableRow key={index}>
               <TableCell>{item.dateOfPayment}</TableCell>
               <TableCell>{item.endDate}</TableCell>
-              <TableCell>{item.price}</TableCell>
+              <TableCell>${item.price}</TableCell>
               <TableCell>{item.subscription}</TableCell>
               <TableCell>{item.paymentType}</TableCell>
             </TableRow>
