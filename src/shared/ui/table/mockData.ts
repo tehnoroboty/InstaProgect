@@ -1,51 +1,7 @@
 import { MyPaymentType } from '@/src/entities/subscription/types'
 import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 
-type TableData = {
-  dateOfPayment: string
-  endDate: string
-  paymentType: string
-  price: string
-  subscription: string
-}
-
-export const formatPaymentType = (type: string): string => {
-  switch (type) {
-    case 'CREDIT_CARD':
-      return 'Credit Card'
-    case 'PAYPAL':
-      return 'PayPal'
-    case 'STRIPE':
-      return 'Stripe'
-    default:
-      return type
-  }
-}
-
-export const formatSubscriptionType = (type: string): string => {
-  switch (type) {
-    case 'DAY':
-      return '1 day'
-    case 'WEEKLY':
-      return '7 days'
-    case 'MONTHLY':
-      return '1 month'
-    default:
-      return type
-  }
-}
-
-const transformData = (serverData: MyPaymentType[]): TableData[] => {
-  return serverData.map(item => ({
-    dateOfPayment: parseISOAndFormat(item.dateOfPayment),
-    endDate: parseISOAndFormat(item.endDateOfSubscription),
-    paymentType: formatPaymentType(item.paymentType),
-    price: item.price.toString(),
-    subscription: formatSubscriptionType(item.subscriptionType),
-  }))
-}
-
-const serverData: MyPaymentType[] = [
+export const mockTableData: MyPaymentType[] = [
   {
     dateOfPayment: '2022-12-12T00:00:00.000Z',
     endDateOfSubscription: '2022-12-12T00:00:00.000Z',
@@ -119,5 +75,3 @@ const serverData: MyPaymentType[] = [
     userId: 8,
   },
 ]
-
-export const mockTableData = transformData(serverData)
