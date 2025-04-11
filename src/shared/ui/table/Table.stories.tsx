@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import s from './table.module.scss'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './Table'
+import { mockTableData } from './mockData'
 
 const meta = {
   component: Table,
@@ -12,73 +13,6 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof Table>
-
-type TableData = {
-  dateOfPayment: string
-  endDate: string
-  paymentType: string
-  price: string
-  subscription: string
-}
-
-const mockTableData: TableData[] = [
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'Stripe',
-    price: '10',
-    subscription: '1 day',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'Stripe',
-    price: '50',
-    subscription: '7 days',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'Stripe',
-    price: '100',
-    subscription: '1 month',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'PayPal',
-    price: '100',
-    subscription: '1 month',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'PayPal',
-    price: '50',
-    subscription: '7 days',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'PayPal',
-    price: '50',
-    subscription: '7 days',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'PayPal',
-    price: '50',
-    subscription: '7 days',
-  },
-  {
-    dateOfPayment: '12.12.2022',
-    endDate: '12.12.2022',
-    paymentType: 'PayPal',
-    price: '100',
-    subscription: '1 month',
-  },
-]
 
 export const Default: Story = {
   render: args => (

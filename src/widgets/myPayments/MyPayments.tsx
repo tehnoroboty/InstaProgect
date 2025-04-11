@@ -20,57 +20,10 @@ import { RadioBtn } from '@/src/shared/ui/radioGroup/RadioBtn'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
 
-import s from './accountManagement.module.scss'
+import s from './myPayments.module.scss'
 
-export const AccountManagement = () => {
+export const MyPayments = () => {
   const { data } = useMyPaymentsQuery()
-  const { data: currentSubscription } = useCurrentPaymentsQuery()
-  const [paySubscription, { isLoading: isLoadingPay }] = useCreateSubscriptionMutation()
-  const [selectedType, setSelectedType] = useState<SubscriptionType>(
-    data ? SubscriptionType.Bisiness : SubscriptionType.Personal
-  )
-  const [selectedSubscription, setSelectedSubscription] = useState<SelectedSubscriptionType>(
-    SelectedSubscriptionType.DAY
-  )
-  const [paymentSystem, setPaymentSystem] = useState<SystemPaymentType>(
-    SystemPaymentType.CREDIT_CARD
-  )
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [modalChecked, setModalChecked] = useState(false)
-  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedType(event.currentTarget.value as SubscriptionType)
-  }
-
-  const handleSelectedSubscriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedSubscription(event.currentTarget.value as SelectedSubscriptionType)
-  }
-  const onClickPayment = (sistemPayment: SystemPaymentType) => {
-    setOpenModal(true)
-    setPaymentSystem(sistemPayment)
-  }
-
-  const buySubscription = async () => {
-    try {
-      const dataForPay = {
-        amount: 0,
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
-        paymentType: paymentSystem,
-        typeSubscription: selectedSubscription,
-      }
-
-      const res = await paySubscription(dataForPay).unwrap()
-
-      if (res?.url) {
-        window.location.assign(res.url)
-      }
-
-      console.log(res)
-    } catch (err) {
-      const error = err as ErrorDataType
-
-      console.log(err)
-    }
-  }
 
   return (
     <div className={s.page}>

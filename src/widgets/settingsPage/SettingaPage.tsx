@@ -23,7 +23,7 @@ const dataTabs: Tab[] = [
     title: 'Account Management',
     value: 'tabs3',
   },
-  { page: <GenerationInformation />, title: 'My payments', value: 'tabs4' },
+  { page: <MyPayments />, title: 'My payments', value: 'tabs4' },
 ]
 
 export const SettingsPage = () => {
