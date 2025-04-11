@@ -59,6 +59,12 @@ export const AccountManagement = () => {
       }
 
       const res = await paySubscription(dataForPay).unwrap()
+
+      if (res?.url) {
+        window.location.assign(res.url)
+      }
+
+      console.log(res)
     } catch (err) {
       const error = err as ErrorDataType
 
