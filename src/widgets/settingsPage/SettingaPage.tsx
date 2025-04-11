@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Tabs, TabsContent } from '@/src/shared/ui/tabs'
 import { renderTabsList } from '@/src/shared/ui/tabs/Tabs.stories'
+import { AccountManagement } from '@/src/widgets/accountManager/AccountManagement'
 import { Devices } from '@/src/widgets/devices/Devices'
 import { GenerationInformation } from '@/src/widgets/generationInformation/GenerationInformation'
 import { Tab } from '@/src/widgets/settingsPage/data'
@@ -18,7 +19,7 @@ const dataTabs: Tab[] = [
   },
   { page: <Devices />, title: 'Devices', value: 'tabs2' },
   {
-    page: <GenerationInformation />,
+    page: <AccountManagement />,
     title: 'Account Management',
     value: 'tabs3',
   },
