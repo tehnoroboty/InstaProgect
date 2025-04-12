@@ -24,24 +24,11 @@
     border-radius: 2px;
     color: var(--dark-900);
     background-color: var(--light-100);
-
-    //@media (hover: hover) {
-    //  &:hover {
-    //    background-color: var(--light-100);
-    //  }
-    //}
   }
 
   &.disabled {
     pointer-events: none;
     opacity: 0.5;
-
-    //@media (hover: hover) {
-    //  &:hover {
-    //    cursor: default;
-    //    background-color: transparent;
-    //  }
-    //}
   }
 
   @media (hover: hover) {
@@ -50,13 +37,6 @@
       background: var(--dark-500);
     }
   }
-
-  //@media (hover: hover) {
-  //  &:hover {
-  //    border-radius: 2px;
-  //    background-color: var(--dark-500);
-  //  }
-  //}
 }
 
 .paginationItemArrow {
@@ -69,15 +49,6 @@
   width: 16px;
   height: 16px;
 }
-
-//.dots {
-//  @media (hover: hover) {
-//    &:hover {
-//      cursor: default;
-//      background-color: transparent;
-//    }
-//  }
-//}
 
 .dots {
   cursor: default;
