@@ -67,7 +67,7 @@ export const MyPayments = () => {
   const { data, isLoading } = useMyPaymentsQuery()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>{'Loading...'}</div>
   }
   /*  if (!data) {
     return <div>No data</div>
@@ -79,11 +79,11 @@ export const MyPayments = () => {
       <Table className={s.table}>
         <TableHeader>
           <TableRow>
-            <TableHead>Date of Payment</TableHead>
-            <TableHead>End date of subscription</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Subscription Type</TableHead>
-            <TableHead>Payment Type</TableHead>
+            <TableHead>{'Date of Payment'}</TableHead>
+            <TableHead>{'End date of subscription'}</TableHead>
+            <TableHead>{'Price'}</TableHead>
+            <TableHead>{'Subscription Type'}</TableHead>
+            <TableHead>{'Payment Type'}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
