@@ -43,7 +43,7 @@ export const Pagination = (props: PaginationProps) => {
   return (
     <ul className={clsx(s.paginationContainer, className)}>
       <li
-        className={clsx(s.paginationItem, {
+        className={clsx(s.paginationItem, s.paginationItemArrow, {
           [s.disabled]: currentPage === 1,
         })}
         onClick={onPrevious}
@@ -72,13 +72,12 @@ export const Pagination = (props: PaginationProps) => {
         )
       })}
       <li
-        className={clsx(s.paginationItem, {
+        className={clsx(s.paginationItem, s.paginationItemArrow, {
           [s.disabled]: currentPage === lastPage,
         })}
         onClick={onNext}
       >
         <ArrowRightIcon className={s.arrowIcon} />
-        {/*<div className={clsx(s.arrow, s.right)} />*/}
       </li>
     </ul>
   )

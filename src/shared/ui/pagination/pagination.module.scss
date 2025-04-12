@@ -1,77 +1,84 @@
 .paginationContainer {
   display: flex;
-  align-items: center;
-
-  //margin: 20px 0;
+  gap: 12px;
   padding: 0;
-  list-style-type: none;
+  list-style: none;
+}
 
-  .paginationItem {
-    cursor: pointer;
+.paginationItem {
+  cursor: pointer;
 
-    display: flex;
-    align-items: center;
+  padding: 0 8px;
 
-    box-sizing: border-box;
-    min-width: 32px;
-    height: 32px;
-    margin: auto 4px;
-    padding: 0 12px;
-    border-radius: 16px;
+  font-size: 14px;
+  line-height: 171.43%;
+  color: var(--light-100);
+  text-align: center;
 
-    font-size: 13px;
-    color: white;
-    text-align: center;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-radius 0.2s ease;
 
-    &.dots:hover {
-      cursor: default;
-      background-color: transparent;
-    }
+  &.selected {
+    border-radius: 2px;
+    color: var(--dark-900);
+    background-color: var(--light-100);
 
-    &:hover {
-      background-color: rgb(0 0 0 / 4%);
-    }
+    //@media (hover: hover) {
+    //  &:hover {
+    //    background-color: var(--light-100);
+    //  }
+    //}
+  }
 
-    &.selected {
-      font-weight: bold;
-      color: #0f9954;
-      background-color: rgb(0 0 0 / 8%);
-    }
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 
-    .arrowIcon {
-      width: 16px;
-      height: 16px;
-    }
+    //@media (hover: hover) {
+    //  &:hover {
+    //    cursor: default;
+    //    background-color: transparent;
+    //  }
+    //}
+  }
 
-    .arrow {
-      &::before {
-        content: '';
-
-        display: inline-block;
-
-        width: 0.4em;
-        height: 0.4em;
-        border-top: 0.12em solid currentcolor;
-        border-right: 0.12em solid currentcolor;
-      }
-
-      &.left {
-        transform: rotate(-135deg);
-      }
-
-      &.right {
-        transform: rotate(45deg);
-      }
-    }
-
-    &.disabled {
-      pointer-events: none;
-      opacity: 0.5;
-
-      &:hover {
-        cursor: default;
-        background-color: transparent;
-      }
+  @media (hover: hover) {
+    &:not(.selected, .disabled, .dots):hover {
+      border-radius: 2px;
+      background: var(--dark-500);
     }
   }
+
+  //@media (hover: hover) {
+  //  &:hover {
+  //    border-radius: 2px;
+  //    background-color: var(--dark-500);
+  //  }
+  //}
+}
+
+.paginationItemArrow {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.arrowIcon {
+  width: 16px;
+  height: 16px;
+}
+
+//.dots {
+//  @media (hover: hover) {
+//    &:hover {
+//      cursor: default;
+//      background-color: transparent;
+//    }
+//  }
+//}
+
+.dots {
+  cursor: default;
 }
