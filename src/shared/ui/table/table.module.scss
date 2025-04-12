@@ -1,0 +1,65 @@
+.container {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+}
+
+.table {
+  border-collapse: collapse;
+
+  width: 100%;
+  border: 1px solid var(--dark-500);
+
+  color: var(--light-100);
+  text-align: left;
+}
+
+.thead {
+  height: 42px;
+  background: var(--dark-500);
+}
+
+.tbody {
+  /* style placeholder */
+}
+
+.tfoot {
+  /* style placeholder */
+}
+
+.tr {
+  border: 1px solid var(--dark-500);
+}
+
+.th {
+  padding: 12px 24px;
+}
+
+.td {
+  padding: 12px 24px;
+}
+
+.caption {
+  /* style placeholder */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

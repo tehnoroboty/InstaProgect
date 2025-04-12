@@ -214,3 +214,7 @@ export type GetCommentsResponse = {
   totalCount: number
   totalUsers: number
 }
+
+export type ModalSuccessType = {
+  type: 'error' | 'success'
+}

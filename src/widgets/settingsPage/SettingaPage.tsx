@@ -2,11 +2,13 @@
 
 import React from 'react'
 
-import { Tabs, TabsContent } from '@/src/shared/ui/tabs'
-import { renderTabsList } from '@/src/shared/ui/tabs/Tabs.stories'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared/ui/tabs'
+import { AccountManagement } from '@/src/widgets/accountManager/AccountManagement'
 import { Devices } from '@/src/widgets/devices/Devices'
 import { GenerationInformation } from '@/src/widgets/generationInformation/GenerationInformation'
+import { MyPayments } from '@/src/widgets/myPayments/MyPayments'
 import { Tab } from '@/src/widgets/settingsPage/data'
+import { usePathname, useRouter } from 'next/navigation'
 
 import s from './settingsPage.module.scss'
 
@@ -14,21 +16,39 @@ const dataTabs: Tab[] = [
   {
     page: <GenerationInformation />,
     title: 'General information',
-    value: 'tabs1',
+    value: 'general-information',
   },
-  { page: <Devices />, title: 'Devices', value: 'tabs2' },
+  { page: <Devices />, title: 'Devices', value: 'devices' },
   {
-    page: <GenerationInformation />,
+    page: <AccountManagement />,
     title: 'Account Management',
-    value: 'tabs3',
+    value: 'account-management',
   },
-  { page: <GenerationInformation />, title: 'My payments', value: 'tabs4' },
+  { page: <MyPayments />, title: 'My payments', value: 'my-payments' },
 ]
 
-export const SettingsPage = () => {
+export const SettingsPage = ({ userId }: { userId: string }) => {
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const currentTab = pathname.split('/').pop() || 'general-information'
+
+  const handleTabChange = (newTab: string) => {
+    router.push(`/profile/${userId}/settings/${newTab}`)
+  }
+  const renderTabsList = (disabled = false) => (
+    <TabsList loop>
+      {dataTabs.map(tab => (
+        <TabsTrigger disabled={disabled} key={tab.value} value={tab.value}>
+          {tab.title}
+        </TabsTrigger>
+      ))}
+    </TabsList>
+  )
+
   return (
     <div className={s.page}>
-      <Tabs className={s.tabs} defaultValue={dataTabs[0].value}>
+      <Tabs className={s.tabs} onValueChange={handleTabChange} value={currentTab}>
         {renderTabsList()}
         {dataTabs.map(tab => (
           <TabsContent key={tab.value} value={tab.value}>
