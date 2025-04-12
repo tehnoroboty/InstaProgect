@@ -7,6 +7,7 @@ import { renderTabsList } from '@/src/shared/ui/tabs/Tabs.stories'
 import { AccountManagement } from '@/src/widgets/accountManager/AccountManagement'
 import { Devices } from '@/src/widgets/devices/Devices'
 import { GenerationInformation } from '@/src/widgets/generationInformation/GenerationInformation'
+import { MyPayments } from '@/src/widgets/myPayments/MyPayments'
 import { Tab } from '@/src/widgets/settingsPage/data'
 
 import s from './settingsPage.module.scss'
@@ -23,7 +24,7 @@ const dataTabs: Tab[] = [
     title: 'Account Management',
     value: 'tabs3',
   },
-  { page: <GenerationInformation />, title: 'My payments', value: 'tabs4' },
+  { page: <MyPayments />, title: 'My payments', value: 'tabs4' },
 ]
 
 export const SettingsPage = () => {

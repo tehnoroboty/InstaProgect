@@ -4,8 +4,8 @@ import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/src/shared/assets/compon
 import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import {
   SelectedSubscriptionType,
-  SistemPaymentType,
   SubscriptionType,
+  SystemPaymentType,
 } from '@/src/shared/lib/constants/subscriptions'
 import {
   useCreateSubscriptionMutation,
@@ -32,8 +32,8 @@ export const AccountManagement = () => {
   const [selectedSubscription, setSelectedSubscription] = useState<SelectedSubscriptionType>(
     SelectedSubscriptionType.DAY
   )
-  const [paymentSystem, setPaymentSystem] = useState<SistemPaymentType>(
-    SistemPaymentType.CREDIT_CARD
+  const [paymentSystem, setPaymentSystem] = useState<SystemPaymentType>(
+    SystemPaymentType.CREDIT_CARD
   )
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [modalChecked, setModalChecked] = useState(false)
@@ -44,7 +44,7 @@ export const AccountManagement = () => {
   const handleSelectedSubscriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSubscription(event.currentTarget.value as SelectedSubscriptionType)
   }
-  const onClickPayment = (sistemPayment: SistemPaymentType) => {
+  const onClickPayment = (sistemPayment: SystemPaymentType) => {
     setOpenModal(true)
     setPaymentSystem(sistemPayment)
   }
@@ -161,7 +161,7 @@ export const AccountManagement = () => {
           <div className={s.subscriptionPay}>
             <Button
               className={s.subscriptionPayBtn}
-              onClick={() => onClickPayment(SistemPaymentType.PAYPAL)}
+              onClick={() => onClickPayment(SystemPaymentType.PAYPAL)}
               variant={'bordered'}
             >
               <PaypalSvgrepoCom4 height={'100%'} viewBox={'-1 3 26 10'} width={'100%'} />
@@ -172,7 +172,7 @@ export const AccountManagement = () => {
             <Button
               className={s.subscriptionPayBtn}
               onClick={() => {
-                onClickPayment(SistemPaymentType.SPRITE)
+                onClickPayment(SystemPaymentType.SPRITE)
               }}
               variant={'bordered'}
             >
