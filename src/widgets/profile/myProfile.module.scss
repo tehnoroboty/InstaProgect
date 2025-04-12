@@ -1,55 +1,23 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: clamp(10px,15vh,40px);
+  gap: clamp(10px, 15vh, 40px);
   height: fit-content;
-
 }
 
-.profileContainer {
-  display: flex;
-  gap: clamp(15px,20vw,40px);
-  align-items: center;
-}
-
-.profileDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  justify-content: space-between;
-
+.noAuthPage {
   width: 80%;
+  margin: auto;
 }
 
-.container {
+.loaging {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
-.profileInfo {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 1.5rem;
-  justify-content: space-between;
-}
-
-.userNameContainer {
-  display: flex;
-  gap: 1%
-}
-
-.followersStats {
-  display: flex;
-  gap: clamp(10px, 10vh,50px)
-}
-
-.profileDescription {
-  overflow-wrap: break-word;
-
-}
-
-.followersStatItem {
-  display: flex;
-  flex-direction: column;
+.loadMore{
+  margin-bottom: 100px;
+  text-align: center;
 }

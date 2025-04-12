@@ -15,44 +15,48 @@ export type Options = {
 
 type Props = {
   /**
-   * The text of the label for the select. If omitted, the label is not displayed.
+   * If true, displays the select in compact pagination style
+   */
+  isPagination?: boolean
+  /**
+   * The text of the label for the select. If omitted, the label is not
+   * displayed.
    */
   label?: string
+  onChangeValue?: (value: string) => void
   /**
-   * An array of options to choose from. Each option must contain a 'value' and a 'value Title' (displayed text).
+   * An array of options to choose from. Each option must contain a 'value'
+   * and a 'value Title' (displayed text).
    */
   options: Options[]
   /**
    * The text that is displayed if nothing is selected.
    */
   placeholder?: string
-  /**
-   * The size of the select. It can be 'large = 358px', 'medium = 330px' or 'small = 234px'. Affects the width of the select.
-   */
-  size?: 'large' | 'medium' | 'small'
+  value?: any
 } & ComponentPropsWithoutRef<'button'>
 
 /** Ui kit SelectBox component */
 export const SelectBox = ({
   className,
+  isPagination = false,
   label,
-  options,
+  onChangeValue,
+  options = [],
   placeholder = options.length > 0 ? options[0].value : 'Select',
-  size,
+  value,
   ...rest
 }: Props) => {
-  const isPagination = options.every(option => !isNaN(Number(option.value)))
-
   const renderOptions = (options: Options[]) =>
     options.map(item => (
-      <SelectItem isPagination={isPagination} key={item.value} value={item.value}>
+      <SelectItem isPagination={isPagination} key={item.value} value={item.valueTitle}>
         {item.valueTitle}
       </SelectItem>
     ))
 
   return (
-    <div className={clsx(size && styles[size], className)}>
-      <Select.Root>
+    <div className={clsx(styles.container, className)}>
+      <Select.Root onValueChange={value => onChangeValue?.(value)} value={value}>
         <Select.Group>
           {label && <Select.Label className={styles.label}>{label}</Select.Label>}
           <Select.Trigger

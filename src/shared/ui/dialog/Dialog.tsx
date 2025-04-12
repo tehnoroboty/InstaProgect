@@ -9,20 +9,24 @@ import clsx from 'clsx'
 import s from './dialog.module.scss'
 
 export type DialogProps = {
+  closeClassName?: string
   extraHeaderContent?: ReactNode
   isSimple?: boolean
   modalTitle?: string
   onClose: () => void
+  onEdit?: () => void
   open: boolean
 } & ComponentPropsWithoutRef<'div'>
 
 export const Dialog = ({
   children,
   className,
+  closeClassName,
   extraHeaderContent,
   isSimple = false,
   modalTitle,
   onClose,
+  onEdit,
   open,
   ...rest
 }: DialogProps) => {
@@ -43,10 +47,16 @@ export const Dialog = ({
                 </Title>
               )}
               {extraHeaderContent}
-              {!modalTitle && (
-                <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />
-              )}
-              <Close className={clsx(s.IconButton, modalTitle ? s.IconButtonIn : s.IconButtonOut)}>
+              {/*{!modalTitle && (*/}
+              {/*  // <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />*/}
+              {/*)}*/}
+              <Close
+                className={clsx(
+                  s.IconButton,
+                  modalTitle ? s.IconButtonIn : s.IconButtonOut,
+                  closeClassName
+                )}
+              >
                 <CloseOutline className={s.icon} />
               </Close>
               {modalTitle && <hr className={s.lineHr} />}

@@ -12,18 +12,21 @@ import s from './headerWeb.module.scss'
 
 type Props = {
   hasNotification?: boolean
+  isLoading?: boolean
   isLoggedIn?: boolean
   title: string
 }
 
 export const HeaderWeb = (props: Props) => {
-  const { hasNotification, isLoggedIn, title } = props
+  const { hasNotification, isLoading, isLoggedIn, title } = props
 
   return (
     <div className={s.container}>
-      <Typography as={'h1'} option={'Large'}>
-        {title}
-      </Typography>
+      <Link href={AuthRoutes.HOME}>
+        <Typography as={'h1'} option={'Large'}>
+          {title}
+        </Typography>
+      </Link>
       <div className={s.headerActions}>
         {isLoggedIn && hasNotification && <DropdownNotification />}
         <SelectLanguage />

@@ -2,6 +2,7 @@ import { type TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'r
 
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
+import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const initializeStore = () => {
@@ -10,6 +11,8 @@ export const initializeStore = () => {
     reducer: {
       [appSlice.name]: appReducer,
       [baseApi.reducerPath]: baseApi.reducer,
+      [authApi.reducerPath]: authApi.reducer,
+      [modalSlice.name]: modalReducer,
     },
   })
 }

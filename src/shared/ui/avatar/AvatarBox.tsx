@@ -17,7 +17,7 @@ export const AvatarBox = ({ className, size = 'xl', src }: Props) => {
 
   return (
     <Avatar.Root className={clsx(size && s[`img-size-${size}`], s.root, className)}>
-      <Avatar.Image alt={'Avatar'} className={s.image} src={src} />
+      <Avatar.Image alt={'Avatar'} className={s.image} src={src || ''} />
       <Avatar.Fallback className={s.fallback}>
         <ImageOutline
           className={s.fallbackImage}

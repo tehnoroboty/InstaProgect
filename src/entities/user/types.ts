@@ -6,6 +6,12 @@ export type Avatar = {
   width: number
 }
 
+type UserMetadata = {
+  followers: number
+  following: number
+  publications: number
+}
+
 export type Profile = {
   aboutMe: string
   avatars: Avatar[]
@@ -18,4 +24,25 @@ export type Profile = {
   lastName: string
   region: string
   userName: string
+}
+
+export type PublicProfileTypes = {
+  aboutMe: string
+  avatars: Avatar[]
+  hasPaymentSubscription: boolean
+  id: number
+  userMetadata: UserMetadata
+  userName: string
+}
+
+export type ResponseTypeCountys = {
+  data: CountrysType[]
+  error: boolean
+  msg: string
+}
+export type CountrysType = {
+  cities: Array<string>
+  country: string
+  iso2: string
+  iso3: string
 }

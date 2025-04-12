@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useId, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import {
   BookmarkOutline,
@@ -11,14 +10,14 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
-import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
-import { Dropdown } from '@/src/shared/ui/dropdown/dropdown'
-import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/dropdownItem'
+import { Dropdown } from '@/src/shared/ui/dropdown/Dropdown'
+import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
 import { SelectLanguage } from '@/src/shared/ui/select/SelectLanguage/SelectLanguage'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
+import { MenuItemType } from '@/src/widgets/navigationPanel/types'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import s from './headerMobile.module.scss'
@@ -35,7 +34,6 @@ export const HeaderMobile = (props: Props) => {
   const [logout, { isLoading }] = useLogoutMutation()
   const id = useId()
 
-  const dispatch = useDispatch()
   const route = useRouter()
 
   const onClickHandler = () => {
@@ -44,9 +42,8 @@ export const HeaderMobile = (props: Props) => {
 
   const onLogoutConfirm = async () => {
     await logout().unwrap()
-    dispatch(setIsLoggedIn({ isLoggedIn: false }))
     setIsModalOpen(false)
-    route.push(AuthRoutes.LOGIN)
+    route.push(AuthRoutes.HOME)
   }
 
   const menuHeaderMobile: MenuItemType[] = [
@@ -87,9 +84,11 @@ export const HeaderMobile = (props: Props) => {
 
   return (
     <div className={s.container}>
-      <Typography as={'h1'} option={'Large'}>
-        {title}
-      </Typography>
+      <Link href={AuthRoutes.HOME}>
+        <Typography as={'h1'} option={'Large'}>
+          {title}
+        </Typography>
+      </Link>
       <div className={s.headerActions}>
         <SelectLanguage />
         {isLoggedIn && (

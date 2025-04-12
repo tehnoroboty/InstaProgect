@@ -1,20 +1,23 @@
-.postsGrid{
+.postsGrid {
   display: grid;
   grid-auto-flow: row dense;
   grid-gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, 234px);
+  justify-content: space-between;
 
   height: fit-content;
 }
 
 .image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  aspect-ratio: 1/1;
   width: 100%;
+  text-align: center;
+}
 
-  background-color: #0f9954;
+.notFound {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #646060;
+  border-radius: 10px;
+
 }
 

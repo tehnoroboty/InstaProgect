@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import Image from 'next/image'
 
+import { Carousel } from './Carousel'
 import sliderImage from './assets/slider.jpg'
 
 const meta = {
@@ -15,7 +15,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const SmallCarousel: Story = {
+export const CarouselStorySmall: Story = {
   args: {
     list: [
       { id: 'slide1', img: sliderImage },
@@ -26,10 +26,14 @@ export const SmallCarousel: Story = {
     size: 'small',
   },
 }
-
-export const LargeCarousel: Story = {
+export const CarouselStoryLarge: Story = {
   args: {
-    ...SmallCarousel.args,
+    list: [
+      { id: 'slide1', img: sliderImage },
+      { id: 'slide1', img: sliderImage },
+      { id: 'slide1', img: sliderImage },
+    ],
+    renderItem: (item: any) => <Image alt={'image'} src={item.img} />,
     size: 'large',
   },
 }

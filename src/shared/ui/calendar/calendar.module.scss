@@ -1,0 +1,218 @@
+.calendarContainer {
+  margin: 0;
+  padding: 7px 12px;
+}
+
+// Заголовок (месяц и год)
+.caption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.captionLabel {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 150%;
+  color: var(--light-100);
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  padding: 0.25em;
+  border-radius: 100%;
+
+  background-color: var(--dark-100);
+
+  transition: all 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+      background-color: var(--dark-100) !important;
+    }
+  }
+}
+
+.arrowIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--light-100);
+}
+
+// Ячейки сетки календаря
+.cell {
+  position: relative;
+  padding: 0;
+  font-size: 14px;
+  text-align: center;
+
+  &:focus-within {
+    position: relative;
+    z-index: 20;
+  }
+}
+
+// Стили дней
+.day {
+  cursor: pointer;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  color: var(--light-100);
+
+  transition: all 0.3s ease;
+
+  &:active {
+    background-color: var(--primary-900);
+  }
+
+  &:focus-visible:not([disabled]) {
+    border: 2px solid var(--primary-300);
+    color: var(--light-100);
+    background-color: transparent;
+  }
+
+  &[aria-selected] {
+    color: var(--light-100);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--primary-700) !important;
+    }
+  }
+}
+
+.dayWeekend {
+  color: var(--danger-300, #f23d61);
+
+  &:focus-visible:not([disabled]) {
+    color: var(--danger-300, #f23d61);
+  }
+
+  &[aria-selected] {
+    color: var(--danger-300, #f23d61);
+  }
+}
+
+.day[disabled]:not(.daySelected) {
+  opacity: 0.5;
+}
+
+.dayToday {
+  font-weight: 700;
+  color: var(--primary-500);
+
+  &:active {
+    color: var(--light-100);
+  }
+
+  &:focus-visible:not([disabled]) {
+    color: var(--primary-300);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--primary-100);
+    }
+  }
+}
+
+.dayDisabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.daySelected {
+  background-color: var(--primary-900);
+}
+
+.dayOutside {
+  color: var(--light-900);
+
+  &:focus-visible:not([disabled]) {
+    color: var(--light-900);
+  }
+}
+
+.dropdownSelect {
+  cursor: pointer;
+
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  transition: all 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// Заголовки дней недели
+.headCell {
+  width: 32px;
+  padding: 4px 0;
+
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--light-900);
+  text-align: center;
+}
+
+.headRow {
+  display: flex;
+}
+
+// Контейнер месяца
+.month {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+
+  select {
+    color: var(--light-100);
+    background-color: var(--dark-500);
+  }
+}
+
+// Строка дней
+.row {
+  display: flex;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+
+  thead {
+    tr {
+      margin-bottom: 20px;
+    }
+
+    th {
+      padding: 0;
+      font-size: 16px;
+      line-height: 150%;
+    }
+  }
+
+  tbody td {
+    font-size: 16px;
+    line-height: 150%;
+  }
+}

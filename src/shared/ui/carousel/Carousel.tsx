@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react'
+import { MouseEvent, ReactNode, useEffect, useRef } from 'react'
 
 import clsx from 'clsx'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -14,12 +14,13 @@ import { Button } from '../button/Button'
 type Props<T> = {
   disableSwipe?: boolean
   list: T[]
-  renderItem: (item: T) => ReactNode
-  size: 'large' | 'small'
+  onChange?: (index: number) => void
+  renderItem: (item: T, index: number) => ReactNode
+  size?: 'large' | 'small'
 }
 
 export const Carousel = <T,>(props: Props<T>) => {
-  const { disableSwipe, list, renderItem, size } = props
+  const { disableSwipe, list, onChange, renderItem, size = 'large' } = props
   const hasMoreThanOneItem = list.length > 1
   const classNames = clsx(s.carousel, s[size])
   const swiperRef = useRef<SwiperRef | null>(null)
@@ -34,14 +35,23 @@ export const Carousel = <T,>(props: Props<T>) => {
     }
   }, [disableSwipe])
 
+  const handleStopPropagation = (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+    e.stopPropagation()
+  }
+
   return (
     <Swiper
       className={classNames}
-      loop
-      modules={[Navigation, Pagination]}
+      loop={hasMoreThanOneItem}
+      modules={[Pagination]}
       navigation={{
         nextEl: `.${s.buttonNext}`,
         prevEl: `.${s.buttonPrev}`,
+      }}
+      onSlideChange={swiper => {
+        if (onChange) {
+          onChange(swiper.activeIndex)
+        }
       }}
       pagination={{
         bulletActiveClass: `${s.paginationActive}`,
@@ -51,15 +61,27 @@ export const Carousel = <T,>(props: Props<T>) => {
       ref={swiperRef}
     >
       {list.map((item, index) => (
-        <SwiperSlide className={s.slide} key={index}>
-          {renderItem(item)}
-        </SwiperSlide>
+        <SwiperSlide key={index}>{renderItem(item, index)}</SwiperSlide>
       ))}
       {hasMoreThanOneItem && (
         <>
-          <Button className={s.buttonPrev} variant={'transparent'}></Button>
-          <Button className={s.buttonNext} variant={'transparent'}></Button>
-          <div className={s.pagination}></div>
+          <Button
+            className={s.buttonPrev}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slidePrev()
+            }}
+            variant={'transparent'}
+          ></Button>
+          <Button
+            className={s.buttonNext}
+            onClick={e => {
+              e.stopPropagation()
+              swiperRef.current?.swiper.slideNext()
+            }}
+            variant={'transparent'}
+          ></Button>
+          <div className={s.pagination} onClick={handleStopPropagation}></div>
         </>
       )}
     </Swiper>

@@ -27,7 +27,7 @@ const mockTabs: Tab[] = [
   { title: 'My payments', value: 'tabs4' },
 ]
 
-const renderTabsList = (disabled = false) => (
+export const renderTabsList = (disabled = false) => (
   <TabsList loop>
     {mockTabs.map(tab => (
       <TabsTrigger disabled={disabled} key={tab.value} value={tab.value}>
