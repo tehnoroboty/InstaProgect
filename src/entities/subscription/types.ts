@@ -1,19 +1,17 @@
-import {
-  SelectedSubscriptionType,
-  SistemPaymentType,
-} from '@/src/shared/lib/constants/subscriptions'
-
 export type RequestSubscriptionType = {
   amount: number
   baseUrl: string
-  paymentType: SistemPaymentType
+  paymentType: SystemPaymentType
   typeSubscription: SelectedSubscriptionType
 }
+
+export type SystemPaymentType = 'CREDIT_CARD' | 'PAYPAL' | 'STRIPE'
+export type SelectedSubscriptionType = 'DAY' | 'MONTHLY' | 'WEEKLY'
 
 export type MyPaymentType = {
   dateOfPayment: string
   endDateOfSubscription: string
-  paymentType: SistemPaymentType
+  paymentType: SystemPaymentType
   price: number
   subscriptionId: string
   subscriptionType: SelectedSubscriptionType

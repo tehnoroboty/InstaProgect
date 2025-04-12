@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared/ui/tabs'
 import { AccountManagement } from '@/src/widgets/accountManager/AccountManagement'
 import { Devices } from '@/src/widgets/devices/Devices'
 import { GenerationInformation } from '@/src/widgets/generationInformation/GenerationInformation'
+import { MyPayments } from '@/src/widgets/myPayments/MyPayments'
 import { Tab } from '@/src/widgets/settingsPage/data'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -23,7 +24,7 @@ const dataTabs: Tab[] = [
     title: 'Account Management',
     value: 'account-management',
   },
-  { page: <Devices />, title: 'My payments', value: 'my-payments' },
+  { page: <MyPayments />, title: 'My payments', value: 'my-payments' },
 ]
 
 export const SettingsPage = ({ userId }: { userId: string }) => {
