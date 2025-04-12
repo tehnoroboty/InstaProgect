@@ -41,11 +41,12 @@ export const AccountManagement = () => {
   const [selectedSubscription, setSelectedSubscription] = useState<SelectedSubscriptionType>(
     SelectedSubscriptionType.DAY
   )
-  
+
   const [modalSuccessType, setModalSuccessType] = useState<ModalSuccessType | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('The inputModel has incorrect values')
-  const [paymentSystem, setPaymentSystem] = useState<SistemPaymentType>(
-    SistemPaymentType.CREDIT_CARD)
+  const [paymentSystem, setPaymentSystem] = useState<SystemPaymentType>(
+    SystemPaymentType.CREDIT_CARD
+  )
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [modalChecked, setModalChecked] = useState(false)
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -230,7 +231,7 @@ export const AccountManagement = () => {
             <Button
               className={s.subscriptionPayBtn}
               onClick={() => {
-                onClickPayment(SystemPaymentType.SPRITE)
+                onClickPayment(SystemPaymentType.STRIPE)
               }}
               variant={'bordered'}
             >
