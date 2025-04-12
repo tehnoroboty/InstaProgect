@@ -3,8 +3,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
 import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
+import { postsReducer, postsSlice } from '@/src/shared/model/slices/postsSlice'
 import { configureStore } from '@reduxjs/toolkit'
-import { postsSlice } from '@/src/shared/model/slices/postsSlice'
 
 export const initializeStore = () => {
   return configureStore({
@@ -13,7 +13,7 @@ export const initializeStore = () => {
       [appSlice.name]: appReducer,
       [baseApi.reducerPath]: baseApi.reducer,
       [modalSlice.name]: modalReducer,
-      [postsSlice.name]: postsSlice.reducer,
+      [postsSlice.name]: postsReducer,
     },
   })
 }

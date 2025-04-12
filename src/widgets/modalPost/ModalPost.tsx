@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
-import { GetCommentsResponse, ImageType, Item } from '@/src/shared/model/api/types'
+import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
@@ -11,15 +11,15 @@ import Image from 'next/image'
 import s from './modalPost.module.scss'
 
 type Props = {
-  isMyPost: boolean
+  comments?: GetCommentsResponse
   isAuth: boolean
+  isMyPost: boolean
   onClose: () => void
   open: boolean
-  comments?: GetCommentsResponse
   post?: Post
 }
 
-export default function ModalPost({ isMyPost, post, isAuth, open, comments, onClose }: Props) {
+export default function ModalPost({ comments, isAuth, isMyPost, onClose, open, post }: Props) {
   if (!post) {
     return null
   }
@@ -51,9 +51,9 @@ export default function ModalPost({ isMyPost, post, isAuth, open, comments, onCl
           )}
           <ModalCommentsSection
             commentsData={commentsData}
+            isAuth={isAuth}
             isMyPost={isMyPost}
             post={post}
-            isAuth={isAuth}
           />
         </div>
       </Dialog>

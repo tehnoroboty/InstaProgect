@@ -2,6 +2,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { Post } from '@/src/entities/post/types'
+import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import {
   useGetCommentsQuery,
@@ -10,18 +12,18 @@ import {
 } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
+import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
-import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
-import { PublicProfileTypes } from '@/src/entities/user/types'
-import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
-import { Post } from '@/src/entities/post/types'
 
+const PUBLIC_PAGE_SIZE = 9
 const AUTH_PAGE_SIZE = 8
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
@@ -56,7 +58,7 @@ export const Profile = (props: Props) => {
   const lastPostId = useAppSelector(selectLastPostId)
   const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
     endCursorPostId: lastPostId || undefined,
-    pageSize: lastPostId ? 9 : AUTH_PAGE_SIZE,
+    pageSize: lastPostId ? PUBLIC_PAGE_SIZE : AUTH_PAGE_SIZE,
     sortBy: SORT_BY,
     sortDirection: SORT_DIRECTION,
     userId: Number(params.userId),
@@ -103,7 +105,7 @@ export const Profile = (props: Props) => {
   }, [closeModal, postId])
 
   const profileDataForRender = profile ? profile : props.profile?.profile
-  const PostsForRender = authProfile ? posts?.items : props.profile?.posts.items
+  const postsForRender = authProfile ? posts?.items : props.profile?.posts.items
   const commentsForRender = authProfile ? comments : props.profile?.comments
   const postForRender = authProfile ? post : props.profile?.post
 
@@ -115,15 +117,19 @@ export const Profile = (props: Props) => {
         profile={profileDataForRender}
       />
       {isFetchingPosts && <div>Loading ...</div>}
-      {!PostsForRender ? <div>Пусто</div> : <Posts posts={PostsForRender} />}
-      {isMyProfile && hasMorePosts && <div className={s.loadMore} ref={ref}></div>}
+      {!postsForRender ? <div>Пусто</div> : <Posts posts={postsForRender} />}
+      {isMyProfile && hasMorePosts && (
+        <div className={s.loadMore} ref={ref}>
+          <Typography option={'bold_text16'}>Loading...</Typography>
+        </div>
+      )}
       {commentsForRender && postForRender && (
         <ModalPost
-          isMyPost={isMyProfile}
+          comments={commentsForRender}
           isAuth={authProfile}
+          isMyPost={isMyProfile}
           onClose={closeModal}
           open={modalIsOpen}
-          comments={commentsForRender}
           post={postForRender}
         />
       )}

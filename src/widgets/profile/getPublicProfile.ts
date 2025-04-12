@@ -1,6 +1,6 @@
+import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
-import { Post } from '@/src/entities/post/types'
 
 export const getUserProfile = async (userId: string): Promise<PublicProfileTypes> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-user/profile/${userId}`, {

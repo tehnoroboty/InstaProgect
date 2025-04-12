@@ -1,13 +1,13 @@
+import { Post } from '@/src/entities/post/types'
+import { GetCommentsResponse } from '@/src/shared/model/api/types'
 import { Profile } from '@/src/widgets/profile/Profile'
 import {
+  SearchParams,
   getUserComments,
   getUserPost,
   getUserPosts,
   getUserProfile,
-  SearchParams,
 } from '@/src/widgets/profile/getPublicProfile'
-import { Post } from '@/src/entities/post/types'
-import { GetCommentsResponse } from '@/src/shared/model/api/types'
 
 type Props = {
   params: { userId: string }

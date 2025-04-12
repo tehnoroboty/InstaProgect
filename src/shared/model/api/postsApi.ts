@@ -2,7 +2,7 @@ import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
-  GetMyPostsArgs,
+  GetPostsArgs,
   GetPostsResponse,
   ImageType,
   RequestPostsType,
@@ -28,8 +28,9 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
       invalidatesTags: ['POSTS'],
-      async onQueryStarted({}, { dispatch, queryFulfilled, getState }) {
+      async onQueryStarted({}, { dispatch, getState, queryFulfilled }) {
         const patchResult = dispatch(setLastPostId({ lastPostId: null }))
+
         try {
           await queryFulfilled
         } catch {}
@@ -77,7 +78,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/id/${postId}`,
       }),
     }),
-    getPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
+    getPosts: builder.query<GetPostsResponse, GetPostsArgs>({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
       },
@@ -85,6 +86,7 @@ export const postsApi = baseApi.injectEndpoints({
         const intersection = currentCache.items.filter(obj1 =>
           newItems.items.some(obj2 => obj1.id === obj2.id)
         )
+
         if (intersection.length === 0) {
           currentCache.items.push(...newItems.items)
         } else {

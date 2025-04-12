@@ -16,5 +16,5 @@ export const postsSlice = createSlice({
 })
 
 export const { setLastPostId } = postsSlice.actions
-export const modalReducer = postsSlice.reducer
+export const postsReducer = postsSlice.reducer
 export const { selectLastPostId } = postsSlice.selectors
