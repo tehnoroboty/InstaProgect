@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect } from 'react'
 
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { useRouter } from 'next/navigation'
@@ -18,7 +19,7 @@ export const AuthWrapper = ({ children }: Props) => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      router.push('/')
+      router.push(AuthRoutes.HOME)
     }
   }, [isSuccess, data])
 

@@ -9,7 +9,7 @@
   max-width: 234px;
   height: 391px;
 
-  background-color: var(--dark-500);
+  background-color: var(--dark-700);
 }
 
 .carouselContainer {
@@ -27,14 +27,14 @@
 
 .cardLowerPart {
   position: relative;
-  z-index: 100500;
+  z-index: 2;
   transform: translateY(0);
 
   overflow: hidden;
 
   padding: 0 2px;
 
-  background-color: var(--dark-500);
+  background-color: var(--dark-700);
 
   transition: transform 0.3s ease-in-out;
 
