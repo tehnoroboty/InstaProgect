@@ -13,6 +13,7 @@ import s from './Input.module.scss'
 
 export type InputProps = {
   error?: string
+  important?: boolean
   label?: string
   onClear?: () => void
   placeholder?: string
@@ -24,6 +25,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
     disabled = false,
     error,
     id,
+    important = false,
     label,
     onClear,
     placeholder = 'Input text',
@@ -58,6 +60,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
           htmlFor={finalId}
         >
           {label}
+          {important && <span className={s.importantForLabel}>{'*'}</span>}
         </Typography>
       )}
       <div className={clsx(s.group, { [s.disabled]: disabled })}>

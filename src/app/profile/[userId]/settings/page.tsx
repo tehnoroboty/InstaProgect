@@ -1,7 +1,5 @@
-'use client'
+import { SettingsPage } from '@/src/widgets/settingsPage/SettingaPage'
 
-import { SettingsPage } from '@/src/widgets/SettingaPage'
-
-export default function Settings() {
-  return <SettingsPage />
+export default function Settings({ params }: { params: { tab: string; userId: string } }) {
+  return <SettingsPage userId={params.userId} />
 }

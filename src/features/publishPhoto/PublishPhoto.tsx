@@ -15,7 +15,7 @@ import {
 } from '@/src/shared/model/api/postsApi'
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
-import { setIsModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -188,7 +188,7 @@ export const PublishPhoto = ({ photos }: Props) => {
       </Dialog>
       <ExitModal
         onCloseModal={exitModal.setFalse}
-        onCloseParentModal={() => dispatch(setIsModalOpen({ isOpen: false }))}
+        onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />

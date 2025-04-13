@@ -90,7 +90,7 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
             {authProfile &&
               (isMyProfile ? (
                 <Button
-                  onClick={() => router.push(`/profile/${profile.id}/settings`)}
+                  onClick={() => router.push(`/profile/${profile.id}/settings/general-information`)}
                   variant={'secondary'}
                 >
                   {'Profile Settings'}

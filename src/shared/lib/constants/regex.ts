@@ -4,3 +4,5 @@ export const PASSWORD_REGEX =
 export const USERNAME_REGEX = /^[A-Za-z0-9_-]+$/
 
 export const MAX_SIZE_PHOTO = 20 * 1024 * 1024
+
+export const NAME_REGEX = /^[A-Za-zА-Яа-я]+$/

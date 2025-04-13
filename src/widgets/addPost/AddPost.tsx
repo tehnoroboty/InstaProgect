@@ -1,19 +1,19 @@
 'use client'
 import { useState } from 'react'
 
-import { CreatePost } from '@/src/features/createPost/CreatePost'
+import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 
 export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
 
   const createPhoto = (photo: string) => {
-    setPhotos([...photos, photo])
+    return setPhotos(prevPhotos => [...prevPhotos, photo])
   }
 
   return (
     <>
-      <CreatePost download={createPhoto} />
+      <CreatePostPhoto download={createPhoto} modalType={'post'} />
       {photos.length !== 0 && <CroppingPhoto photos={photos} />}
     </>
   )

@@ -18,3 +18,5 @@ export type CroppedAreaType = {
   x: number
   y: number
 }
+
+export type ModalType = 'photo' | 'post'

@@ -5,6 +5,7 @@ const SvgArrowIosBackOutline = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGE
     fill={'none'}
     height={24}
     ref={ref}
+    viewBox={'0 0 24 24'}
     width={24}
     xmlns={'http://www.w3.org/2000/svg'}
     {...props}

@@ -2,19 +2,24 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const modalSlice = createSlice({
   initialState: {
-    isOpen: false,
+    isPhotoOpen: false,
+    isPostOpen: false,
   },
   name: 'modal',
   reducers: {
-    setIsModalOpen: (state, action) => {
-      state.isOpen = action.payload.isOpen
+    setIsPhotoModalOpen: (state, action) => {
+      state.isPhotoOpen = action.payload.isOpen
+    },
+    setIsPostModalOpen: (state, action) => {
+      state.isPostOpen = action.payload.isOpen
     },
   },
   selectors: {
-    selectIsModalOpen: state => state.isOpen,
+    selectIsPhotoModalOpen: state => state.isPhotoOpen,
+    selectIsPostModalOpen: state => state.isPostOpen,
   },
 })
 
-export const { setIsModalOpen } = modalSlice.actions
+export const { setIsPhotoModalOpen, setIsPostModalOpen } = modalSlice.actions
 export const modalReducer = modalSlice.reducer
-export const { selectIsModalOpen } = modalSlice.selectors
+export const { selectIsPhotoModalOpen, selectIsPostModalOpen } = modalSlice.selectors

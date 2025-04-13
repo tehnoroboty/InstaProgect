@@ -1,0 +1,69 @@
+.datePickerBtn {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--dark-100);
+  border-radius: 2px;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--light-900);
+
+  background-color: var(--dark-700);
+
+  &:active {
+    border: 1px solid var(--dark-300);
+    background-color: var(--dark-500);
+  }
+
+  &:focus-visible {
+    border: 1px solid transparent;
+    background-color: var(--dark-500);
+    outline: 2px solid var(--primary-700);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border: 1px solid var(--dark-100);
+      background-color: var(--dark-500);
+    }
+  }
+}
+
+.errorBtn {
+  border: 1px solid var(--danger-500);
+}
+
+.content {
+  pointer-events: auto;
+
+  z-index: 888;
+
+  height: fit-content;
+  padding: 10px 12px;
+  border: 1px solid var(--dark-300);
+  border-radius: 2px;
+
+  color: var(--dark-100);
+
+  background-color: var(--dark-500);
+}
+
+.label {
+  color: var(--light-900);
+}
+
+.datePickerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  color: var(--danger-500);
+}
