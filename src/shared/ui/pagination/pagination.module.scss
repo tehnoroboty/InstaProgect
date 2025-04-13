@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
 .paginationContainer {
   display: flex;
   gap: 12px;
@@ -59,4 +65,15 @@
 
 .dots {
   cursor: default;
+}
+
+.selectContainer {
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: auto;
+  margin-right: 7px;
+  margin-left: 4px;
 }
