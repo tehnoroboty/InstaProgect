@@ -7,6 +7,8 @@ import clsx from 'clsx'
 
 import s from './pagination.module.scss'
 
+import { Button } from '../button/Button'
+
 type PaginationProps = {
   className?: string
   currentPage: number
@@ -42,13 +44,16 @@ export const Pagination = (props: PaginationProps) => {
 
   return (
     <ul className={clsx(s.paginationContainer, className)}>
-      <li
-        className={clsx(s.paginationItem, s.paginationItemArrow, {
-          [s.disabled]: currentPage === 1,
-        })}
-        onClick={onPrevious}
-      >
-        <ArrowLeftIcon className={s.arrowIcon} />
+      <li className={s.paginationItem}>
+        <Button
+          aria-label={'Previous page'}
+          className={clsx(s.button, s.buttonArrow)}
+          disabled={currentPage === 1}
+          onClick={onPrevious}
+          variant={'transparent'}
+        >
+          <ArrowLeftIcon className={s.arrowIcon} />
+        </Button>
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
@@ -60,24 +65,30 @@ export const Pagination = (props: PaginationProps) => {
         }
 
         return (
-          <li
-            className={clsx(s.paginationItem, {
-              [s.selected]: pageNumber === currentPage,
-            })}
-            key={pageNumber}
-            onClick={() => onPageChange(pageNumber as number)}
-          >
-            {pageNumber}
+          <li className={s.paginationItem} key={pageNumber}>
+            <Button
+              aria-current={pageNumber === currentPage ? 'page' : undefined}
+              className={clsx(s.button, {
+                [s.selected]: pageNumber === currentPage,
+              })}
+              onClick={() => onPageChange(pageNumber as number)}
+              variant={'transparent'}
+            >
+              {pageNumber}
+            </Button>
           </li>
         )
       })}
-      <li
-        className={clsx(s.paginationItem, s.paginationItemArrow, {
-          [s.disabled]: currentPage === lastPage,
-        })}
-        onClick={onNext}
-      >
-        <ArrowRightIcon className={s.arrowIcon} />
+      <li className={s.paginationItem}>
+        <Button
+          aria-label={'Next page'}
+          className={clsx(s.button, s.buttonArrow)}
+          disabled={currentPage === lastPage}
+          onClick={onNext}
+          variant={'transparent'}
+        >
+          <ArrowRightIcon className={s.arrowIcon} />
+        </Button>
       </li>
     </ul>
   )
