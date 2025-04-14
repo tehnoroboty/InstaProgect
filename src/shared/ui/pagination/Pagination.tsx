@@ -29,6 +29,9 @@ type PaginationProps = {
    * */
   pageSize: number
   /**
+   * custom select options*/
+  pageSizeOptions?: Options[]
+  /**
    * represents the min number of page buttons to be shown on each side of the current page button. Defaults to 1.*/
   siblingCount?: number
   /**
@@ -54,6 +57,7 @@ export const Pagination = (props: PaginationProps) => {
     onPageChange,
     onPageSizeChange,
     pageSize,
+    pageSizeOptions = PAGE_SIZE_OPTIONS,
     siblingCount = 1,
     totalCount,
   } = props
@@ -90,61 +94,63 @@ export const Pagination = (props: PaginationProps) => {
 
   return (
     <div className={clsx(s.container, className)}>
-      <ul className={s.paginationContainer}>
-        <li className={s.paginationItem}>
-          <Button
-            aria-label={'Previous page'}
-            className={clsx(s.button, s.buttonArrow)}
-            disabled={currentPage === 1}
-            onClick={onPrevious}
-            variant={'transparent'}
-          >
-            <ArrowLeftIcon className={s.arrowIcon} />
-          </Button>
-        </li>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS) {
+      <nav aria-label={'Pagination'}>
+        <ul className={s.paginationContainer}>
+          <li className={s.paginationItem}>
+            <Button
+              aria-label={'Previous page'}
+              className={clsx(s.button, s.buttonArrow)}
+              disabled={currentPage === 1}
+              onClick={onPrevious}
+              variant={'transparent'}
+            >
+              <ArrowLeftIcon className={s.arrowIcon} />
+            </Button>
+          </li>
+          {paginationRange.map((pageNumber, index) => {
+            if (pageNumber === DOTS) {
+              return (
+                <li className={clsx(s.paginationItem, s.dots)} key={`dots-${index}`}>
+                  {DOTS}
+                </li>
+              )
+            }
+
             return (
-              <li className={clsx(s.paginationItem, s.dots)} key={`dots-${index}`}>
-                {DOTS}
+              <li className={s.paginationItem} key={pageNumber}>
+                <Button
+                  aria-current={pageNumber === currentPage ? 'page' : undefined}
+                  className={clsx(s.button, {
+                    [s.selected]: pageNumber === currentPage,
+                  })}
+                  onClick={() => onPageChange(pageNumber as number)}
+                  variant={'transparent'}
+                >
+                  {pageNumber}
+                </Button>
               </li>
             )
-          }
-
-          return (
-            <li className={s.paginationItem} key={pageNumber}>
-              <Button
-                aria-current={pageNumber === currentPage ? 'page' : undefined}
-                className={clsx(s.button, {
-                  [s.selected]: pageNumber === currentPage,
-                })}
-                onClick={() => onPageChange(pageNumber as number)}
-                variant={'transparent'}
-              >
-                {pageNumber}
-              </Button>
-            </li>
-          )
-        })}
-        <li className={s.paginationItem}>
-          <Button
-            aria-label={'Next page'}
-            className={clsx(s.button, s.buttonArrow)}
-            disabled={currentPage === lastPage}
-            onClick={onNext}
-            variant={'transparent'}
-          >
-            <ArrowRightIcon className={s.arrowIcon} />
-          </Button>
-        </li>
-      </ul>
+          })}
+          <li className={s.paginationItem}>
+            <Button
+              aria-label={'Next page'}
+              className={clsx(s.button, s.buttonArrow)}
+              disabled={currentPage === lastPage}
+              onClick={onNext}
+              variant={'transparent'}
+            >
+              <ArrowRightIcon className={s.arrowIcon} />
+            </Button>
+          </li>
+        </ul>
+      </nav>
       <div className={s.selectContainer}>
         <Typography>Show</Typography>
         <SelectBox
           className={s.select}
           isPagination
           onChangeValue={handlePageSizeChange}
-          options={PAGE_SIZE_OPTIONS}
+          options={pageSizeOptions}
         />
         <Typography>on page</Typography>
       </div>

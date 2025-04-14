@@ -26,7 +26,7 @@ const mockPaginationProps = {
   totalCount: 100,
 }
 
-export const DefaultPagination: Story = {
+export const InteractiveDemo: Story = {
   args: { ...mockPaginationProps },
   render: args => {
     const [page, setPage] = useState(args.currentPage)
@@ -45,6 +45,35 @@ export const DefaultPagination: Story = {
           <Typography>Current page: {page}</Typography>
           <Typography>Items per page: {size}</Typography>
         </div>
+      </div>
+    )
+  },
+}
+
+export const WithCustomOptions: Story = {
+  args: {
+    ...mockPaginationProps,
+    pageSizeOptions: [
+      { value: '5', valueTitle: '5' },
+      { value: '15', valueTitle: '15' },
+      { value: '25', valueTitle: '25' },
+    ],
+  },
+  render: args => (
+    <div>
+      <Typography>With custom page size options</Typography>
+      <Pagination {...args} />
+    </div>
+  ),
+}
+
+export const WithCustomSiblingCount: Story = {
+  args: { ...mockPaginationProps, currentPage: 5, siblingCount: 2 },
+  render: args => {
+    return (
+      <div>
+        <Typography>With 2 sibling pages visible</Typography>
+        <Pagination {...args} />
       </div>
     )
   },
