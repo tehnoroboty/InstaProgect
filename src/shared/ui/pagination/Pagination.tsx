@@ -3,7 +3,7 @@
 import ArrowLeftIcon from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ArrowRightIcon from '@/src/shared/assets/componentsIcons/ArrowIosForwardOutline'
 import { DOTS, usePagination } from '@/src/shared/ui/pagination/usePagination'
-import { SelectBox } from '@/src/shared/ui/select/SelectBox'
+import { Options, SelectBox } from '@/src/shared/ui/select/SelectBox'
 import clsx from 'clsx'
 
 import s from './pagination.module.scss'
@@ -13,15 +13,39 @@ import { Typography } from '../typography/Typography'
 
 type PaginationProps = {
   className?: string
+  /**
+   * represents the current active page
+   * */
   currentPage: number
+  /**
+   * callback function invoked with the updated page value when the page is changed
+   * */
   onPageChange: (page: number) => void
+  /**
+   * callback function is called when the value changes*/
   onPageSizeChange?: (size: number) => void
+  /**
+   * represents the maximum data that is visible in a single page
+   * */
   pageSize: number
+  /**
+   * represents the min number of page buttons to be shown on each side of the current page button. Defaults to 1.*/
   siblingCount?: number
+  /**
+   * represents the total count of data available from the source
+   * */
   totalCount: number
 }
 
 export type UsePaginationProps = Omit<PaginationProps, 'className' | 'onPageChange'>
+
+const PAGE_SIZE_OPTIONS: Options[] = [
+  { value: '10', valueTitle: '10' },
+  { value: '20', valueTitle: '20' },
+  { value: '30', valueTitle: '30' },
+  { value: '50', valueTitle: '50' },
+  { value: '100', valueTitle: '100' },
+]
 
 export const Pagination = (props: PaginationProps) => {
   const {
@@ -36,6 +60,10 @@ export const Pagination = (props: PaginationProps) => {
 
   const handlePageSizeChange = (value: string) => {
     const newSize = Number(value)
+
+    if (isNaN(newSize)) {
+      return
+    }
 
     onPageSizeChange?.(newSize)
     onPageChange(1)
@@ -116,13 +144,7 @@ export const Pagination = (props: PaginationProps) => {
           className={s.select}
           isPagination
           onChangeValue={handlePageSizeChange}
-          options={[
-            { value: '10', valueTitle: '10' },
-            { value: '20', valueTitle: '20' },
-            { value: '30', valueTitle: '30' },
-            { value: '50', valueTitle: '50' },
-            { value: '100', valueTitle: '100' },
-          ]}
+          options={PAGE_SIZE_OPTIONS}
         />
         <Typography>on page</Typography>
       </div>
