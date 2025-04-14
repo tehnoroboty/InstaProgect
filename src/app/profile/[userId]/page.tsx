@@ -9,10 +9,12 @@ import {
   getUserProfile,
 } from '@/src/widgets/profile/getPublicProfile'
 
-export default async function ProfilePage(props: {
+type Props = {
   params: { userId: string }
   searchParams: SearchParams
-}) {
+}
+
+export default async function ProfilePage(props: Props) {
   const userProfile = await getUserProfile(props.params.userId)
   const userPosts = await getUserPosts(props.params.userId)
   const searchParams = await props.searchParams
@@ -38,5 +40,5 @@ export default async function ProfilePage(props: {
     profile: userProfile,
   }
 
-  return <Profile publicProfileNoAuth={publicProfileNoAuth} />
+  return <Profile profile={publicProfileNoAuth} />
 }

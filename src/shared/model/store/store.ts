@@ -1,7 +1,9 @@
-import { authApi } from '@/src/shared/model/api/authApi'
+import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux'
+
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
 import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
+import { postsReducer, postsSlice } from '@/src/shared/model/slices/postsSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const initializeStore = () => {
@@ -9,8 +11,9 @@ export const initializeStore = () => {
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
     reducer: {
       [appSlice.name]: appReducer,
-      [authApi.reducerPath]: authApi.reducer,
+      [baseApi.reducerPath]: baseApi.reducer,
       [modalSlice.name]: modalReducer,
+      [postsSlice.name]: postsReducer,
     },
   })
 }
@@ -18,3 +21,7 @@ export const initializeStore = () => {
 type StoreType = ReturnType<typeof initializeStore>
 export type RootState = ReturnType<StoreType['getState']>
 export type AppDispatch = StoreType['dispatch']
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppStore = () => useStore<StoreType>()

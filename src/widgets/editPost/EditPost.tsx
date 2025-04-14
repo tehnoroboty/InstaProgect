@@ -89,7 +89,7 @@ export const EditPost = ({
 
         <div className={s.container}>
           <div className={s.photoBox}>
-            <Image alt={'picture'} layout={'fill'} objectFit={'cover'} src={imgSrc} />
+            <Image alt={'picture'} fill src={imgSrc} style={{ objectFit: 'cover' }} />
           </div>
           <div className={s.descriptionBox}>
             <UserAvatarName className={s.userAvatarName} url={avatarOwner} username={userName} />

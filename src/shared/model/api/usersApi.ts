@@ -1,4 +1,4 @@
-import { Profile } from '@/src/entities/user/types'
+import { Profile, ProfileByUserName } from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const usersApi = baseApi.injectEndpoints({
@@ -15,7 +15,7 @@ export const usersApi = baseApi.injectEndpoints({
       providesTags: ['PROFILE'],
       query: () => '/users/profile',
     }),
-    getUserProfile: builder.query<any, string>({
+    getUserProfile: builder.query<ProfileByUserName, string>({
       providesTags: ['FOLLOWING'],
       query: userName => `/users/${userName}`,
     }),
@@ -56,9 +56,9 @@ export const usersApi = baseApi.injectEndpoints({
 })
 
 export const {
-  useDeleteProfileAvatarMutation,
   useGetMyProfileQuery,
   useGetUserProfileQuery,
+  useDeleteProfileAvatarMutation,
   usePutUserProfileMutation,
   useUpdateUserAvatarMutation,
 } = usersApi

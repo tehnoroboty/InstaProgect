@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './posts.module.scss'
+import { Item } from '@/src/shared/model/api/types'
 
 type ImageType = {
   height?: number
@@ -21,7 +22,7 @@ type PostType = {
 }
 
 type Props = {
-  posts: PostType[]
+  posts: PostType[] | Item[]
   publicPost?: Post | null
   publicPosts?: any
 }
@@ -37,7 +38,6 @@ export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
       scroll: false,
     })
   }
-
   const renderImgCarousel = (img: ImageType, index: number) => {
     return (
       <Image alt={'Post image'} height={228} priority={index === 0} src={img.url} width={234} />

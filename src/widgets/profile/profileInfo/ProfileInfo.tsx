@@ -1,22 +1,24 @@
-import { useState } from 'react'
-
-import { PublicProfileTypes } from '@/src/entities/user/types'
-import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
-import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
+import { ProfileByUserName, PublicProfileTypes } from '@/src/entities/user/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useRouter } from 'next/navigation'
 
 import s from './profileInfo.module.scss'
+import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
+import { useState } from 'react'
+import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: GetProfileWithFollowType | PublicProfileTypes
+  profile: PublicProfileTypes | ProfileByUserName | undefined
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
+  if (!profile) {
+    return
+  }
   const router = useRouter()
   const [follow] = useFollowMutation()
   const [unFollow] = useUnFollowMutation()
@@ -27,17 +29,17 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
   const followingCount =
-    !authProfile && 'userMetadata' in profile
+    'userMetadata' in profile
       ? profile.userMetadata.following
-      : ((profile as GetProfileWithFollowType)?.followingCount ?? 0)
+      : ((profile as ProfileByUserName)?.followingCount ?? 0)
   const followersCount =
     !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.followers
-      : ((profile as GetProfileWithFollowType)?.followersCount ?? 0)
+      : ((profile as ProfileByUserName)?.followersCount ?? 0)
   const publicationsCount =
     !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.publications
-      : ((profile as GetProfileWithFollowType)?.publicationsCount ?? 0)
+      : ((profile as ProfileByUserName)?.publicationsCount ?? 0)
 
   const onClickFollowingHandler = async () => {
     if (!isFollowing) {
@@ -98,7 +100,8 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
               ) : (
                 <>
                   <Button onClick={onClickFollowingHandler} variant={'primary'}>
-                    {isFollowing ? 'Unfollow' : 'Follow'}
+                    {/*{isFollowing ? 'Unfollow' : 'Follow'}*/}
+                    Unfollow
                   </Button>
                   <Button variant={'secondary'}>Send Message</Button>
                 </>
