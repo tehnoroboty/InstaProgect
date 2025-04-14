@@ -48,7 +48,7 @@ export const Profile = (props: Props) => {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
-
+  console.log(authProfile)
   // получаем информацию профайл
   const { data: myProfile } = useGetMyProfileQuery()
   const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {

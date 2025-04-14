@@ -5,6 +5,9 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useRouter } from 'next/navigation'
 
 import s from './profileInfo.module.scss'
+import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
+import { useState } from 'react'
+import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 
 type Props = {
   authProfile: boolean
@@ -17,16 +20,16 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
     return
   }
   const router = useRouter()
-  // const [follow] = useFollowMutation()
-  // const [unFollow] = useUnFollowMutation()
-  // const [isFollowing, setIsFollowing] = useState<boolean>(
-  //   (profile as GetProfileWithFollowType)?.isFollowing ?? false
-  // )
+  const [follow] = useFollowMutation()
+  const [unFollow] = useUnFollowMutation()
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    (profile as GetProfileWithFollowType)?.isFollowing ?? false
+  )
   const avatarUrl = profile?.avatars?.[0]?.url
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
   const followingCount =
-    !authProfile && 'userMetadata' in profile
+    'userMetadata' in profile
       ? profile.userMetadata.following
       : ((profile as ProfileByUserName)?.followingCount ?? 0)
   const followersCount =
@@ -39,13 +42,12 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
       : ((profile as ProfileByUserName)?.publicationsCount ?? 0)
 
   const onClickFollowingHandler = async () => {
-    // TODO: follow unfollow
-    // if (!isFollowing) {
-    //   await follow(profile.id).unwrap()
-    // } else {
-    //   await unFollow(profile.id).unwrap()
-    // }
-    // setIsFollowing(prev => !prev)
+    if (!isFollowing) {
+      await follow(profile.id).unwrap()
+    } else {
+      await unFollow(profile.id).unwrap()
+    }
+    setIsFollowing(prev => !prev)
   }
 
   return (

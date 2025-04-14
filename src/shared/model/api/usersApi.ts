@@ -1,4 +1,4 @@
-import { Profile, ProfileByUserName, PublicProfileTypes } from '@/src/entities/user/types'
+import { Profile, ProfileByUserName } from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const usersApi = baseApi.injectEndpoints({
@@ -18,10 +18,6 @@ export const usersApi = baseApi.injectEndpoints({
     getUserProfile: builder.query<ProfileByUserName, string>({
       providesTags: ['FOLLOWING'],
       query: userName => `/users/${userName}`,
-    }),
-    getUserProfileById: builder.query<PublicProfileTypes, number>({
-      providesTags: ['USER_PROFILE'],
-      query: profileId => `/public-user/profile/${profileId}`,
     }),
     putUserProfile: builder.mutation<any, any>({
       invalidatesTags: ['PROFILE'],
@@ -59,10 +55,10 @@ export const usersApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetMyProfileQuery,
-    useGetUserProfileQuery,
-    useGetUserProfileByIdQuery ,
-    useDeleteProfileAvatarMutation,
-    usePutUserProfileMutation,
-    useUpdateUserAvatarMutation,} = usersApi
-
+export const {
+  useGetMyProfileQuery,
+  useGetUserProfileQuery,
+  useDeleteProfileAvatarMutation,
+  usePutUserProfileMutation,
+  useUpdateUserAvatarMutation,
+} = usersApi
