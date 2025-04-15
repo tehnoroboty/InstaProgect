@@ -11,7 +11,11 @@ import {
   useGetPostsQuery,
 } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
-import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import {
+  useGetMyProfileQuery,
+  useGetUserProfileByIdQuery,
+  useGetUserProfileQuery,
+} from '@/src/shared/model/api/usersApi'
 import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
@@ -48,11 +52,14 @@ export const Profile = (props: Props) => {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
-  console.log(authProfile)
   // получаем информацию профайл
-  const { data: myProfile } = useGetMyProfileQuery()
-  const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {
-    skip: !myProfile?.userName,
+  // const { data: myProfile } = useGetMyProfileQuery()
+
+  const { data: profileById } = useGetUserProfileByIdQuery(Number(params.userId), {
+    skip: !params.userId,
+  })
+  const { data: profileByName } = useGetUserProfileQuery(profileById?.userName ?? '', {
+    skip: !profileById?.userName,
   })
   // получаем посты
   const lastPostId = useAppSelector(selectLastPostId)
@@ -104,7 +111,7 @@ export const Profile = (props: Props) => {
     }
   }, [closeModal, postId])
 
-  const profileDataForRender = profile ? profile : props.profile?.profile
+  const profileDataForRender = profileByName ? profileByName : props.profile?.profile
   const postsForRender = authProfile ? posts?.items : props.profile?.posts.items
   const commentsForRender = authProfile ? comments : props.profile?.comments
   const postForRender = authProfile ? post : props.profile?.post

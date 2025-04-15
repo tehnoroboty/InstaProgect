@@ -29,7 +29,7 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
   const followingCount =
-    'userMetadata' in profile
+    !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.following
       : ((profile as ProfileByUserName)?.followingCount ?? 0)
   const followersCount =
