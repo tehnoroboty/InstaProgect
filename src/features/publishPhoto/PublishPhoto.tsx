@@ -27,11 +27,9 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
 import { Title } from '@radix-ui/react-dialog'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
-import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 type Props = {
   photos: string[]
@@ -74,12 +72,13 @@ export const PublishPhoto = ({ photos }: Props) => {
         const publishData: RequestPostsType = {
           childrenMetadata: uploadIds,
           description: value,
+          userId: Number(userProfile?.id) ?? 0,
         }
 
         await addPost(publishData).unwrap()
 
         openModal.setFalse()
-
+        dispatch(setIsPostModalOpen({ isOpen: false }))
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
       } else {
         console.warn('No files were uploaded successfully.')
@@ -187,6 +186,7 @@ export const PublishPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
+        modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}

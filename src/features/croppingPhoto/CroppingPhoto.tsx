@@ -115,14 +115,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
 
   return (
     <>
-      <Dialog
-        className={s.modal}
-        isSimple
-        onClose={() => {
-          exitModal.setTrue()
-        }}
-        open={openModal.value}
-      >
+      <Dialog className={s.modal} isSimple onClose={exitModal.setFalse} open={openModal.value}>
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
             <ArrowIosBackOutline color={'white'} />
