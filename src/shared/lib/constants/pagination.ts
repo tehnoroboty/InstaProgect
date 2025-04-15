@@ -1,7 +1,6 @@
 import { Options } from '../../ui/select/SelectBox'
 
 export const PAGE_SIZE_OPTIONS: Options[] = [
-  { value: '5', valueTitle: '5' },
   { value: '10', valueTitle: '10' },
   { value: '20', valueTitle: '20' },
   { value: '30', valueTitle: '30' },
