@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-export type PaginationRange = ('...' | number)[]
-
 export const DOTS = '...'
 
 const range = (start: number, end: number): number[] => {
