@@ -49,7 +49,6 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
     }
     setIsFollowing(prev => !prev)
   }
-
   return (
     <div className={s.profileContainer}>
       <AvatarBox size={'xl'} src={avatarUrl} />
@@ -100,8 +99,7 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
               ) : (
                 <>
                   <Button onClick={onClickFollowingHandler} variant={'primary'}>
-                    {/*{isFollowing ? 'Unfollow' : 'Follow'}*/}
-                    Unfollow
+                    {isFollowing ? 'Unfollow' : 'Follow'}
                   </Button>
                   <Button variant={'secondary'}>Send Message</Button>
                 </>
