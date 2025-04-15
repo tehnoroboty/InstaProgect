@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import ArrowLeftIcon from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ArrowRightIcon from '@/src/shared/assets/componentsIcons/ArrowIosForwardOutline'
 import { PAGE_SIZE_OPTIONS } from '@/src/shared/lib/constants/pagination'
@@ -41,13 +43,24 @@ type PaginationProps = {
 export const Pagination = (props: PaginationProps) => {
   const {
     className,
-    currentPage,
+    currentPage: propCurrentPage,
     onPageChange,
     onPageSizeChange,
     pageSize,
     siblingCount = 1,
     totalCount,
   } = props
+
+  // Корректируем currentPage, если оно превышает totalPageCount
+  const totalPageCount = Math.ceil(totalCount / pageSize)
+  const currentPage = propCurrentPage > totalPageCount ? 1 : propCurrentPage
+
+  // Если после корректировки currentPage изменилось, вызываем onPageChange
+  useEffect(() => {
+    if (propCurrentPage > totalPageCount && totalPageCount > 0) {
+      onPageChange(1)
+    }
+  }, [propCurrentPage, totalPageCount, onPageChange])
 
   const handlePageSizeChange = (value: string) => {
     const newSize = Number(value)
