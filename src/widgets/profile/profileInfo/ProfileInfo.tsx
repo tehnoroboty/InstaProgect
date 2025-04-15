@@ -1,30 +1,32 @@
+import { useState } from 'react'
+
 import { ProfileByUserName, PublicProfileTypes } from '@/src/entities/user/types'
+import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
+import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useRouter } from 'next/navigation'
 
 import s from './profileInfo.module.scss'
-import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
-import { useState } from 'react'
-import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: PublicProfileTypes | ProfileByUserName | undefined
+  profile: ProfileByUserName | PublicProfileTypes | undefined
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
-  if (!profile) {
-    return
-  }
   const router = useRouter()
   const [follow] = useFollowMutation()
   const [unFollow] = useUnFollowMutation()
   const [isFollowing, setIsFollowing] = useState<boolean>(
     (profile as GetProfileWithFollowType)?.isFollowing ?? false
   )
+
+  if (!profile) {
+    return
+  }
   const avatarUrl = profile?.avatars?.[0]?.url
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
@@ -49,6 +51,7 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
     }
     setIsFollowing(prev => !prev)
   }
+
   return (
     <div className={s.profileContainer}>
       <AvatarBox size={'xl'} src={avatarUrl} />

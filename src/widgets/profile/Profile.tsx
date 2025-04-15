@@ -11,11 +11,7 @@ import {
   useGetPostsQuery,
 } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
-import {
-  useGetMyProfileQuery,
-  useGetUserProfileByIdQuery,
-  useGetUserProfileQuery,
-} from '@/src/shared/model/api/usersApi'
+import { useGetUserProfileByIdQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
 import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
@@ -123,7 +119,6 @@ export const Profile = (props: Props) => {
         isMyProfile={isMyProfile}
         profile={profileDataForRender}
       />
-      {isFetchingPosts && <div>Loading ...</div>}
       {!postsForRender ? <div>Пусто</div> : <Posts posts={postsForRender} />}
       {isMyProfile && hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
