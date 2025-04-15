@@ -5,14 +5,15 @@ import { useInView } from 'react-intersection-observer'
 import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { useGetMyPostsQuery, useGetPublicUserPostsQuery } from '@/src/shared/model/api/postsApi'
 import {
-  GetCommentsResponse,
-  GetPostsResponse,
-  Item,
-  SortDirection,
-} from '@/src/shared/model/api/types'
-import { useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+  useGetCommentsQuery,
+  useGetPostQuery,
+  useGetPostsQuery,
+} from '@/src/shared/model/api/postsApi'
+import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
+import { useGetMyProfileQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
+import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
@@ -22,13 +23,13 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 
-const AUTH_PAGE_SIZE = 3
-const PUBLIC_PAGE_SIZE = 12
+const PUBLIC_PAGE_SIZE = 9
+const AUTH_PAGE_SIZE = 8
 const SORT_BY = 'createdAt'
 const SORT_DIRECTION: SortDirection = 'desc'
 
 type Props = {
-  publicProfileNoAuth: {
+  profile?: {
     comments: GetCommentsResponse | null
     post: Post | null
     posts: GetPostsResponse
@@ -36,41 +37,59 @@ type Props = {
   }
 }
 
-export const Profile = ({ publicProfileNoAuth }: Props) => {
+export const Profile = (props: Props) => {
+  const dispatch = useAppDispatch()
   const { inView, ref } = useInView({ threshold: 1 })
-
-  const [pageNumber, setPageNumber] = useState<number>(1)
-  const [myAllPosts, setMyAllPosts] = useState<Item[]>([])
-  const [publicAllPosts, setPublicAllPosts] = useState<Item[]>([])
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const params = useParams()
-  const userId = params.userId
-
+  const params = useParams<{ userId: string }>()
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+  const router = useRouter()
   const { data: meData } = useMeQuery()
+  const authProfile = !!meData
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
-  const router = useRouter()
-  const authProfile = !!meData
-  const isMyProfile = meData?.userId === Number(userId)
-  const { data: userProfile, isFetching: isFetchingUserProfile } = useGetUserProfileQuery(
-    publicProfileNoAuth.profile.userName,
+  const isMyProfile = meData?.userId === Number(params.userId)
+  console.log(authProfile)
+  // получаем информацию профайл
+  const { data: myProfile } = useGetMyProfileQuery()
+  const { data: profile } = useGetUserProfileQuery(myProfile?.userName ?? '', {
+    skip: !myProfile?.userName,
+  })
+  // получаем посты
+  const lastPostId = useAppSelector(selectLastPostId)
+  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
+    endCursorPostId: lastPostId || undefined,
+    pageSize: lastPostId ? PUBLIC_PAGE_SIZE : AUTH_PAGE_SIZE,
+    sortBy: SORT_BY,
+    sortDirection: SORT_DIRECTION,
+    userId: Number(params.userId),
+  })
+  const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
+  const postsCount = posts?.items.length ?? totalCount
+  const hasMorePosts = totalCount > postsCount
+
+  useEffect(() => {
+    if (hasMorePosts && inView && isMyProfile && !isFetchingPosts) {
+      if (posts?.items[posts.items.length - 1] === lastPostId) {
+        dispatch(setLastPostId({ lastPostId: null }))
+      } else {
+        dispatch(setLastPostId({ lastPostId: posts?.items[posts.items.length - 1]?.id }))
+      }
+    }
+  }, [inView])
+  // получаем пост по ID
+  const { data: post } = useGetPostQuery(
+    { postId: Number(postId) },
     {
-      skip: !meData || isMyProfile,
+      skip: !postId,
     }
   )
-  const { data: myProfile, isFetching: isFetchingMyProfile } = useGetUserProfileQuery(
-    meData?.userName ?? '',
+  // получаем комменты по ID
+  const { data: comments } = useGetCommentsQuery(
+    { postId: Number(postId) },
     {
-      skip: !meData || !isMyProfile,
+      skip: !postId,
     }
   )
-
-  const authUserProfile = isMyProfile ? myProfile : userProfile
-  const profile = authProfile ? authUserProfile : publicProfileNoAuth?.profile
-
-  const pageSize = isMyProfile ? AUTH_PAGE_SIZE : PUBLIC_PAGE_SIZE
-
-  const postsToShow = isMyProfile ? myAllPosts : publicAllPosts
 
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
@@ -85,82 +104,35 @@ export const Profile = ({ publicProfileNoAuth }: Props) => {
     }
   }, [closeModal, postId])
 
-  const { data: myPosts, isFetching: isFetchingMyPosts } = useGetMyPostsQuery(
-    {
-      pageNumber,
-      pageSize,
-      sortBy: SORT_BY,
-      sortDirection: SORT_DIRECTION,
-      userName: myProfile?.userName || '',
-    },
-    { skip: !meData || userProfile }
-  )
-
-  const { data: publicPosts, isFetching: isFetchingPublicPosts } = useGetPublicUserPostsQuery(
-    {
-      // endCursorPostId: '456', // Или undefined для первой страницы
-      // pageSize,
-      sortBy: SORT_BY,
-      sortDirection: SORT_DIRECTION,
-      userName: publicProfileNoAuth.profile.userName,
-    },
-    { skip: !meData || isMyProfile }
-  )
-
-  // собираем посты в Личный профиль
-  useEffect(() => {
-    if (isMyProfile && myPosts?.items) {
-      setMyAllPosts(prev => {
-        const existingIds = new Set(prev.map(post => post.id))
-        const newItems = myPosts.items.filter(post => !existingIds.has(post.id))
-
-        return [...prev, ...newItems]
-      })
-    }
-  }, [myPosts, publicPosts, isMyProfile, params])
-
-  //собираем посты в Публичный профиль
-  useEffect(() => {
-    if (authProfile && !isMyProfile && publicPosts?.items) {
-      setPublicAllPosts(publicPosts.items)
-    }
-  }, [publicPosts, isMyProfile])
-
-  const totalCount = myPosts?.totalCount ?? pageSize
-  const hasMorePosts = Math.ceil(totalCount / pageSize) > pageNumber
-
-  // бесконечный скролл только для личного профиля
-  useEffect(() => {
-    if (hasMorePosts && inView && isMyProfile && !isFetchingMyPosts) {
-      setPageNumber(prevPage => prevPage + 1)
-    }
-  }, [inView, isFetchingMyPosts, isMyProfile])
-
-  useEffect(() => {
-    setMyAllPosts([])
-    setPublicAllPosts([])
-    setPageNumber(1)
-  }, [params.userId])
+  const profileDataForRender = profile ? profile : props.profile?.profile
+  const postsForRender = authProfile ? posts?.items : props.profile?.posts.items
+  const commentsForRender = authProfile ? comments : props.profile?.comments
+  const postForRender = authProfile ? post : props.profile?.post
 
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
-      <ProfileInfo authProfile={authProfile} isMyProfile={isMyProfile} profile={profile} />
-      {isFetchingMyPosts || (isFetchingPublicPosts && <div>Loading ...</div>)}
-      <Posts posts={authProfile ? postsToShow : publicProfileNoAuth.posts.items} />
+      <ProfileInfo
+        authProfile={authProfile}
+        isMyProfile={isMyProfile}
+        profile={profileDataForRender}
+      />
+      {isFetchingPosts && <div>Loading ...</div>}
+      {!postsForRender ? <div>Пусто</div> : <Posts posts={postsForRender} />}
       {isMyProfile && hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
-          {isFetchingMyPosts && <Typography option={'bold_text16'}>Loading...</Typography>}
+          <Typography option={'bold_text16'}>Loading...</Typography>
         </div>
       )}
-      <ModalPost
-        {...(!authProfile &&
-          publicProfileNoAuth && {
-            publicComments: publicProfileNoAuth.comments,
-            publicPost: publicProfileNoAuth.post,
-          })}
-        onClose={closeModal}
-        open={modalIsOpen}
-      />
+      {commentsForRender && postForRender && (
+        <ModalPost
+          comments={commentsForRender}
+          isAuth={authProfile}
+          isMyPost={isMyProfile}
+          onClose={closeModal}
+          open={modalIsOpen}
+          post={postForRender}
+        />
+      )}
     </div>
   )
 }

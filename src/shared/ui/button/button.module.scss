@@ -13,7 +13,7 @@
 
   transition: all 0.3s ease;
 
-  &:disabled{
+  &:disabled {
     cursor: default;
   }
 
@@ -125,7 +125,6 @@ a.transparent:visited {
     color: var(--primary-900);
   }
 }
-
 
 .fullWidth {
   width: 100%;

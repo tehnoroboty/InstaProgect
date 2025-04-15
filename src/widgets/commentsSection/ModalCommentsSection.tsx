@@ -6,6 +6,7 @@ import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
+import { useDeletePostMutation } from '@/src/shared/model/api/postsApi'
 import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
@@ -14,9 +15,11 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
+import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
 
@@ -33,23 +36,24 @@ type Avatar = {
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
+  isAuth: boolean
   isMyPost: boolean
   post: Post
-  postPublicStatus: boolean
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
+  isAuth,
   isMyPost,
   post,
-  postPublicStatus,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-  // Состояние для комментариев
   const [comments, setComments] = useState<Comment[]>(commentsData)
   const textArea = useRef<HTMLTextAreaElement>(null)
-
+  const [deletePost] = useDeletePostMutation()
+  const router = useRouter()
+  const params = useParams<{ userId: string }>()
   const handleChangeHeight = () => {
     if (textArea.current) {
       textArea.current.style.height = '24px'
@@ -58,9 +62,7 @@ export const ModalCommentsSection = ({
       textArea.current.style.height = textAreaHeight + 'px'
     }
   }
-
   const handleLikeComment = (commentId: number) => {
-    // Обновляем состояние лайка для конкретного комментария
     setComments(prevComments =>
       prevComments.map(comment =>
         comment.id === commentId
@@ -91,13 +93,23 @@ export const ModalCommentsSection = ({
     })
 
   const [isEditing, setIsEditing] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleEditPost = () => {
     setIsEditing(true)
   }
+  const handleDeletePost = () => {
+    setIsDeleting(true)
+  }
 
   const handleExitEdit = () => {
     setIsEditing(false)
+  }
+
+  const onDeletePost = async () => {
+    await deletePost({ postId, userId: Number(params.userId) }).unwrap()
+    setIsDeleting(false)
+    router.push(`/profile/${params.userId}`, { scroll: false })
   }
 
   if (isEditing) {
@@ -113,6 +125,19 @@ export const ModalCommentsSection = ({
     )
   }
 
+  if (isDeleting) {
+    return (
+      <ConfirmationModal
+        modalMessage={'Are you sure you want to delete this post?'}
+        modalTitle={'Delete Post'}
+        onClickNo={() => setIsDeleting(false)}
+        onCloseModal={() => setIsDeleting(false)}
+        onCloseParentModal={onDeletePost}
+        open={isDeleting}
+      />
+    )
+  }
+
   return (
     <div className={s.commentsBox}>
       <div className={s.commentsHeader}>
@@ -123,9 +148,16 @@ export const ModalCommentsSection = ({
             usernameClassName={s.userAvatarName}
           />
         </Link>
-        {!postPublicStatus && (
+        {isAuth && (
           <div className={s.postMenu}>
-            {<DropdownPost isFollowedBy={false} isOurPost={isMyPost} onEdit={handleEditPost} />}
+            {
+              <DropdownPost
+                isFollowedBy={false}
+                isOurPost={isMyPost}
+                onDelete={handleDeletePost}
+                onEdit={handleEditPost}
+              />
+            }
           </div>
         )}
       </div>
@@ -191,7 +223,7 @@ export const ModalCommentsSection = ({
                   </div>
                 </div>
               </div>
-              {!postPublicStatus && (
+              {!isAuth && (
                 <div className={s.heartIconWrapper}>
                   {el.isLiked ? (
                     <Button
@@ -219,9 +251,7 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        {!postPublicStatus && (
-          <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        )}
+        {!isAuth && <InteractionBar className={s.interactionBar} hasCommentIcon={false} />}
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
@@ -229,7 +259,7 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      {!postPublicStatus && (
+      {isAuth && (
         <div className={s.addComment}>
           <div className={s.textareaWrapper}>
             <TextArea
