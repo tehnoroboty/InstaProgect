@@ -44,27 +44,11 @@ export const InteractiveDemo: Story = {
         <div>
           <Typography>Current page: {page}</Typography>
           <Typography>Items per page: {size}</Typography>
+          <Typography>Total number of items: {args.totalCount}</Typography>
         </div>
       </div>
     )
   },
-}
-
-export const WithCustomOptions: Story = {
-  args: {
-    ...mockPaginationProps,
-    pageSizeOptions: [
-      { value: '5', valueTitle: '5' },
-      { value: '15', valueTitle: '15' },
-      { value: '25', valueTitle: '25' },
-    ],
-  },
-  render: args => (
-    <div>
-      <Typography>With custom page size options</Typography>
-      <Pagination {...args} />
-    </div>
-  ),
 }
 
 export const WithCustomSiblingCount: Story = {

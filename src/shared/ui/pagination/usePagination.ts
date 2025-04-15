@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-import { UsePaginationProps } from '@/src/shared/ui/pagination/Pagination'
-
 export type PaginationRange = ('...' | number)[]
 
 export const DOTS = '...'
@@ -10,6 +8,13 @@ const range = (start: number, end: number): number[] => {
   const length = end - start + 1
 
   return Array.from({ length }, (_, idx) => idx + start)
+}
+
+type UsePaginationProps = {
+  currentPage: number
+  pageSize: number
+  siblingCount: number
+  totalCount: number
 }
 
 export const usePagination = ({
