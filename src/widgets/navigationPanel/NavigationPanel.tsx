@@ -1,7 +1,6 @@
 // @flow
 'use client'
 import * as React from 'react'
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -27,7 +26,7 @@ import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 export const NavigationPanel = () => {
-  const { data, isLoading, isSuccess } = useMeQuery()
+  const { data, isSuccess } = useMeQuery()
   const isPostModalOpen = useSelector(selectIsPostModalOpen)
   const dispatch = useDispatch()
 

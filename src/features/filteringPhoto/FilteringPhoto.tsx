@@ -147,6 +147,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
         </div>
       </Dialog>
       <ExitModal
+        modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
         onSaveDraft={() => {}}
