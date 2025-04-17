@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 
 import {
   MyPaymentType,
@@ -6,7 +6,9 @@ import {
   SystemPaymentType,
 } from '@/src/entities/subscription/types'
 import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
+import { DEFAULT_PAGE_SIZE } from '@/src/shared/lib/constants/pagination'
 import { useMyPaymentsQuery } from '@/src/shared/model/api/subscriptionsApi'
+import { Pagination } from '@/src/shared/ui/pagination/Pagination'
 import {
   Table,
   TableBody,
@@ -65,14 +67,19 @@ export const transformData = (serverData: MyPaymentType[]): TableData[] => {
 
 export const MyPayments = () => {
   const { data, isLoading } = useMyPaymentsQuery()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   if (isLoading) {
     return <div>{'Loading...'}</div>
   }
   /*  if (!data) {
-    return <div>No data</div>
-  }*/
+          return <div>No data</div>
+        }*/
   const tableData = data ? transformData(data) : transformData(mockTableData)
+
+  // Добавляем выборку данных для текущей страницы
+  const paginatedData = tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   return (
     <div className={s.page}>
@@ -87,7 +94,7 @@ export const MyPayments = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tableData.map((item, index) => (
+          {paginatedData.map((item, index) => (
             <TableRow key={index}>
               <TableCell>{item.dateOfPayment}</TableCell>
               <TableCell>{item.endDate}</TableCell>
@@ -98,6 +105,13 @@ export const MyPayments = () => {
           ))}
         </TableBody>
       </Table>
+      <Pagination
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={setPageSize}
+        pageSize={pageSize}
+        totalCount={tableData.length}
+      />
     </div>
   )
 }

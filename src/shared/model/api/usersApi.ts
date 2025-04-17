@@ -19,7 +19,11 @@ export const usersApi = baseApi.injectEndpoints({
       providesTags: ['FOLLOWING'],
       query: userName => `/users/${userName}`,
     }),
-    putUserProfile: builder.mutation<any, any>({
+    getUserProfileById: builder.query<PublicProfileTypes, number>({
+      providesTags: ['FOLLOWING'],
+      query: userId => `/public-user/profile/${userId}`,
+    }),
+    putUserProfile: builder.mutation<void, UpdateProfileArg>({
       invalidatesTags: ['PROFILE'],
       query: ({ aboutMe, city, country, dateOfBirth, firstName, lastName, region, userName }) => {
         return {
@@ -58,6 +62,7 @@ export const usersApi = baseApi.injectEndpoints({
 export const {
   useDeleteProfileAvatarMutation,
   useGetMyProfileQuery,
+  useGetUserProfileByIdQuery,
   useGetUserProfileQuery,
   usePutUserProfileMutation,
   useUpdateUserAvatarMutation,

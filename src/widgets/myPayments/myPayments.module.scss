@@ -1,13 +1,15 @@
 .page {
   display: flex;
   flex-direction: column;
+  gap: 36px;
+  align-items: center;
+
   width: 100%;
 }
 
 .dopBox {
   margin: 0 0 13px;
 }
-
 
 .box {
   display: flex;
@@ -21,7 +23,6 @@
   border-radius: 2px;
 
   background-color: var(--dark-500);
-
 }
 
 .content {
@@ -74,7 +75,7 @@
   text-transform: none;
 }
 
-.modalContent{
+.modalContent {
   display: flex;
   flex-direction: column;
   gap: 18px;
