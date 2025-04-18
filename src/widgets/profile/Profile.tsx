@@ -48,8 +48,6 @@ export const Profile = (props: Props) => {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const isMyProfile = meData?.userId === Number(params.userId)
-  // получаем информацию профайл
-  // const { data: myProfile } = useGetMyProfileQuery()
 
   const { data: profileById } = useGetUserProfileByIdQuery(Number(params.userId), {
     skip: !params.userId,
@@ -65,6 +63,8 @@ export const Profile = (props: Props) => {
     sortBy: SORT_BY,
     sortDirection: SORT_DIRECTION,
     userId: Number(params.userId),
+  },{
+    skip: !authProfile
   })
   const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
   const postsCount = posts?.items.length ?? totalCount
@@ -83,14 +83,14 @@ export const Profile = (props: Props) => {
   const { data: post } = useGetPostQuery(
     { postId: Number(postId) },
     {
-      skip: !postId,
+      skip: !postId || !authProfile,
     }
   )
   // получаем комменты по ID
   const { data: comments } = useGetCommentsQuery(
     { postId: Number(postId) },
     {
-      skip: !postId,
+      skip: !postId || !authProfile,
     }
   )
 

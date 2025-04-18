@@ -62,6 +62,8 @@ export const GenerationInformation = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
   const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
   const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
+  console.log('cites',cites)
+  console.log('countrys',countrys)
   const { errorAge, onSelectDate } = useDateSelection(setValue)
 
   useEffect(() => {
@@ -146,7 +148,6 @@ export const GenerationInformation = () => {
   useEffect(() => {
     if (isFetching) {
       sessionStorage.clear()
-
       return
     }
     if (isDirty) {
@@ -237,14 +238,14 @@ export const GenerationInformation = () => {
                 onChangeValue={onSelectCountyHandler}
                 options={countrys}
                 placeholder={'Country'}
-                value={selectedCountry || MyProfile?.country || ''}
+                value={ MyProfile?.country || selectedCountry || ''}
               />
               <SelectBox
                 label={'Select your city'}
                 onChangeValue={onSelectCityHandler}
                 options={cites}
                 placeholder={'City'}
-                value={selectedCity || MyProfile?.city || ''}
+                value={MyProfile?.city || selectedCity || ''}
               />
             </div>
             <TextArea

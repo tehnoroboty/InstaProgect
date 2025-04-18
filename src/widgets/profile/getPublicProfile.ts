@@ -12,7 +12,7 @@ export const getUserProfile = async (userId: string): Promise<PublicProfileTypes
 
 export const getUserPosts = async (userId: string): Promise<GetPostsResponse> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/user/${userId}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
   })
 
   return await res.json()
