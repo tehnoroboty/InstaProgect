@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation'
 import s from './login.module.scss'
 
 export default function Login() {
-  const [login, { data, error, isError, isLoading }] = useLoginMutation()
+  const [login, {isLoading }] = useLoginMutation()
 
   const router = useRouter()
 
@@ -33,7 +33,7 @@ export default function Login() {
       email: 'tehnoroboty@gmail.com',
       password: 'qwQW12!',
     },
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: zodResolver(schema),
   })
   const disabledButton = isLoading || !isValid || Object.keys(errors).length > 0
