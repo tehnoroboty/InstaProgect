@@ -8,6 +8,7 @@ import {
   SystemPaymentType,
 } from '@/src/shared/lib/constants/subscriptions'
 import {
+  useCanceledAutoRenewalMutation,
   useCreateSubscriptionMutation,
   useCurrentPaymentsQuery,
   useMyPaymentsQuery,
@@ -30,9 +31,9 @@ export const AccountManagement = () => {
   const { data, isFetching } = useMyPaymentsQuery()
   const { data: currentSubscription } = useCurrentPaymentsQuery()
   const [paySubscription, { isError, isLoading: isLoadingPay }] = useCreateSubscriptionMutation()
+  const [canceledAutoRenewal]=useCanceledAutoRenewalMutation()
   const params = useParams()
   const searchParams = useSearchParams()
-
   const [modalTitle, setModalTitle] = useState<string>('Create Payment')
   const [modalText, setModalText] = useState<string>(
     'Auto-renewal will be enabled with this payment. You can disable it anytime in your profile settings'
@@ -160,7 +161,7 @@ export const AccountManagement = () => {
               </Typography>
             </div>
           </div>
-          <CheckBox checked={currentSubscription.hasAutoRenewal} label={'Auto-Renewal'} />
+          <CheckBox checked={currentSubscription.hasAutoRenewal} onChange={()=>canceledAutoRenewal()} label={'Auto-Renewal'} />
         </div>
       )}
 
@@ -244,7 +245,7 @@ export const AccountManagement = () => {
         className={s.modal}
         modalTitle={modalTitle}
         onClose={() => {
-          setOpenModal(false),
+          setOpenModal(false)
             searchParams && router.push(`/profile/${params.userId}/settings/account-management`)
         }}
         open={openModal}
@@ -267,7 +268,7 @@ export const AccountManagement = () => {
                 className={s.btnModalResult}
                 fullWidth
                 onClick={() => {
-                  setOpenModal(false),
+                  setOpenModal(false)
                     router.push(`/profile/${params.userId}/settings/account-management`)
                 }}
               >
@@ -279,7 +280,7 @@ export const AccountManagement = () => {
                 className={s.btnModalResult}
                 fullWidth
                 onClick={() => {
-                  setOpenModal(false),
+                  setOpenModal(false)
                     router.push(`/profile/${params.userId}/settings/account-management`)
                 }}
               >

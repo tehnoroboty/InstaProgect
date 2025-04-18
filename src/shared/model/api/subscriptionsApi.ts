@@ -17,13 +17,23 @@ export const subscriptionsApi = baseApi.injectEndpoints({
       },
     }),
     currentPayments: builder.query<ResponseCurrentPaymentsType, void>({
+      providesTags: ['PAYMENTS'],
       query: () => 'subscriptions/current-payment-subscriptions',
     }),
     myPayments: builder.query<ResponseMyPaymentsType, void>({
       query: () => 'subscriptions/my-payments',
     }),
+    canceledAutoRenewal: builder.mutation<void, void>({
+      invalidatesTags: ['PAYMENTS'],
+      query: () => {
+        return {
+          method: 'POST',
+          url: '/subscriptions/canceled-auto-renewal',
+        }
+      },
+    }),
   }),
 })
 
-export const { useCreateSubscriptionMutation, useCurrentPaymentsQuery, useMyPaymentsQuery } =
+export const { useCreateSubscriptionMutation, useCurrentPaymentsQuery, useMyPaymentsQuery ,useCanceledAutoRenewalMutation} =
   subscriptionsApi
