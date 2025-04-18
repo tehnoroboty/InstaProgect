@@ -55,9 +55,6 @@ export const Dialog = ({
                 </VisuallyHidden>
               )}
               {extraHeaderContent}
-              {/*{!modalTitle && (*/}
-              {/*  // <DropdownPost className={s.dropdownPost} isFollowedBy={false} isOurPost />*/}
-              {/*)}*/}
               <Close
                 className={clsx(
                   s.IconButton,
