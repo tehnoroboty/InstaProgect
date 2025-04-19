@@ -2,10 +2,16 @@
   display: flex;
   flex-direction: column;
 
+  //justify-content: space-between;
+  align-items: stretch;
+
   width: 100%;
-  max-width: 564px;
-  height: 490px;
-  max-height: 481px;
+
+  //height: 100%;
+
+  //width: 564px;
+  //height: 490px;
+  //min-height: 490px;
   padding: 11px 0;
 
   background-color: var(--dark-300);
@@ -32,7 +38,7 @@
 
 .commentsBody {
   overflow-y: auto;
-  height: 235px;
+  flex: 1 1 auto;
   padding: 19px 23px 8px 24px;
   border-bottom: 1px solid var(--dark-100);
 }
