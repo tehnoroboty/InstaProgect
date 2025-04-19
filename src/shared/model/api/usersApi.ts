@@ -1,4 +1,9 @@
-import { Profile, ProfileByUserName } from '@/src/entities/user/types'
+import {
+  Profile,
+  ProfileByUserName,
+  PublicProfileTypes,
+  UpdateProfileArg,
+} from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const usersApi = baseApi.injectEndpoints({
