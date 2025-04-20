@@ -1,14 +1,14 @@
 'use client'
 
 import type { Post } from '@/src/entities/post/types'
+import type {
+  GetCommentsResponse,
+  PublicPostsResponse,
+  UsersCountResponse,
+} from '@/src/shared/model/api/types'
 
 import React, { useCallback, useEffect, useState } from 'react'
 
-import {
-  useGetAllPublicPostsQuery,
-  useGetCommentsQuery,
-  useGetUsersCountQuery,
-} from '@/src/shared/model/api/posts/publicPostsApi'
 import { Card } from '@/src/shared/ui/card/Card'
 import { RegisteredUsersCounter } from '@/src/shared/ui/registeredUsersCounter/RegisteredUsersCounter'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -18,10 +18,16 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import s from './publicFeed.module.scss'
 
-export const PublicFeed = () => {
-  const { data: usersNumber } = useGetUsersCountQuery()
-  const { data: posts } = useGetAllPublicPostsQuery({ endCursorPostId: 0, pageSize: 4 })
+type Props = {
+  info: {
+    comments: GetCommentsResponse | null
+    count: UsersCountResponse
+    post: Post | null
+    posts: PublicPostsResponse
+  }
+}
 
+export const PublicFeed = ({ info }: Props) => {
   const [isModalOpen, setModalOpen] = useState(false)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
@@ -42,28 +48,32 @@ export const PublicFeed = () => {
   useEffect(() => {
     if (postId) {
       setModalOpen(true)
-    } else {
-      closeModal()
-    }
-  }, [postId])
+      const selected = info.posts.items.find(post => post.id === Number(postId))
 
-  const { data: publicComments } = useGetCommentsQuery(Number(postId))
+      setSelectedPost(selected ?? null)
+    } else {
+      setModalOpen(false)
+      setSelectedPost(null)
+    }
+  }, [postId, info.posts])
+
+  // const { data: publicComments } = useGetCommentsQuery(Number(postId))
 
   console.log('postId from URL:', postId)
   console.log('isModalOpen:', isModalOpen)
-  console.log('posts:', posts)
+  console.log('posts:', info.posts)
 
   return (
     <div className={s.container}>
       <div className={s.feed}>
         <Card className={s.registeredUsersContainer}>
           <Typography as={'h2'} option={'h2'}>{`Registered users:`}</Typography>
-          {usersNumber?.totalCount != null && (
-            <RegisteredUsersCounter userCount={usersNumber.totalCount} />
+          {info.count?.totalCount != null && (
+            <RegisteredUsersCounter userCount={info.count.totalCount} />
           )}
         </Card>
         <div className={s.postsContainer}>
-          {posts?.items?.map(post => (
+          {info.posts?.items?.map(post => (
             <PublicFeedPost key={post.id} onClick={() => handlePostClick(post)} post={post} />
           ))}
         </div>
@@ -73,7 +83,7 @@ export const PublicFeed = () => {
         <ModalPost
           onClose={closeModal}
           open
-          // publicComments={publicComments}
+          publicComments={info.comments}
           publicPost={selectedPost}
         />
       )}
