@@ -223,7 +223,7 @@ export const ModalCommentsSection = ({
                   </div>
                 </div>
               </div>
-              {!isAuth && (
+              {isAuth && (
                 <div className={s.heartIconWrapper}>
                   {el.isLiked ? (
                     <Button
@@ -251,10 +251,10 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        {!isAuth && <InteractionBar className={s.interactionBar} hasCommentIcon={false} />}
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
+          isAuth={isAuth}
           likesCount={post.likesCount}
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>

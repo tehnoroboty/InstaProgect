@@ -20,9 +20,9 @@ import s from './publicFeed.module.scss'
 
 type Props = {
   info: {
-    comments: GetCommentsResponse
+    comments: GetCommentsResponse | undefined
     count: UsersCountResponse
-    post: Post | null
+    post: Post | undefined
     posts: PublicPostsResponse
   }
 }
