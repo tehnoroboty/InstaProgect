@@ -33,8 +33,8 @@ export const PublicFeedPost = ({ onClick, post }: Props) => {
   }
 
   return (
-    <div className={s.card} id={`${id}`} onClick={onClick}>
-      <div className={containerClasses}>
+    <div className={s.card} id={`${id}`}>
+      <div className={containerClasses} onClick={onClick}>
         <Carousel disableSwipe={open} list={images} renderItem={renderImgCarousel} size={'small'} />
       </div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>
