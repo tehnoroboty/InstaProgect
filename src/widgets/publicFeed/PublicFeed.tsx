@@ -20,7 +20,7 @@ import s from './publicFeed.module.scss'
 
 type Props = {
   info: {
-    comments: GetCommentsResponse | null
+    comments: GetCommentsResponse
     count: UsersCountResponse
     post: Post | null
     posts: PublicPostsResponse
@@ -75,10 +75,12 @@ export const PublicFeed = ({ info }: Props) => {
 
       {isModalOpen && selectedPost && (
         <ModalPost
+          comments={info.comments}
+          isAuth={false}
+          isMyPost={false}
           onClose={closeModal}
           open
-          publicComments={info.comments}
-          publicPost={selectedPost}
+          post={selectedPost}
         />
       )}
     </div>

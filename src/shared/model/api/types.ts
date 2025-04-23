@@ -1,3 +1,5 @@
+import type { Post } from '@/src/entities/post/types'
+
 export type PasswordRecoveryType = {
   baseUrl: string
   email: string

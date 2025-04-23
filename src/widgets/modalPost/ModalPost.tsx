@@ -23,8 +23,6 @@ export default function ModalPost({ comments, isAuth, isMyPost, onClose, open, p
   if (!post) {
     return null
   }
-  console.log('isMyPost', isMyPost)
-  console.log('isAuth', isAuth)
   const isCarousel = post.images.length > 1
   const renderItem = (item: ImageType) => {
     return item ? (
