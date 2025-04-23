@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { type ReactNode, useEffect } from 'react'
 
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
@@ -10,22 +10,18 @@ import { useRouter } from 'next/navigation'
 import s from './authWrapper.module.scss'
 
 type Props = {
-  login?: boolean
+  children: ReactNode
 }
 
-export const AuthWrapper = (props: Props) => {
-  const { login } = props
+export const AuthWrapper = ({ children }: Props) => {
   const router = useRouter()
-
   const { data, isLoading, isSuccess } = useMeQuery()
 
   useEffect(() => {
-    if (isSuccess) {
-      if (login) {
-        router.push(AuthRoutes.HOME)
-      }
+    if (isSuccess && data) {
+      router.push(AuthRoutes.HOME)
     }
-  }, [isSuccess])
+  }, [isSuccess, data])
 
   if (isLoading) {
     return (
@@ -35,13 +31,9 @@ export const AuthWrapper = (props: Props) => {
     )
   }
 
-  if (login && !isSuccess) {
-    return null
-  }
+  if (isSuccess) {
+    return <h1 className={s.h1}>Контент для авторизованных пользователей</h1>
+  } //TODO: добавить ленту постов конкретного пользователя тут
 
-  return (
-    <>
-      <h1 className={s.h1}>{isSuccess ? 'Зарегистрированный' : 'Незаригестрированный'}</h1>
-    </>
-  )
+  return <>{children}</>
 }

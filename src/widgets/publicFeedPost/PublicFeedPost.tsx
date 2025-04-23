@@ -12,13 +12,18 @@ import Image from 'next/image'
 
 import s from './publicFeedPost.module.scss'
 
-export const PublicFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, userName } = props
+type Props = {
+  onClick: () => void
+  post: Post
+}
+
+export const PublicFeedPost = ({ onClick, post }: Props) => {
+  const { avatarOwner, createdAt, description, id, images, userName } = post
 
   const [open, setOpen] = useState<boolean>(false)
 
-  const isDescriptionLong = description.length > 95
-  const truncatedDescription = description.slice(0, 83) + '...'
+  const isDescriptionLong = description.length > 60
+  const truncatedDescription = description.slice(0, 61) + '...'
 
   const classNames = clsx(s.cardLowerPart, { [s.shifted]: open })
   const containerClasses = clsx(s.carouselContainer, { [s.open]: open })
@@ -29,7 +34,7 @@ export const PublicFeedPost = (props: Post) => {
 
   return (
     <div className={s.card} id={`${id}`}>
-      <div className={containerClasses}>
+      <div className={containerClasses} onClick={onClick}>
         <Carousel disableSwipe={open} list={images} renderItem={renderImgCarousel} size={'small'} />
       </div>
       <Collapsible.Root onOpenChange={setOpen} open={open}>

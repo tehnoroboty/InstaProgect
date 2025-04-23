@@ -16,10 +16,11 @@ type Avatar = {
 
 type Props = {
   avatars?: { url: string }[] | Avatar[]
+  isAuth?: boolean
   likesCount?: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const PostLikesBox = ({ avatars = [], className, likesCount }: Props) => {
+export const PostLikesBox = ({ avatars = [], className, isAuth, likesCount }: Props) => {
   const firstThreeAvatars = avatars.slice(0, 3)
   const avatarClasses = [s.firstAvaLike, s.secondAvaLike, s.thirdAvaLike]
 
@@ -27,7 +28,7 @@ export const PostLikesBox = ({ avatars = [], className, likesCount }: Props) => 
     <div className={clsx(s.postLikes, className)}>
       {avatars.length === 0 && (!likesCount || likesCount === 0) ? (
         <Typography as={'div'} className={s.likeCount}>
-          {'Be the first to like this'}
+          {isAuth ? 'Be the first to like this' : 'No likes here yet'}
         </Typography>
       ) : (
         <>
