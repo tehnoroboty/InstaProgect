@@ -38,7 +38,7 @@ export const Register = () => {
       passwordConfirmation: '',
       userName: '',
     },
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: zodResolver(schema),
   })
 

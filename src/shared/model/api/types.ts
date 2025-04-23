@@ -1,5 +1,3 @@
-import type { Post } from '@/src/entities/post/types'
-
 export type PasswordRecoveryType = {
   baseUrl: string
   email: string
@@ -68,12 +66,20 @@ export type MeResponse = {
 
 export type SortDirection = 'asc' | 'desc'
 
-export type GetMyPostsArgs = {
-  pageNumber?: number
+export type GetPublicUserPostsArgs = {
+  endCursorPostId?: null | number
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection
   userName: string
+}
+
+export type GetPostsArgs = {
+  endCursorPostId?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  userId: number
 }
 
 export type GetProfileWithFollowType = {
@@ -134,6 +140,7 @@ export type ImageType = {
 export type RequestPostsType = {
   childrenMetadata: { uploadId: string }[]
   description: string
+  userId: number
 }
 
 export type ResponsePostsType = {
@@ -181,13 +188,6 @@ export type UserMetadata = {
   publications: number
 }
 
-export type GetPublicUserPostsArgs = {
-  endCursorPostId?: number
-  pageSize?: number
-  sortBy?: string
-  sortDirection?: SortDirection
-  userName: string
-}
 export type GetPublicUserPostsResponse = {
   items: Item[]
   pageSize: number
@@ -215,6 +215,10 @@ export type GetCommentsResponse = {
   pageSize: number
   totalCount: number
   totalUsers: number
+}
+
+export type ModalSuccessType = {
+  type: 'error' | 'success'
 }
 
 export type PublicPostsResponse = {

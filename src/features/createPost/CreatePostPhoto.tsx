@@ -1,16 +1,11 @@
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { ModalType } from '@/src/features/croppingPhoto/types'
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
-import {
-  selectIsPhotoModalOpen,
-  selectIsPostModalOpen,
-  setIsPhotoModalOpen,
-  setIsPostModalOpen,
-} from '@/src/shared/model/slices/modalSlice'
+import { setIsPhotoModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { errorMaxPhoto } from '@/src/widgets/addPost/data'
@@ -24,8 +19,6 @@ type Props = {
 
 export const CreatePostPhoto = ({ download, modalType }: Props) => {
   const dispatch = useDispatch()
-
-  const isOpen = useSelector(modalType === 'photo' ? selectIsPhotoModalOpen : selectIsPostModalOpen)
 
   const [openModal, setOpenModel] = useState<boolean>(true)
   const [additionalModal, setAdditionalModal] = useState<boolean>(false)
@@ -45,7 +38,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
 
   const onCloseAdditionalModal = () => setAdditionalModal(false)
 
-  const { getInputProps, getRootProps, open } = useDropzone({
+  const { getInputProps, open } = useDropzone({
     accept: {
       'image/jpeg': ['.jpg', '.jpeg'],
       'image/png': ['.png'],

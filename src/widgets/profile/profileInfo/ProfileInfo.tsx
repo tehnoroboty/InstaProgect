@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PublicProfileTypes } from '@/src/entities/user/types'
+import { ProfileByUserName, PublicProfileTypes } from '@/src/entities/user/types'
 import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
 import { GetProfileWithFollowType } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
@@ -13,7 +13,7 @@ import s from './profileInfo.module.scss'
 type Props = {
   authProfile: boolean
   isMyProfile: boolean
-  profile: GetProfileWithFollowType | PublicProfileTypes
+  profile: ProfileByUserName | PublicProfileTypes | undefined
 }
 
 export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
@@ -23,21 +23,25 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(
     (profile as GetProfileWithFollowType)?.isFollowing ?? false
   )
+
+  if (!profile) {
+    return
+  }
   const avatarUrl = profile?.avatars?.[0]?.url
   const aboutMe = profile?.aboutMe
   const userName = profile?.userName
   const followingCount =
     !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.following
-      : ((profile as GetProfileWithFollowType)?.followingCount ?? 0)
+      : ((profile as ProfileByUserName)?.followingCount ?? 0)
   const followersCount =
     !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.followers
-      : ((profile as GetProfileWithFollowType)?.followersCount ?? 0)
+      : ((profile as ProfileByUserName)?.followersCount ?? 0)
   const publicationsCount =
     !authProfile && 'userMetadata' in profile
       ? profile.userMetadata.publications
-      : ((profile as GetProfileWithFollowType)?.publicationsCount ?? 0)
+      : ((profile as ProfileByUserName)?.publicationsCount ?? 0)
 
   const onClickFollowingHandler = async () => {
     if (!isFollowing) {
@@ -90,7 +94,7 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
             {authProfile &&
               (isMyProfile ? (
                 <Button
-                  onClick={() => router.push(`/profile/${profile.id}/settings`)}
+                  onClick={() => router.push(`/profile/${profile.id}/settings/general-information`)}
                   variant={'secondary'}
                 >
                   {'Profile Settings'}

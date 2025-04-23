@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
 
-import { MenuItemsType } from '@/src/widgets/navigationPanel/NavigationPanel'
 import { MenuSection } from '@/src/widgets/navigationPanel/sidebar/menuSection/MenuSection'
 import clsx from 'clsx'
 
 import s from './sidebar.module.scss'
+import {MenuItemsType} from "@/src/widgets/navigationPanel/types";
 
 type Props = {
   items: MenuItemsType

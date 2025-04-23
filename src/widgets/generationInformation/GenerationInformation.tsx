@@ -60,7 +60,7 @@ export const GenerationInformation = () => {
     setAlertType
   )
   const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
-  const [selectedCity, setSelectedCity] = useState<string>(MyProfile?.city || '')
+  const [selectedCity, setSelectedCity] = useState<string>('')
   const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
   const { errorAge, onSelectDate } = useDateSelection(setValue)
 
@@ -150,9 +150,9 @@ export const GenerationInformation = () => {
       return
     }
     if (isDirty) {
-      router.push(`/profile/${MyProfile?.id}/settings?isFormDirty=true`)
+      router.push(`/profile/${MyProfile?.id}/settings/general-information?isFormDirty=true`)
     } else {
-      router.push(`/profile/${MyProfile?.id}/settings`)
+      router.push(`/profile/${MyProfile?.id}/settings/general-information`)
     }
   }, [isDirty, isFetching])
 
@@ -206,13 +206,6 @@ export const GenerationInformation = () => {
             deleteModal={() => setDeleteModal(true)}
             isLoadingDelete={isLoadingDelete}
             myProfileAvatars={MyProfile?.avatars}
-            uploadAvatar={file => {
-              // Здесь загрузка файла через RTK Query или fetch/post
-              const formData = new FormData()
-
-              formData.append('file', file)
-              // dispatch(uploadAvatar(formData))
-            }}
           />
           <div className={s.informationBox}>
             <ProfileInputsSettings
@@ -244,14 +237,14 @@ export const GenerationInformation = () => {
                 onChangeValue={onSelectCountyHandler}
                 options={countrys}
                 placeholder={'Country'}
-                value={selectedCountry || MyProfile?.country || ''}
+                value={MyProfile?.country || selectedCountry || ''}
               />
               <SelectBox
                 label={'Select your city'}
                 onChangeValue={onSelectCityHandler}
                 options={cites}
                 placeholder={'City'}
-                value={selectedCity || MyProfile?.city || ''}
+                value={MyProfile?.city || selectedCity || ''}
               />
             </div>
             <TextArea

@@ -20,13 +20,12 @@
 
   color: var(--light-100);
 
-
   background: var(--dark-300);
 
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dropdownPost{
+.dropdownPost {
   cursor: pointer;
   position: absolute;
   top: 15px;
@@ -35,8 +34,6 @@
   &:disabled {
     pointer-events: none;
   }
-
-
 }
 
 .IconButton {
@@ -68,13 +65,11 @@
 .IconButtonIn {
   top: 16px;
   right: 22px;
-
 }
 
 .IconButtonOut {
   top: -30px;
   right: -30px;
-
 }
 
 .icon {
@@ -105,7 +100,6 @@
   column-gap: 24px;
   justify-content: flex-end;
 }
-
 
 .lineHr {
   width: calc(100% + 48px);
@@ -148,13 +142,13 @@
   color: var(--light-100);
 }
 
-.widthDefault{
+.widthDefault {
   width: 50%;
 }
 
 .containerAddComent {
   max-width: 1000px;
-  padding: 0
+  padding: 0;
 }
 
 .addComent {

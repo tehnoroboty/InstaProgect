@@ -2,15 +2,14 @@ import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
-  GetMyPostsArgs,
+  GetPostsArgs,
   GetPostsResponse,
-  GetPublicUserPostsArgs,
-  GetPublicUserPostsResponse,
   ImageType,
   RequestPostsType,
   ResponsePostsType,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
+import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -29,75 +28,90 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
       invalidatesTags: ['POSTS'],
+      async onQueryStarted({}, { dispatch, getState, queryFulfilled }) {
+        const patchResult = dispatch(setLastPostId({ lastPostId: null }))
+
+        try {
+          await queryFulfilled
+        } catch {}
+      },
       query: body => ({
         body,
         method: 'POST',
         url: 'posts',
       }),
     }),
-    getComments: builder.query<GetCommentsResponse, { postId: number }>({
-      query: ({ postId }) => ({
-        method: 'GET',
-        url: `/posts/${postId}/comments`,
-      }),
-    }),
-    getMyPosts: builder.query<GetPostsResponse, GetMyPostsArgs>({
-      providesTags: ['POSTS'],
-      query: ({ pageNumber, pageSize, sortBy, sortDirection, userName }) => ({
-        method: 'GET',
-        params: {
-          pageNumber,
-          pageSize,
-          sortBy,
-          sortDirection,
-        },
-        url: `/posts/${userName}`,
-      }),
-    }),
-    getPost: builder.query<Post, { postId: number }>({
-      providesTags: (result, error, { postId }) => [{ id: postId, type: 'POSTS' }],
-      query: ({ postId }) => ({
-        method: 'GET',
-        url: `/posts/id/${postId}`,
-      }),
-    }),
-
-    getPublicUserPosts: builder.query<GetPublicUserPostsResponse, GetPublicUserPostsArgs>({
-      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userName }) => {
-        const baseUrl = `posts/${userName}`
-        const cursorSegment = endCursorPostId ? `/${endCursorPostId}` : ''
-
-        return {
-          method: 'GET',
-          params: {
-            pageSize,
-            sortBy,
-            sortDirection,
-          },
-          url: `${baseUrl}${cursorSegment}`,
-        }
-      },
-    }),
-    updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
-      invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POSTS' }],
-      // Добавляем optimistic update:
-      async onQueryStarted({ model, postId }, { dispatch, getState, queryFulfilled }) {
-        // Получаем текущее состояние поста
+    deletePost: builder.mutation<void, { postId: number; userId: number }>({
+      async onQueryStarted({ postId, userId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          postsApi.util.updateQueryData('getPost', { postId }, draft => {
-            if (draft) {
-              draft.description = model.description
+          postsApi.util.updateQueryData('getPosts', { userId }, draft => {
+            const index = draft.items.findIndex(post => post.id === postId)
+
+            if (index !== -1) {
+              draft.items.splice(index, 1)
             }
           })
         )
 
         try {
-          await queryFulfilled
+          await queryFulfilled // Ждем завершения запроса
         } catch {
-          // Если запрос не удался - откатываем изменения
-          patchResult.undo()
+          patchResult.undo() // Если запрос не удался, откатываем изменения
         }
       },
+      query: ({ postId }) => ({
+        method: 'DELETE',
+        url: `/posts/${postId}`,
+      }),
+    }),
+    getComments: builder.query<GetCommentsResponse, { postId: number }>({
+      providesTags: ['COMMENTS'],
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/${postId}/comments`,
+      }),
+    }),
+    getPost: builder.query<Post, { postId: number }>({
+      providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
+      query: ({ postId }) => ({
+        method: 'GET',
+        url: `/posts/id/${postId}`,
+      }),
+    }),
+    getPosts: builder.query<GetPostsResponse, GetPostsArgs>({
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
+      merge: (currentCache, newItems) => {
+        const intersection = currentCache.items.filter(obj1 =>
+          newItems.items.some(obj2 => obj1.id === obj2.id)
+        )
+
+        if (intersection.length === 0) {
+          currentCache.items.push(...newItems.items)
+        } else {
+          currentCache.items = newItems.items
+        }
+      },
+      providesTags: ['POSTS'],
+      query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
+        method: 'GET',
+        params: {
+          pageSize,
+          sortBy,
+          sortDirection,
+        },
+        url: `/public-posts/user/${userId}/${endCursorPostId}`,
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      transformResponse: (response: GetPostsResponse, meta, arg) => {
+        return response
+      },
+    }),
+    updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
+      invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POST' }],
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
@@ -110,9 +124,9 @@ export const postsApi = baseApi.injectEndpoints({
 export const {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
+  useDeletePostMutation,
   useGetCommentsQuery,
-  useGetMyPostsQuery,
   useGetPostQuery,
-  useGetPublicUserPostsQuery,
+  useGetPostsQuery,
   useUpdatePostMutation,
 } = postsApi

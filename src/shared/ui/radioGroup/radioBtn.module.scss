@@ -91,7 +91,7 @@
     opacity: 1;
   }
 
-  @media (hover:hover) {
+  @media (hover: hover) {
     &:hover:not(:disabled)::after {
       background-color: var(--dark-300);
     }

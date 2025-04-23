@@ -3,9 +3,18 @@ import { useState } from 'react'
 
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
+import { useRouter } from 'next/navigation'
 
 export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
+  const router = useRouter()
+
+  const isAuth = localStorage.getItem('accessToken')
+
+  if (!isAuth) {
+    router.push(AuthRoutes.LOGIN)
+  }
 
   const createPhoto = (photo: string) => {
     return setPhotos(prevPhotos => [...prevPhotos, photo])

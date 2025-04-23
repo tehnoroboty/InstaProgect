@@ -1,9 +1,15 @@
-import { Profile } from '@/src/entities/user/types'
+import {
+  Profile,
+  ProfileByUserName,
+  PublicProfileTypes,
+  UpdateProfileArg,
+} from '@/src/entities/user/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     deleteProfileAvatar: builder.mutation<void, void>({
+      invalidatesTags: ['PROFILE'],
       query: () => {
         return {
           method: 'DELETE',
@@ -15,11 +21,15 @@ export const usersApi = baseApi.injectEndpoints({
       providesTags: ['PROFILE'],
       query: () => '/users/profile',
     }),
-    getUserProfile: builder.query<any, string>({
+    getUserProfile: builder.query<ProfileByUserName, string>({
       providesTags: ['FOLLOWING'],
       query: userName => `/users/${userName}`,
     }),
-    putUserProfile: builder.mutation<any, any>({
+    getUserProfileById: builder.query<PublicProfileTypes, number>({
+      providesTags: ['FOLLOWING'],
+      query: userId => `/public-user/profile/${userId}`,
+    }),
+    putUserProfile: builder.mutation<void, any>({
       invalidatesTags: ['PROFILE'],
       query: ({ aboutMe, city, country, dateOfBirth, firstName, lastName, region, userName }) => {
         return {
@@ -58,6 +68,7 @@ export const usersApi = baseApi.injectEndpoints({
 export const {
   useDeleteProfileAvatarMutation,
   useGetMyProfileQuery,
+  useGetUserProfileByIdQuery,
   useGetUserProfileQuery,
   usePutUserProfileMutation,
   useUpdateUserAvatarMutation,

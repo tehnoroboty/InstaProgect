@@ -24,7 +24,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     exchangeGoogleCodeForToken: builder.mutation<OAuthTokenResponse, ArgsPostGoogleOAuth>({
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const res = await queryFulfilled
 
@@ -44,7 +44,7 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, {queryFulfilled }) {
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
@@ -56,11 +56,12 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     logout: builder.mutation<void, void>({
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
+          dispatch(baseApi.util.resetApiState())
           localStorage.removeItem('accessToken')
-          dispatch(authApi.util.resetApiState())
+
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
         }
@@ -71,7 +72,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     me: builder.query<MeResponse, void>({
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const res = await queryFulfilled
 
@@ -123,7 +124,6 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useCreateNewPasswordMutation,
   useExchangeGoogleCodeForTokenMutation,
-  useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
   useMeQuery,

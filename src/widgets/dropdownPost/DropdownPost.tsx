@@ -13,10 +13,11 @@ type Props = {
   className?: string
   isFollowedBy: boolean
   isOurPost: boolean
+  onDelete?: () => void
   onEdit?: () => void
 }
 
-export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit }: Props) => {
+export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onEdit }: Props) => {
   const ourPostActions: DropdownMenuItems[] = [
     {
       icon: Edit2Outline,
@@ -27,9 +28,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onEdit }: Pro
     {
       icon: TrashOutline,
       id: '2',
-      onClick: () => {
-        console.log('delete post')
-      },
+      onClick: onDelete,
       title: 'Delete Post',
     },
   ]

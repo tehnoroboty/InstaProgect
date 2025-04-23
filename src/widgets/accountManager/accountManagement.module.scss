@@ -8,6 +8,12 @@
   margin: 0 0 13px;
 }
 
+.pageLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
 
 .box {
   display: flex;
@@ -74,11 +80,16 @@
   text-transform: none;
 }
 
+.btnModalResult{
+  margin-top:54px;
+}
+
 .modalContent{
   display: flex;
   flex-direction: column;
   gap: 18px;
   padding: 30px 24px;
+
 }
 
 .modalAction {
