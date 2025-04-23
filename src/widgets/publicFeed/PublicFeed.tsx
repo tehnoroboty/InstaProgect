@@ -57,15 +57,9 @@ export const PublicFeed = ({ info }: Props) => {
     }
   }, [postId, info.posts])
 
-  // const { data: publicComments } = useGetCommentsQuery(Number(postId))
-
-  console.log('postId from URL:', postId)
-  console.log('isModalOpen:', isModalOpen)
-  console.log('posts:', info.posts)
-
   return (
     <div className={s.container}>
-      <div className={s.feed}>
+      <div>
         <Card className={s.registeredUsersContainer}>
           <Typography as={'h2'} option={'h2'}>{`Registered users:`}</Typography>
           {info.count?.totalCount != null && (
