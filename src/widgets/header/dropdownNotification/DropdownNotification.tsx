@@ -7,20 +7,19 @@ import {Typography} from '@/src/shared/ui/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdownNotification.module.scss'
-import {Notifications, useGetNotificationsQuery} from "@/src/shared/model/api/notificationsApi";
+import {Notifications, useGetNotificationsQuery, useMarkAsReadMutation} from "@/src/shared/model/api/notificationsApi";
+
 
 export const DropdownNotification = () => {
-    const {data: notifications} = useGetNotificationsQuery({})
     const [open, setOpen] = useState<boolean>(false)
-    console.log(notifications)
+    const {data: notifications} = useGetNotificationsQuery({pageSize: 100})
+
     if (!notifications) {
         return null
     }
 
-
-    const hasNotification = notifications.notReadCount
-    const notReadCount =notifications.notReadCount
-
+    const hasNotification = notifications.items.length !== 0
+    const notReadCount = notifications.notReadCount
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
     }
@@ -30,9 +29,9 @@ export const DropdownNotification = () => {
             <DropdownMenu.Trigger asChild>
                 <button className = {s.buttonIcon} type = {'button'}>
                     {open ? (
-                        <Fillbell className = {s.icon} height = {24} width = {24}/>
+                        <Fillbell className = {s.icon}/>
                     ) : (
-                        <Outlinebell height = {24} width = {24}/>
+                        <Outlinebell/>
                     )}
                     {hasNotification && (
                         <Typography as = {'span'} className = {s.notificationBadge} option = {'small_text'}>
@@ -73,21 +72,80 @@ type PropsNotification = {
 }
 
 const NotificationItem = ({notification}: PropsNotification) => {
-    const {createdAt, isRead, message} = notification
+    const {createdAt, isRead, message, id} = notification
+    const [markAsRead] = useMarkAsReadMutation()
+
+    function plural(
+        value: number,
+        variants: { [key: string]: string } = {},
+        locale: string = 'ru-RU'
+    ): string {
+        const key = new Intl.PluralRules(locale).select(value);
+        return variants[key] || '';
+    }
+
+    function timeElapsedSince(date: string) {
+        const now: Date = new Date();
+        const pastDate: Date = new Date(date);
+        const diffMs = +now - +pastDate; // разница в миллисекундах
+
+        const seconds = Math.floor(diffMs / 1000);
+        if (seconds < 60) {
+            return `${seconds} ${plural(seconds, {
+                one: 'секунда',
+                few: 'секунд',
+                many: 'секунд',
+            })} назад`
+        }
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) {
+            return `${minutes} ${plural(minutes, {
+                one: 'минута',
+                few: 'минуты',
+                many: 'минут',
+            })} назад`
+        }
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) {
+            return `${hours} ${plural(hours, {
+                one: 'час',
+                few: 'час',
+                many: 'часов',
+            })} назад`
+        }
+        const days = Math.floor(hours / 24);
+        if (days < 7) {
+            return `${days} ${plural(days, {
+                one: 'день',
+                few: 'дня',
+                many: 'дней',
+            })} назад`
+        }
+        const weeks = Math.floor(days / 7);
+        return `${weeks} ${plural(weeks, {
+            one: 'неделя',
+            few: 'недели',
+            many: 'недель',
+        })} назад`
+    }
+
+    const clickOnHandler = () => {
+        markAsRead({ids: [id]})
+    }
 
     return (
-        <DropdownMenu.Item className = {s.notification}>
+        <DropdownMenu.Item className = {s.notification} onClick = {clickOnHandler}>
             <Typography as = {'h3'} option = {'h3'}>
                 {'Новое уведомление!'}
             </Typography>
             {!isRead && (
                 <Typography as = {'span'} className = {s.notificationStatus} option = {'small_text'}>
-                    Новое
+                    {'Новое'}
                 </Typography>
             )}
             <Typography className = {s.notificationMessages}>{message}</Typography>
             <Typography as = {'span'} className = {s.notificationTime} option = {'small_text'}>
-                {createdAt}
+                {timeElapsedSince(createdAt)}
             </Typography>
         </DropdownMenu.Item>
     )

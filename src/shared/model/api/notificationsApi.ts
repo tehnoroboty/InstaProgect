@@ -25,6 +25,7 @@ type GetNotificationsArgs = {
 export const notificationsApi = baseApi.injectEndpoints({
     endpoints: builder => ({
         getNotifications: builder.query<GetNotificationsResponse, GetNotificationsArgs>({
+            providesTags: ['NOTIFICATIONS'],
             query: ({cursor, pageSize, sortBy, sortDirection, isRead}) => ({
                 method: 'GET',
                 params: {
@@ -35,8 +36,18 @@ export const notificationsApi = baseApi.injectEndpoints({
                 },
                 url: `notifications/${cursor}`,
             }),
+
         }),
-    }),
+        markAsRead: builder.mutation<void, { ids: number[] }>({
+            invalidatesTags: ['NOTIFICATIONS'],
+            query: (data) => ({
+                body: data,
+                method: 'PUT',
+                url: `notifications/mark-as-read`,
+            })
+        })
+    })
 })
 
-export const {useGetNotificationsQuery} = notificationsApi
+
+export const {useGetNotificationsQuery, useMarkAsReadMutation} = notificationsApi
