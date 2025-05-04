@@ -60,6 +60,8 @@
   flex-wrap: wrap;
   align-items: center;
   padding: 0 10px;
+  position: relative;
+  cursor: pointer;
 }
 
 .notificationBadge {
@@ -100,4 +102,17 @@ span.notificationStatus {
 
 .icon {
   color: var(--primary-500);
+}
+
+button.closeIconButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0;
+}
+
+.closeIcon {
+  color: var(--light-100);
+
+
 }

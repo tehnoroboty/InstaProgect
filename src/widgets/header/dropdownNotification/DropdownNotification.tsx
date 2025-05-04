@@ -1,13 +1,19 @@
 'use client'
 import * as React from 'react'
-import {Fragment, useState} from 'react'
+import {Fragment, useState, MouseEvent} from 'react'
 
 import {Fillbell, Outlinebell} from '@/src/shared/assets/componentsIcons'
 import {Typography} from '@/src/shared/ui/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-
+import {Button} from '@/src/shared/ui/button/Button'
 import s from './dropdownNotification.module.scss'
-import {Notifications, useGetNotificationsQuery, useMarkAsReadMutation} from "@/src/shared/model/api/notificationsApi";
+import {
+    Notifications,
+    useDeleteNotificationMutation,
+    useGetNotificationsQuery,
+    useMarkAsReadMutation
+} from "@/src/shared/model/api/notificationsApi";
+import CloseOutline from "@/src/shared/assets/componentsIcons/CloseOutline";
 
 
 export const DropdownNotification = () => {
@@ -74,6 +80,7 @@ type PropsNotification = {
 const NotificationItem = ({notification}: PropsNotification) => {
     const {createdAt, isRead, message, id} = notification
     const [markAsRead] = useMarkAsReadMutation()
+    const [deleteNotification] = useDeleteNotificationMutation()
 
     function plural(
         value: number,
@@ -129,12 +136,19 @@ const NotificationItem = ({notification}: PropsNotification) => {
         })} назад`
     }
 
-    const clickOnHandler = () => {
+    const markAsReadHandler = (event: MouseEvent<HTMLDivElement>) => {
+        event.preventDefault()
         markAsRead({ids: [id]})
     }
-
+    const deleteHandler = (event: MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation()
+        deleteNotification({id})
+    }
     return (
-        <DropdownMenu.Item className = {s.notification} onClick = {clickOnHandler}>
+        <DropdownMenu.Item className = {s.notification} onClick = {markAsReadHandler}>
+            <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {deleteHandler}>
+                <CloseOutline className = {s.closeIcon}/>
+            </Button>
             <Typography as = {'h3'} option = {'h3'}>
                 {'Новое уведомление!'}
             </Typography>
