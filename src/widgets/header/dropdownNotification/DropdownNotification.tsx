@@ -2,7 +2,7 @@
 import * as React from 'react'
 import {Fragment, useState, MouseEvent} from 'react'
 
-import {Fillbell, Outlinebell} from '@/src/shared/assets/componentsIcons'
+import {EyeOffOutline, Fillbell, Outlinebell, TrashOutline} from '@/src/shared/assets/componentsIcons'
 import {Typography} from '@/src/shared/ui/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {Button} from '@/src/shared/ui/button/Button'
@@ -13,16 +13,23 @@ import {
     useGetNotificationsQuery,
     useMarkAsReadMutation
 } from "@/src/shared/model/api/notificationsApi";
-import CloseOutline from "@/src/shared/assets/componentsIcons/CloseOutline";
 
 
 export const DropdownNotification = () => {
     const [open, setOpen] = useState<boolean>(false)
-    const {data: notifications} = useGetNotificationsQuery({pageSize: 100})
+    const [cursor, setCursor] = useState<number | undefined>(undefined)
+    const {data: notifications} = useGetNotificationsQuery({cursor, pageSize: 10})
 
     if (!notifications) {
         return null
     }
+
+    const hasMore = notifications.totalCount > notifications.items.length
+
+    const getNotificationMore = () => {
+        setCursor(notifications.items[notifications.items.length - 1].id)
+    }
+
 
     const hasNotification = notifications.items.length !== 0
     const notReadCount = notifications.notReadCount
@@ -67,6 +74,14 @@ export const DropdownNotification = () => {
                             ))}
                         </DropdownMenu.Item>
                     )}
+                    {hasMore && <>
+                        <DropdownMenu.Separator className = {s.separator}/>
+                        <DropdownMenu.Label className = {s.seeMore}>
+                            <Button variant = {'transparent'} onClick = {getNotificationMore}>
+                                {'See more'}
+                            </Button>
+                        </DropdownMenu.Label>
+                    </>}
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>
@@ -81,6 +96,7 @@ const NotificationItem = ({notification}: PropsNotification) => {
     const {createdAt, isRead, message, id} = notification
     const [markAsRead] = useMarkAsReadMutation()
     const [deleteNotification] = useDeleteNotificationMutation()
+
 
     function plural(
         value: number,
@@ -136,7 +152,7 @@ const NotificationItem = ({notification}: PropsNotification) => {
         })} назад`
     }
 
-    const markAsReadHandler = (event: MouseEvent<HTMLDivElement>) => {
+    const markAsReadHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         markAsRead({ids: [id]})
     }
@@ -145,10 +161,18 @@ const NotificationItem = ({notification}: PropsNotification) => {
         deleteNotification({id})
     }
     return (
-        <DropdownMenu.Item className = {s.notification} onClick = {markAsReadHandler}>
-            <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {deleteHandler}>
-                <CloseOutline className = {s.closeIcon}/>
-            </Button>
+        <DropdownMenu.Item className = {s.notification}>
+            <div className = {s.buttonsContainer}>
+                {!isRead &&
+                    <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {markAsReadHandler}>
+                        <EyeOffOutline className = {s.closeIcon}/>
+                    </Button>}
+                <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {deleteHandler}>
+                    <TrashOutline className = {s.closeIcon}/>
+                </Button>
+            </div>
+
+
             <Typography as = {'h3'} option = {'h3'}>
                 {'Новое уведомление!'}
             </Typography>

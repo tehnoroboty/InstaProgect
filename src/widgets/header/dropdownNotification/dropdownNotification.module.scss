@@ -52,7 +52,7 @@
 
 .items {
   overflow-y: auto;
-  height: 350px;
+  height: 300px;
 }
 
 .notification {
@@ -104,15 +104,22 @@ span.notificationStatus {
   color: var(--primary-500);
 }
 
-button.closeIconButton {
+.buttonsContainer {
   position: absolute;
   top: 0;
   right: 0;
+
+}
+
+button.closeIconButton {
   padding: 0;
+  margin: 0 5px;
 }
 
 .closeIcon {
   color: var(--light-100);
+}
 
-
+.seeMore {
+  text-align: center;
 }
