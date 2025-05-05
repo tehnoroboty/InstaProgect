@@ -120,5 +120,15 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithReauth, // Используем кастомный baseQuery
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
-  tagTypes: ['ME', 'POSTS', 'POST', 'FOLLOWING', 'COMMENTS', 'PROFILE', 'SESSIONS', 'PAYMENTS','NOTIFICATIONS'],
+  tagTypes: [
+    'ME',
+    'POSTS',
+    'POST',
+    'FOLLOWING',
+    'COMMENTS',
+    'PROFILE',
+    'SESSIONS',
+    'PAYMENTS',
+    'NOTIFICATIONS',
+  ],
 })

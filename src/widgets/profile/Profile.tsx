@@ -57,15 +57,18 @@ export const Profile = (props: Props) => {
   })
   // получаем посты
   const lastPostId = useAppSelector(selectLastPostId)
-  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery({
-    endCursorPostId: lastPostId || undefined,
-    pageSize: lastPostId ? PUBLIC_PAGE_SIZE : AUTH_PAGE_SIZE,
-    sortBy: SORT_BY,
-    sortDirection: SORT_DIRECTION,
-    userId: Number(params.userId),
-  },{
-    skip: !authProfile
-  })
+  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery(
+    {
+      endCursorPostId: lastPostId || undefined,
+      pageSize: lastPostId ? PUBLIC_PAGE_SIZE : AUTH_PAGE_SIZE,
+      sortBy: SORT_BY,
+      sortDirection: SORT_DIRECTION,
+      userId: Number(params.userId),
+    },
+    {
+      skip: !authProfile,
+    }
+  )
   const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
   const postsCount = posts?.items.length ?? totalCount
   const hasMorePosts = totalCount > postsCount

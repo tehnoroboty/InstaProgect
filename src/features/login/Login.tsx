@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation'
 import s from './login.module.scss'
 
 export default function Login() {
-  const [login, {isLoading }] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
 
   const router = useRouter()
 
