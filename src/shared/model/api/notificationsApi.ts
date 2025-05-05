@@ -1,6 +1,8 @@
 import {baseApi} from '@/src/shared/model/api/baseApi'
 import {SortDirection} from "@/src/shared/model/api/types";
 
+
+
 export type Notifications = {
     id: number,
     message: string,
@@ -21,6 +23,8 @@ type GetNotificationsArgs = {
     pageSize?: number
     sortDirection?: SortDirection
 }
+
+
 
 export const notificationsApi = baseApi.injectEndpoints({
     endpoints: builder => ({
@@ -109,6 +113,8 @@ export const notificationsApi = baseApi.injectEndpoints({
         })
     })
 })
+
+
 
 
 export const {useGetNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationMutation} = notificationsApi

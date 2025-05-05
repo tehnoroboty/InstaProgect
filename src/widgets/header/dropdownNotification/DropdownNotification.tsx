@@ -2,7 +2,7 @@
 import * as React from 'react'
 import {Fragment, useState, MouseEvent} from 'react'
 
-import {EyeOffOutline, Fillbell, Outlinebell, TrashOutline} from '@/src/shared/assets/componentsIcons'
+import {EyeOutline, Fillbell, Outlinebell, TrashOutline} from '@/src/shared/assets/componentsIcons'
 import {Typography} from '@/src/shared/ui/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {Button} from '@/src/shared/ui/button/Button'
@@ -13,12 +13,17 @@ import {
     useGetNotificationsQuery,
     useMarkAsReadMutation
 } from "@/src/shared/model/api/notificationsApi";
+import {useConnectSocket} from "@/src/shared/hooks/useConnectSocket";
+import {useAppDispatch} from "@/src/shared/model/store/store";
 
 
 export const DropdownNotification = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [cursor, setCursor] = useState<number | undefined>(undefined)
     const {data: notifications} = useGetNotificationsQuery({cursor, pageSize: 10})
+    const dispatch = useAppDispatch()
+
+    useConnectSocket(dispatch)
 
     if (!notifications) {
         return null
@@ -26,10 +31,10 @@ export const DropdownNotification = () => {
 
     const hasMore = notifications.totalCount > notifications.items.length
 
+
     const getNotificationMore = () => {
         setCursor(notifications.items[notifications.items.length - 1].id)
     }
-
 
     const hasNotification = notifications.items.length !== 0
     const notReadCount = notifications.notReadCount
@@ -165,7 +170,7 @@ const NotificationItem = ({notification}: PropsNotification) => {
             <div className = {s.buttonsContainer}>
                 {!isRead &&
                     <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {markAsReadHandler}>
-                        <EyeOffOutline className = {s.closeIcon}/>
+                        <EyeOutline className = {s.closeIcon}/>
                     </Button>}
                 <Button variant = {'transparent'} className = {s.closeIconButton} onClick = {deleteHandler}>
                     <TrashOutline className = {s.closeIcon}/>
