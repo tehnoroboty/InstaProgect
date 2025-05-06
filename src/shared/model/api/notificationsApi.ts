@@ -33,7 +33,7 @@ export const notificationsApi = baseApi.injectEndpoints({
 
             if (index !== -1) {
               if (!draft.items[index].isRead) {
-                draft.notReadCount = draft.notReadCount - 1
+                draft.notReadCount =  draft.notReadCount>0?draft.notReadCount - 1:0
               }
               draft.items.splice(index, 1)
             }
@@ -56,13 +56,13 @@ export const notificationsApi = baseApi.injectEndpoints({
         return currentArg?.cursor !== previousArg?.cursor
       },
       merge: (currentCache, newItems) => {
-        newItems.items.map(newitem => {
+        newItems.items.map(newItem => {
           const findIndex = currentCache.items.findIndex(
-            currentItem => currentItem.id === newitem.id
+            currentItem => currentItem.id === newItem.id
           )
 
           if (findIndex === -1) {
-            currentCache.items.push(newitem)
+            currentCache.items.push(newItem)
           }
         })
       },
@@ -94,7 +94,7 @@ export const notificationsApi = baseApi.injectEndpoints({
 
               if (index !== -1 && !draft.items[index].isRead) {
                 draft.items[index].isRead = true
-                draft.notReadCount = draft.notReadCount - 1
+                draft.notReadCount =  draft.notReadCount>0?draft.notReadCount - 1:0
               }
             })
           })
