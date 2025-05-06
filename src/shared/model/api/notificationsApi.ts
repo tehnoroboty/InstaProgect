@@ -33,7 +33,7 @@ export const notificationsApi = baseApi.injectEndpoints({
 
             if (index !== -1) {
               if (!draft.items[index].isRead) {
-                draft.notReadCount =  draft.notReadCount>0?draft.notReadCount - 1:0
+                draft.notReadCount = draft.notReadCount > 0 ? draft.notReadCount - 1 : 0
               }
               draft.items.splice(index, 1)
             }
@@ -94,7 +94,7 @@ export const notificationsApi = baseApi.injectEndpoints({
 
               if (index !== -1 && !draft.items[index].isRead) {
                 draft.items[index].isRead = true
-                draft.notReadCount =  draft.notReadCount>0?draft.notReadCount - 1:0
+                draft.notReadCount = draft.notReadCount > 0 ? draft.notReadCount - 1 : 0
               }
             })
           })
