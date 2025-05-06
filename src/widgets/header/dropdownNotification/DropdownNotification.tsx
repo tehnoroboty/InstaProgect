@@ -8,7 +8,8 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import {useConnectSocket} from '@/src/shared/hooks/useConnectSocket'
 import {
-    useGetNotificationsQuery,
+    useDeleteNotificationMutation,
+    useGetNotificationsQuery, useMarkAsReadMutation,
 } from '@/src/shared/model/api/notificationsApi'
 import {useAppDispatch} from '@/src/shared/model/store/store'
 import {Typography} from '@/src/shared/ui/typography/Typography'
@@ -22,10 +23,19 @@ export const DropdownNotification = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [cursor, setCursor] = useState<number | undefined>(undefined)
     const {data: notifications} = useGetNotificationsQuery({cursor, pageSize: 10})
+    const [markAsRead, {isLoading: markAsReadIsLoading}] = useMarkAsReadMutation()
+    const [deleteNotification, {isLoading: deleteNotificationIsLoading}] = useDeleteNotificationMutation()
     const dispatch = useAppDispatch()
     const {inView, ref} = useInView()
     useConnectSocket(dispatch)
 
+    const markAsReadHandler = (id: number) => {
+        markAsRead({ids: [id]})
+    }
+
+    const deleteHandler = (id: number) => {
+        deleteNotification({id})
+    }
 
     useEffect(() => {
         setCursor(notifications?.items[notifications.items.length - 1].id)
@@ -68,7 +78,10 @@ export const DropdownNotification = () => {
                         <DropdownMenu.Item className = {s.items}>
                             {notifications.items.map((notification, id: number, arr) => (
                                 <Fragment key = {notification.id}>
-                                    <NotificationItem notification = {notification}/>
+                                    <NotificationItem notification = {notification} markAsRead = {markAsReadHandler}
+                                                      deleteNotification = {deleteHandler}
+                                                      buttonDisabled = {markAsReadIsLoading || deleteNotificationIsLoading}
+                                    />
                                     <DropdownMenu.Separator className = {s.separator}/>
                                     {arr.length - 1 === id && hasMorNotifications &&
                                         <div className = {s.loadMore} ref = {ref}>

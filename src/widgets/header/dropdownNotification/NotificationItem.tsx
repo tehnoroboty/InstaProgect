@@ -1,7 +1,5 @@
 import {
     Notifications,
-    useDeleteNotificationMutation,
-    useMarkAsReadMutation
 } from "@/src/shared/model/api/notificationsApi";
 import {MouseEvent} from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -13,12 +11,14 @@ import * as React from "react";
 
 type PropsNotification = {
     notification: Notifications
+    markAsRead: (id: number) => void
+    deleteNotification: (id: number) => void
+    buttonDisabled: boolean
 }
 
-export const NotificationItem = ({ notification }: PropsNotification) => {
-    const { createdAt, id, isRead, message } = notification
-    const [markAsRead] = useMarkAsReadMutation()
-    const [deleteNotification] = useDeleteNotificationMutation()
+export const NotificationItem = ({notification, markAsRead, deleteNotification, buttonDisabled}: PropsNotification) => {
+    const {createdAt, id, isRead, message} = notification
+
 
     function plural(
         value: number,
@@ -82,36 +82,38 @@ export const NotificationItem = ({ notification }: PropsNotification) => {
 
     const markAsReadHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        markAsRead({ ids: [id] })
+        markAsRead(id)
     }
     const deleteHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation()
-        deleteNotification({ id })
+        deleteNotification(id)
     }
-
+    console.log(buttonDisabled)
     return (
-        <DropdownMenu.Item className={s.notification}>
-            <div className={s.buttonsContainer}>
+        <DropdownMenu.Item className = {s.notification}>
+            <div className = {s.buttonsContainer}>
                 {!isRead && (
-                    <Button className={s.closeIconButton} onClick={markAsReadHandler} variant={'transparent'}>
-                        <EyeOutline className={s.closeIcon} />
+                    <Button disabled = {buttonDisabled} className = {s.closeIconButton} onClick = {markAsReadHandler}
+                            variant = {'transparent'}>
+                        <EyeOutline className = {s.closeIcon}/>
                     </Button>
                 )}
-                <Button className={s.closeIconButton} onClick={deleteHandler} variant={'transparent'}>
-                    <TrashOutline className={s.closeIcon} />
+                <Button disabled = {buttonDisabled} className = {s.closeIconButton} onClick = {deleteHandler}
+                        variant = {'transparent'}>
+                    <TrashOutline className = {s.closeIcon}/>
                 </Button>
             </div>
 
-            <Typography as={'h3'} option={'h3'}>
+            <Typography as = {'h3'} option = {'h3'}>
                 {'Новое уведомление!'}
             </Typography>
             {!isRead && (
-                <Typography as={'span'} className={s.notificationStatus} option={'small_text'}>
+                <Typography as = {'span'} className = {s.notificationStatus} option = {'small_text'}>
                     {'Новое'}
                 </Typography>
             )}
-            <Typography className={s.notificationMessages}>{message}</Typography>
-            <Typography as={'span'} className={s.notificationTime} option={'small_text'}>
+            <Typography className = {s.notificationMessages}>{message}</Typography>
+            <Typography as = {'span'} className = {s.notificationTime} option = {'small_text'}>
                 {timeElapsedSince(createdAt)}
             </Typography>
         </DropdownMenu.Item>
