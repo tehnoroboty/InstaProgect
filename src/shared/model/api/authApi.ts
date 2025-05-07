@@ -44,7 +44,7 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
-      async onQueryStarted(_args, {queryFulfilled }) {
+      async onQueryStarted(_args, { queryFulfilled }) {
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
@@ -61,7 +61,6 @@ export const authApi = baseApi.injectEndpoints({
           await queryFulfilled
           dispatch(baseApi.util.resetApiState())
           localStorage.removeItem('accessToken')
-
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
         }

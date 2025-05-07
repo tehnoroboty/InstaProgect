@@ -1,46 +1,63 @@
 'use client'
 import React from 'react'
 
-import {useMeQuery} from '@/src/shared/model/api/authApi'
-
-import {GetPostsResponse} from '@/src/shared/model/api/types'
-import {useAppDispatch} from '@/src/shared/model/store/store'
-import {Posts} from '@/src/shared/ui/postsGrid/Posts'
+import { PublicProfileTypes } from '@/src/entities/user/types'
+import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { GetPostsResponse } from '@/src/shared/model/api/types'
+import { useAppDispatch } from '@/src/shared/model/store/store'
+import { Posts } from '@/src/shared/ui/postsGrid/Posts'
+import { Typography } from '@/src/shared/ui/typography/Typography'
+import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
+import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
+import { useGetProfile } from '@/src/widgets/profile/useGetProfile'
 import clsx from 'clsx'
+import { useParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
-import {useParams} from "next/navigation";
-import {Typography} from "@/src/shared/ui/typography/Typography";
-import {useGetPosts} from "@/src/widgets/profile/useGetPosts";
-
 
 type Props = {
-    profileDataFromServer?: {
-        posts: GetPostsResponse
-    }
+  profileDataFromServer: {
+    posts: GetPostsResponse
+    profile: PublicProfileTypes
+  }
 }
 
 export const Profile = (props: Props) => {
-    const {data: meData} = useMeQuery()
-    const authProfile = !!meData
-    const params = useParams<{ userId: string }>()
-    const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-    const {ref, postsDataForRender, hasMorePosts} = useGetPosts({
-        userId: params.userId,
-        postsDataFromServer: props.profileDataFromServer?.posts,
-        dispatch
-    })
+  const { data: meData } = useMeQuery()
+  const authProfile = !!meData
+  const params = useParams<{ userId: string }>()
 
-    return (
-        <div className = {clsx(s.page, [!authProfile && s.noAuthPage])}>
+  const isMyProfile = meData?.userId === Number(params.userId)
 
-            {!postsDataForRender ? <div>Пусто</div> : <Posts posts = {postsDataForRender}/>}
-            {hasMorePosts && (
-                <div className = {s.loadMore} ref = {ref}>
-                    <Typography option = {'bold_text16'}>Loading...</Typography>
-                </div>
-            )}
+  const { hasMorePosts, postsDataForRender, ref } = useGetPosts({
+    dispatch,
+    postsDataFromServer: props.profileDataFromServer.posts,
+    userId: params.userId,
+  })
+
+  const { profileDataForRender } = useGetProfile({
+    authProfile,
+    dispatch,
+    isMeDataUserName: !!meData?.userName,
+    profileDataFromServer: props.profileDataFromServer.profile,
+    userId: params.userId,
+  })
+
+  return (
+    <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
+      <ProfileInfo
+        authProfile={authProfile}
+        isMyProfile={isMyProfile}
+        profile={profileDataForRender}
+      />
+      {!postsDataForRender ? <div>Пусто</div> : <Posts posts={postsDataForRender} />}
+      {hasMorePosts && (
+        <div className={s.loadMore} ref={ref}>
+          <Typography option={'bold_text16'}>Loading...</Typography>
         </div>
-    )
+      )}
+    </div>
+  )
 }

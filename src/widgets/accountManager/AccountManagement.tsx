@@ -31,7 +31,7 @@ export const AccountManagement = () => {
   const { data, isFetching } = useMyPaymentsQuery()
   const { data: currentSubscription } = useCurrentPaymentsQuery()
   const [paySubscription, { isError, isLoading: isLoadingPay }] = useCreateSubscriptionMutation()
-  const [canceledAutoRenewal]=useCanceledAutoRenewalMutation()
+  const [canceledAutoRenewal] = useCanceledAutoRenewalMutation()
   const params = useParams()
   const searchParams = useSearchParams()
   const [modalTitle, setModalTitle] = useState<string>('Create Payment')
@@ -161,7 +161,11 @@ export const AccountManagement = () => {
               </Typography>
             </div>
           </div>
-          <CheckBox checked={currentSubscription.hasAutoRenewal} onChange={()=>canceledAutoRenewal()} label={'Auto-Renewal'} />
+          <CheckBox
+            checked={currentSubscription.hasAutoRenewal}
+            label={'Auto-Renewal'}
+            onChange={() => canceledAutoRenewal()}
+          />
         </div>
       )}
 
@@ -246,7 +250,7 @@ export const AccountManagement = () => {
         modalTitle={modalTitle}
         onClose={() => {
           setOpenModal(false)
-            searchParams && router.push(`/profile/${params.userId}/settings/account-management`)
+          searchParams && router.push(`/profile/${params.userId}/settings/account-management`)
         }}
         open={openModal}
       >
@@ -269,7 +273,7 @@ export const AccountManagement = () => {
                 fullWidth
                 onClick={() => {
                   setOpenModal(false)
-                    router.push(`/profile/${params.userId}/settings/account-management`)
+                  router.push(`/profile/${params.userId}/settings/account-management`)
                 }}
               >
                 {'OK'}
@@ -281,7 +285,7 @@ export const AccountManagement = () => {
                 fullWidth
                 onClick={() => {
                   setOpenModal(false)
-                    router.push(`/profile/${params.userId}/settings/account-management`)
+                  router.push(`/profile/${params.userId}/settings/account-management`)
                 }}
               >
                 {'Back to payment'}

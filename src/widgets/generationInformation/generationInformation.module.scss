@@ -17,7 +17,6 @@
   width: 100%;
 }
 
-
 .informationBox {
   display: flex;
   flex-direction: column;
@@ -66,7 +65,6 @@
   color: var(--light-900);
 }
 
-
 .modalDeletePhoto {
   width: clamp(420px, 20vw, 438px);
   min-width: 30%;
@@ -86,6 +84,5 @@
 
       margin-top: 54px;
     }
-
   }
 }
