@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { GetPostsResponse } from '@/src/shared/model/api/types'
+import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -11,25 +11,31 @@ import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
 import { useGetProfile } from '@/src/widgets/profile/useGetProfile'
 import clsx from 'clsx'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import s from './myProfile.module.scss'
+import { Post } from '@/src/entities/post/types'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
 
 type Props = {
   profileDataFromServer: {
+    comments: GetCommentsResponse | null
+    post: Post | null
     posts: GetPostsResponse
     profile: PublicProfileTypes
   }
 }
 
 export const Profile = (props: Props) => {
+  const router = useRouter()
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-
   const { data: meData } = useMeQuery()
   const authProfile = !!meData
   const params = useParams<{ userId: string }>()
-
   const isMyProfile = meData?.userId === Number(params.userId)
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId')
 
   const { hasMorePosts, postsDataForRender, ref } = useGetPosts({
     dispatch,
@@ -45,6 +51,19 @@ export const Profile = (props: Props) => {
     userId: params.userId,
   })
 
+  const closeModal = useCallback(() => {
+    setModalIsOpen(false)
+    router.replace(`/profile/${params.userId}`, { scroll: false })
+  }, [router, params.userId])
+
+  useEffect(() => {
+    if (postId) {
+      setModalIsOpen(true)
+    } else {
+      closeModal()
+    }
+  }, [closeModal, postId])
+
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo
@@ -58,6 +77,14 @@ export const Profile = (props: Props) => {
           <Typography option={'bold_text16'}>Loading...</Typography>
         </div>
       )}
+      <ModalPost
+        commentsDataFromServer={props.profileDataFromServer.comments}
+        isAuth={authProfile}
+        isMyPost={isMyProfile}
+        onClose={closeModal}
+        open={modalIsOpen}
+        postDataFromServer={props.profileDataFromServer.post}
+      />
     </div>
   )
 }

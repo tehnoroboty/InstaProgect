@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
@@ -9,21 +9,69 @@ import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalComment
 import Image from 'next/image'
 
 import s from './modalPost.module.scss'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { postsApi } from '@/src/shared/model/api/postsApi'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
-  comments?: GetCommentsResponse
+  commentsDataFromServer: GetCommentsResponse | null
   isAuth: boolean
   isMyPost: boolean
   onClose: () => void
   open: boolean
-  post?: Post
+  postDataFromServer: Post | null
 }
 
-export default function ModalPost({ comments, isAuth, isMyPost, onClose, open, post }: Props) {
-  if (!post) {
+export default function ModalPost({
+  commentsDataFromServer,
+  isAuth,
+  isMyPost,
+  onClose,
+  open,
+  postDataFromServer,
+}: Props) {
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId')
+  const dispatch = useAppDispatch()
+
+  const { data: postFromCash } = useAppSelector(state =>
+    postsApi.endpoints.getPost.select({ postId: Number(postId) })(state)
+  )
+  const { data: commentsFromCash } = useAppSelector(state =>
+    postsApi.endpoints.getComments.select({ postId: Number(postId) })(state)
+  )
+
+  const needInitCommentsInStore = !!commentsDataFromServer && !commentsFromCash
+  const needInitPostInStore = !!postDataFromServer && !postFromCash
+
+  useEffect(() => {
+    if (needInitPostInStore) {
+      dispatch(
+        postsApi.util.upsertQueryData('getPost', { postId: Number(postId) }, postDataFromServer)
+      )
+    }
+  }, [needInitPostInStore])
+  useEffect(() => {
+    if (needInitCommentsInStore && !!commentsDataFromServer) {
+      dispatch(
+        postsApi.util.upsertQueryData(
+          'getComments',
+          { postId: Number(postId) },
+          commentsDataFromServer
+        )
+      )
+    }
+  }, [needInitCommentsInStore])
+
+  const postForRender = postFromCash || postDataFromServer
+  const commentsForRender = commentsFromCash?.items || commentsDataFromServer?.items || []
+
+  if (!postForRender || !commentsForRender) {
     return null
   }
-  const isCarousel = post.images.length > 1
+
+  const isCarousel = postForRender.images.length > 1
+
   const renderItem = (item: ImageType) => {
     return item ? (
       <Image alt={'post'} className={s.image} height={490} priority src={item.url} width={562} />
@@ -36,22 +84,21 @@ export default function ModalPost({ comments, isAuth, isMyPost, onClose, open, p
       </div>
     )
   }
-  const commentsData = comments?.items ?? []
 
   return (
     <>
       <Dialog className={s.dialog} closeClassName={s.closeClassName} onClose={onClose} open={open}>
         <div className={s.container}>
           {isCarousel ? (
-            <Carousel list={post.images} renderItem={renderItem} size={'large'} />
+            <Carousel list={postForRender.images} renderItem={renderItem} size={'large'} />
           ) : (
-            renderItem(post.images[0])
+            renderItem(postForRender.images[0])
           )}
           <ModalCommentsSection
-            commentsData={commentsData}
+            commentsData={commentsForRender}
             isAuth={isAuth}
             isMyPost={isMyPost}
-            post={post}
+            post={postForRender}
           />
         </div>
       </Dialog>
