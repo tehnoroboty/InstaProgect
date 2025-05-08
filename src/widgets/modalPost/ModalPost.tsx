@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
@@ -11,14 +11,12 @@ import Image from 'next/image'
 import s from './modalPost.module.scss'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { postsApi } from '@/src/shared/model/api/postsApi'
-import { useSearchParams } from 'next/navigation'
+import {useParams, useRouter, useSearchParams} from 'next/navigation'
 
 type Props = {
   commentsDataFromServer: GetCommentsResponse | null
   isAuth: boolean
   isMyPost: boolean
-  onClose: () => void
-  open: boolean
   postDataFromServer: Post | null
 }
 
@@ -26,13 +24,27 @@ export default function ModalPost({
   commentsDataFromServer,
   isAuth,
   isMyPost,
-  onClose,
-  open,
   postDataFromServer,
 }: Props) {
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const params = useParams<{ userId: string }>()
+
+  const closeModal = useCallback(() => {
+    setModalIsOpen(false)
+    router.replace(`/profile/${params.userId}`, { scroll: false })
+  }, [router, params.userId])
+
+  useEffect(() => {
+    if (postId) {
+      setModalIsOpen(true)
+    } else {
+      closeModal()
+    }
+  }, [closeModal, postId])
 
   const { data: postFromCash } = useAppSelector(state =>
     postsApi.endpoints.getPost.select({ postId: Number(postId) })(state)
@@ -87,7 +99,7 @@ export default function ModalPost({
 
   return (
     <>
-      <Dialog className={s.dialog} closeClassName={s.closeClassName} onClose={onClose} open={open}>
+      <Dialog className={s.dialog} closeClassName={s.closeClassName} onClose={closeModal} open={modalIsOpen}>
         <div className={s.container}>
           {isCarousel ? (
             <Carousel list={postForRender.images} renderItem={renderItem} size={'large'} />
