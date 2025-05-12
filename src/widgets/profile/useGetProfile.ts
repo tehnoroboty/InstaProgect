@@ -34,8 +34,9 @@ export const useGetProfile = ({
   }, [needInitProfileInStore])
 
   const { data: profileByName } = useGetUserProfileQuery(profileFromCash?.userName ?? '', {
-    skip: !isMeDataUserName && !authProfile,
+    skip: !isMeDataUserName || !profileFromCash?.userName || !authProfile,
   })
+
   const profileDataForRender = profileByName
     ? {
         aboutMe: profileByName?.aboutMe,

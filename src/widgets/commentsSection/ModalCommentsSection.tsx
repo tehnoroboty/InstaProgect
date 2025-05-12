@@ -16,7 +16,6 @@ import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
-import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -54,6 +53,7 @@ export const ModalCommentsSection = ({
   const [deletePost] = useDeletePostMutation()
   const router = useRouter()
   const params = useParams<{ userId: string }>()
+
   const handleChangeHeight = () => {
     if (textArea.current) {
       textArea.current.style.height = '24px'

@@ -47,8 +47,6 @@ export const Profile = (props: Props) => {
     userId: params.userId,
   })
 
-
-
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
       <ProfileInfo

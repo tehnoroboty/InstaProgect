@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
@@ -10,8 +10,8 @@ import Image from 'next/image'
 
 import s from './modalPost.module.scss'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
-import { postsApi } from '@/src/shared/model/api/postsApi'
-import {useParams, useRouter, useSearchParams} from 'next/navigation'
+import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 type Props = {
   commentsDataFromServer: GetCommentsResponse | null
@@ -47,10 +47,11 @@ export default function ModalPost({
   }, [closeModal, postId])
 
   const { data: postFromCash } = useAppSelector(state =>
-    postsApi.endpoints.getPost.select({ postId: Number(postId) })(state)
+    postsApi.endpoints.getPost.select(Number(postId))(state)
   )
+
   const { data: commentsFromCash } = useAppSelector(state =>
-    postsApi.endpoints.getComments.select({ postId: Number(postId) })(state)
+    postsApi.endpoints.getComments.select(Number(postId))(state)
   )
 
   const needInitCommentsInStore = !!commentsDataFromServer && !commentsFromCash
@@ -58,25 +59,26 @@ export default function ModalPost({
 
   useEffect(() => {
     if (needInitPostInStore) {
-      dispatch(
-        postsApi.util.upsertQueryData('getPost', { postId: Number(postId) }, postDataFromServer)
-      )
+      dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
     }
   }, [needInitPostInStore])
+
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
-      dispatch(
-        postsApi.util.upsertQueryData(
-          'getComments',
-          { postId: Number(postId) },
-          commentsDataFromServer
-        )
-      )
+      dispatch(postsApi.util.upsertQueryData('getComments', Number(postId), commentsDataFromServer))
     }
   }, [needInitCommentsInStore])
 
-  const postForRender = postFromCash || postDataFromServer
-  const commentsForRender = commentsFromCash?.items || commentsDataFromServer?.items || []
+  const { data: post } = useGetPostQuery(Number(postId), {
+    skip: !needInitPostInStore && !Number(postId),
+  })
+  const { data: comments } = useGetCommentsQuery(Number(postId), {
+    skip: !needInitCommentsInStore,
+  })
+
+  const postForRender = post || postFromCash || postDataFromServer
+  const commentsForRender =
+    comments?.items || commentsFromCash?.items || commentsDataFromServer?.items || []
 
   if (!postForRender || !commentsForRender) {
     return null
@@ -99,7 +101,12 @@ export default function ModalPost({
 
   return (
     <>
-      <Dialog className={s.dialog} closeClassName={s.closeClassName} onClose={closeModal} open={modalIsOpen}>
+      <Dialog
+        className={s.dialog}
+        closeClassName={s.closeClassName}
+        onClose={closeModal}
+        open={modalIsOpen}
+      >
         <div className={s.container}>
           {isCarousel ? (
             <Carousel list={postForRender.images} renderItem={renderItem} size={'large'} />

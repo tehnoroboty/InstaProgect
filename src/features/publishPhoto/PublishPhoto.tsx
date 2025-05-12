@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
@@ -10,6 +9,7 @@ import PinIcon from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { AppRoutes } from '@/src/shared/lib/constants/routing'
 import {
+  postsApi,
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
@@ -30,6 +30,7 @@ import { Title } from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 
 type Props = {
   photos: string[]
@@ -38,7 +39,7 @@ type Props = {
 export const PublishPhoto = ({ photos }: Props) => {
   const { data: userProfile } = useGetMyProfileQuery()
   const openModal = useBoolean(true)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
@@ -76,9 +77,13 @@ export const PublishPhoto = ({ photos }: Props) => {
         }
 
         await addPost(publishData).unwrap()
-
         openModal.setFalse()
         dispatch(setIsPostModalOpen({ isOpen: false }))
+        dispatch(
+          postsApi.util.updateQueryData('getPosts', { userId: Number(userProfile?.id) }, draft => {
+            draft.items = []
+          })
+        )
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
       } else {
         console.warn('No files were uploaded successfully.')

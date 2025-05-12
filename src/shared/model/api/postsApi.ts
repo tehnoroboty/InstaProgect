@@ -30,7 +30,6 @@ export const postsApi = baseApi.injectEndpoints({
       invalidatesTags: ['POSTS'],
       async onQueryStarted({}, { dispatch, queryFulfilled }) {
         dispatch(setLastPostId({ lastPostId: null }))
-
         try {
           await queryFulfilled
         } catch {}
@@ -46,7 +45,6 @@ export const postsApi = baseApi.injectEndpoints({
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPosts', { userId }, draft => {
             const index = draft.items.findIndex(post => post.id === postId)
-
             if (index !== -1) {
               draft.items.splice(index, 1)
             }
@@ -64,16 +62,16 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
       }),
     }),
-    getComments: builder.query<GetCommentsResponse, { postId: number }>({
+    getComments: builder.query<GetCommentsResponse, number>({
       providesTags: ['COMMENTS'],
-      query: ({ postId }) => ({
+      query: postId => ({
         method: 'GET',
         url: `/posts/${postId}/comments`,
       }),
     }),
-    getPost: builder.query<Post, { postId: number }>({
+    getPost: builder.query<Post, number>({
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
-      query: ({ postId }) => ({
+      query: postId => ({
         method: 'GET',
         url: `/posts/id/${postId}`,
       }),
@@ -128,6 +126,5 @@ export const {
   useGetCommentsQuery,
   useGetPostQuery,
   useGetPostsQuery,
-  useLazyGetPostsQuery,
   useUpdatePostMutation,
 } = postsApi
