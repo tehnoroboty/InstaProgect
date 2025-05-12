@@ -1,26 +1,5 @@
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { SortDirection } from '@/src/shared/model/api/types'
-
-export type Notifications = {
-  createdAt: string
-  id: number
-  isRead: boolean
-  message: string
-}
-type GetNotificationsResponse = {
-  items: Notifications[]
-  notReadCount: number
-  pageSize: number
-  totalCount: number
-}
-
-type GetNotificationsArgs = {
-  cursor?: number
-  isRead?: boolean
-  pageSize?: number
-  sortBy?: string
-  sortDirection?: SortDirection
-}
+import { GetNotificationsArgs, GetNotificationsResponse } from '@/src/shared/model/api/types'
 
 export const notificationsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -39,7 +18,6 @@ export const notificationsApi = baseApi.injectEndpoints({
             }
           })
         )
-
         try {
           await queryFulfilled
         } catch {
