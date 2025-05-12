@@ -11,13 +11,14 @@ import Image from 'next/image'
 import s from './modalPost.module.scss'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 
 type Props = {
   commentsDataFromServer: GetCommentsResponse | null
   isAuth: boolean
   isMyPost: boolean
   postDataFromServer: Post | null
+  onClose: () => void
 }
 
 export default function ModalPost({
@@ -25,18 +26,19 @@ export default function ModalPost({
   isAuth,
   isMyPost,
   postDataFromServer,
+  onClose,
 }: Props) {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const dispatch = useAppDispatch()
-  const router = useRouter()
+
   const params = useParams<{ userId: string }>()
 
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
-    router.replace(`/profile/${params.userId}`, { scroll: false })
-  }, [router, params.userId])
+    onClose()
+  }, [params.userId])
 
   useEffect(() => {
     if (postId) {

@@ -11,7 +11,7 @@ import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
 import { useGetProfile } from '@/src/widgets/profile/useGetProfile'
 import clsx from 'clsx'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import s from './myProfile.module.scss'
 import { Post } from '@/src/entities/post/types'
@@ -32,6 +32,11 @@ export const Profile = (props: Props) => {
   const authProfile = !!meData
   const params = useParams<{ userId: string }>()
   const isMyProfile = meData?.userId === Number(params.userId)
+  const router = useRouter()
+
+  const closeModal = () => {
+    router.replace(`/profile/${params.userId}`, { scroll: false })
+  }
 
   const { hasMorePosts, postsDataForRender, ref } = useGetPosts({
     dispatch,
@@ -61,6 +66,7 @@ export const Profile = (props: Props) => {
         </div>
       )}
       <ModalPost
+        onClose={closeModal}
         commentsDataFromServer={props.profileDataFromServer.comments}
         isAuth={authProfile}
         isMyPost={isMyProfile}
