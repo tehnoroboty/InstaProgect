@@ -1,6 +1,7 @@
 'use client'
 import * as React from 'react'
 import { Fragment, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { Fillbell, Outlinebell } from '@/src/shared/assets/componentsIcons'
 import { useConnectSocket } from '@/src/shared/hooks/useConnectSocket'
@@ -11,11 +12,10 @@ import {
 } from '@/src/shared/model/api/notificationsApi'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { NotificationItem } from '@/src/widgets/header/dropdownNotification/NotificationItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdownNotification.module.scss'
-import { NotificationItem } from '@/src/widgets/header/dropdownNotification/NotificationItem'
-import { useInView } from 'react-intersection-observer'
 
 export const DropdownNotification = () => {
   const [open, setOpen] = useState<boolean>(false)
@@ -26,6 +26,7 @@ export const DropdownNotification = () => {
     useDeleteNotificationMutation()
   const dispatch = useAppDispatch()
   const { inView, ref } = useInView()
+
   useConnectSocket(dispatch)
 
   const markAsReadHandler = (id: number) => {
@@ -84,10 +85,10 @@ export const DropdownNotification = () => {
               {notifications.items.map((notification, id: number, arr) => (
                 <Fragment key={notification.id}>
                   <NotificationItem
-                    notification={notification}
-                    markAsRead={markAsReadHandler}
-                    deleteNotification={deleteHandler}
                     buttonDisabled={markAsReadIsLoading || deleteNotificationIsLoading}
+                    deleteNotification={deleteHandler}
+                    markAsRead={markAsReadHandler}
+                    notification={notification}
                   />
                   <DropdownMenu.Separator className={s.separator} />
                   {arr.length - 1 === id && hasMorNotifications && (

@@ -1,7 +1,7 @@
 import { notificationsApi } from '@/src/shared/model/api/notificationsApi'
+import { Notifications } from '@/src/shared/model/api/types'
 import { AppDispatch } from '@/src/shared/model/store/store'
 import { Socket, io } from 'socket.io-client'
-import { Notifications } from '@/src/shared/model/api/types'
 
 type NotificationSocket = {
   clientId: string

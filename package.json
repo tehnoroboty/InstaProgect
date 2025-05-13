@@ -1,22 +1,7 @@
 {
-  "name": "project",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "build:production": "pnpm run build",
-    "start": "next start",
-    "test": "jest --passWithNoTests",
-    "format": "prettier --write src",
-    "lint": "eslint src --ext .jsx,.js,.tsx,.ts  --no-error-on-unmatched-pattern --fix && stylelint --fix src/{,*/}*.{scss,css} --allow-empty-input",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "lint:styles": "stylelint '**/*.{css,scss}' --fix"
-  },
   "dependencies": {
-    "@fontsource-variable/inter": "^5.1.0",
     "@fontsource/roboto": "^5.1.0",
+    "@fontsource-variable/inter": "^5.1.0",
     "@hookform/resolvers": "^3.9.1",
     "@pqina/pintura": "^8.92.3",
     "@pqina/react-pintura": "^9.0.3",
@@ -82,5 +67,20 @@
     "stylelint-config-standard": "^36.0.1",
     "stylelint-scss": "^6.10.0",
     "typescript": "^5"
-  }
+  },
+  "name": "project",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "build:production": "pnpm run build",
+    "build-storybook": "storybook build",
+    "dev": "next dev",
+    "format": "prettier --write src",
+    "lint": "eslint src --ext .jsx,.js,.tsx,.ts  --no-error-on-unmatched-pattern --fix && stylelint --fix src/{,*/}*.{scss,css} --allow-empty-input",
+    "lint:styles": "stylelint '**/*.{css,scss}' --fix",
+    "start": "next start",
+    "storybook": "storybook dev -p 6006",
+    "test": "jest --passWithNoTests"
+  },
+  "version": "0.1.0"
 }

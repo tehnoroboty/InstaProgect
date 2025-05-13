@@ -1,25 +1,27 @@
-import { Notifications } from '@/src/shared/model/api/types'
 import { MouseEvent } from 'react'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import s from '@/src/widgets/header/dropdownNotification/dropdownNotification.module.scss'
-import { Button } from '@/src/shared/ui/button/Button'
-import { EyeOutline, TrashOutline } from '@/src/shared/assets/componentsIcons'
-import { Typography } from '@/src/shared/ui/typography/Typography'
 import * as React from 'react'
+
+import { EyeOutline, TrashOutline } from '@/src/shared/assets/componentsIcons'
 import { timeElapsedSince } from '@/src/shared/lib/timeElapsedSince'
+import { Notifications } from '@/src/shared/model/api/types'
+import { Button } from '@/src/shared/ui/button/Button'
+import { Typography } from '@/src/shared/ui/typography/Typography'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+
+import s from '@/src/widgets/header/dropdownNotification/dropdownNotification.module.scss'
 
 type PropsNotification = {
-  notification: Notifications
-  markAsRead: (id: number) => void
-  deleteNotification: (id: number) => void
   buttonDisabled: boolean
+  deleteNotification: (id: number) => void
+  markAsRead: (id: number) => void
+  notification: Notifications
 }
 
 export const NotificationItem = ({
-  notification,
-  markAsRead,
-  deleteNotification,
   buttonDisabled,
+  deleteNotification,
+  markAsRead,
+  notification,
 }: PropsNotification) => {
   const { createdAt, id, isRead, message } = notification
 
@@ -37,8 +39,8 @@ export const NotificationItem = ({
       <div className={s.buttonsContainer}>
         {!isRead && (
           <Button
-            disabled={buttonDisabled}
             className={s.closeIconButton}
+            disabled={buttonDisabled}
             onClick={markAsReadHandler}
             variant={'transparent'}
           >
@@ -46,8 +48,8 @@ export const NotificationItem = ({
           </Button>
         )}
         <Button
-          disabled={buttonDisabled}
           className={s.closeIconButton}
+          disabled={buttonDisabled}
           onClick={deleteHandler}
           variant={'transparent'}
         >

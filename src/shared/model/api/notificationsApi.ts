@@ -18,6 +18,7 @@ export const notificationsApi = baseApi.injectEndpoints({
             }
           })
         )
+
         try {
           await queryFulfilled
         } catch {
