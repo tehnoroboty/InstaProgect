@@ -17,10 +17,12 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdownNotification.module.scss'
 
+const PAGE_SIZE = 10
+
 export const DropdownNotification = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [cursor, setCursor] = useState<number | undefined>(undefined)
-  const { data: notifications } = useGetNotificationsQuery({ cursor, pageSize: 10 })
+  const { data: notifications } = useGetNotificationsQuery({ cursor, pageSize: PAGE_SIZE })
   const [markAsRead, { isLoading: markAsReadIsLoading }] = useMarkAsReadMutation()
   const [deleteNotification, { isLoading: deleteNotificationIsLoading }] =
     useDeleteNotificationMutation()
@@ -72,17 +74,17 @@ export const DropdownNotification = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content align={'end'} className={s.content} sideOffset={10}>
-          <DropdownMenu.Label className={s.title}>{'Уведомления'}</DropdownMenu.Label>
+          <DropdownMenu.Label className={s.title}>{'Notifications'}</DropdownMenu.Label>
           <DropdownMenu.Separator className={s.separator} />
           {!hasNotification ? (
             <DropdownMenu.Item>
               <Typography as={'h3'} option={'h3'}>
-                {'Уведомлений пока нет'}
+                {'No notifications yet'}
               </Typography>
             </DropdownMenu.Item>
           ) : (
             <DropdownMenu.Item className={s.items}>
-              {notifications.items.map((notification, id: number, arr) => (
+              {notifications.items.map((notification, index: number, arr) => (
                 <Fragment key={notification.id}>
                   <NotificationItem
                     buttonDisabled={markAsReadIsLoading || deleteNotificationIsLoading}
@@ -91,8 +93,8 @@ export const DropdownNotification = () => {
                     notification={notification}
                   />
                   <DropdownMenu.Separator className={s.separator} />
-                  {arr.length - 1 === id && hasMorNotifications && (
-                    <div className={s.loadMore} ref={ref}>
+                  {arr.length - 1 === index && hasMorNotifications && (
+                    <div className={s.seeMore} ref={ref}>
                       <Typography option={'bold_text16'}>Loading...</Typography>
                     </div>
                   )}

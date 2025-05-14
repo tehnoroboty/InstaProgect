@@ -58,11 +58,11 @@ export const NotificationItem = ({
       </div>
 
       <Typography as={'h3'} option={'h3'}>
-        {'Новое уведомление!'}
+        {'New notification!'}
       </Typography>
       {!isRead && (
         <Typography as={'span'} className={s.notificationStatus} option={'small_text'}>
-          {'Новое'}
+          {'New'}
         </Typography>
       )}
       <Typography className={s.notificationMessages}>{message}</Typography>
