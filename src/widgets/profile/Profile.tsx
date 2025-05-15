@@ -37,6 +37,8 @@ type Props = {
   }
 }
 
+
+
 export const Profile = (props: Props) => {
   const dispatch = useAppDispatch()
   const { inView, ref } = useInView({ threshold: 1 })
