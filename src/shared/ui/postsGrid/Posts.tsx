@@ -3,12 +3,12 @@ import React from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
+import { Item } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './posts.module.scss'
-import { Item } from '@/src/shared/model/api/types'
 
 type ImageType = {
   height?: number
@@ -22,12 +22,12 @@ type PostType = {
 }
 
 type Props = {
-  posts: PostType[] | Item[]
+  posts: Item[] | PostType[]
   publicPost?: Post | null
   publicPosts?: any
 }
 
-export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
+export const Posts = ({ posts, publicPosts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {

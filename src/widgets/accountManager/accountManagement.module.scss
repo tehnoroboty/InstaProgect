@@ -27,7 +27,6 @@
   border-radius: 2px;
 
   background-color: var(--dark-500);
-
 }
 
 .content {
@@ -80,16 +79,15 @@
   text-transform: none;
 }
 
-.btnModalResult{
-  margin-top:54px;
+.btnModalResult {
+  margin-top: 54px;
 }
 
-.modalContent{
+.modalContent {
   display: flex;
   flex-direction: column;
   gap: 18px;
   padding: 30px 24px;
-
 }
 
 .modalAction {

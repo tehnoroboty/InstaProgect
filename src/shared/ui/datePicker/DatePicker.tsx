@@ -7,7 +7,7 @@ import { Calendar } from '@/src/shared/ui/calendar/Calendar'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import clsx from 'clsx'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 
 import s from './datePicker.module.scss'
 
