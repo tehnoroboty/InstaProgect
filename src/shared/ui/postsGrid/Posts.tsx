@@ -27,7 +27,7 @@ type Props = {
   publicPosts?: any
 }
 
-export const Posts = ({ posts, publicPost, publicPosts }: Props) => {
+export const Posts = ({ posts, publicPosts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {

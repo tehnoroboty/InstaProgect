@@ -1,90 +1,60 @@
-// @flow
 'use client'
 import * as React from 'react'
-import { useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { Fillbell, Outlinebell } from '@/src/shared/assets/componentsIcons'
+import { useConnectSocket } from '@/src/shared/hooks/useConnectSocket'
+import {
+  useDeleteNotificationMutation,
+  useGetNotificationsQuery,
+  useMarkAsReadMutation,
+} from '@/src/shared/model/api/notificationsApi'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { NotificationItem } from '@/src/widgets/header/dropdownNotification/NotificationItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import s from './dropdownNotification.module.scss'
 
-const placeholderNotifications: Notification[] = [
-  {
-    createdAt: '20.00 Sutturday',
-    id: '1',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '1',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '1',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '1',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '1',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '2',
-    isRead: false,
-    message: 'Ваша подписка истекает через 7 дней',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '3',
-    isRead: false,
-    message: 'Ваша подписка истекает через 7 дней',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '4',
-    isRead: false,
-    message: 'Ваша подписка истекает через 7 дней',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '5',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-  {
-    createdAt: '20.00 Sutturday',
-    id: '6',
-    isRead: false,
-    message: ' Следующий платеж у вас спишется через 1 день',
-  },
-]
-
-type Notification = {
-  createdAt: string
-  id: string
-  isRead: boolean
-  message: string
-}
+const PAGE_SIZE = 10
 
 export const DropdownNotification = () => {
-  const notifications = placeholderNotifications
-  const [open, setOpen] = useState(false)
-  const hasNotification = notifications.length > 0
-  const filteredNotifications = notifications?.filter(notification => !notification.isRead).length
+  const [open, setOpen] = useState<boolean>(false)
+  const [cursor, setCursor] = useState<number | undefined>(undefined)
+  const { data: notifications } = useGetNotificationsQuery({ cursor, pageSize: PAGE_SIZE })
+  const [markAsRead, { isLoading: markAsReadIsLoading }] = useMarkAsReadMutation()
+  const [deleteNotification, { isLoading: deleteNotificationIsLoading }] =
+    useDeleteNotificationMutation()
+  const dispatch = useAppDispatch()
+  const { inView, ref } = useInView()
 
+  useConnectSocket(dispatch)
+
+  const markAsReadHandler = (id: number) => {
+    markAsRead({ ids: [id] })
+  }
+
+  const deleteHandler = (id: number) => {
+    deleteNotification({ id })
+  }
+
+  useEffect(() => {
+    if (
+      notifications &&
+      notifications.items.length < notifications.totalCount &&
+      notifications.items.length !== 0
+    ) {
+      setCursor(notifications?.items[notifications.items.length - 1].id)
+    }
+  }, [inView])
+
+  if (!notifications) {
+    return null
+  }
+  const hasMorNotifications = notifications.items.length < notifications.totalCount
+  const hasNotification = notifications.items.length !== 0
+  const notReadCount = notifications.notReadCount
   const handleOpenChange = (open: boolean) => {
     setOpen(open)
   }
@@ -93,14 +63,10 @@ export const DropdownNotification = () => {
     <DropdownMenu.Root onOpenChange={handleOpenChange}>
       <DropdownMenu.Trigger asChild>
         <button className={s.buttonIcon} type={'button'}>
-          {open ? (
-            <Fillbell className={s.icon} height={24} width={24} />
-          ) : (
-            <Outlinebell height={24} width={24} />
-          )}
-          {hasNotification && (
+          {open ? <Fillbell className={s.icon} /> : <Outlinebell />}
+          {!!notReadCount && (
             <Typography as={'span'} className={s.notificationBadge} option={'small_text'}>
-              {filteredNotifications}
+              {notReadCount}
             </Typography>
           )}
         </button>
@@ -108,51 +74,36 @@ export const DropdownNotification = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content align={'end'} className={s.content} sideOffset={10}>
-          <DropdownMenu.Label className={s.title}>{'Уведомления'}</DropdownMenu.Label>
+          <DropdownMenu.Label className={s.title}>{'Notifications'}</DropdownMenu.Label>
           <DropdownMenu.Separator className={s.separator} />
           {!hasNotification ? (
             <DropdownMenu.Item>
               <Typography as={'h3'} option={'h3'}>
-                {'Уведомлений пока нет'}
+                {'No notifications yet'}
               </Typography>
             </DropdownMenu.Item>
           ) : (
             <DropdownMenu.Item className={s.items}>
-              {notifications.map(notification => (
-                <>
-                  <NotificationItem key={notification.id} notification={notification} />
+              {notifications.items.map((notification, index: number, arr) => (
+                <Fragment key={notification.id}>
+                  <NotificationItem
+                    buttonDisabled={markAsReadIsLoading || deleteNotificationIsLoading}
+                    deleteNotification={deleteHandler}
+                    markAsRead={markAsReadHandler}
+                    notification={notification}
+                  />
                   <DropdownMenu.Separator className={s.separator} />
-                </>
+                  {arr.length - 1 === index && hasMorNotifications && (
+                    <div className={s.seeMore} ref={ref}>
+                      <Typography option={'bold_text16'}>Loading...</Typography>
+                    </div>
+                  )}
+                </Fragment>
               ))}
             </DropdownMenu.Item>
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
-  )
-}
-
-type PropsNotification = {
-  notification: Notification
-}
-
-const NotificationItem = ({ notification }: PropsNotification) => {
-  const { createdAt, isRead, message } = notification
-
-  return (
-    <DropdownMenu.Item className={s.notification}>
-      <Typography as={'h3'} option={'h3'}>
-        {'Новое уведомление!'}
-      </Typography>
-      {!isRead && (
-        <Typography as={'span'} className={s.notificationStatus} option={'small_text'}>
-          Новое
-        </Typography>
-      )}
-      <Typography className={s.notificationMessages}>{message}</Typography>
-      <Typography as={'span'} className={s.notificationTime} option={'small_text'}>
-        {createdAt}
-      </Typography>
-    </DropdownMenu.Item>
   )
 }

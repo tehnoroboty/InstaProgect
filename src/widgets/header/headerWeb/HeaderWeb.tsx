@@ -11,14 +11,12 @@ import Link from 'next/link'
 import s from './headerWeb.module.scss'
 
 type Props = {
-  hasNotification?: boolean
-  isLoading?: boolean
   isLoggedIn?: boolean
   title: string
 }
 
 export const HeaderWeb = (props: Props) => {
-  const { hasNotification, isLoading, isLoggedIn, title } = props
+  const { isLoggedIn, title } = props
 
   return (
     <div className={s.container}>
@@ -28,7 +26,7 @@ export const HeaderWeb = (props: Props) => {
         </Typography>
       </Link>
       <div className={s.headerActions}>
-        {isLoggedIn && hasNotification && <DropdownNotification />}
+        {isLoggedIn && <DropdownNotification />}
         <SelectLanguage />
         {!isLoggedIn && (
           <div className={s.buttons}>
