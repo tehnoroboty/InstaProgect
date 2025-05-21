@@ -28,9 +28,8 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
       invalidatesTags: ['POSTS'],
-      async onQueryStarted({}, { dispatch, getState, queryFulfilled }) {
-        const patchResult = dispatch(setLastPostId({ lastPostId: null }))
-
+      async onQueryStarted({}, { dispatch, queryFulfilled }) {
+        dispatch(setLastPostId({ lastPostId: null }))
         try {
           await queryFulfilled
         } catch {}
@@ -46,7 +45,6 @@ export const postsApi = baseApi.injectEndpoints({
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPosts', { userId }, draft => {
             const index = draft.items.findIndex(post => post.id === postId)
-
             if (index !== -1) {
               draft.items.splice(index, 1)
             }
@@ -64,16 +62,16 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
       }),
     }),
-    getComments: builder.query<GetCommentsResponse, { postId: number }>({
+    getComments: builder.query<GetCommentsResponse, number>({
       providesTags: ['COMMENTS'],
-      query: ({ postId }) => ({
+      query: postId => ({
         method: 'GET',
         url: `/posts/${postId}/comments`,
       }),
     }),
-    getPost: builder.query<Post, { postId: number }>({
+    getPost: builder.query<Post, number>({
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
-      query: ({ postId }) => ({
+      query: postId => ({
         method: 'GET',
         url: `/posts/id/${postId}`,
       }),
@@ -83,15 +81,15 @@ export const postsApi = baseApi.injectEndpoints({
         return currentArg !== previousArg
       },
       merge: (currentCache, newItems) => {
-        const intersection = currentCache.items.filter(obj1 =>
-          newItems.items.some(obj2 => obj1.id === obj2.id)
-        )
+        newItems.items.map(newItem => {
+          const findIndex = currentCache.items.findIndex(
+            currentItem => currentItem.id === newItem.id
+          )
 
-        if (intersection.length === 0) {
-          currentCache.items.push(...newItems.items)
-        } else {
-          currentCache.items = newItems.items
-        }
+          if (findIndex === -1) {
+            currentCache.items.push(newItem)
+          }
+        })
       },
       providesTags: ['POSTS'],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
@@ -106,12 +104,12 @@ export const postsApi = baseApi.injectEndpoints({
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
       },
-      transformResponse: (response: GetPostsResponse, meta, arg) => {
+      transformResponse: (response: GetPostsResponse, _meta, _arg) => {
         return response
       },
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
-      invalidatesTags: (result, err, { postId }) => [{ id: postId, type: 'POST' }],
+      invalidatesTags: (_result, _err, { postId }) => [{ id: postId, type: 'POST' }],
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',

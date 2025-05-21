@@ -1,35 +1,24 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
+import React from 'react'
 
-import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import {
-  useGetCommentsQuery,
-  useGetPostQuery,
-  useGetPostsQuery,
-} from '@/src/shared/model/api/postsApi'
-import { GetCommentsResponse, GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
-import { useGetUserProfileByIdQuery, useGetUserProfileQuery } from '@/src/shared/model/api/usersApi'
-import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
-import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
+import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
+import { useGetProfile } from '@/src/widgets/profile/useGetProfile'
 import clsx from 'clsx'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import s from './myProfile.module.scss'
-
-const PUBLIC_PAGE_SIZE = 9
-const AUTH_PAGE_SIZE = 8
-const SORT_BY = 'createdAt'
-const SORT_DIRECTION: SortDirection = 'desc'
+import { Post } from '@/src/entities/post/types'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
 
 type Props = {
-  profile?: {
+  profileDataFromServer: {
     comments: GetCommentsResponse | null
     post: Post | null
     posts: GetPostsResponse
@@ -37,85 +26,31 @@ type Props = {
   }
 }
 
-
-
 export const Profile = (props: Props) => {
   const dispatch = useAppDispatch()
-  const { inView, ref } = useInView({ threshold: 1 })
-  const params = useParams<{ userId: string }>()
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const router = useRouter()
   const { data: meData } = useMeQuery()
   const authProfile = !!meData
-  const searchParams = useSearchParams()
-  const postId = searchParams.get('postId')
+  const params = useParams<{ userId: string }>()
   const isMyProfile = meData?.userId === Number(params.userId)
+  const router = useRouter()
 
-  const { data: profileById } = useGetUserProfileByIdQuery(Number(params.userId), {
-    skip: !params.userId,
-  })
-  const { data: profileByName } = useGetUserProfileQuery(profileById?.userName ?? '', {
-    skip: !profileById?.userName,
-  })
-  // получаем посты
-  const lastPostId = useAppSelector(selectLastPostId)
-  const { data: posts, isFetching: isFetchingPosts } = useGetPostsQuery(
-    {
-      endCursorPostId: lastPostId || undefined,
-      pageSize: lastPostId ? PUBLIC_PAGE_SIZE : AUTH_PAGE_SIZE,
-      sortBy: SORT_BY,
-      sortDirection: SORT_DIRECTION,
-      userId: Number(params.userId),
-    },
-    {
-      skip: !authProfile,
-    }
-  )
-  const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
-  const postsCount = posts?.items.length ?? totalCount
-  const hasMorePosts = totalCount > postsCount
-
-  useEffect(() => {
-    if (hasMorePosts && inView && isMyProfile && !isFetchingPosts) {
-      if (posts?.items[posts.items.length - 1] === lastPostId) {
-        dispatch(setLastPostId({ lastPostId: null }))
-      } else {
-        dispatch(setLastPostId({ lastPostId: posts?.items[posts.items.length - 1]?.id }))
-      }
-    }
-  }, [inView])
-  // получаем пост по ID
-  const { data: post } = useGetPostQuery(
-    { postId: Number(postId) },
-    {
-      skip: !postId || !authProfile,
-    }
-  )
-  // получаем комменты по ID
-  const { data: comments } = useGetCommentsQuery(
-    { postId: Number(postId) },
-    {
-      skip: !postId || !authProfile,
-    }
-  )
-
-  const closeModal = useCallback(() => {
-    setModalIsOpen(false)
+  const closeModal = () => {
     router.replace(`/profile/${params.userId}`, { scroll: false })
-  }, [router, params.userId])
+  }
 
-  useEffect(() => {
-    if (postId) {
-      setModalIsOpen(true)
-    } else {
-      closeModal()
-    }
-  }, [closeModal, postId])
+  const { hasMorePosts, postsDataForRender, ref } = useGetPosts({
+    dispatch,
+    postsDataFromServer: props.profileDataFromServer.posts,
+    userId: params.userId,
+  })
 
-  const profileDataForRender = profileByName ? profileByName : props.profile?.profile
-  const postsForRender = authProfile ? posts?.items : props.profile?.posts.items
-  const commentsForRender = authProfile ? comments : props.profile?.comments
-  const postForRender = authProfile ? post : props.profile?.post
+  const { profileDataForRender } = useGetProfile({
+    authProfile,
+    dispatch,
+    isMeDataUserName: !!meData?.userName,
+    profileDataFromServer: props.profileDataFromServer.profile,
+    userId: params.userId,
+  })
 
   return (
     <div className={clsx(s.page, [!authProfile && s.noAuthPage])}>
@@ -124,22 +59,19 @@ export const Profile = (props: Props) => {
         isMyProfile={isMyProfile}
         profile={profileDataForRender}
       />
-      {!postsForRender ? <div>Пусто</div> : <Posts posts={postsForRender} />}
-      {isMyProfile && hasMorePosts && (
+      {!postsDataForRender ? <div>Пусто</div> : <Posts posts={postsDataForRender} />}
+      {hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
           <Typography option={'bold_text16'}>Loading...</Typography>
         </div>
       )}
-      {commentsForRender && postForRender && (
-        <ModalPost
-          comments={commentsForRender}
-          isAuth={authProfile}
-          isMyPost={isMyProfile}
-          onClose={closeModal}
-          open={modalIsOpen}
-          post={postForRender}
-        />
-      )}
+      <ModalPost
+        onClose={closeModal}
+        commentsDataFromServer={props.profileDataFromServer.comments}
+        isAuth={authProfile}
+        isMyPost={isMyProfile}
+        postDataFromServer={props.profileDataFromServer.post}
+      />
     </div>
   )
 }

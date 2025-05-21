@@ -17,10 +17,10 @@ export default async function Page(props: {
 }) {
   const publicPosts: PublicPostsResponse = await getUsersPosts()
   const usersCount: UsersCountResponse = await getUsersCount()
-  const searchParams = await props.searchParams
+  const searchParams = props.searchParams
   const query = searchParams.postId
-  let post: Post | undefined = undefined
-  let comments: GetCommentsResponse | undefined = undefined
+  let post: Post | null = null
+  let comments: GetCommentsResponse | null = null
 
   if (query) {
     try {

@@ -1,13 +1,13 @@
-import { Post } from '@/src/entities/post/types'
-import { GetCommentsResponse } from '@/src/shared/model/api/types'
 import { Profile } from '@/src/widgets/profile/Profile'
 import {
   SearchParams,
-  getUserComments,
-  getUserPost,
   getUserPosts,
   getUserProfile,
+  getUserPost,
+  getUserComments,
 } from '@/src/widgets/profile/getPublicProfile'
+import { Post } from '@/src/entities/post/types'
+import { GetCommentsResponse } from '@/src/shared/model/api/types'
 
 type Props = {
   params: { userId: string }
@@ -15,9 +15,9 @@ type Props = {
 }
 
 export default async function ProfilePage(props: Props) {
-  const userProfile = await getUserProfile(props.params.userId)
   const userPosts = await getUserPosts(props.params.userId)
-  const searchParams = await props.searchParams
+  const userProfile = await getUserProfile(props.params.userId)
+  const searchParams = props.searchParams
   const query = searchParams.postId
   let post: Post | null = null
   let comments: GetCommentsResponse | null = null
@@ -33,12 +33,12 @@ export default async function ProfilePage(props: Props) {
     }
   }
 
-  const publicProfileNoAuth = {
+  const profileDataFromServer = {
     comments: comments,
     post: post,
     posts: userPosts,
     profile: userProfile,
   }
 
-  return <Profile profile={publicProfileNoAuth} />
+  return <Profile profileDataFromServer={profileDataFromServer} />
 }

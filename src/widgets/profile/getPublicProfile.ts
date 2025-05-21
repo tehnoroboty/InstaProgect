@@ -11,14 +11,16 @@ export const getUserProfile = async (userId: string): Promise<PublicProfileTypes
 }
 
 export const getUserPosts = async (userId: string): Promise<GetPostsResponse> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/user/${userId}`, {
-    cache: 'no-cache',
-  })
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}public-posts/user/${userId}?pageSize=8`,
+    {
+      cache: 'no-cache',
+    }
+  )
 
   return await res.json()
 }
 
-// export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 export type SearchParams = { [key: string]: string | string[] | undefined }
 
 export const getUserPost = async (postId: number): Promise<Post> => {
