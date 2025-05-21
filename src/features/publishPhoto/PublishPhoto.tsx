@@ -16,6 +16,7 @@ import {
 import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -30,7 +31,6 @@ import { Title } from '@radix-ui/react-dialog'
 import { useRouter } from 'next/navigation'
 
 import s from './publishPhoto.module.scss'
-import { useAppDispatch } from '@/src/shared/model/store/store'
 
 type Props = {
   photos: string[]
