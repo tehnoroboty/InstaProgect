@@ -10,7 +10,7 @@ export const timeElapsedSince = (date: string) => {
   if (seconds < 60) {
     return `${seconds} ${plural(seconds, {
       one: 'second',
-      other:'seconds'
+      other: 'seconds',
     })} ago`
   }
   const minutes = Math.floor(seconds / 60)
@@ -18,7 +18,7 @@ export const timeElapsedSince = (date: string) => {
   if (minutes < 60) {
     return `${minutes} ${plural(minutes, {
       one: 'minute',
-      other:'minutes'
+      other: 'minutes',
     })} ago`
   }
   const hours = Math.floor(minutes / 60)
@@ -26,22 +26,21 @@ export const timeElapsedSince = (date: string) => {
   if (hours < 24) {
     return `${hours} ${plural(hours, {
       one: 'hour',
-      other:'hours'
+      other: 'hours',
     })} ago`
-
   }
   const days = Math.floor(hours / 24)
 
   if (days < 7) {
     return `${days} ${plural(days, {
       one: 'day',
-      other:'days'
+      other: 'days',
     })} ago`
   }
   const weeks = Math.floor(days / 7)
 
   return `${weeks} ${plural(weeks, {
     one: 'week',
-    other:'weeks'
+    other: 'weeks',
   })} ago`
 }

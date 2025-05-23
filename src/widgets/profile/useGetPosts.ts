@@ -1,4 +1,4 @@
-import {Dispatch, useEffect, useMemo} from 'react'
+import { Dispatch, useEffect, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 import { postsApi, useGetPostsQuery } from '@/src/shared/model/api/postsApi'
@@ -19,13 +19,12 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) => {
   const { inView, ref } = useInView({ threshold: 0.1 })
-    const selectPostsFromCash = useMemo(() =>
-        postsApi.endpoints.getPosts.select({ userId: Number(userId) }), [userId]
-    );
+  const selectPostsFromCash = useMemo(
+    () => postsApi.endpoints.getPosts.select({ userId: Number(userId) }),
+    [userId]
+  )
 
-    const { data: postsFromCash } = useAppSelector(state =>
-        selectPostsFromCash(state)
-    );
+  const { data: postsFromCash } = useAppSelector(state => selectPostsFromCash(state))
 
   const lastPostId = useAppSelector(selectLastPostId)
   const needInitPostsInStore = !lastPostId && !!postsDataFromServer && !postsFromCash

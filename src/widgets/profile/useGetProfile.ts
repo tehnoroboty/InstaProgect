@@ -1,4 +1,4 @@
-import {Dispatch, useEffect, useMemo} from 'react'
+import { Dispatch, useEffect, useMemo } from 'react'
 
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useGetUserProfileQuery, usersApi } from '@/src/shared/model/api/usersApi'
@@ -19,12 +19,12 @@ export const useGetProfile = ({
   profileDataFromServer,
   userId,
 }: Props) => {
-    const selectUserProfileById = useMemo(
-        () => usersApi.endpoints.getUserProfileById.select(Number(userId)),
-        [userId]
-    );
+  const selectUserProfileById = useMemo(
+    () => usersApi.endpoints.getUserProfileById.select(Number(userId)),
+    [userId]
+  )
 
-    const { data: profileFromCash } = useAppSelector(state => selectUserProfileById(state));
+  const { data: profileFromCash } = useAppSelector(state => selectUserProfileById(state))
 
   const needInitProfileInStore = !!profileDataFromServer && !profileFromCash
 
