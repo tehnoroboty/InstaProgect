@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
@@ -48,13 +48,13 @@ export default function ModalPost({
     }
   }, [closeModal, postId])
 
-  const { data: postFromCash } = useAppSelector(state =>
-    postsApi.endpoints.getPost.select(Number(postId))(state)
-  )
 
-  const { data: commentsFromCash } = useAppSelector(state =>
-    postsApi.endpoints.getComments.select(Number(postId))(state)
-  )
+
+  const selectPost = useMemo(() => postsApi.endpoints.getPost.select(Number(postId)), [postId]);
+  const selectComments = useMemo(() => postsApi.endpoints.getComments.select(Number(postId)), [postId]);
+
+  const { data: postFromCash } = useAppSelector(state => selectPost(state));
+  const { data: commentsFromCash } = useAppSelector(state => selectComments(state));
 
   const needInitCommentsInStore = !!commentsDataFromServer && !commentsFromCash
   const needInitPostInStore = !!postDataFromServer && !postFromCash
