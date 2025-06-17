@@ -28,11 +28,13 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     createNewPost: builder.mutation<ResponsePostsType, RequestPostsType>({
       invalidatesTags: ['POSTS'],
-      async onQueryStarted({}, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         dispatch(setLastPostId({ lastPostId: null }))
         try {
           await queryFulfilled
-        } catch {}
+        } catch (error) {
+          console.error('Failed to create post:', error)
+        }
       },
       query: body => ({
         body,
@@ -45,6 +47,7 @@ export const postsApi = baseApi.injectEndpoints({
         const patchResult = dispatch(
           postsApi.util.updateQueryData('getPosts', { userId }, draft => {
             const index = draft.items.findIndex(post => post.id === postId)
+
             if (index !== -1) {
               draft.items.splice(index, 1)
             }
