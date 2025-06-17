@@ -1,15 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 
-import {
-  BookmarkOutline,
-  LogOutOutline,
-  MoreHorizontalOutline,
-  SettingsOutline,
-  TrendingUpOutline,
-} from '@/src/shared/assets/componentsIcons'
+import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
 import { ItemWrapper } from '@/src/widgets/itemWrapper/ItemWrapper'
-import { MenuItemType } from '@/src/widgets/navigationPanel/NavigationPanel'
+import { MenuItemType } from '@/src/widgets/navigationPanel/types'
 import * as DropdownMenuMob from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
 
