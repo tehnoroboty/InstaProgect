@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import s from './authWrapper.module.scss'
 
 type Props = {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export const AuthWrapper = ({ children }: Props) => {
@@ -21,7 +21,7 @@ export const AuthWrapper = ({ children }: Props) => {
     if (isSuccess && data) {
       router.push(AuthRoutes.HOME)
     }
-  }, [isSuccess, data])
+  }, [isSuccess, data, router])
 
   if (isLoading) {
     return (
