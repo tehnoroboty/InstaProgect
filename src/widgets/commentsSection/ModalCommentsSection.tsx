@@ -35,16 +35,16 @@ type Avatar = {
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
   commentsData: Comment[]
-  isAuth: boolean
-  isMyPost: boolean
+  isAuth?: boolean
+  isMyPost?: boolean
   post: Post
 }
 
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
-  isAuth,
-  isMyPost,
+  isAuth=false,
+  isMyPost=false,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
