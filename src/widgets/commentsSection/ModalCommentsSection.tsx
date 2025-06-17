@@ -43,8 +43,8 @@ export type ModalCommentsSectionProps = {
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
-  isAuth=false,
-  isMyPost=false,
+  isAuth = false,
+  isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
