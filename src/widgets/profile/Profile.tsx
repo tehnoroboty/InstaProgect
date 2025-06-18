@@ -66,8 +66,8 @@ export const Profile = (props: Props) => {
         </div>
       )}
       <ModalPost
-        onClose={closeModal}
         commentsDataFromServer={props.profileDataFromServer.comments}
+        onClose={closeModal}
         isAuth={authProfile}
         isMyPost={isMyProfile}
         postDataFromServer={props.profileDataFromServer.post}
