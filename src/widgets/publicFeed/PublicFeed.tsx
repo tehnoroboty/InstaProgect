@@ -43,7 +43,7 @@ export const PublicFeed = ({ info }: Props) => {
     setModalOpen(false)
     setSelectedPost(null)
     router.push(`/`, { scroll: false })
-  }, [router, postId])
+  }, [router])
 
   useEffect(() => {
     if (postId) {

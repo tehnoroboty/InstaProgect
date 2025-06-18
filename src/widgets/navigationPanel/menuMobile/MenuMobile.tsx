@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import s from './menuMobile.module.scss'
-import {MenuItemType} from "@/src/widgets/navigationPanel/types";
+import { MenuItemType } from '@/src/widgets/navigationPanel/types'
 
 type Props = {
   items: MenuItemType[]
