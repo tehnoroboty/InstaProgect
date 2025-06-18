@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 import {
@@ -20,6 +19,7 @@ import {
 
 const meta = {
   component: Sidebar,
+
   tags: ['autodocs'],
   title: 'Components/Sidebar',
 } satisfies Meta<typeof Sidebar>
