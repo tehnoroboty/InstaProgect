@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
