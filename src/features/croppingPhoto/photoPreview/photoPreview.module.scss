@@ -1,0 +1,55 @@
+.photoPreview {
+  display: flex;
+  gap: 12px;
+}
+
+.photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.photoItem {
+  cursor: pointer;
+
+  position: relative;
+
+  overflow: hidden;
+
+  width: 80px;
+  height: 82px;
+  border-radius: 1px;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.closeIcon {
+  cursor: pointer;
+
+  position: absolute;
+  top: 2px;
+  right: 2px;
+
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+
+  color: var(--light-100);
+
+  background-color: var(--dark-500);
+}
+
+.plusCircleIcon {
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  color: var(--light-100);
+}
+
+.disabled {
+  color: var(--light-900);
+}

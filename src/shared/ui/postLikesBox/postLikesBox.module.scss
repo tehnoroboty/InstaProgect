@@ -1,0 +1,24 @@
+.postLikes {
+  display: flex;
+  gap: 12px;
+}
+
+.postLikesAvatars {
+  display: flex;
+  align-items: center;
+}
+
+.firstAvaLike {
+  position: relative;
+  z-index: 3;
+}
+
+.secondAvaLike {
+  position: relative;
+  z-index: 2;
+  margin-left: -9px;
+}
+
+.thirdAvaLike {
+  margin-left: -9px;
+}

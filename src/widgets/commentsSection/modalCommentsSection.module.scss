@@ -1,0 +1,206 @@
+.commentsBox {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  padding: 11px 0;
+
+  background-color: var(--dark-300);
+}
+
+.commentsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 23px 11px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.userAvatarName {
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.commentsBody {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  padding: 19px 23px 8px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.descriptionBox {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.description {
+  overflow: hidden;
+
+  box-sizing: border-box;
+  width: 370px;
+  max-width: 100%;
+
+  word-wrap: break-word;
+}
+
+.userNameContent {
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+.postActions {
+  padding: 11px 23px 7px 24px;
+}
+
+.postActions:has(+ .addComment) {
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.interactionBar {
+  margin-bottom: 19px;
+}
+
+.postLikesBox {
+  margin-bottom: 5px;
+}
+
+.addComment {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 23px 17px 24px;
+}
+
+.textareaWrapper {
+  width: 100%;
+}
+
+.textarea textarea {
+  height: 24px;
+  padding: 0;
+  border: none;
+
+  font-size: 14px;
+  color: var(--light-900);
+
+  background-color: var(--dark-300);
+}
+
+.timeAgo {
+  color: var(--light-900);
+}
+
+.usersCommentBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 80%;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+}
+
+.usersCommentBodyBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userComment {
+  margin-right: auto;
+  margin-left: 12px;
+}
+
+.userCommentTypography {
+  width: 370px;
+  max-width: 100%;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.userCommentBottom {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+
+  & p {
+    color: var(--light-900);
+  }
+}
+
+.iconButton {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+}
+
+.heartIcon {
+  cursor: pointer;
+  align-self: center;
+  width: 16px;
+  height: 16px;
+
+  & path {
+    fill: var(--light-100);
+    transition: opacity 0.3s ease;
+  }
+}
+
+.red {
+  & path {
+    fill: var(--danger-500);
+  }
+}
+
+.heartOutlineIcon {
+  @media (hover: hover) {
+    &:hover path {
+      opacity: 0.5;
+    }
+  }
+}
+
+.answerButton {
+  display: inline;
+
+  padding: 0;
+  border: none;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--light-900);
+
+  background: none;
+}
+
+.userName {
+  display: inline-flex;
+  margin-right: 5px;
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.postDate {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--light-900);
+}

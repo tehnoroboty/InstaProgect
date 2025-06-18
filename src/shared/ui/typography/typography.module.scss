@@ -1,0 +1,139 @@
+@mixin text-style($fontSize, $lineHeight, $fontWeight) {
+  margin: 0;
+
+  font-size: $fontSize;
+  font-weight: $fontWeight;
+  line-height: $lineHeight;
+  color: var(--light-100);
+}
+
+.Large {
+  @include text-style(var(--font-size-xxl), var(--line-height-xl), var(--font-weight-semi-bold));
+}
+
+.h1 {
+  @include text-style(var(--font-size-xl), var(--line-height-xl), var(--font-weight-bold));
+}
+
+.h2 {
+  @include text-style(var(--font-size-l), var(--line-height-m), var(--font-weight-bold));
+}
+
+.h3 {
+  @include text-style(var(--font-size-m), var(--line-height-m), var(--font-weight-semi-bold));
+}
+
+.regular_text16 {
+  @include text-style(var(--font-size-m), var(--line-height-m), var(--font-weight-regular));
+}
+
+.bold_text16 {
+  @include text-style(var(--font-size-m), var(--line-height-m), var(--font-weight-bold));
+}
+
+.regular_text14 {
+  @include text-style(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
+}
+
+.medium_text14 {
+  @include text-style(var(--font-size-s), var(--line-height-m), var(--font-weight-medium));
+}
+
+.bold_text14 {
+  @include text-style(var(--font-size-s), var(--line-height-m), var(--font-weight-bold));
+}
+
+.small_text {
+  @include text-style(var(--font-size-xs), var(--line-height-s), var(--font-weight-regular));
+}
+
+.semi-bold_small_text {
+  @include text-style(var(--font-size-xs), var(--line-height-s), var(--font-weight-semi-bold));
+}
+
+.regular_link {
+  @include text-style(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
+
+  cursor: pointer;
+  color: var(--primary-500);
+  text-decoration: underline;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.small_link {
+  @include text-style(var(--font-size-xs), var(--line-height-s), var(--font-weight-regular));
+
+  cursor: pointer;
+  color: var(--primary-500);
+  text-decoration: underline;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.font-size-xs {
+  font-size: var(--font-size-xs);
+}
+
+.font-size-s {
+  font-size: var(--font-size-s);
+}
+
+.font-size-m {
+  font-size: var(--font-size-m);
+}
+
+.font-size-l {
+  font-size: var(--font-size-l);
+}
+
+.font-size-xl {
+  font-size: var(--font-size-xl);
+}
+
+.font-size-xxl {
+  font-size: var(--font-size-xxl);
+}
+
+.font-weight-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.font-weight-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-weight-semi-bold {
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.font-weight-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+.line-heights-s {
+  line-height: var(--line-height-s);
+}
+
+.line-heights-m {
+  line-height: var(--line-height-m);
+}
+
+.line-heights-xl {
+  line-height: var(--line-height-xl);
+}
+
+.labelDisabled {
+  cursor: default;
+  color: var(--light-900);
+}
+
+.customDisabledClass {
+  color: red;
+}

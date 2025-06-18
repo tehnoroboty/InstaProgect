@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  &:has(+ textarea:disabled) {
+    color: var(--dark-100);
+  }
+}
+
+.textArea {
+  resize: none;
+
+  padding: 6px 12px;
+  border: 1px solid var(--dark-100);
+  border-radius: 2px;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--light-100);
+
+  background-color: var(--dark-500);
+  box-shadow: none;
+
+  &::placeholder {
+    color: var(--light-900);
+  }
+
+  &:focus::placeholder {
+    color: var(--light-100);
+  }
+
+  &:focus {
+    color: var(--light-100);
+    outline: 2px solid var(--primary-700);
+  }
+
+  &:disabled::placeholder {
+    color: var(--dark-100);
+  }
+}
+
+.informationWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  width: 100%;
+
+  & .symbol {
+    margin-left: auto;
+    color: var(--light-900);
+  }
+
+  & .errorText {
+    color: var(--danger-500);
+  }
+}
+
+.isError:not(.textArea:disabled) {
+  outline: 2px solid var(--danger-500);
+}

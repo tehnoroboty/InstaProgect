@@ -1,0 +1,45 @@
+.root {
+  touch-action: none;
+  user-select: none;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 124px;
+  height: 36px;
+  padding: 10px;
+}
+
+.track {
+  position: relative;
+
+  flex-grow: 1;
+
+  height: clamp(2px, 2px, 4px);
+  border-radius: 2px;
+
+  background-color: var(--light-100);
+}
+
+.range {
+  position: absolute;
+  height: 100%;
+  border-radius: 2px;
+  background-color: var(--light-100);
+}
+
+.thumb {
+  display: block;
+
+  width: clamp(3px, 4vw, 10px);
+  height: clamp(3px, 4vw, 10px);
+  border-radius: 10px;
+
+  background-color: var(--light-100);
+
+  &:focus {
+    outline: none;
+  }
+}

@@ -1,0 +1,58 @@
+.root {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  aspect-ratio: 1/1;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.img-size-s {
+  width: 48px;
+}
+
+.img-size-m {
+  width: 72px;
+}
+
+.img-size-xs {
+  width: 36px;
+}
+
+.img-size-xl {
+  width: 204px;
+}
+
+.img-size-l {
+  width: 192px;
+}
+
+.img-size-xxs {
+  width: 24px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--dark-500);
+}
+
+@media (width <= 768px) {
+  .fallbackImage {
+    width: 40%;
+  }
+}

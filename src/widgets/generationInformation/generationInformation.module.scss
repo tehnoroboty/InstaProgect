@@ -1,0 +1,88 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.pageLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.inputsContainer {
+  display: flex;
+  gap: clamp(30px, 5vw, 40px);
+  width: 100%;
+}
+
+.informationBox {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: clamp(10px, 2vh, 24px);
+
+  width: 70%;
+}
+
+.selectBox {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.error {
+  color: var(--danger-500);
+}
+
+.link {
+  font-size: 12px;
+  color: var(--danger-500);
+  text-decoration: underline;
+}
+
+.select {
+  color: var(--light-900);
+}
+
+.otherBox {
+  width: 100%;
+}
+
+.hr {
+  margin: 24px 0;
+  border: 0.5px solid var(--dark-100);
+}
+
+.button {
+  display: block;
+  margin-left: auto;
+}
+
+.labelClassName {
+  color: var(--light-900);
+}
+
+.modalDeletePhoto {
+  width: clamp(420px, 20vw, 438px);
+  min-width: 30%;
+  height: 240px;
+
+  .modalDeletePhotoContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 10px;
+
+    .modalBtns {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      justify-content: flex-end;
+
+      margin-top: 54px;
+    }
+  }
+}

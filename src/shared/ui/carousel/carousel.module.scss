@@ -1,0 +1,165 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+}
+
+.buttonNext,
+.buttonPrev {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  transform: translateY(-50%);
+
+  aspect-ratio: 1/1;
+
+  background-color: rgb(51 51 51 / 60%) !important;
+
+  &::after,
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    width: 18px;
+    height: 4px;
+    border-radius: 4px;
+
+    background: var(--light-100);
+  }
+
+  &::after {
+    top: 60%;
+    left: 45%;
+    transform: translate(-50%) rotate(50deg);
+  }
+
+  &::before {
+    top: 35%;
+    left: 45%;
+    transform: translate(-50%) rotate(-50deg);
+  }
+
+  @media (hover: hover) {
+    &:hover::after,
+    &:hover::before {
+      background: var(--primary-300);
+    }
+  }
+}
+
+.buttonPrev {
+  left: 2%;
+}
+
+.buttonNext {
+  right: 2%;
+  transform: scale(-1) translateY(50%);
+}
+
+.large {
+  & > .buttonNext,
+  & > .buttonPrev {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.small {
+  & > .buttonNext,
+  & > .buttonPrev {
+    width: 24px;
+    height: 24px;
+    padding: 5px 9px !important;
+
+    &::after,
+    &::before {
+      content: '';
+
+      position: absolute;
+
+      width: 3px;
+      height: 10px;
+      border-radius: 3px;
+
+      background: var(--light-100);
+    }
+
+    &::after {
+      top: 20%;
+      left: 48%;
+      transform: translate(-50%) rotate(40deg);
+    }
+
+    &::before {
+      top: 45%;
+      left: 48%;
+      transform: translate(-50%) rotate(-40deg);
+    }
+
+    @media (hover: hover) {
+      &:hover::after,
+      &:hover::before {
+        background: var(--primary-300);
+      }
+    }
+  }
+}
+
+.pagination {
+  position: absolute;
+  z-index: 20;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+  border-radius: 2px;
+
+  background-color: rgb(51 51 51 / 60%);
+
+  & span {
+    cursor: pointer;
+
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    background: var(--light-100);
+
+    @media (hover: hover) {
+      &:hover {
+        background: var(--primary-300);
+      }
+    }
+  }
+
+  & .paginationActive {
+    background: var(--primary-300);
+  }
+}
+
+.small {
+  & > .pagination {
+    bottom: 8px;
+    gap: 8px;
+    padding: 3px 8px;
+
+    & span {
+      width: 6px;
+      height: 6px;
+    }
+  }
+}

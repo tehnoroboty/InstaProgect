@@ -1,0 +1,40 @@
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.itemWrapper {
+  cursor: pointer;
+
+  display: flex;
+  gap: 29px;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  color: var(--light-900);
+
+  & span {
+    color: inherit;
+  }
+
+  .img {
+    color: inherit;
+  }
+
+  .imgItem {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--light-100);
+    }
+  }
+}

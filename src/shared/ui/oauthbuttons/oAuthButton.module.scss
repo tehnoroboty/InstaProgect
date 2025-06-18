@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+}
+
+.button {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 6px;
+  border: none;
+  border-radius: 2px;
+
+  background-color: transparent;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:disabled svg {
+    opacity: 0.8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-700);
+  }
+
+  @media (hover: hover) {
+    &:hover svg {
+      opacity: 0.8;
+    }
+  }
+}

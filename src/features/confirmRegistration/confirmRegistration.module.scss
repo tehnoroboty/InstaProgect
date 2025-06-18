@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  & h2 {
+    text-align: center;
+  }
+
+  & a {
+    width: max(182px, 10%);
+    height: max(36px, 2%);
+    margin-top: 3%;
+    text-align: center;
+  }
+
+  & img {
+    width: 100%;
+    margin-top: 3%;
+  }
+}

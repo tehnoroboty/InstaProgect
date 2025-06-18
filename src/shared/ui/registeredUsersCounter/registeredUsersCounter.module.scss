@@ -1,0 +1,38 @@
+.counterContainer {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 203px;
+  padding: 12px;
+  border: 1px solid var(--dark-300);
+  border-radius: 2px;
+
+  background-color: var(--dark-700);
+}
+
+.counterDigit {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  color: var(--light-100);
+
+  &:not(:last-child)::after {
+    content: '';
+
+    position: absolute;
+    left: 26px;
+
+    width: 1px;
+    height: 30px;
+
+    background-color: var(--dark-300);
+  }
+}
