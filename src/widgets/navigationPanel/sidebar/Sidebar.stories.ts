@@ -1,18 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
-import {MenuItemsType} from "@/src/widgets/navigationPanel/types";
 import {
   Bookmark,
   BookmarkOutline,
   Home,
-  HomeLine, LogOutOutline, MessageCircle, MessageCircleOutline, Person, PersonOutline, PlusSquare,
-  PlusSquareOutline, SearchOutline,
-  TrendingUpOutline
-} from "@/src/shared/assets/componentsIcons";
+  HomeLine,
+  LogOutOutline,
+  MessageCircle,
+  MessageCircleOutline,
+  Person,
+  PersonOutline,
+  PlusSquare,
+  PlusSquareOutline,
+  SearchOutline,
+  TrendingUpOutline,
+} from '@/src/shared/assets/componentsIcons'
+import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
+import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 const meta = {
   component: Sidebar,
+
   tags: ['autodocs'],
   title: 'Components/Sidebar',
 } satisfies Meta<typeof Sidebar>
@@ -20,7 +28,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const menuItemsMock:  MenuItemsType = {
+const menuItemsMock: MenuItemsType = {
   additional: [
     { href: '/statistics', icon: TrendingUpOutline, title: 'Statistics' },
     {
@@ -35,7 +43,7 @@ const menuItemsMock:  MenuItemsType = {
     {
       icon: PlusSquareOutline,
       iconActive: PlusSquare,
-      onClick: ()=>{},
+      onClick: () => {},
       title: 'Create',
     },
     {

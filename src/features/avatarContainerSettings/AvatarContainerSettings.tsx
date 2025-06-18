@@ -42,8 +42,6 @@ export const AvatarContainerSettings = ({
     handleClosePhotoModal()
   }
 
-  console.log(isPhotoModalOpen)
-
   return (
     <div className={s.photoBox}>
       <div className={s.avatarContainer}>

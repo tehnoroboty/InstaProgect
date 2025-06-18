@@ -118,7 +118,7 @@ export const GenerationInformation = () => {
       setSelectedCountry(MyProfile?.country || '')
       setSelectedCity(MyProfile?.city || '')
     }
-  }, [MyProfile, isFetching, reset])
+  }, [MyProfile, isFetching, isFormDirty, reset])
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target
@@ -154,7 +154,7 @@ export const GenerationInformation = () => {
     } else {
       router.push(`/profile/${MyProfile?.id}/settings/general-information`)
     }
-  }, [isDirty, isFetching])
+  }, [MyProfile?.id, isDirty, isFetching, router])
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -182,7 +182,6 @@ export const GenerationInformation = () => {
           message: errorMessage.message,
           type: 'manual',
         })
-        console.log(error)
         setAlertMessage('Error! Server is not available!')
         setAlertType('error')
       }

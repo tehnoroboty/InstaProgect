@@ -1,10 +1,9 @@
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
+import { Typography } from '../typography/Typography'
 import clsx from 'clsx'
 
 import s from './textArea.module.scss'
-
-import { Typography } from '../typography/Typography'
 
 /**
  * Компонент TextArea - многострочное текстовое поле для ввода.

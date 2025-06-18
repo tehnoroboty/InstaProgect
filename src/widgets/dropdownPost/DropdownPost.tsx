@@ -36,17 +36,13 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
     {
       icon: PersonRemoveOutline,
       id: '1',
-      onClick: () => {
-        console.log('unfollow user')
-      },
+      onClick: () => {},
       title: 'Unfollow',
     },
     {
       icon: CopyOutline,
       id: '2',
-      onClick: () => {
-        console.log('Copy link')
-      },
+      onClick: () => {},
       title: 'Copy Link',
     },
   ] //пользователь, которого мы фолловим
@@ -54,17 +50,13 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
     {
       icon: PersonAddOutline,
       id: '1',
-      onClick: () => {
-        console.log('follow user')
-      },
+      onClick: () => {},
       title: 'Follow',
     },
     {
       icon: CopyOutline,
       id: '2',
-      onClick: () => {
-        console.log('Copy link')
-      },
+      onClick: () => {},
       title: 'Copy Link',
     },
   ] // пользователь, которого НЕ фолловим

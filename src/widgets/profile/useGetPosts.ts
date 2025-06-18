@@ -35,7 +35,7 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
         postsApi.util.upsertQueryData('getPosts', { userId: Number(userId) }, postsDataFromServer)
       )
     }
-  }, [needInitPostsInStore, dispatch, postsDataFromServer])
+  }, [needInitPostsInStore, dispatch, postsDataFromServer, userId])
 
   const params = {
     endCursorPostId: lastPostId || undefined,
@@ -54,7 +54,7 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
     if (hasMorePosts && inView) {
       dispatch(setLastPostId({ lastPostId: posts?.items[posts.items.length - 1]?.id }))
     }
-  }, [inView, hasMorePosts])
+  }, [inView, hasMorePosts, dispatch, posts?.items])
 
   const postsDataForRender = posts?.items || postsFromCash?.items || postsDataFromServer?.items
 

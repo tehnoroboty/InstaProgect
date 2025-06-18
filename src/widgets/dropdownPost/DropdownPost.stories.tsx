@@ -1,6 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react'
-
 import { DropdownPost } from './DropdownPost'
+import { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof DropdownPost> = {
   argTypes: {

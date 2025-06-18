@@ -106,11 +106,7 @@ export const ProtectedFeedPost = (props: Post) => {
           </p>
         </div>
         <PostLikesBox avatars={mockAvatars} className={s.likesBox} likesCount={likesCount} />
-        <Button
-          className={s.viewCommentsBtn}
-          onClick={() => console.log('Open modal window with post')}
-          variant={'transparent'}
-        >
+        <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
           {`View All Comments (${mockComments.length})`}
         </Button>
         <div className={s.addCommentContainer}>

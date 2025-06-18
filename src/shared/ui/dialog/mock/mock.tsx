@@ -1,7 +1,6 @@
-import Image from 'next/image'
-
 import img from './img.png'
 import img2 from './img_coment.png'
+import Image from 'next/image'
 
 export const ImageViewer = () => {
   return <Image alt={'First image'} height={562} src={img} width={490} />

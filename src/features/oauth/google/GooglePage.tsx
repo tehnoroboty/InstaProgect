@@ -37,7 +37,7 @@ export const GooglePage = () => {
     }
 
     fetchData()
-  }, [code])
+  }, [code, exchangeGoogleCodeForToken, router])
 
   return (
     <div className={s.container}>

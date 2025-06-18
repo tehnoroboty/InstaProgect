@@ -29,9 +29,8 @@ import {
 import { PinturaEditor } from '@pqina/react-pintura'
 import { Title } from '@radix-ui/react-dialog'
 
-import '@pqina/pintura/pintura.css'
-
 import s from '@/src/features/filteringPhoto/filteringPhoto.module.scss'
+import '@pqina/pintura/pintura.css'
 
 setPlugins(plugin_filter, plugin_filter_defaults)
 

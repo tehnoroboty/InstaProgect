@@ -1,12 +1,11 @@
 import { ComponentPropsWithoutRef } from 'react'
 
+import { SelectItem } from './SelectItem'
 import Arrow from '@/src/shared/assets/componentsIcons/ArrowIosDownOutline'
 import * as Select from '@radix-ui/react-select'
 import clsx from 'clsx'
 
 import styles from './Select.module.scss'
-
-import { SelectItem } from './SelectItem'
 
 export type Options = {
   value: string

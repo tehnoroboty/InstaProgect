@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react'
 
+import { Button } from '../button/Button'
+import { Typography } from '../typography/Typography'
 import ArrowLeftIcon from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import ArrowRightIcon from '@/src/shared/assets/componentsIcons/ArrowIosForwardOutline'
 import { PAGE_SIZE_OPTIONS } from '@/src/shared/lib/constants/pagination'
@@ -10,9 +12,6 @@ import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import clsx from 'clsx'
 
 import s from './pagination.module.scss'
-
-import { Button } from '../button/Button'
-import { Typography } from '../typography/Typography'
 
 type PaginationProps = {
   className?: string

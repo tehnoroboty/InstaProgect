@@ -2,10 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import React from 'react'
 
+import sliderImage from './assets/slider.jpg'
 import ModalPostComments from '@/src/widgets/postComments/ModalPostComments'
 import Image from 'next/image'
-
-import sliderImage from './assets/slider.jpg'
 
 const meta = {
   argTypes: {},
