@@ -1,12 +1,11 @@
 'use client'
+import { data } from '../data'
 import ArrowBackOutline from '@/src/shared/assets/componentsIcons/ArrowBackOutline'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { useRouter } from 'next/navigation'
 
 import s from '../pageStyle.module.scss'
-
-import { data } from '../data'
 
 export default function PrivacyPolicyPage() {
   const router = useRouter()

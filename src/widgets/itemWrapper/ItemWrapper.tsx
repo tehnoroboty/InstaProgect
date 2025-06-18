@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 
+import { Button } from '../../shared/ui/button/Button'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation, useMeQuery } from '@/src/shared/model/api/authApi'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
@@ -11,8 +12,6 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 import s from './itemWrapper.module.scss'
-
-import { Button } from '../../shared/ui/button/Button'
 
 type DropdownMenuItemWithLinkProps = {
   Icon: React.ElementType
@@ -91,7 +90,7 @@ export const ItemWrapper = ({
       >
         <div className={s.contentModal}>
           <Typography as={'span'} option={'regular_text16'}>
-            Are you really want to log out of your account "<b>{meData?.email}</b>"?
+            Are you really want to log out of your account &quot;<b>{meData?.email}</b>&quot;?
           </Typography>
           <div className={s.modalActions}>
             <Button

@@ -4,12 +4,11 @@ import type {
   UsersCountResponse,
 } from '@/src/shared/model/api/types'
 
+import { AuthWrapper } from '../features/authWrapper/AuthWrapper'
 import { Post } from '@/src/entities/post/types'
 import { SearchParams, getUserComments, getUserPost } from '@/src/widgets/profile/getPublicProfile'
 import { PublicFeed } from '@/src/widgets/publicFeed/PublicFeed'
 import { getUsersCount, getUsersPosts } from '@/src/widgets/publicFeed/getPublicPosts'
-
-import { AuthWrapper } from '../features/authWrapper/AuthWrapper'
 
 export default async function Page(props: {
   params: { postId: string }

@@ -100,9 +100,7 @@ export const AccountManagement = () => {
     try {
       const dataForPay = {
         amount: 0,
-        baseUrl:
-          (process.env.NEXT_PUBLIC_BASE_URL as string) +
-          `/profile/${params.userId}/settings/account-management`,
+        baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL as string}/profile/${params.userId}/settings/account-management`,
         paymentType: paymentSystem,
         typeSubscription: selectedSubscription,
       }
@@ -113,9 +111,7 @@ export const AccountManagement = () => {
         window.location.assign(res.url)
       }
     } catch (err) {
-      const error = err as ErrorDataType
-
-      setErrorMessage(error.messages[0].message)
+      setErrorMessage((err as ErrorDataType).messages[0].message)
     }
   }
 

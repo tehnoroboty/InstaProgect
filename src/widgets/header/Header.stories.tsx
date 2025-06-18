@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
-
 import { Header } from './Header'
+import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 
 const meta = {
   argTypes: {

@@ -1,17 +1,17 @@
 import React from 'react'
 
+import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
 import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
 import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
 import { Header } from '@/src/widgets/header/Header'
 import { Metadata } from 'next'
 
+import '@fontsource-variable/inter'
+
 import '@/src/shared/styles/index.scss'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
-import '@fontsource-variable/inter'
-
-import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
 
 export const metadata: Metadata = {
   icons: {

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 
+import { Button } from '../../shared/ui/button/Button'
 import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
@@ -22,8 +23,6 @@ import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
 
-import { Button } from '../../shared/ui/button/Button'
-
 type Avatar = {
   createdAt: string
   fileSize: number
@@ -43,8 +42,8 @@ export type ModalCommentsSectionProps = {
 export const ModalCommentsSection = ({
   avatars,
   commentsData,
-  isAuth=false,
-  isMyPost=false,
+  isAuth = false,
+  isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post

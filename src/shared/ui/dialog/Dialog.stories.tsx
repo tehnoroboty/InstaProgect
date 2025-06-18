@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 
+import { Button } from '../button/Button'
+import { Dialog } from './Dialog'
+import { CommentsSection, ImageViewer, mockData, mockText } from './mock/mock'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './dialog.module.scss'
-
-import { Button } from '../button/Button'
-import { Dialog } from './Dialog'
-import { CommentsSection, ImageViewer, mockData, mockText } from './mock/mock'
 
 const meta = {
   argTypes: {},

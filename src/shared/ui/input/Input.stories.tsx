@@ -1,10 +1,9 @@
 import { ChangeEvent, useState } from 'react'
 
+import { Input, InputProps } from './Input'
 import { Meta, StoryObj } from '@storybook/react'
 
 import s from './Input.module.scss'
-
-import { Input, InputProps } from './Input'
 
 const meta = {
   argTypes: {

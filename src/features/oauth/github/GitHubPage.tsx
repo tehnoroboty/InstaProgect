@@ -13,7 +13,6 @@ export const GitHubPage = () => {
   const router = useRouter()
 
   const accessToken = searchParams.get('accessToken')
-  const email = searchParams.get('email')
 
   useEffect(() => {
     if (accessToken) {
@@ -22,7 +21,7 @@ export const GitHubPage = () => {
     } else {
       router.push(AuthRoutes.REGISTRATION)
     }
-  }, [])
+  }, [accessToken, router])
 
   return (
     <div className={s.container}>

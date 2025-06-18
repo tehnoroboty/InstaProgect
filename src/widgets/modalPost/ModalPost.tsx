@@ -2,43 +2,41 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
+import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { ModalCommentsSection } from '@/src/widgets/commentsSection/ModalCommentsSection'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 
 import s from './modalPost.module.scss'
-import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
-import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { useParams, useSearchParams } from 'next/navigation'
 
 type Props = {
   commentsDataFromServer: GetCommentsResponse | null
   isAuth: boolean
   isMyPost: boolean
-  postDataFromServer: Post | null
   onClose: () => void
+  postDataFromServer: Post | null
 }
 
 export default function ModalPost({
   commentsDataFromServer,
   isAuth,
   isMyPost,
-  postDataFromServer,
   onClose,
+  postDataFromServer,
 }: Props) {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
   const dispatch = useAppDispatch()
 
-  const params = useParams<{ userId: string }>()
-
   const closeModal = useCallback(() => {
     setModalIsOpen(false)
     onClose()
-  }, [params.userId])
+  }, [onClose])
 
   useEffect(() => {
     if (postId) {
@@ -64,13 +62,13 @@ export default function ModalPost({
     if (needInitPostInStore) {
       dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
     }
-  }, [needInitPostInStore])
+  }, [dispatch, needInitPostInStore, postDataFromServer, postId])
 
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
       dispatch(postsApi.util.upsertQueryData('getComments', Number(postId), commentsDataFromServer))
     }
-  }, [needInitCommentsInStore])
+  }, [commentsDataFromServer, dispatch, needInitCommentsInStore, postId])
 
   const { data: post } = useGetPostQuery(Number(postId), {
     skip: !needInitPostInStore && !Number(postId),
