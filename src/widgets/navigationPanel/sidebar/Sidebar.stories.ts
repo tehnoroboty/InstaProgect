@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
-import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
+
 import {
   Bookmark,
   BookmarkOutline,
@@ -16,6 +15,8 @@ import {
   SearchOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
+import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
+import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 const meta = {
   component: Sidebar,

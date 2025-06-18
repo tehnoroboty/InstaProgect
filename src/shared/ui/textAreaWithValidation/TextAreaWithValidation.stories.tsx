@@ -2,10 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { useState } from 'react'
 
+import { Button } from '../button/Button'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-
-import { Button } from '../button/Button'
 
 const meta = {
   argTypes: { disabled: { control: 'boolean' } },
@@ -27,7 +26,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const WithErrorAndText: Story = {
-  render: args => {
+  render: () => {
     const [text, setText] = useState('')
     const [error, setError] = useState<string | undefined>(undefined)
 
@@ -44,7 +43,7 @@ export const WithErrorAndText: Story = {
 }
 
 export const WithValue: Story = {
-  render: args => {
+  render: () => {
     const [error, setError] = useState<string | undefined>(undefined)
 
     return (

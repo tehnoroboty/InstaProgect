@@ -34,7 +34,7 @@ export const useGetProfile = ({
         usersApi.util.upsertQueryData('getUserProfileById', Number(userId), profileDataFromServer)
       )
     }
-  }, [dispatch, needInitProfileInStore, userId])
+  }, [dispatch, needInitProfileInStore, profileDataFromServer, userId])
 
   const { data: profileByName } = useGetUserProfileQuery(profileFromCash?.userName ?? '', {
     skip: !isMeDataUserName || !profileFromCash?.userName || !authProfile,

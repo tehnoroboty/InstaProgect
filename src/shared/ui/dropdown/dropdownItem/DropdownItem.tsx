@@ -2,13 +2,12 @@
 
 import type { ElementType, ReactNode } from 'react'
 
+import { Button } from '../../button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
 
 import s from './dropdownItem.module.scss'
-
-import { Button } from '../../button/Button'
 
 type Props = {
   Icon: ElementType

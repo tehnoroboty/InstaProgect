@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 
+import { Button } from '../../shared/ui/button/Button'
 import { Post } from '@/src/entities/post/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
@@ -21,8 +22,6 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
-
-import { Button } from '../../shared/ui/button/Button'
 
 type Avatar = {
   createdAt: string

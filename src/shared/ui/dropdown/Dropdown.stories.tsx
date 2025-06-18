@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { useId } from 'react'
 
+import { Dropdown, DropdownMenuItems } from './Dropdown'
 import {
   BookmarkOutline,
   Edit2Outline,
@@ -12,8 +13,6 @@ import {
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
-
-import { Dropdown, DropdownMenuItems } from './Dropdown'
 
 const meta = {
   argTypes: {},

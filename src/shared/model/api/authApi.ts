@@ -1,6 +1,3 @@
-import { FormType } from '@/src/features/login/validators'
-import { baseApi } from '@/src/shared/model/api/baseApi'
-
 import { setAppError, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
@@ -13,6 +10,8 @@ import {
   RegistrationEmailResending,
   RegistrationType,
 } from './types'
+import { FormType } from '@/src/features/login/validators'
+import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => ({

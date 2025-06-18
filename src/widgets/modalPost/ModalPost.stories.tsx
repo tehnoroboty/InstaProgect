@@ -6,9 +6,6 @@ const meta = {
   argTypes: {},
   args: {
     commentsDataFromServer: {
-      pageSize: 20,
-      totalCount: 20,
-      totalUsers: 20,
       items: [
         {
           answerCount: 12,
@@ -55,6 +52,9 @@ const meta = {
           postId: 9,
         },
       ],
+      pageSize: 20,
+      totalCount: 20,
+      totalUsers: 20,
     },
     postDataFromServer: {
       avatarOwner:

@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 
 import s from './tabs.module.scss'
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs'
 
 const meta = {
   component: Tabs,
@@ -39,7 +38,7 @@ export const renderTabsList = (disabled = false) => (
 
 export const Default: Story = {
   args: {},
-  render: args => {
+  render: () => {
     return (
       <Tabs className={s.tabs} defaultValue={mockTabs[0].value}>
         {renderTabsList()}
@@ -55,7 +54,7 @@ export const Default: Story = {
   },
 }
 export const Disabled: Story = {
-  render: args => {
+  render: () => {
     return (
       <Tabs className={s.tabs} defaultValue={mockTabs[0].value}>
         {renderTabsList(true)}

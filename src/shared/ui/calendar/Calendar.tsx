@@ -6,9 +6,8 @@ import { DayPicker } from 'react-day-picker'
 import { ArrowIosBackOutline, ArrowIosForwardOutline } from '@/src/shared/assets/componentsIcons'
 import clsx from 'clsx'
 
-import 'react-day-picker/src/style.css'
-
 import s from './calendar.module.scss'
+import 'react-day-picker/src/style.css'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 

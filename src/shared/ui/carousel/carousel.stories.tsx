@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Image from 'next/image'
-
 import { Carousel } from './Carousel'
 import sliderImage from './assets/slider.jpg'
+import Image from 'next/image'
 
 const meta = {
   argTypes: {},

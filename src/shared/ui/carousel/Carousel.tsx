@@ -1,15 +1,14 @@
 import { MouseEvent, ReactNode, useEffect, useRef } from 'react'
 
+import { Button } from '../button/Button'
 import clsx from 'clsx'
-import { Navigation, Pagination } from 'swiper/modules'
+import { Pagination } from 'swiper/modules'
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 
 // eslint-disable-next-line import/extensions
 import 'swiper/scss'
 
 import s from './carousel.module.scss'
-
-import { Button } from '../button/Button'
 
 type Props<T> = {
   disableSwipe?: boolean

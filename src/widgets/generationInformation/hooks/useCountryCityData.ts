@@ -20,7 +20,7 @@ export const useCountryCityData = (selectedCountry: string) => {
     if (selectedCountry && countrysWithCity) {
       fetchCitiesForCountry(countrysWithCity, selectedCountry, setCites)
     }
-  }, [selectedCountry])
+  }, [countrysWithCity, selectedCountry])
 
   return {
     cites,

@@ -47,7 +47,7 @@ export const DropdownNotification = () => {
     ) {
       setCursor(notifications?.items[notifications.items.length - 1].id)
     }
-  }, [inView])
+  }, [inView, notifications])
 
   if (!notifications) {
     return null

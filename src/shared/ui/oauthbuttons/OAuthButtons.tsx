@@ -2,12 +2,11 @@
 
 import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
+import { GitHubOAuthButton } from './githubOAuthButton/GitHubOAuthButton'
+import { GoogleOAuthButton } from './googleOAuthButton/GoogleOAuthButton'
 import clsx from 'clsx'
 
 import s from './oAuthButton.module.scss'
-
-import { GitHubOAuthButton } from './githubOAuthButton/GitHubOAuthButton'
-import { GoogleOAuthButton } from './googleOAuthButton/GoogleOAuthButton'
 
 type Props = {
   className?: string

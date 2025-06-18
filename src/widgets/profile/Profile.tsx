@@ -1,12 +1,14 @@
 'use client'
 import React from 'react'
 
+import { Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/user/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
 import { useGetProfile } from '@/src/widgets/profile/useGetProfile'
@@ -14,8 +16,6 @@ import clsx from 'clsx'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './myProfile.module.scss'
-import { Post } from '@/src/entities/post/types'
-import ModalPost from '@/src/widgets/modalPost/ModalPost'
 
 type Props = {
   profileDataFromServer: {
@@ -67,9 +67,9 @@ export const Profile = (props: Props) => {
       )}
       <ModalPost
         commentsDataFromServer={props.profileDataFromServer.comments}
-        onClose={closeModal}
         isAuth={authProfile}
         isMyPost={isMyProfile}
+        onClose={closeModal}
         postDataFromServer={props.profileDataFromServer.post}
       />
     </div>
