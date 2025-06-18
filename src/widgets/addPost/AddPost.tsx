@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
@@ -8,9 +8,18 @@ import { useRouter } from 'next/navigation'
 
 export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
+  const [isAuth, setIsAuth] = useState<boolean | null>(null)
   const router = useRouter()
 
-  const isAuth = localStorage.getItem('accessToken')
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+
+    if (!token) {
+      router.push(AuthRoutes.LOGIN)
+    } else {
+      setIsAuth(true)
+    }
+  }, [router])
 
   if (!isAuth) {
     router.push(AuthRoutes.LOGIN)
