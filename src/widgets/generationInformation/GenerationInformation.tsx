@@ -6,15 +6,12 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
 import { CustomerError } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
-import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
-import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { useAvatar } from '@/src/widgets/generationInformation/hooks/useAvatar'
 import { useCountryCityData } from '@/src/widgets/generationInformation/hooks/useCountryCityData'
 import { useDateSelection } from '@/src/widgets/generationInformation/hooks/useDateSelection'
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
@@ -53,12 +50,7 @@ export const GenerationInformation = () => {
   const router = useRouter()
   const params = useSearchParams()
   const isFormDirty = params.get('isFormDirty')
-  const [alertMessage, setAlertMessage] = useState<null | string>(null)
-  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
-  const { deleteAvatarHandler, deleteModal, isLoadingDelete, setDeleteModal } = useAvatar(
-    setAlertMessage,
-    setAlertType
-  )
+
   const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
   const [selectedCity, setSelectedCity] = useState<string>('')
   const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
@@ -171,8 +163,6 @@ export const GenerationInformation = () => {
 
       await updateProfile(registrationData).unwrap()
       sessionStorage.clear()
-      setAlertMessage('Your settings are saved!')
-      setAlertType('success')
     } catch (err) {
       const error = err as CustomerError
       const errorMessage = error.data?.messages[0]
@@ -182,8 +172,6 @@ export const GenerationInformation = () => {
           message: errorMessage.message,
           type: 'manual',
         })
-        setAlertMessage('Error! Server is not available!')
-        setAlertType('error')
       }
     }
   }
@@ -198,14 +186,9 @@ export const GenerationInformation = () => {
 
   return (
     <>
-      {alertMessage && alertType && <Alerts message={alertMessage} type={alertType} />}
       <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
         <div className={s.inputsContainer}>
-          <AvatarContainerSettings
-            deleteModal={() => setDeleteModal(true)}
-            isLoadingDelete={isLoadingDelete}
-            myProfileAvatars={MyProfile?.avatars}
-          />
+          <AvatarContainerSettings myProfileAvatars={MyProfile?.avatars} />
           <div className={s.informationBox}>
             <ProfileInputsSettings
               errors={errors}
@@ -268,24 +251,6 @@ export const GenerationInformation = () => {
           </Button>
         </div>
       </form>
-      <Dialog
-        className={s.modalDeletePhoto}
-        modalTitle={'Delete Photo'}
-        onClose={() => setDeleteModal(false)}
-        open={deleteModal}
-      >
-        <div className={s.modalDeletePhotoContent}>
-          {'Do you really want to delete your profile photo?'}
-          <div className={s.modalBtns}>
-            <Button onClick={deleteAvatarHandler} type={'button'} variant={'bordered'}>
-              {'Yes'}
-            </Button>
-            <Button onClick={() => setDeleteModal(false)} type={'button'} variant={'primary'}>
-              {'No'}
-            </Button>
-          </div>
-        </div>
-      </Dialog>
     </>
   )
 }
