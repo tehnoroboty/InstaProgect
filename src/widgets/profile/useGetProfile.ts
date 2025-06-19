@@ -40,27 +40,29 @@ export const useGetProfile = ({
     skip: !isMeDataUserName || !profileFromCash?.userName || !authProfile,
   })
 
-  const profileDataForRender = profileByName
-    ? {
-        aboutMe: profileByName?.aboutMe,
-        avatarUrl: profileByName?.avatars[0]?.url ?? '',
-        followersCount: profileByName?.followersCount,
-        followingCount: profileByName?.followingCount,
-        id: +userId,
-        isFollowing: profileByName?.isFollowing,
-        publicationsCount: profileByName?.publicationsCount,
-        userName: profileByName?.userName,
-      }
-    : {
-        aboutMe: profileDataFromServer?.aboutMe ?? '',
-        avatarUrl: profileDataFromServer?.avatars[0]?.url ?? '',
-        followersCount: profileDataFromServer?.userMetadata.followers ?? 0,
-        followingCount: profileDataFromServer?.userMetadata.following ?? 0,
-        id: +userId,
-        isFollowing: false,
-        publicationsCount: profileDataFromServer?.userMetadata.publications ?? 0,
-        userName: profileDataFromServer?.userName ?? '',
-      }
+  const profileDataForRender = useMemo(() => {
+    return profileByName
+      ? {
+          aboutMe: profileByName?.aboutMe,
+          avatarUrl: profileByName?.avatars[0]?.url ?? '',
+          followersCount: profileByName?.followersCount,
+          followingCount: profileByName?.followingCount,
+          id: +userId,
+          isFollowing: profileByName?.isFollowing,
+          publicationsCount: profileByName?.publicationsCount,
+          userName: profileByName?.userName,
+        }
+      : {
+          aboutMe: profileDataFromServer?.aboutMe ?? '',
+          avatarUrl: profileDataFromServer?.avatars[0]?.url ?? '',
+          followersCount: profileDataFromServer?.userMetadata.followers ?? 0,
+          followingCount: profileDataFromServer?.userMetadata.following ?? 0,
+          id: +userId,
+          isFollowing: false,
+          publicationsCount: profileDataFromServer?.userMetadata.publications ?? 0,
+          userName: profileDataFromServer?.userName ?? '',
+        }
+  }, [profileByName, profileDataFromServer, userId])
 
   return { profileDataForRender }
 }
