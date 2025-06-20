@@ -1,25 +1,24 @@
-import { ResponseTypeCountys } from '@/src/entities/user/types'
+import { CountrysType, ResponseTypeCountys } from '@/src/entities/user/types'
+import { Options } from '@/src/shared/ui/select/SelectBox'
 
 export const fetchCountriesAndCities = async (
-  setCountrysWithCity: Function,
-  setCountries: Function
-) => {
+  setCountriesWithCity: (data: ResponseTypeCountys) => void,
+  setCountries: (items: Options[]) => void
+): Promise<void> => {
   try {
-    const res = await fetch('https://countriesnow.space/api/v0.1/countries', {
-      cache: 'no-store',
-    })
+    const res = await fetch('https://countriesnow.space/api/v0.1/countries', {})
 
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`)
     }
 
-    const data = await res.json()
-    const items = data.data.map((item: any) => ({
-      value: item.iso2,
+    const data: ResponseTypeCountys = await res.json()
+    const items: Options[] = data.data.map((item: CountrysType) => ({
+      value: item.country,
       valueTitle: item.country,
     }))
 
-    setCountrysWithCity(data)
+    setCountriesWithCity(data)
     setCountries(items)
   } catch (err) {
     console.error('Error fetching countries:', err)
@@ -27,14 +26,14 @@ export const fetchCountriesAndCities = async (
 }
 
 export const fetchCitiesForCountry = async (
-  countrysWithCity: ResponseTypeCountys,
+  countriesWithCity: ResponseTypeCountys,
   selectedCountry: string,
-  setCites: Function
-) => {
-  const res = countrysWithCity.data.find(item => item.country === selectedCountry)
+  setCites: (cities: Options[]) => void
+): Promise<void> => {
+  const res = countriesWithCity.data.find(item => item.country === selectedCountry)
 
   if (res) {
-    const items = res.cities.map((city: any) => ({
+    const items: Options[] = res.cities.map(city => ({
       value: city,
       valueTitle: city,
     }))

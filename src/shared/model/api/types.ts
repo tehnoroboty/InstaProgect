@@ -1,5 +1,7 @@
 import type { Post } from '@/src/entities/post/types'
 
+import { FormType } from '@/src/widgets/generationInformation/validators'
+
 export type PasswordRecoveryType = {
   baseUrl: string
   email: string
@@ -251,4 +253,11 @@ export type GetNotificationsArgs = {
   pageSize?: number
   sortBy?: string
   sortDirection?: SortDirection
+}
+
+export type InputChangeEvent = {
+  target: {
+    name: keyof FormType
+    value: string
+  }
 }
