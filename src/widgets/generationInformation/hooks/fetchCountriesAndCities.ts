@@ -9,7 +9,7 @@ export const fetchCountriesAndCities = async (
     const res = await fetch('https://countriesnow.space/api/v0.1/countries', {})
 
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`)
+      console.error(`HTTP error! status: ${res.status}`)
     }
 
     const data: ResponseTypeCountys = await res.json()
