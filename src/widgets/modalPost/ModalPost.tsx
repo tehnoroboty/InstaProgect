@@ -14,11 +14,11 @@ import { useSearchParams } from 'next/navigation'
 import s from './modalPost.module.scss'
 
 type Props = {
-  commentsDataFromServer: GetCommentsResponse
+  commentsDataFromServer: GetCommentsResponse | null
   isAuth: boolean
   isMyPost: boolean
   onClose: () => void
-  postDataFromServer: Post
+  postDataFromServer: Post | null
 }
 
 export default function ModalPost({
@@ -59,7 +59,7 @@ export default function ModalPost({
   const needInitPostInStore = !!postDataFromServer && !postFromCash
 
   useEffect(() => {
-    if (needInitPostInStore || !postFromCash) {
+    if ((needInitPostInStore || !postFromCash) && postDataFromServer) {
       dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
     }
   }, [dispatch, needInitPostInStore, postDataFromServer, postFromCash, postId])
