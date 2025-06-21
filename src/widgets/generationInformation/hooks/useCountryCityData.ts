@@ -8,24 +8,24 @@ import {
 } from '@/src/widgets/generationInformation/hooks/fetchCountriesAndCities'
 
 export const useCountryCityData = (selectedCountry: string) => {
-  const [countrysWithCity, setCountrysWithCity] = useState<ResponseTypeCountys>()
-  const [countrys, setCountries] = useState<Options[]>([])
+  const [countriesWithCity, setCountriesWithCity] = useState<ResponseTypeCountys>()
+  const [countries, setCountries] = useState<Options[]>([])
   const [cites, setCites] = useState<Options[]>([])
 
   useEffect(() => {
-    fetchCountriesAndCities(setCountrysWithCity, setCountries)
+    fetchCountriesAndCities(setCountriesWithCity, setCountries)
   }, [])
 
   useEffect(() => {
-    if (selectedCountry && countrysWithCity) {
-      fetchCitiesForCountry(countrysWithCity, selectedCountry, setCites)
+    if (selectedCountry && countriesWithCity) {
+      fetchCitiesForCountry(countriesWithCity, selectedCountry, setCites)
     }
-  }, [countrysWithCity, selectedCountry])
+  }, [countriesWithCity, selectedCountry])
 
   return {
     cites,
-    countrys,
-    countrysWithCity,
+    countries,
+    countriesWithCity,
     setCites,
   }
 }

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
-import { CustomerError } from '@/src/shared/model/api/types'
+import { CustomerError, InputChangeEvent } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
@@ -51,9 +51,9 @@ export const GenerationInformation = () => {
   const params = useSearchParams()
   const isFormDirty = params.get('isFormDirty')
 
-  const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
+  const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [selectedCity, setSelectedCity] = useState<string>('')
-  const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
+  const { cites, countries, countriesWithCity, setCites } = useCountryCityData(selectedCountry)
   const { errorAge, onSelectDate } = useDateSelection(setValue)
 
   useEffect(() => {
@@ -112,10 +112,15 @@ export const GenerationInformation = () => {
     }
   }, [MyProfile, isFetching, isFormDirty, reset])
 
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target
+  useEffect(() => {
+    if (MyProfile && !isFormDirty) {
+      setSelectedCountry(prev => (prev ? prev : MyProfile.country || ''))
+      setSelectedCity(prev => (prev ? prev : MyProfile.city || ''))
+    }
+  }, [MyProfile, isFormDirty])
 
-    sessionStorage.setItem(name, value)
+  const handleInputChange = (e: InputChangeEvent) => {
+    sessionStorage.setItem(e.target.name, e.target.value)
   }
 
   const onSelectCountyHandler = (value: string) => {
@@ -176,7 +181,7 @@ export const GenerationInformation = () => {
     }
   }
 
-  if (isFetching || !countrysWithCity) {
+  if (isFetching || !countriesWithCity) {
     return (
       <div className={s.pageLoading}>
         <Loader />
@@ -217,16 +222,16 @@ export const GenerationInformation = () => {
               <SelectBox
                 label={'Select your country'}
                 onChangeValue={onSelectCountyHandler}
-                options={countrys}
+                options={countries}
                 placeholder={'Country'}
-                value={MyProfile?.country || selectedCountry || ''}
+                value={selectedCountry || MyProfile?.country || ''}
               />
               <SelectBox
                 label={'Select your city'}
                 onChangeValue={onSelectCityHandler}
                 options={cites}
                 placeholder={'City'}
-                value={MyProfile?.city || selectedCity || ''}
+                value={selectedCity || MyProfile?.city || ''}
               />
             </div>
             <TextArea
