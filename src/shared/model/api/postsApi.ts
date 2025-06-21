@@ -94,7 +94,7 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      providesTags: ['POSTS'],
+      providesTags: (result, error, arg) => [{ type: 'POSTS', userId: arg.userId }],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
         method: 'GET',
         params: {
@@ -104,10 +104,10 @@ export const postsApi = baseApi.injectEndpoints({
         },
         url: `/public-posts/user/${userId}/${endCursorPostId}`,
       }),
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+      serializeQueryArgs: ({ queryArgs }) => {
+        return queryArgs.userId
       },
-      transformResponse: (response: GetPostsResponse, _meta, _arg) => {
+      transformResponse: (response: GetPostsResponse) => {
         return response
       },
     }),

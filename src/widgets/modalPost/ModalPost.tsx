@@ -59,10 +59,10 @@ export default function ModalPost({
   const needInitPostInStore = !!postDataFromServer && !postFromCash
 
   useEffect(() => {
-    if (needInitPostInStore) {
+    if ((needInitPostInStore || !postFromCash) && postDataFromServer) {
       dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
     }
-  }, [dispatch, needInitPostInStore, postDataFromServer, postId])
+  }, [dispatch, needInitPostInStore, postDataFromServer, postFromCash, postId])
 
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
@@ -71,15 +71,19 @@ export default function ModalPost({
   }, [commentsDataFromServer, dispatch, needInitCommentsInStore, postId])
 
   const { data: post } = useGetPostQuery(Number(postId), {
-    skip: !needInitPostInStore && !Number(postId),
+    skip: !needInitPostInStore && !Number(postId) && postFromCash?.id === Number(postId),
   })
   const { data: comments } = useGetCommentsQuery(Number(postId), {
     skip: !needInitCommentsInStore,
   })
 
-  const postForRender = post || postFromCash || postDataFromServer
-  const commentsForRender =
-    comments?.items || commentsFromCash?.items || commentsDataFromServer?.items || []
+  const postForRender = useMemo(() => {
+    return post || postFromCash || postDataFromServer
+  }, [post, postFromCash, postDataFromServer])
+
+  const commentsForRender = useMemo(() => {
+    return comments?.items || commentsFromCash?.items || commentsDataFromServer?.items || []
+  }, [comments, commentsFromCash, commentsDataFromServer])
 
   if (!postForRender || !commentsForRender) {
     return null
