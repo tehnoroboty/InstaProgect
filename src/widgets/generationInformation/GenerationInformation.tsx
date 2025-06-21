@@ -8,7 +8,6 @@ import { CustomerError, InputChangeEvent } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
-import { Loader } from '@/src/shared/ui/loader/Loader'
 import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -181,6 +180,7 @@ export const GenerationInformation = () => {
     }
   }
 
+  /*
   if (isFetching || !countriesWithCity) {
     return (
       <div className={s.pageLoading}>
@@ -188,6 +188,7 @@ export const GenerationInformation = () => {
       </div>
     )
   }
+*/
 
   return (
     <>
@@ -219,6 +220,7 @@ export const GenerationInformation = () => {
               )}
             </div>
             <div className={s.selectBox}>
+              {/*
               <SelectBox
                 label={'Select your country'}
                 onChangeValue={onSelectCountyHandler}
@@ -233,6 +235,31 @@ export const GenerationInformation = () => {
                 placeholder={'City'}
                 value={selectedCity || MyProfile?.city || ''}
               />
+*/}
+              {isFetching || !countriesWithCity ? (
+                <div className={s.selectLoader}>
+                  <div className={s.loader}>
+                    <Typography option={'bold_text14'}>Loading...</Typography>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <SelectBox
+                    label={'Select your country'}
+                    onChangeValue={onSelectCountyHandler}
+                    options={countries}
+                    placeholder={'Country'}
+                    value={selectedCountry || MyProfile?.country || ''}
+                  />
+                  <SelectBox
+                    label={'Select your city'}
+                    onChangeValue={onSelectCityHandler}
+                    options={cites}
+                    placeholder={'City'}
+                    value={selectedCity || MyProfile?.city || ''}
+                  />
+                </>
+              )}
             </div>
             <TextArea
               label={'About Me'}
