@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 
 import { applyCropToAllPhotos } from '@/src/features/croppingPhoto/applyCropToAllPhotos'
 import { PhotoSettings } from '@/src/features/croppingPhoto/types'
-import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { CustomerError } from '@/src/shared/model/api/types'
 import { useUpdateUserAvatarMutation } from '@/src/shared/model/api/usersApi'
 import { setIsPhotoModalOpen } from '@/src/shared/model/slices/modalSlice'
@@ -28,9 +27,7 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
   const [openModal, setOpenModal] = useState(true)
   const [exitModal, setExitModal] = useState(false)
 
-  const photo = photos[0] ?? ''
-
-  const [localPhoto, setLocalPhoto] = useState<string>(photo)
+  const localPhoto = photos[0] ?? ''
 
   const [photoSettings, setPhotoSettings] = useState<PhotoSettings>({
     crop: { x: 0, y: 0 },
@@ -49,7 +46,7 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
   const onSaveClick = async () => {
     try {
       await applyCropToAllPhotos([localPhoto], { 0: photoSettings }, async updatedPhotos => {
-        setLocalPhoto(updatedPhotos[0])
+        // setLocalPhoto(updatedPhotos[0])
 
         const blob = await fetch(updatedPhotos[0]).then(res => res.blob())
         const file = new File([blob], 'avatar.jpg', { type: blob.type })
