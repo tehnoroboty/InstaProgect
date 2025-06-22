@@ -1,7 +1,6 @@
 'use client'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { Item } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -23,20 +22,13 @@ type PostType = {
 
 type Props = {
   posts: Item[] | PostType[]
-  publicPost?: Post | null
-  publicPosts?: any
 }
 
-export const Posts = ({ posts, publicPosts }: Props) => {
+export const Posts = memo(({ posts }: Props) => {
   const router = useRouter()
   const params = useParams() as { userId: string }
   const onClickPostHandler = (postId: number) => {
-    const basePath = publicPosts ? '/public/profile' : '/profile'
-    const method = publicPosts ? 'replace' : 'push'
-
-    router[method](`${basePath}/${params.userId}?postId=${postId}`, {
-      scroll: false,
-    })
+    router.push(`/profile/${params.userId}?postId=${postId}`, { scroll: false })
   }
   const renderImgCarousel = (img: ImageType, index: number) => {
     return (
@@ -64,4 +56,4 @@ export const Posts = ({ posts, publicPosts }: Props) => {
       })}
     </div>
   )
-}
+})

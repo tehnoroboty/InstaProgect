@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
@@ -23,7 +23,7 @@ type Props = {
   }
 }
 
-export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
+export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) => {
   const router = useRouter()
   const [follow] = useFollowMutation()
   const [unFollow] = useUnFollowMutation()
@@ -111,4 +111,4 @@ export const ProfileInfo = ({ authProfile, isMyProfile, profile }: Props) => {
       </div>
     </div>
   )
-}
+})
