@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-right: 36px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.pagination {
+  margin-top: 36px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 15vh, 40px);
+  height: fit-content;
+}
+
+.noAuthPage {
+  width: 80%;
+  margin: auto;
+}
+
+.loaging {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loadMore {
+  height: 50px;
+  text-align: center;
+}
