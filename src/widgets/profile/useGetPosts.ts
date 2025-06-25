@@ -46,6 +46,7 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
   }
 
   const { data: posts } = useGetPostsQuery(params)
+
   const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
   const postsCount = posts?.items.length ?? totalCount - 1
   const hasMorePosts = totalCount > postsCount
@@ -56,7 +57,9 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
     }
   }, [inView, hasMorePosts, dispatch, posts?.items])
 
-  const postsDataForRender = posts?.items || postsFromCash?.items || postsDataFromServer?.items
+  const postsDataForRender = useMemo(() => {
+    return posts?.items || postsFromCash?.items || postsDataFromServer?.items
+  }, [posts, postsFromCash, postsDataFromServer])
 
   return { hasMorePosts, postsDataForRender, ref }
 }

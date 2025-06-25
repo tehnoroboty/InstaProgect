@@ -6,6 +6,7 @@ import { ModalType } from '@/src/features/croppingPhoto/types'
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import { MAX_SIZE_PHOTO } from '@/src/shared/lib/constants/regex'
 import { setIsPhotoModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { errorMaxPhoto } from '@/src/widgets/addPost/data'
@@ -21,7 +22,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
   const dispatch = useDispatch()
 
   const [openModal, setOpenModel] = useState<boolean>(true)
-  const [additionalModal, setAdditionalModal] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<null | string>(null)
 
   const closeModal = () => {
     setOpenModel(false)
@@ -36,7 +37,7 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
     dispatch(action)
   }
 
-  const onCloseAdditionalModal = () => setAdditionalModal(false)
+  const onCloseErrorAlert = () => setErrorMessage(null)
 
   const { getInputProps, open } = useDropzone({
     accept: {
@@ -47,13 +48,24 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
     noClick: true,
     onDrop: acceptedFiles => {
       const file = acceptedFiles[0]
+
+      if (!file) {
+        return
+      }
       const fileUrl = URL.createObjectURL(file)
 
       if (file.size > MAX_SIZE_PHOTO) {
-        setAdditionalModal(true)
+        setErrorMessage(errorMaxPhoto.text)
       } else {
         download(fileUrl)
         closeModal()
+      }
+    },
+    onDropRejected: fileRejections => {
+      const rejectedFile = fileRejections[0]?.file
+
+      if (rejectedFile) {
+        setErrorMessage('The format of the uploaded photo must be PNG and JPEG')
       }
     },
   })
@@ -67,6 +79,17 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
         open={openModal}
       >
         <div className={s.content}>
+          {errorMessage && (
+            <Alerts
+              autoClose
+              className={s.alert}
+              closable
+              closeFn={onCloseErrorAlert}
+              message={errorMessage}
+              position={'static'}
+              type={'error'}
+            />
+          )}
           <div className={s.imageBox}>
             <ImageOutline height={48} width={48} />
           </div>
@@ -78,19 +101,6 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
             {modalType !== 'photo' && <Button variant={'bordered'}>{'Open Draft'}</Button>}
           </div>
         </div>
-      </Dialog>
-      <Dialog
-        className={s.additionalModal}
-        modalTitle={errorMaxPhoto.title}
-        onClose={onCloseAdditionalModal}
-        open={additionalModal}
-      >
-        <>
-          {errorMaxPhoto.text}
-          <div className={s.additionalModalBtn}>
-            <Button onClick={onCloseAdditionalModal}>{'OK'}</Button>
-          </div>
-        </>
       </Dialog>
     </div>
   )
