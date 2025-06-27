@@ -1,113 +1,154 @@
 'use client'
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
-// import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useGetSearchUserQuery } from '@/src/shared/model/api/followingApi'
+import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
+import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
 import debounce from 'lodash/debounce'
 
 import s from './showSearch.module.scss'
 
-const USERS_PER_PAGE = 6
-
-const SHOW_USERS_PAGE_SIZE_OPTIONS = [6, 10, 20, 30, 50, 100].map(value => ({
-  value: String(value),
-  valueTitle: String(value),
-}))
+const USERS_PER_PAGE = 12
 
 export const ShowSearch = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [cursor, setCursor] = useState<number | undefined>(undefined)
+  const [users, setUsers] = useState<ItemSearch[]>([])
+  const [hasMore, setHasMore] = useState(true)
 
-  /*
-    const [sortConfig, setSortConfig] = useState<{
-      sortBy: SortColumn
-      sortDirection: SortDirection
-    }>({
-      sortBy: 'createdAt',
-      sortDirection: SortDirection.Desc,
-    })
-  */
+  const { inView, ref } = useInView({ threshold: 0.1 })
+  const lastFetchedCursor = useRef<number | undefined>(undefined)
 
-  const dispatch = useDispatch()
-  /*
+  const { data, error, isError, isFetching } = useGetSearchUserQuery({
+    cursor,
+    pageNumber: 1,
+    pageSize: USERS_PER_PAGE,
+    search: searchTerm,
+  })
 
-    const variables: QueryGetPaymentsArgs = {
-      pageNumber: currentPage,
-      pageSize,
-      searchTerm,
-      ...sortConfig,
+  // бновляем список пользователей после получения данных
+  useEffect(() => {
+    if (data) {
+      setUsers(prev => (cursor === undefined ? data.items : [...prev, ...data.items]))
+
+      setHasMore(!!data.nextCursor)
+      lastFetchedCursor.current = cursor // сохраняем текущий курсор как уже использованный
     }
+  }, [data])
 
-    const { data, error, loading, refetch } = useGetPaymentsQuery({ variables })
-  */
+  //  скролл вниз: если inView и есть что грузить — загружаем
+  useEffect(() => {
+    if (
+      inView &&
+      hasMore &&
+      !isFetching &&
+      data?.nextCursor !== undefined &&
+      data.nextCursor !== lastFetchedCursor.current
+    ) {
+      setCursor(data.nextCursor) // именно от события скролла
+    }
+  }, [inView, hasMore, isFetching, cursor, data?.nextCursor])
 
-  /*
-    const transformedData = useMemo(
-      () => (data?.getPayments?.items ? paymentsDataTransform(data.getPayments.items) : []),
-      [data]
-    )
-  */
-
-  // const totalPagesCount = data?.getPayments?.totalCount || 0
-
-  /*
-    useEffect(() => {
-      if (error) {
-        const errorMessage = error.message
-
-        dispatch(setAppError({ error: errorMessage }))
-      }
-    }, [error, dispatch])
-
-  */
-  // Добавляем debounce для поиска
+  // обработка ввода в поиске с debounce
   const handleSearchChange = useMemo(
     () =>
       debounce((e: ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value)
+        const value = e.target.value
+
+        setSearchTerm(value)
+        setCursor(undefined)
+        setUsers([])
+        setHasMore(true)
       }, 500),
     []
   )
 
-  // Очищаем таймер при размонтировании
+  // очищаем таймер при размонтировании
   useEffect(() => {
     return () => {
       handleSearchChange.cancel()
     }
   }, [handleSearchChange])
-  /*
-useEffect(() => {
 
-      const intervalId = setInterval(() => {
-        void refetch()
-      }, 10000)
+  // обработка ошибки
+  useEffect(() => {
+    if (isError) {
+      const err = error as CustomerError
 
-    return () => clearInterval(intervalId)
-  }, [autoUpdateEnabled, refetch])
-  */
-  const loading = true
+      setErrorMessage(err.data?.messages?.[0]?.message || 'Something went wrong')
+    }
+  }, [isError, error])
 
   return (
     <div className={clsx(s.page)}>
+      {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
+
       <div className={s.container}>
-        <Typography option={'regular_text16'}>Text</Typography>
-        <div className={s.header}>
-          <Input
-            className={s.searchInput}
-            onInput={handleSearchChange}
-            placeholder={'Search'}
-            type={'search'}
-          />
+        <Typography as={'div'} className={s.searchText} option={'h1'}>
+          Search
+        </Typography>
+
+        <div className={s.searchBox}>
+          <Input onInput={handleSearchChange} placeholder={'Search'} type={'search'} />
         </div>
-        {loading ? (
+
+        <Typography option={'bold_text16'}>Recent requests</Typography>
+
+        {isFetching && users.length === 0 ? (
           <div className={s.loading}>
-            <Typography option={'regular_text16'}>Text</Typography>
+            <Loader size={15} />
+          </div>
+        ) : users?.length > 0 ? (
+          <div className={s.userBox}>
+            {users?.map(user => (
+              <div className={s.userCard} key={user.id}>
+                <AvatarBox size={'s'} src={user.avatars[0]?.url || ''} />
+                <div>
+                  <Typography
+                    as={'a'}
+                    className={s.userLink}
+                    href={`/profile/${user.id}`}
+                    option={'medium_text14'}
+                  >
+                    {user.userName}
+                  </Typography>
+                  <Typography
+                    className={s.userName}
+                    option={'regular_text14'}
+                  >{`${user.firstName ?? '----'} ${user.lastName ?? '----'}`}</Typography>
+                </div>
+              </div>
+            ))}
+
+            {hasMore && <div ref={ref} />}
+            <div className={s.wrapLoader}>
+              {isFetching && (
+                // <Loader size={10} />
+                <Typography className={s.loaderText} option={'bold_text14'}>
+                  Loading...
+                </Typography>
+              )}
+            </div>
           </div>
         ) : (
-          <div>List of users</div>
+          <div className={s.emptyState}>
+            <div className={s.emptyContent}>
+              <Typography className={s.emptyTitle} option={'bold_text14'}>
+                Oops! This place looks empty!
+              </Typography>
+              <Typography className={s.emptySubtitle} option={'small_text'}>
+                No recent requests
+              </Typography>
+            </div>
+          </div>
         )}
       </div>
     </div>
