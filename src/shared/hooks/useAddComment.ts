@@ -17,7 +17,7 @@ export const useAddComment = (postId: number) => {
     }
 
     try {
-      const newComment = await createNewComment({ content: commentText, postId }).unwrap()
+      await createNewComment({ content: commentText, postId }).unwrap()
 
       setCommentText('')
     } catch (err) {
