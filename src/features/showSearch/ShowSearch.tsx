@@ -5,7 +5,8 @@ import { useInView } from 'react-intersection-observer'
 
 import { useGetSearchUserQuery } from '@/src/shared/model/api/followingApi'
 import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
-import { Alerts } from '@/src/shared/ui/alerts/Alerts'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
@@ -19,13 +20,13 @@ const USERS_PER_PAGE = 12
 
 export const ShowSearch = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [errorMessage, setErrorMessage] = useState<string>('')
   const [cursor, setCursor] = useState<number | undefined>(undefined)
   const [users, setUsers] = useState<ItemSearch[]>([])
   const [hasMore, setHasMore] = useState(true)
 
   const { inView, ref } = useInView({ threshold: 0.1 })
   const lastFetchedCursor = useRef<number | undefined>(undefined)
+  const dispatch = useAppDispatch()
 
   const { data, error, isError, isFetching } = useGetSearchUserQuery({
     cursor,
@@ -35,10 +36,10 @@ export const ShowSearch = () => {
   })
 
   // бновляем список пользователей после получения данных
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (data) {
       setUsers(prev => (cursor === undefined ? data.items : [...prev, ...data.items]))
-
       setHasMore(!!data.nextCursor)
       lastFetchedCursor.current = cursor // сохраняем текущий курсор как уже использованный
     }
@@ -83,14 +84,12 @@ export const ShowSearch = () => {
     if (isError) {
       const err = error as CustomerError
 
-      setErrorMessage(err.data?.messages?.[0]?.message || 'Something went wrong')
+      dispatch(setAppError(err.data))
     }
-  }, [isError, error])
+  }, [isError, error, dispatch])
 
   return (
     <div className={clsx(s.page)}>
-      {isError && <Alerts message={errorMessage} position={'fixed'} type={'error'} />}
-
       <div className={s.container}>
         <Typography as={'div'} className={s.searchText} option={'h1'}>
           Search
@@ -102,11 +101,13 @@ export const ShowSearch = () => {
 
         <Typography option={'bold_text16'}>Recent requests</Typography>
 
-        {isFetching && users.length === 0 ? (
+        {isFetching && users.length === 0 && (
           <div className={s.loading}>
             <Loader size={15} />
           </div>
-        ) : users?.length > 0 ? (
+        )}
+
+        {users?.length > 0 && (
           <div className={s.userBox}>
             {users?.map(user => (
               <div className={s.userCard} key={user.id}>
@@ -130,15 +131,12 @@ export const ShowSearch = () => {
 
             {hasMore && <div ref={ref} />}
             <div className={s.wrapLoader}>
-              {isFetching && (
-                // <Loader size={10} />
-                <Typography className={s.loaderText} option={'bold_text14'}>
-                  Loading...
-                </Typography>
-              )}
+              {isFetching && <Loader color={'#4C8DFF'} size={15} />}
             </div>
           </div>
-        ) : (
+        )}
+
+        {!isFetching && users.length === 0 && (
           <div className={s.emptyState}>
             <div className={s.emptyContent}>
               <Typography className={s.emptyTitle} option={'bold_text14'}>

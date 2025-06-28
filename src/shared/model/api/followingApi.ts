@@ -14,7 +14,6 @@ export const followingApi = baseApi.injectEndpoints({
       },
     }),
     getSearchUser: builder.query<GetSearchUserResponse, GetSearchUserArgs>({
-      // invalidatesTags: ['FOLLOWING'],
       query: ({ cursor, pageNumber, pageSize, search }) => {
         return {
           method: 'GET',

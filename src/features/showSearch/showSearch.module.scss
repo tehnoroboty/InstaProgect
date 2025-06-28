@@ -40,9 +40,6 @@
   gap: 15px;
 }
 
-.userLink {
-}
-
 .userCard .userLink {
   color: var(--light-100);
   text-decoration: underline;
@@ -91,26 +88,3 @@
   color: red;
   text-align: center;
 }
-
-/*
-.pagination {
-  margin-top: 36px;
-}
-
-.noAuthPage {
-  width: 80%;
-  margin: auto;
-}
-
-.loaging {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.loadMore {
-  height: 50px;
-  text-align: center;
-}
-*/
