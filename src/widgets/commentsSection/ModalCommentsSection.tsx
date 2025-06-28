@@ -14,6 +14,7 @@ import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
@@ -258,19 +259,7 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      {isAuth && (
-        <div className={s.addComment}>
-          <div className={s.textareaWrapper}>
-            <TextArea
-              className={s.textarea}
-              label={''}
-              onChange={handleChangeHeight}
-              placeholder={'Add a Comment...'}
-            />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>
-      )}
+      {isAuth && <AddCommentForm postId={postId} />}
     </div>
   )
 }
