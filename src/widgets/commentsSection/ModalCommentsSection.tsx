@@ -259,7 +259,7 @@ export const ModalCommentsSection = ({
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
-      {isAuth && <AddCommentForm onChange={() => {}} onSubmit={() => {}} value={''} />}
+      {isAuth && <AddCommentForm postId={postId} />}
     </div>
   )
 }

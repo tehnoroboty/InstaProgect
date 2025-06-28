@@ -5,13 +5,13 @@ import { useCreateNewCommentMutation } from '@/src/shared/model/api/commentsAnsw
 export const useAddComment = (postId: number) => {
   const [commentText, setCommentText] = useState('')
 
-  const [createNewComment, { isError, isLoading }] = useCreateNewCommentMutation()
+  const [createNewComment, { isLoading }] = useCreateNewCommentMutation()
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value)
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (onSuccess?: () => void) => {
     if (!commentText.trim()) {
       return
     }
@@ -20,8 +20,10 @@ export const useAddComment = (postId: number) => {
       await createNewComment({ content: commentText, postId }).unwrap()
 
       setCommentText('')
+      onSuccess?.()
     } catch (err) {
       console.error('Error adding comment:', err)
+      // dispatch(setAppError(err.data))
     }
   }
 
@@ -29,7 +31,6 @@ export const useAddComment = (postId: number) => {
     commentText,
     handleChange,
     handleSubmit,
-    isError,
     isLoading,
   }
 }
