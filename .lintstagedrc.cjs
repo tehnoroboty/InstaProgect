@@ -4,7 +4,7 @@ module.exports = {
     "prettier --write",   // Использует .prettierrc.cjs
   ],
   "*.{css,scss}": [
-    //"stylelint --fix",   // Использует .stylelintrc.cjs
+    "stylelint --fix",   // Использует .stylelintrc.cjs
     "prettier --write",
   ],
   "*.{json,md}": [
