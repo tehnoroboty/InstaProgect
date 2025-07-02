@@ -38,6 +38,8 @@ export const AddCommentForm = ({
         <TextArea
           className={s.textarea}
           label={''}
+          maxLength={300}
+          minLength={1}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
@@ -45,7 +47,7 @@ export const AddCommentForm = ({
         />
       </div>
       <Button
-        disabled={isLoading}
+        disabled={isLoading || commentText.length === 0}
         onClick={() => handleSubmit(onCommentAdded)}
         variant={'transparent'}
       >
