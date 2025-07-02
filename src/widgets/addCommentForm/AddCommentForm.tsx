@@ -24,14 +24,11 @@ export const AddCommentForm = ({
 }: Props) => {
   const { commentText, handleChange, handleSubmit, isLoading } = useAddComment(postId)
 
-  const handleKeyDown = async (e: KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      try {
-        await handleSubmit(onCommentAdded)
-      } catch (error) {
-        console.error('Failed to submit:', error)
-      }
+
+      void handleSubmit(onCommentAdded)
     }
   }
 
