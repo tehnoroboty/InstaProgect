@@ -10,6 +10,7 @@ import s from '@/src/widgets/addCommentForm/addCommentForm.module.scss'
 type Props = {
   buttonText?: string
   className?: string
+  disabled?: boolean
   onCommentAdded?: () => void // Колбэк после успешного добавления
   placeholder?: string
   postId: number
@@ -18,6 +19,7 @@ type Props = {
 export const AddCommentForm = ({
   buttonText = 'Publish',
   className,
+  disabled = false,
   onCommentAdded,
   placeholder = 'Add a Comment...',
   postId,
@@ -32,11 +34,14 @@ export const AddCommentForm = ({
     }
   }
 
+  const isSubmitDisabled = disabled || isLoading || !commentText.trim()
+
   return (
     <div className={clsx(s.addComment, className)}>
       <div className={s.textareaWrapper}>
         <TextArea
           className={s.textarea}
+          disabled={disabled || isLoading}
           label={''}
           maxLength={300}
           minLength={1}
@@ -47,7 +52,7 @@ export const AddCommentForm = ({
         />
       </div>
       <Button
-        disabled={isLoading || commentText.length === 0}
+        disabled={isSubmitDisabled}
         onClick={() => handleSubmit(onCommentAdded)}
         variant={'transparent'}
       >
