@@ -56,7 +56,7 @@ export const AddCommentForm = ({
         onClick={() => handleSubmit(onCommentAdded)}
         variant={'transparent'}
       >
-        {buttonText}
+        {isLoading ? 'Sending...' : buttonText}
       </Button>
     </div>
   )
