@@ -14,7 +14,7 @@ export type Owner = {
 
 export type Post = {
   avatarOwner: string
-  avatarWhoLikes: boolean
+  avatarWhoLikes: string[]
   createdAt: string
   description: string
   id: number

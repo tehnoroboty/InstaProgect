@@ -261,3 +261,19 @@ export type InputChangeEvent = {
     value: string
   }
 }
+
+export type GetFolloweePostsArgs = {
+  endCursorPostId?: number
+  pageNumber?: number
+  pageSize?: number
+}
+
+export type GetFolloweePostsResponse = {
+  items: Post[]
+  nextCursor: number
+  page: number
+  pageSize: number
+  pagesCount: number
+  prevCursor: number
+  totalCount: number
+}
