@@ -30,13 +30,10 @@ const meta: Meta<typeof AddCommentForm> = {
 export default meta
 type Story = StoryObj<typeof AddCommentForm>
 
-export const Default: Story = {
-  args: {},
-}
+export const Default: Story = {}
 
 export const Disabled: Story = {
   args: {
-    buttonText: 'Disabled',
     disabled: true,
   },
 }
