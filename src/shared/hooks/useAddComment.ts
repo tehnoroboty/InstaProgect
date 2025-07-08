@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useCreateNewCommentMutation } from '@/src/shared/model/api/commentsAnswersApi'
 import { CustomerError } from '@/src/shared/model/api/types'
@@ -11,8 +11,8 @@ export const useAddComment = (postId: number) => {
 
   const [createNewComment, { isLoading }] = useCreateNewCommentMutation()
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setCommentText(e.target.value)
+  const handleChange = (text: string) => {
+    setCommentText(text)
   }
 
   const handleSubmit = useCallback(
