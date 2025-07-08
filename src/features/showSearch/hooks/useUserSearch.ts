@@ -2,9 +2,9 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
 import { useInView } from 'react-intersection-observer'
 import { useAppDispatch } from '@/src/shared/model/store/store'
-import { useGetSearchUserQuery } from '@/src/shared/model/api/followingApi'
 import debounce from 'lodash/debounce'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useGetSearchUserQuery } from '@/src/shared/model/api/searchApi'
 
 const USERS_PER_PAGE = 12
 

@@ -1,5 +1,4 @@
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { GetSearchUserArgs, GetSearchUserResponse } from '@/src/shared/model/api/types'
 
 export const followingApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -10,20 +9,6 @@ export const followingApi = baseApi.injectEndpoints({
           body: { selectedUserId: userId },
           method: 'POST',
           url: 'users/following',
-        }
-      },
-    }),
-    getSearchUser: builder.query<GetSearchUserResponse, GetSearchUserArgs>({
-      query: ({ cursor, pageNumber, pageSize, search }) => {
-        return {
-          method: 'GET',
-          params: {
-            cursor,
-            pageNumber,
-            pageSize,
-            search,
-          },
-          url: `users`,
         }
       },
     }),
@@ -40,4 +25,4 @@ export const followingApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useFollowMutation, useGetSearchUserQuery, useUnFollowMutation } = followingApi
+export const { useFollowMutation, useUnFollowMutation } = followingApi
