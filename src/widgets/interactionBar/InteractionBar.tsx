@@ -7,7 +7,6 @@ import {
   BookmarkOutline,
   Heart,
   HeartOutline,
-  MessageCircle,
   MessageCircleOutline,
   PaperPlaneOutline,
 } from '@/src/shared/assets/componentsIcons'
@@ -42,28 +41,32 @@ export const InteractionBar = ({
     setIsSavedPost(prevSavedPost => !prevSavedPost)
   }
 
+  const likeButtonIcon = isLikedPost ? (
+    <Heart className={clsx(s.interactionIcon, s.red)} />
+  ) : (
+    <HeartOutline className={s.interactionIcon} />
+  )
+  const likeButtonTitle = isLikedPost ? 'Unlike' : 'Like'
+
+  const bookmarkIcon = isSavedPost ? (
+    <Bookmark className={s.interactionIcon} />
+  ) : (
+    <BookmarkOutline className={s.interactionIcon} />
+  )
+  const bookmarkTitle = isSavedPost ? 'Remove' : 'Save'
+
   return (
     <div className={clsx(s.interactionBar, className)}>
       <div className={clsx(s.interactionBarLeftSide, { [s.withMessageIcon]: hasCommentIcon })}>
-        {isLikedPost ? (
-          <Button
-            className={s.interactionIconWrapper}
-            onClick={handleLikePost}
-            title={'Unlike'}
-            variant={'transparent'}
-          >
-            <Heart className={clsx(s.interactionIcon, s.red)} />
-          </Button>
-        ) : (
-          <Button
-            className={clsx(s.interactionIconWrapper, s.outlineIcon)}
-            onClick={handleLikePost}
-            title={'Like'}
-            variant={'transparent'}
-          >
-            <HeartOutline className={s.interactionIcon} />
-          </Button>
-        )}
+        <Button
+          className={clsx(s.interactionIconWrapper, { [s.outlineIcon]: !isLikedPost })}
+          onClick={handleLikePost}
+          title={likeButtonTitle}
+          variant={'transparent'}
+        >
+          {likeButtonIcon}
+        </Button>
+
         {hasCommentIcon && (
           <Button
             className={clsx(s.interactionIconWrapper, s.outlineIcon)}
@@ -83,25 +86,14 @@ export const InteractionBar = ({
       </div>
 
       <div className={s.save}>
-        {isSavedPost ? (
-          <Button
-            className={s.interactionIconWrapper}
-            onClick={handleSavePost}
-            title={'Remove'}
-            variant={'transparent'}
-          >
-            <Bookmark className={s.interactionIcon} />
-          </Button>
-        ) : (
-          <Button
-            className={clsx(s.interactionIconWrapper, s.outlineIcon)}
-            onClick={handleSavePost}
-            title={'Save'}
-            variant={'transparent'}
-          >
-            <BookmarkOutline className={s.interactionIcon} />
-          </Button>
-        )}
+        <Button
+          className={clsx(s.interactionIconWrapper, { [s.outlineIcon]: !isSavedPost })}
+          onClick={handleSavePost}
+          title={bookmarkTitle}
+          variant={'transparent'}
+        >
+          {bookmarkIcon}
+        </Button>
       </div>
     </div>
   )
