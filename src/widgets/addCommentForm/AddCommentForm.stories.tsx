@@ -24,7 +24,7 @@ const meta: Meta<typeof AddCommentForm> = {
   },
   component: AddCommentForm,
   tags: ['autodocs'],
-  title: 'Components/AddCommentForm',
+  title: 'Components/AddAnswerForm',
 }
 
 export default meta

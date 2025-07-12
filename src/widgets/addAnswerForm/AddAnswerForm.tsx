@@ -1,41 +1,45 @@
 import { KeyboardEvent, useState } from 'react'
 
-import { useAddComment } from '@/src/shared/hooks/useAddComment'
+import { useAddAnswer } from '@/src/shared/hooks/useAddAnswer'
 import { Button } from '@/src/shared/ui/button/Button'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import clsx from 'clsx'
 
-import s from '@/src/widgets/addCommentForm/addCommentForm.module.scss'
+import s from './addAnswerForm.module.scss'
+import { AnswersComment } from '@/src/shared/model/api/types'
 
 type Props = {
   buttonText?: string
   className?: string
   disabled?: boolean
   maxLength?: number
-  onCommentAdded?: () => void // Колбэк после успешного добавления
+  onAnswerAdded?: (result: AnswersComment) => void // Колбэк после успешного добавления
   placeholder?: string
   postId: number
+  commentId: number
 }
 
-export const AddCommentForm = ({
+export const AddAnswerForm = ({
   buttonText = 'Publish',
   className,
   disabled = false,
   maxLength = 300,
-  onCommentAdded,
-  placeholder = 'Add a Comment...',
+  onAnswerAdded,
+  placeholder = 'Add an Answer...',
   postId,
+  commentId,
 }: Props) => {
-  const { commentText, handleChange, handleSubmit, isLoading } = useAddComment(postId)
+  const { commentText, handleChange, handleSubmit, isLoading } = useAddAnswer(postId, commentId)
 
-  const [error, setError] = useState<string | undefined>(undefined)
+  const [error, setError] = useState<string | undefined>()
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = async (e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
 
-      if (!error) {
-        void handleSubmit(onCommentAdded)
+      const result = await handleSubmit()
+      if (result) {
+        onAnswerAdded?.(result)
       }
     }
   }
@@ -61,7 +65,12 @@ export const AddCommentForm = ({
       <Button
         className={s.btn}
         disabled={isSubmitDisabled}
-        onClick={() => handleSubmit(onCommentAdded)}
+        onClick={async () => {
+          const result = await handleSubmit()
+          if (result) {
+            onAnswerAdded?.(result)
+          }
+        }}
         variant={'transparent'}
       >
         {isLoading ? 'Sending...' : buttonText}

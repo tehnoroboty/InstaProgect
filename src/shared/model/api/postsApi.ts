@@ -1,6 +1,7 @@
 import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
+  AnswersComment,
   GetCommentsResponse,
   GetPostsArgs,
   GetPostsResponse,
@@ -119,6 +120,17 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
       }),
     }),
+    addCommentAnswer: builder.mutation<
+      AnswersComment,
+      { postId: number; commentId: number; content: string }
+    >({
+      query: ({ postId, commentId, content }) => ({
+        body: { content },
+        method: 'POST',
+        url: `/posts/${postId}/comments/${commentId}/answers`,
+      }),
+      invalidatesTags: (result, error, { postId }) => [{ type: 'COMMENTS', id: postId }],
+    }),
   }),
 })
 
@@ -130,4 +142,5 @@ export const {
   useGetPostQuery,
   useGetPostsQuery,
   useUpdatePostMutation,
+  useAddCommentAnswerMutation: useAddAnswerMutation,
 } = postsApi

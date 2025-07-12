@@ -8,7 +8,7 @@ import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { Avatar, Comment } from '@/src/shared/model/api/types'
+import { AnswersComment, Avatar, Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -23,6 +23,7 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
+import { AddAnswerForm } from '@/src/widgets/addAnswerForm/AddAnswerForm'
 
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
@@ -40,11 +41,17 @@ export const ModalCommentsSection = ({
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
 
+  const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null)
+  const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
+  const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
+
   const { data: commentsResponse } = useGetCommentsQuery(postId)
   const comments = commentsResponse?.items ?? []
 
   const [likedCommentsMap, setLikedCommentsMap] = useState<Record<number, boolean>>({})
-  const [likeCounts, setLikeCounts] = useState<Record<number, number>>({})
+  const [likeCommentsCounts, setLikeCommentsCounts] = useState<Record<number, number>>({})
+  const [likedAnswersMap, setLikedAnswersMap] = useState<Record<number, boolean>>({})
+  const [likeAnswersCounts, setLikeAnswersCounts] = useState<Record<number, number>>({})
 
   const [deletePost] = useDeletePostMutation()
   const router = useRouter()
@@ -53,12 +60,29 @@ export const ModalCommentsSection = ({
   const handleLikeComment = (commentId: number) => {
     const comment = comments.find(c => c.id === commentId)
     const isLiked = likedCommentsMap[commentId] ?? comment?.isLiked
-    const likeCount = likeCounts[commentId] ?? comment?.likeCount ?? 0
+    const likeCount = likeCommentsCounts[commentId] ?? comment?.likeCount ?? 0
+
+    if (!comment) return
 
     setLikedCommentsMap(prev => ({ ...prev, [commentId]: !isLiked }))
-    setLikeCounts(prev => ({
+    setLikeCommentsCounts(prev => ({
       ...prev,
       [commentId]: isLiked ? likeCount - 1 : likeCount + 1,
+    }))
+  }
+
+  const handleLikeAnswer = (answerId: number) => {
+    const answer = Object.values(answersMap)
+      .flat()
+      .find(a => a.id === answerId)
+
+    const isLiked = likedAnswersMap[answerId] ?? answer?.isLiked
+    const likeCount = likeAnswersCounts[answerId] ?? answer?.likeCount ?? 0
+
+    setLikedAnswersMap(prev => ({ ...prev, [answerId]: !isLiked }))
+    setLikeAnswersCounts(prev => ({
+      ...prev,
+      [answerId]: isLiked ? likeCount - 1 : likeCount + 1,
     }))
   }
 
@@ -93,6 +117,13 @@ export const ModalCommentsSection = ({
     await deletePost({ postId, userId: Number(params.userId) }).unwrap()
     setIsDeleting(false)
     router.push(`/profile/${params.userId}`, { scroll: false })
+  }
+
+  const toggleAnswersVisibility = (commentId: number) => {
+    setExpandedAnswersMap(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }))
   }
 
   if (isEditing) {
@@ -170,8 +201,8 @@ export const ModalCommentsSection = ({
         </div>
         {comments
           .map(comment => {
-            const isLiked = likedCommentsMap[comment.id] ?? comment.isLiked
-            const likeCount = likeCounts[comment.id] ?? comment.likeCount
+            const isLikedComment = likedCommentsMap[comment.id] ?? comment.isLiked
+            const likeCommentCount = likeCommentsCounts[comment.id] ?? comment.likeCount
 
             return (
               <div className={s.usersCommentBody} key={comment.id}>
@@ -203,11 +234,103 @@ export const ModalCommentsSection = ({
                         lineHeights={'s'}
                         size={'xs'}
                         weight={'semi-bold'}
-                      >{`Like: ${likeCount}`}</Typography>
-                      <Button className={s.answerButton} variant={'transparent'}>
+                      >{`Like: ${likeCommentCount}`}</Typography>
+                      <Button
+                        className={s.answerButton}
+                        variant={'transparent'}
+                        onClick={() =>
+                          setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
+                        }
+                      >
                         {'Answer'}
                       </Button>
                     </div>
+                    {isAuth && replyingToCommentId === comment.id && (
+                      <AddAnswerForm
+                        className={s.answerForm}
+                        postId={post.id}
+                        commentId={comment.id}
+                        onAnswerAdded={newAnswer => {
+                          setAnswersMap(prev => ({
+                            ...prev,
+                            [comment.id]: [...(prev[comment.id] || []), newAnswer],
+                          }))
+                          setReplyingToCommentId(null)
+                        }}
+                      />
+                    )}
+                    {(answersMap[comment.id]?.length ?? 0) > 0 && (
+                      <Button
+                        className={s.viewAnswersButton}
+                        variant="transparent"
+                        onClick={() => toggleAnswersVisibility(comment.id)}
+                      >
+                        {expandedAnswersMap[comment.id]
+                          ? `Hide Answers (${answersMap[comment.id].length})`
+                          : `View Answers (${answersMap[comment.id].length})`}
+                      </Button>
+                    )}
+                    {expandedAnswersMap[comment.id] &&
+                      (answersMap[comment.id] || []).map(answer => {
+                        const isLikedAnswer = likedAnswersMap[answer.id] ?? answer.isLiked
+                        const likeAnswerCount = likeAnswersCounts[answer.id] ?? answer.likeCount
+
+                        return (
+                          <div key={answer.id} className={s.answer}>
+                            <div className={s.userAva}>
+                              <AvatarBox size={'xs'} src={answer.from.avatars?.[0]?.url || ''} />
+                            </div>
+                            <div className={s.userComment}>
+                              <Typography as="h3" className={s.userName} size="s" weight="bold">
+                                {answer.from.username}
+                              </Typography>
+                              <Typography
+                                as="div"
+                                className={s.userCommentTypography}
+                                size="s"
+                                weight="regular"
+                              >
+                                {answer.content}
+                              </Typography>
+                              <div className={s.userCommentBottom}>
+                                <Typography lineHeights="s" size="xs" weight="regular">
+                                  {timeSince(answer.createdAt)}
+                                </Typography>
+                                <Typography
+                                  lineHeights={'s'}
+                                  size={'xs'}
+                                  weight={'semi-bold'}
+                                >{`Like: ${likeAnswerCount}`}</Typography>
+                                <Button
+                                  className={s.answerButton}
+                                  variant={'transparent'}
+                                  onClick={() =>
+                                    setReplyingToCommentId(prev =>
+                                      prev === answer.id ? null : answer.id
+                                    )
+                                  }
+                                >
+                                  {'Answer'}
+                                </Button>
+                              </div>
+                            </div>
+                            <div className={s.heartIconWrapper}>
+                              <Button
+                                className={s.iconButton}
+                                onClick={() => handleLikeAnswer(answer.id)}
+                                title={isLikedAnswer ? 'Unlike' : 'Like'}
+                                variant={'transparent'}
+                              >
+                                {isLikedAnswer ? (
+                                  <Heart className={clsx(s.heartIcon, s.red)} />
+                                ) : (
+                                  <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                        )
+                      })}
                   </div>
                 </div>
                 {isAuth && (
@@ -215,10 +338,10 @@ export const ModalCommentsSection = ({
                     <Button
                       className={s.iconButton}
                       onClick={() => handleLikeComment(comment.id)}
-                      title={isLiked ? 'Unlike' : 'Like'}
+                      title={isLikedComment ? 'Unlike' : 'Like'}
                       variant={'transparent'}
                     >
-                      {isLiked ? (
+                      {isLikedComment ? (
                         <Heart className={clsx(s.heartIcon, s.red)} />
                       ) : (
                         <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />

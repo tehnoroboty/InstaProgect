@@ -91,10 +91,12 @@
 
 .usersCommentBodyBox {
   display: flex;
-  justify-content: space-between;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .userComment {
+  width: 100%;
   margin-right: auto;
   margin-left: 12px;
 }
@@ -122,6 +124,12 @@
   width: 16px;
   height: 16px;
   padding: 0;
+}
+
+.heartIconWrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
 }
 
 .heartIcon {
@@ -162,6 +170,44 @@
   color: var(--light-900);
 
   background: none;
+}
+
+.answer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.viewAnswersButton {
+  cursor: pointer;
+
+  position: relative;
+
+  padding: 6px 0 6px 30px;
+
+  font-size: var(--font-size-xs);
+  color: var(--light-900);
+
+  &::before {
+    cursor: pointer;
+    content: '';
+
+    position: absolute;
+    top: 49%;
+    left: 0;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 1px;
+
+    background-color: var(--light-900);
+  }
+
+  &:hover {
+    &::before {
+      background-color: var(--primary-100); // линия тоже подсвечивается
+    }
+  }
 }
 
 .userName {

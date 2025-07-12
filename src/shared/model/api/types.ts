@@ -286,3 +286,18 @@ export type ItemSearch = {
   lastName: string
   userName: string
 }
+export type AnswersComment = {
+  id: number
+  commentId: number
+  from: Author
+  content: string
+  createdAt: string
+  likeCount: number
+  isLiked: boolean
+}
+
+export type Author = {
+  id: number
+  username: string
+  avatars: Avatar[]
+}
