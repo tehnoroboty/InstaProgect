@@ -7,6 +7,7 @@ import {
   ImageType,
   RequestPostsType,
   ResponsePostsType,
+  UpdateLikeStatusModel,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
@@ -111,6 +112,14 @@ export const postsApi = baseApi.injectEndpoints({
         return response
       },
     }),
+    updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
+      invalidatesTags: (_result, _err, { postId }) => [{ id: postId, type: 'POST' }],
+      query: ({ model, postId }) => ({
+        body: model,
+        method: 'PUT',
+        url: `/posts/${postId}/like-status`,
+      }),
+    }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (_result, _err, { postId }) => [{ id: postId, type: 'POST' }],
       query: ({ model, postId }) => ({
@@ -129,5 +138,6 @@ export const {
   useGetCommentsQuery,
   useGetPostQuery,
   useGetPostsQuery,
+  useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi

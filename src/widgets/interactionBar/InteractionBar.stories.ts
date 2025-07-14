@@ -5,9 +5,12 @@ import { InteractionBar } from './InteractionBar'
 const meta = {
   argTypes: {
     hasCommentIcon: { control: 'boolean' },
+    isLiked: { control: 'boolean' },
   },
   args: {
     hasCommentIcon: true,
+    isLiked: false,
+    postId: 2084,
   },
   component: InteractionBar,
   tags: ['autodocs'],

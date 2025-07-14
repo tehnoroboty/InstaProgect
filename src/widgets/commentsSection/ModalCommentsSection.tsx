@@ -38,8 +38,16 @@ export const ModalCommentsSection = ({
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
-  const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-
+  const {
+    avatarOwner,
+    createdAt,
+    description,
+    id: postId,
+    isLiked,
+    likesCount,
+    ownerId,
+    userName,
+  } = post
   const { data: commentsResponse } = useGetCommentsQuery(postId)
   const comments = commentsResponse?.items ?? []
 
@@ -232,12 +240,17 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
+        <InteractionBar
+          className={s.interactionBar}
+          hasCommentIcon={false}
+          isLiked={isLiked}
+          postId={postId}
+        />
         <PostLikesBox
           avatars={avatarsData}
           className={s.postLikesBox}
           isAuth={isAuth}
-          likesCount={post.likesCount}
+          likesCount={likesCount}
         />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>

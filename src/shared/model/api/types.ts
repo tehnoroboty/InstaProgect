@@ -286,3 +286,9 @@ export type ItemSearch = {
   lastName: string
   userName: string
 }
+
+export type LikeStatus = 'DISLIKE' | 'LIKE' | 'NONE'
+
+export type UpdateLikeStatusModel = {
+  likeStatus: LikeStatus
+}

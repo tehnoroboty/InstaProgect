@@ -18,7 +18,7 @@ import Image from 'next/image'
 import s from './protectedFeedPost.module.scss'
 
 export const ProtectedFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, likesCount, userName } = props
+  const { avatarOwner, createdAt, description, id, images, isLiked, likesCount, userName } = props
 
   const renderImgCarousel = (img: PostImage) => {
     return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
@@ -98,7 +98,7 @@ export const ProtectedFeedPost = (props: Post) => {
         <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
       </div>
       <div className={s.cardBody}>
-        <InteractionBar />
+        <InteractionBar isLiked={isLiked} postId={id} />
         <div className={s.infoContainer}>
           <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
           <p className={s.postInfo}>
