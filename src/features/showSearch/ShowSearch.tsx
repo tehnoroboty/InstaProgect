@@ -1,20 +1,18 @@
 'use client'
 
-import React from 'react'
+import { useUserSearch } from '@/src/features/showSearch/hooks/useUserSearch'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import clsx from 'clsx'
 
 import s from './showSearch.module.scss'
-import { useUserSearch } from '@/src/features/showSearch/hooks/useUserSearch'
 
 export const ShowSearch = () => {
-  const { users, isFetching, hasMore, ref, handleSearchChange } = useUserSearch()
+  const { handleSearchChange, hasMore, isFetching, ref, users } = useUserSearch()
 
   return (
-    <div className={clsx(s.page)}>
+    <div className={s.page}>
       <div className={s.container}>
         <Typography as={'div'} className={s.searchText} option={'h1'}>
           Search
@@ -49,7 +47,7 @@ export const ShowSearch = () => {
                   <Typography
                     className={s.userName}
                     option={'regular_text14'}
-                  >{`${user.firstName ?? '----'} ${user.lastName ?? '----'}`}</Typography>
+                  >{`${user.firstName || '----'} ${user.lastName || '----'}`}</Typography>
                 </div>
               </div>
             ))}
