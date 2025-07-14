@@ -1,11 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-
-import { Button } from '../../shared/ui/button/Button'
+import { useMemo, useState } from 'react'
 import { Post } from '@/src/entities/post/types'
-import Heart from '@/src/shared/assets/componentsIcons/Heart'
-import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
 import { AnswersComment, Avatar, Comment } from '@/src/shared/model/api/types'
@@ -23,7 +19,10 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
-import { AddAnswerForm } from '@/src/widgets/addAnswerForm/AddAnswerForm'
+import { useSelector } from 'react-redux'
+import { selectUserId } from '@/src/shared/model/slices/appSlice'
+import { sortComments } from '@/src/shared/lib/sortComments'
+import { CommentItem } from '@/src/features/commentItem/CommentItem'
 
 export type ModalCommentsSectionProps = {
   avatars?: Avatar[]
@@ -46,7 +45,14 @@ export const ModalCommentsSection = ({
   const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
 
   const { data: commentsResponse } = useGetCommentsQuery(postId)
-  const comments = commentsResponse?.items ?? []
+  const commentsRaw = commentsResponse?.items ?? []
+
+  const currentUserId = useSelector(selectUserId)
+
+  const comments = useMemo(() => {
+    if (!currentUserId) return commentsRaw
+    return sortComments(commentsRaw, currentUserId)
+  }, [commentsRaw, currentUserId])
 
   const [likedCommentsMap, setLikedCommentsMap] = useState<Record<number, boolean>>({})
   const [likeCommentsCounts, setLikeCommentsCounts] = useState<Record<number, number>>({})
@@ -199,160 +205,37 @@ export const ModalCommentsSection = ({
             </Typography>
           </div>
         </div>
-        {comments
-          .map(comment => {
-            const isLikedComment = likedCommentsMap[comment.id] ?? comment.isLiked
-            const likeCommentCount = likeCommentsCounts[comment.id] ?? comment.likeCount
-
-            return (
-              <div className={s.usersCommentBody} key={comment.id}>
-                <div className={s.usersCommentBodyBox}>
-                  <div className={s.userAva}>
-                    <AvatarBox
-                      className={s.smallAva}
-                      size={'xs'}
-                      src={comment.from.avatars?.[0]?.url || ''}
-                    />
-                  </div>
-                  <div className={s.userComment}>
-                    <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-                      {comment.from.username}
-                    </Typography>
-                    <Typography
-                      as={'div'}
-                      className={s.userCommentTypography}
-                      size={'s'}
-                      weight={'regular'}
-                    >
-                      {comment.content}
-                    </Typography>
-                    <div className={s.userCommentBottom}>
-                      <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                        {timeSince(comment.createdAt)}
-                      </Typography>
-                      <Typography
-                        lineHeights={'s'}
-                        size={'xs'}
-                        weight={'semi-bold'}
-                      >{`Like: ${likeCommentCount}`}</Typography>
-                      <Button
-                        className={s.answerButton}
-                        variant={'transparent'}
-                        onClick={() =>
-                          setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
-                        }
-                      >
-                        {'Answer'}
-                      </Button>
-                    </div>
-                    {isAuth && replyingToCommentId === comment.id && (
-                      <AddAnswerForm
-                        className={s.answerForm}
-                        postId={post.id}
-                        commentId={comment.id}
-                        onAnswerAdded={newAnswer => {
-                          setAnswersMap(prev => ({
-                            ...prev,
-                            [comment.id]: [...(prev[comment.id] || []), newAnswer],
-                          }))
-                          setReplyingToCommentId(null)
-                        }}
-                      />
-                    )}
-                    {(answersMap[comment.id]?.length ?? 0) > 0 && (
-                      <Button
-                        className={s.viewAnswersButton}
-                        variant="transparent"
-                        onClick={() => toggleAnswersVisibility(comment.id)}
-                      >
-                        {expandedAnswersMap[comment.id]
-                          ? `Hide Answers (${answersMap[comment.id].length})`
-                          : `View Answers (${answersMap[comment.id].length})`}
-                      </Button>
-                    )}
-                    {expandedAnswersMap[comment.id] &&
-                      (answersMap[comment.id] || []).map(answer => {
-                        const isLikedAnswer = likedAnswersMap[answer.id] ?? answer.isLiked
-                        const likeAnswerCount = likeAnswersCounts[answer.id] ?? answer.likeCount
-
-                        return (
-                          <div key={answer.id} className={s.answer}>
-                            <div className={s.userAva}>
-                              <AvatarBox size={'xs'} src={answer.from.avatars?.[0]?.url || ''} />
-                            </div>
-                            <div className={s.userComment}>
-                              <Typography as="h3" className={s.userName} size="s" weight="bold">
-                                {answer.from.username}
-                              </Typography>
-                              <Typography
-                                as="div"
-                                className={s.userCommentTypography}
-                                size="s"
-                                weight="regular"
-                              >
-                                {answer.content}
-                              </Typography>
-                              <div className={s.userCommentBottom}>
-                                <Typography lineHeights="s" size="xs" weight="regular">
-                                  {timeSince(answer.createdAt)}
-                                </Typography>
-                                <Typography
-                                  lineHeights={'s'}
-                                  size={'xs'}
-                                  weight={'semi-bold'}
-                                >{`Like: ${likeAnswerCount}`}</Typography>
-                                <Button
-                                  className={s.answerButton}
-                                  variant={'transparent'}
-                                  onClick={() =>
-                                    setReplyingToCommentId(prev =>
-                                      prev === answer.id ? null : answer.id
-                                    )
-                                  }
-                                >
-                                  {'Answer'}
-                                </Button>
-                              </div>
-                            </div>
-                            <div className={s.heartIconWrapper}>
-                              <Button
-                                className={s.iconButton}
-                                onClick={() => handleLikeAnswer(answer.id)}
-                                title={isLikedAnswer ? 'Unlike' : 'Like'}
-                                variant={'transparent'}
-                              >
-                                {isLikedAnswer ? (
-                                  <Heart className={clsx(s.heartIcon, s.red)} />
-                                ) : (
-                                  <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        )
-                      })}
-                  </div>
-                </div>
-                {isAuth && (
-                  <div className={s.heartIconWrapper}>
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(comment.id)}
-                      title={isLikedComment ? 'Unlike' : 'Like'}
-                      variant={'transparent'}
-                    >
-                      {isLikedComment ? (
-                        <Heart className={clsx(s.heartIcon, s.red)} />
-                      ) : (
-                        <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                      )}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )
-          })
-          .reverse()}
+        {comments.map(comment => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            isAuth={isAuth}
+            isLiked={likedCommentsMap[comment.id] ?? comment.isLiked}
+            likeCount={likeCommentsCounts[comment.id] ?? comment.likeCount}
+            onLike={() => handleLikeComment(comment.id)}
+            onReplyClick={() =>
+              setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
+            }
+            replying={replyingToCommentId === comment.id}
+            onAnswerAdded={newAnswer => {
+              setAnswersMap(prev => ({
+                ...prev,
+                [comment.id]: [newAnswer, ...(prev[comment.id] || [])],
+              }))
+              setExpandedAnswersMap(prev => ({
+                ...prev,
+                [comment.id]: true,
+              }))
+              setReplyingToCommentId(null)
+            }}
+            answers={answersMap[comment.id] ?? []}
+            expanded={expandedAnswersMap[comment.id]}
+            toggleExpanded={() => toggleAnswersVisibility(comment.id)}
+            likedAnswersMap={likedAnswersMap}
+            likeAnswersCounts={likeAnswersCounts}
+            onLikeAnswer={handleLikeAnswer}
+          />
+        ))}
       </div>
       <div className={s.postActions}>
         <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
