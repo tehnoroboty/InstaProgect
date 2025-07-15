@@ -113,7 +113,7 @@ export type GetPostsResponse = {
 }
 
 export type Item = {
-  avatarWhoLikes: any[]
+  avatarWhoLikes: string[]
   createdAt: string
   description: string
   id: number
@@ -149,7 +149,7 @@ export type RequestPostsType = {
 
 export type ResponsePostsType = {
   avatarOwner: string
-  avatarWhoLikes: boolean
+  avatarWhoLikes: string[]
   createdAt: string
   description: string
   id: number
@@ -178,7 +178,7 @@ export type UpdatePostModel = {
   description: string
 }
 
-type Avatar = {
+export type Avatar = {
   createdAt: string
   fileSize: number
   height: number
@@ -260,6 +260,31 @@ export type InputChangeEvent = {
     name: keyof FormType
     value: string
   }
+}
+
+export type GetSearchUserArgs = {
+  cursor?: number
+  pageNumber?: number
+  pageSize?: number
+  search?: string
+}
+export type GetSearchUserResponse = {
+  items: ItemSearch[]
+  nextCursor: number
+  page: number
+  pageSize: number
+  pagesCount: number
+  prevCursor: number
+  totalCount: number
+}
+
+export type ItemSearch = {
+  avatars: Avatar[]
+  createdAt: string
+  firstName: string
+  id: number
+  lastName: string
+  userName: string
 }
 
 export type GetFolloweePostsArgs = {

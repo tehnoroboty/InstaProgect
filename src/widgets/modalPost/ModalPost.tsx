@@ -118,12 +118,7 @@ export default function ModalPost({
           ) : (
             renderItem(postForRender.images[0])
           )}
-          <ModalCommentsSection
-            commentsData={commentsForRender}
-            isAuth={isAuth}
-            isMyPost={isMyPost}
-            post={postForRender}
-          />
+          <ModalCommentsSection isAuth={isAuth} isMyPost={isMyPost} post={postForRender} />
         </div>
       </Dialog>
     </>

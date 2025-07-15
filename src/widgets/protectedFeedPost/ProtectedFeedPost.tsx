@@ -1,7 +1,5 @@
 import type { Post, PostImage } from '@/src/entities/post/types'
 
-import React from 'react'
-
 import { useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
