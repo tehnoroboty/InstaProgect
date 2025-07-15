@@ -287,17 +287,33 @@ export type ItemSearch = {
   userName: string
 }
 export type AnswersComment = {
-  id: number
   commentId: number
-  from: Author
   content: string
   createdAt: string
-  likeCount: number
+  from: Author
+  id: number
   isLiked: boolean
+  likeCount: number
 }
 
 export type Author = {
+  avatars: Avatar[]
   id: number
   username: string
-  avatars: Avatar[]
+}
+
+export type GetFolloweePostsArgs = {
+  endCursorPostId?: number
+  pageNumber?: number
+  pageSize?: number
+}
+
+export type GetFolloweePostsResponse = {
+  items: Post[]
+  nextCursor: number
+  page: number
+  pageSize: number
+  pagesCount: number
+  prevCursor: number
+  totalCount: number
 }

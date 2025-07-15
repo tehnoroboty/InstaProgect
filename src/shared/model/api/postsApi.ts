@@ -3,6 +3,8 @@ import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   AnswersComment,
   GetCommentsResponse,
+  GetFolloweePostsArgs,
+  GetFolloweePostsResponse,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
@@ -14,6 +16,17 @@ import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
+    addCommentAnswer: builder.mutation<
+      AnswersComment,
+      { commentId: number; content: string; postId: number }
+    >({
+      invalidatesTags: (result, error, { postId }) => [{ id: postId, type: 'COMMENTS' }],
+      query: ({ commentId, content, postId }) => ({
+        body: { content },
+        method: 'POST',
+        url: `/posts/${postId}/comments/${commentId}/answers`,
+      }),
+    }),
     createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
@@ -73,6 +86,32 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}/comments`,
       }),
     }),
+    getFolloweePosts: builder.query<GetFolloweePostsResponse, GetFolloweePostsArgs>({
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
+      merge: (currentCache, newItems) => {
+        newItems.items.map(newItem => {
+          const findIndex = currentCache.items.findIndex(
+            currentItem => currentItem.id === newItem.id
+          )
+
+          if (findIndex === -1) {
+            currentCache.items.push(newItem)
+          }
+        })
+      },
+      // providesTags: 'FEED',
+      query: ({ endCursorPostId, pageNumber, pageSize }) => ({
+        method: 'GET',
+        params: {
+          endCursorPostId,
+          pageNumber,
+          pageSize,
+        },
+        url: `/home/publications-followers`,
+      }),
+    }),
     getPost: builder.query<Post, number>({
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
       query: postId => ({
@@ -120,27 +159,17 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
       }),
     }),
-    addCommentAnswer: builder.mutation<
-      AnswersComment,
-      { postId: number; commentId: number; content: string }
-    >({
-      query: ({ postId, commentId, content }) => ({
-        body: { content },
-        method: 'POST',
-        url: `/posts/${postId}/comments/${commentId}/answers`,
-      }),
-      invalidatesTags: (result, error, { postId }) => [{ type: 'COMMENTS', id: postId }],
-    }),
   }),
 })
 
 export const {
+  useAddCommentAnswerMutation: useAddAnswerMutation,
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetCommentsQuery,
+  useGetFolloweePostsQuery,
   useGetPostQuery,
   useGetPostsQuery,
   useUpdatePostMutation,
-  useAddCommentAnswerMutation: useAddAnswerMutation,
 } = postsApi

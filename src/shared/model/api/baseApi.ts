@@ -102,5 +102,6 @@ export const baseApi = createApi({
     'SESSIONS',
     'PAYMENTS',
     'NOTIFICATIONS',
+    'FEED',
   ],
 })

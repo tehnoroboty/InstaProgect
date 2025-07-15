@@ -15,7 +15,7 @@ type Story = StoryObj<typeof ProtectedFeedPost>
 export const Default: Story = {
   args: {
     avatarOwner: 'https://catastic.pet/wp-content/uploads/2022/10/clever-tuxedo-cat.jpg',
-    avatarWhoLikes: false,
+    avatarWhoLikes: ['https://example.com/avatar1.jpg', 'https://example.com/avatar2.jpg'],
     createdAt: '2025-02-17T16:36:44.410Z',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',

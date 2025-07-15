@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
-import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
 import { useInView } from 'react-intersection-observer'
+
+import { useGetSearchUserQuery } from '@/src/shared/model/api/searchApi'
+import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import debounce from 'lodash/debounce'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
-import { useGetSearchUserQuery } from '@/src/shared/model/api/searchApi'
 
 const USERS_PER_PAGE = 12
 
@@ -70,15 +71,17 @@ export const useUserSearch = () => {
   useEffect(() => {
     if (isError) {
       const err = error as CustomerError
+
       dispatch(setAppError(err.data))
     }
   }, [isError, error, dispatch])
+
   return {
-    users,
-    isFetching,
-    isError,
-    hasMore,
-    ref,
     handleSearchChange,
+    hasMore,
+    isError,
+    isFetching,
+    ref,
+    users,
   }
 }
