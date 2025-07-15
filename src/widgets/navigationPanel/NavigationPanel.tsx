@@ -50,7 +50,7 @@ export const NavigationPanel = () => {
       },
     ],
     mainActions: [
-      { href: '/', icon: HomeLine, iconActive: Home, title: 'Home' },
+      { href: '/', icon: HomeLine, iconActive: Home, title: 'Feed' },
       {
         icon: PlusSquareOutline,
         iconActive: PlusSquare,

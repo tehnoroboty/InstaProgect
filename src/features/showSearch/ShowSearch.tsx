@@ -1,6 +1,8 @@
 'use client'
 
 import React from 'react'
+
+import { useUserSearch } from '@/src/features/showSearch/hooks/useUserSearch'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
@@ -8,10 +10,9 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
 
 import s from './showSearch.module.scss'
-import { useUserSearch } from '@/src/features/showSearch/hooks/useUserSearch'
 
 export const ShowSearch = () => {
-  const { users, isFetching, hasMore, ref, handleSearchChange } = useUserSearch()
+  const { handleSearchChange, hasMore, isFetching, ref, users } = useUserSearch()
 
   return (
     <div className={clsx(s.page)}>

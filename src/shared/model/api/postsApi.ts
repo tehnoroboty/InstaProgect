@@ -1,7 +1,7 @@
-import { Post } from '@/src/entities/post/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
-import {
+import type {
   GetCommentsResponse,
+  GetFolloweePostsArgs,
+  GetFolloweePostsResponse,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
@@ -9,6 +9,9 @@ import {
   ResponsePostsType,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
+
+import { Post } from '@/src/entities/post/types'
+import { baseApi } from '@/src/shared/model/api/baseApi'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
@@ -72,6 +75,32 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}/comments`,
       }),
     }),
+    getFolloweePosts: builder.query<GetFolloweePostsResponse, GetFolloweePostsArgs>({
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
+      merge: (currentCache, newItems) => {
+        newItems.items.map(newItem => {
+          const findIndex = currentCache.items.findIndex(
+            currentItem => currentItem.id === newItem.id
+          )
+
+          if (findIndex === -1) {
+            currentCache.items.push(newItem)
+          }
+        })
+      },
+      // providesTags: 'FEED',
+      query: ({ endCursorPostId, pageNumber, pageSize }) => ({
+        method: 'GET',
+        params: {
+          endCursorPostId,
+          pageNumber,
+          pageSize,
+        },
+        url: `/home/publications-followers`,
+      }),
+    }),
     getPost: builder.query<Post, number>({
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
       query: postId => ({
@@ -127,6 +156,7 @@ export const {
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetCommentsQuery,
+  useGetFolloweePostsQuery,
   useGetPostQuery,
   useGetPostsQuery,
   useUpdatePostMutation,

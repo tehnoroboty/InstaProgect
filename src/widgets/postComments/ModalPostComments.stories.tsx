@@ -100,7 +100,7 @@ const meta = {
     post: {
       avatarOwner:
         'https://storage.yandexcloud.net/users-inctagram/users/41/avatar/3359612b-cff9-4b6b-8897-fbbd09153d51-images-45x45',
-      avatarWhoLikes: true,
+      avatarWhoLikes: [],
       createdAt: '2025-02-19T11:58:19.847Z',
       description: 'string',
       id: 12,
