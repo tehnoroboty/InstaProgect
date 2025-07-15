@@ -56,13 +56,6 @@ export default function ModalPost({
   const { data: commentsFromCash } = useAppSelector(state => selectComments(state))
 
   const needInitCommentsInStore = !!commentsDataFromServer && !commentsFromCash
-  const needInitPostInStore = !!postDataFromServer && !postFromCash
-
-  useEffect(() => {
-    if ((needInitPostInStore || !postFromCash) && postDataFromServer) {
-      dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
-    }
-  }, [dispatch, needInitPostInStore, postDataFromServer, postFromCash, postId])
 
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
@@ -70,9 +63,12 @@ export default function ModalPost({
     }
   }, [commentsDataFromServer, dispatch, needInitCommentsInStore, postId])
 
-  const { data: post } = useGetPostQuery(Number(postId), {
-    skip: !needInitPostInStore && !Number(postId),
+  const { data: postFromApi } = useGetPostQuery(Number(postId), {
+    skip: !postId,
   })
+
+  const post = postFromApi ?? postDataFromServer
+
   const { data: comments } = useGetCommentsQuery(Number(postId), {
     skip: !needInitCommentsInStore,
   })
