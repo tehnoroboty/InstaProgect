@@ -4,11 +4,12 @@ import { useState } from 'react'
 
 import { Button } from '../../shared/ui/button/Button'
 import { Post } from '@/src/entities/post/types'
+import { Avatar } from '@/src/entities/user/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { Avatar, Comment } from '@/src/shared/model/api/types'
+import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -246,12 +247,7 @@ export const ModalCommentsSection = ({
           isLiked={isLiked}
           postId={postId}
         />
-        <PostLikesBox
-          avatars={avatarsData}
-          className={s.postLikesBox}
-          isAuth={isAuth}
-          likesCount={likesCount}
-        />
+        <PostLikesBox className={s.postLikesBox} likesCount={likesCount} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>

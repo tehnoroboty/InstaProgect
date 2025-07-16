@@ -2,6 +2,8 @@ import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
+  GetLikesArgs,
+  GetPostLikesResponse,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
@@ -80,6 +82,19 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/id/${postId}`,
       }),
     }),
+    getPostLikes: builder.query<GetPostLikesResponse, GetLikesArgs>({
+      providesTags: (result, error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
+      query: ({ cursor, pageNumber, pageSize = 3, postId, search }) => ({
+        method: 'GET',
+        params: {
+          cursor,
+          pageNumber,
+          pageSize,
+          search,
+        },
+        url: `/posts/${postId}/likes`,
+      }),
+    }),
     getPosts: builder.query<GetPostsResponse, GetPostsArgs>({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
@@ -113,7 +128,13 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
     updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
-      invalidatesTags: (_result, _err, { postId }) => [{ id: postId, type: 'POST' }],
+      invalidatesTags: (_result, _err, { postId }) => [
+        { id: postId, type: 'POST' },
+        {
+          id: postId,
+          type: 'POST_LIKES',
+        },
+      ],
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
@@ -136,6 +157,7 @@ export const {
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetCommentsQuery,
+  useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
   useUpdateLikeStatusPostMutation,

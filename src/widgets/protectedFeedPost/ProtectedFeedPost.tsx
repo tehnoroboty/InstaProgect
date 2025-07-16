@@ -105,7 +105,7 @@ export const ProtectedFeedPost = (props: Post) => {
             <span className={s.userName}>{userName}</span> {description}
           </p>
         </div>
-        <PostLikesBox avatars={mockAvatars} className={s.likesBox} likesCount={likesCount} />
+        <PostLikesBox className={s.likesBox} likesCount={likesCount} postId={id} />
         <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
           {`View All Comments (${mockComments.length})`}
         </Button>
