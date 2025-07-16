@@ -40,6 +40,8 @@
 
   &.shifted {
     transform: translateY(-50%);
+    overflow-y: auto;
+    max-height: 300px;
   }
 }
 
