@@ -114,7 +114,7 @@ export type GetPostsResponse = {
 }
 
 export type Item = {
-  avatarWhoLikes: any[]
+  avatarWhoLikes: string[]
   createdAt: string
   description: string
   id: number
@@ -264,6 +264,22 @@ export type ItemSearch = {
   id: number
   lastName: string
   userName: string
+}
+
+export type GetFolloweePostsArgs = {
+  endCursorPostId?: number
+  pageNumber?: number
+  pageSize?: number
+}
+
+export type GetFolloweePostsResponse = {
+  items: Post[]
+  nextCursor: number
+  page: number
+  pageSize: number
+  pagesCount: number
+  prevCursor: number
+  totalCount: number
 }
 
 export type LikeStatus = 'DISLIKE' | 'LIKE' | 'NONE'

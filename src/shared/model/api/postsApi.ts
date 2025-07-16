@@ -2,6 +2,8 @@ import { Post } from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import {
   GetCommentsResponse,
+  GetFolloweePostsArgs,
+  GetFolloweePostsResponse,
   GetLikesArgs,
   GetPostLikesResponse,
   GetPostsArgs,
@@ -73,6 +75,32 @@ export const postsApi = baseApi.injectEndpoints({
       query: postId => ({
         method: 'GET',
         url: `/posts/${postId}/comments`,
+      }),
+    }),
+    getFolloweePosts: builder.query<GetFolloweePostsResponse, GetFolloweePostsArgs>({
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
+      merge: (currentCache, newItems) => {
+        newItems.items.map(newItem => {
+          const findIndex = currentCache.items.findIndex(
+            currentItem => currentItem.id === newItem.id
+          )
+
+          if (findIndex === -1) {
+            currentCache.items.push(newItem)
+          }
+        })
+      },
+      // providesTags: 'FEED',
+      query: ({ endCursorPostId, pageNumber, pageSize }) => ({
+        method: 'GET',
+        params: {
+          endCursorPostId,
+          pageNumber,
+          pageSize,
+        },
+        url: `/home/publications-followers`,
       }),
     }),
     getPost: builder.query<Post, number>({
@@ -157,6 +185,7 @@ export const {
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetCommentsQuery,
+  useGetFolloweePostsQuery,
   useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,

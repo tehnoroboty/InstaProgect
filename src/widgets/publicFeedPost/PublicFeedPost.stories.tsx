@@ -14,7 +14,7 @@ type Story = StoryObj<typeof PublicFeedPost>
 
 const defaultPost = {
   avatarOwner: 'https://catastic.pet/wp-content/uploads/2022/10/clever-tuxedo-cat.jpg',
-  avatarWhoLikes: false,
+  avatarWhoLikes: [],
   createdAt: '2025-02-17T16:36:44.410Z',
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..',
