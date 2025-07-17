@@ -71,7 +71,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getComments: builder.query<GetCommentsResponse, number>({
-      providesTags: (result, error, postId) => [{ id: postId, type: 'COMMENTS' }],
+      providesTags: (_result, _error, postId) => [{ id: postId, type: 'COMMENTS' }],
       query: postId => ({
         method: 'GET',
         url: `/posts/${postId}/comments`,
@@ -92,13 +92,6 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      providesTags: result =>
-        result
-          ? [
-              ...result.items.map(post => ({ id: post.id, type: 'POST' }) as const),
-              { type: 'FEED' },
-            ]
-          : [{ type: 'FEED' }],
       // providesTags: 'FEED',
       query: ({ endCursorPostId, pageNumber, pageSize }) => ({
         method: 'GET',
@@ -118,7 +111,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPostLikes: builder.query<GetPostLikesResponse, GetLikesArgs>({
-      providesTags: (result, error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
+      providesTags: (_result, _error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
       query: ({ cursor, pageNumber, pageSize = 3, postId, search }) => ({
         method: 'GET',
         params: {
@@ -145,7 +138,7 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      providesTags: (result, error, arg) => [{ type: 'POSTS', userId: arg.userId }],
+      providesTags: (_result, _error, arg) => [{ type: 'POSTS', userId: arg.userId }],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
         method: 'GET',
         params: {
@@ -169,7 +162,6 @@ export const postsApi = baseApi.injectEndpoints({
           id: postId,
           type: 'POST_LIKES',
         },
-        { type: 'FEED' },
       ],
       query: ({ model, postId }) => ({
         body: model,
@@ -197,7 +189,6 @@ export const {
   useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
-  useLazyGetFolloweePostsQuery,
   useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi
