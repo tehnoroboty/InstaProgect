@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 import { Button } from '../../shared/ui/button/Button'
 import { Post } from '@/src/entities/post/types'
-import { Avatar } from '@/src/entities/user/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
@@ -26,7 +25,6 @@ import { useParams, useRouter } from 'next/navigation'
 import s from './modalCommentsSection.module.scss'
 
 export type ModalCommentsSectionProps = {
-  avatars?: Avatar[]
   commentsData?: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
@@ -34,21 +32,11 @@ export type ModalCommentsSectionProps = {
 }
 
 export const ModalCommentsSection = ({
-  avatars,
   isAuth = false,
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
-  const {
-    avatarOwner,
-    createdAt,
-    description,
-    id: postId,
-    isLiked,
-    likesCount,
-    ownerId,
-    userName,
-  } = post
+  const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
   const { data: commentsResponse } = useGetCommentsQuery(postId)
   const comments = commentsResponse?.items ?? []
 
@@ -228,13 +216,8 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        <InteractionBar
-          className={s.interactionBar}
-          hasCommentIcon={false}
-          isLiked={isLiked}
-          postId={postId}
-        />
-        <PostLikesBox className={s.postLikesBox} likesCount={likesCount} postId={postId} />
+        <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>

@@ -1,9 +1,8 @@
 'use client'
 
-import { ComponentPropsWithoutRef, useMemo } from 'react'
+import { ComponentPropsWithoutRef } from 'react'
 
 import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
-import { useGetPostLikesQuery } from '@/src/shared/model/api/postsApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
@@ -11,37 +10,13 @@ import clsx from 'clsx'
 import s from '@/src/shared/ui/postLikesBox/postLikesBox.module.scss'
 
 type Props = {
-  likesCount?: number
   postId: number
 } & ComponentPropsWithoutRef<'div'>
 
 export const PostLikesBox = ({ className, postId }: Props) => {
-  // const {
-  //   data: likesData,
-  //   isFetching,
-  //   isLoading,
-  // } = useGetPostLikesQuery(
-  //   {
-  //     pageSize: 3,
-  //     postId,
-  //   },
-  //   { refetchOnMountOrArgChange: true }
-  // )
-  //
-  // const likesCount = likesData?.totalCount
-  // const isLikesLoaded = !isLoading && !isFetching
-
   const { avatars, likesCount } = usePostLikes(postId)
 
   const avatarClasses = [s.firstAvaLike, s.secondAvaLike, s.thirdAvaLike]
-
-  // const avatars = useMemo(() => {
-  //   return [...(likesData?.items || [])]
-  //     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  //     .map(user => user.avatars?.[0]?.url)
-  //     .filter(Boolean)
-  //     .slice(0, 3)
-  // }, [likesData])
 
   return (
     <div className={clsx(s.postLikes, className)}>

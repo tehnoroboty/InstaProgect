@@ -22,7 +22,6 @@ import s from '@/src/widgets/interactionBar/interactionBar.module.scss'
 
 type Props = {
   hasCommentIcon?: boolean
-  isLiked?: boolean
   postId: number
 } & ComponentPropsWithoutRef<'div'>
 

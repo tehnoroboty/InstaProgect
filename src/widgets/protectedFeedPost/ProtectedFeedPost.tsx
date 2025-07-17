@@ -15,7 +15,7 @@ import Image from 'next/image'
 import s from './protectedFeedPost.module.scss'
 
 export const ProtectedFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, isLiked, likesCount, userName } = props
+  const { avatarOwner, createdAt, description, id, images, userName } = props
 
   const renderImgCarousel = (img: PostImage) => {
     return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
@@ -39,14 +39,14 @@ export const ProtectedFeedPost = (props: Post) => {
         <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
       </div>
       <div className={s.cardBody}>
-        <InteractionBar isLiked={isLiked} postId={id} />
+        <InteractionBar postId={id} />
         <div className={s.infoContainer}>
           <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
           <p className={s.postInfo}>
             <span className={s.userName}>{userName}</span> {description}
           </p>
         </div>
-        <PostLikesBox className={s.likesBox} likesCount={likesCount} postId={id} />
+        <PostLikesBox className={s.likesBox} postId={id} />
         <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
           {`View All Comments (${data?.items.length})`}
         </Button>

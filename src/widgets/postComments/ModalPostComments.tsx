@@ -21,7 +21,7 @@ type Props = {
 } & ModalCommentsSectionProps
 
 export default function ModalPostComments(props: Props) {
-  const { avatars, commentsData, list, post, renderItem } = props
+  const { commentsData, list, post, renderItem } = props
 
   const [showDialog, setShowDialog] = useState(true)
 
@@ -43,7 +43,7 @@ export default function ModalPostComments(props: Props) {
       >
         <div className={s.container}>
           <Carousel list={list} renderItem={renderItem} />
-          <ModalCommentsSection avatars={avatars} commentsData={commentsData} post={post} />
+          <ModalCommentsSection commentsData={commentsData} post={post} />
         </div>
       </Dialog>
     </>
