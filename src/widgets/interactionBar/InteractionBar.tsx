@@ -10,6 +10,7 @@ import {
   MessageCircleOutline,
   PaperPlaneOutline,
 } from '@/src/shared/assets/componentsIcons'
+import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
 import { useUpdateLikeStatusPostMutation } from '@/src/shared/model/api/postsApi'
 import { CustomerError, LikeStatus } from '@/src/shared/model/api/types'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
@@ -21,14 +22,16 @@ import s from '@/src/widgets/interactionBar/interactionBar.module.scss'
 
 type Props = {
   hasCommentIcon?: boolean
-  isLiked: boolean
+  isLiked?: boolean
   postId: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const InteractionBar = ({ className, hasCommentIcon = true, isLiked, postId }: Props) => {
+export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Props) => {
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
   const [updateLikeStatus] = useUpdateLikeStatusPostMutation()
   const dispatch = useAppDispatch()
+
+  const { isLiked } = usePostLikes(postId)
 
   const handleLikePost = async () => {
     if (!postId) {

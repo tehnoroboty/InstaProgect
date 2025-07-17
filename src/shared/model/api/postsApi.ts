@@ -92,6 +92,13 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
+      providesTags: result =>
+        result
+          ? [
+              ...result.items.map(post => ({ id: post.id, type: 'POST' }) as const),
+              { type: 'FEED' },
+            ]
+          : [{ type: 'FEED' }],
       // providesTags: 'FEED',
       query: ({ endCursorPostId, pageNumber, pageSize }) => ({
         method: 'GET',
@@ -162,6 +169,7 @@ export const postsApi = baseApi.injectEndpoints({
           id: postId,
           type: 'POST_LIKES',
         },
+        { type: 'FEED' },
       ],
       query: ({ model, postId }) => ({
         body: model,
@@ -189,6 +197,7 @@ export const {
   useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
+  useLazyGetFolloweePostsQuery,
   useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi

@@ -71,19 +71,6 @@ export const ModalCommentsSection = ({
     }))
   }
 
-  const avatarsData =
-    avatars ??
-    comments.map(
-      item =>
-        item.from.avatars?.[0] || {
-          createdAt: '2025-02-19T11:58:19.531Z',
-          fileSize: 300,
-          height: 300,
-          url: 'https://example.com/image1.jpg',
-          width: 300,
-        }
-    )
-
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
