@@ -4,17 +4,23 @@ import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Post } from '@/src/entities/post/types'
-import { CommentItem } from '@/src/features/commentItem/CommentItem'
 import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { AnswersComment, Comment } from '@/src/shared/model/api/types'
-import { selectUserId } from '@/src/shared/model/slices/appSlice'
+import {
+  useDeletePostMutation,
+  useGetCommentsQuery,
+  useUpdateAnswerLikeStatusMutation,
+  useUpdateCommentLikeStatusMutation,
+} from '@/src/shared/model/api/postsApi'
+import { AnswersComment, Comment, CustomerError, LikeStatus } from '@/src/shared/model/api/types'
+import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
+import { CommentItemContainer } from '@/src/widgets/commentItemContainer/CommentItemContainer'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
@@ -37,6 +43,8 @@ export const ModalCommentsSection = ({
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
+  const dispatch = useAppDispatch()
+
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
 
   const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
@@ -56,48 +64,55 @@ export const ModalCommentsSection = ({
     return sortComments(commentsRaw, currentUserId)
   }, [commentsRaw, currentUserId])
 
-  const [likedCommentsMap, setLikedCommentsMap] = useState<Record<number, boolean>>({})
-  const [likeCommentsCounts, setLikeCommentsCounts] = useState<Record<number, number>>({})
-  const [likedAnswersMap, setLikedAnswersMap] = useState<Record<number, boolean>>({})
-  const [likeAnswersCounts, setLikeAnswersCounts] = useState<Record<number, number>>({})
-
   const [deletePost] = useDeletePostMutation()
   const router = useRouter()
   const params = useParams<{ userId: string }>()
 
-  const handleLikeComment = (commentId: number) => {
-    const comment = comments.find(c => c.id === commentId)
-    const isLiked = likedCommentsMap[commentId] ?? comment?.isLiked
-    const likeCount = likeCommentsCounts[commentId] ?? comment?.likeCount ?? 0
+  const [updateCommentLikeStatus] = useUpdateCommentLikeStatusMutation()
 
-    if (!comment) {
-      return
+  const handleLikeComment = async (commentId: number, currentStatus: LikeStatus) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
+
+    try {
+      await updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The comment has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
     }
-
-    setLikedCommentsMap(prev => ({ ...prev, [commentId]: !isLiked }))
-    setLikeCommentsCounts(prev => ({
-      ...prev,
-      [commentId]: isLiked ? likeCount - 1 : likeCount + 1,
-    }))
   }
 
-  const handleLikeAnswer = (answerId: number) => {
-    const answer = Object.values(answersMap)
-      .flat()
-      .find(a => a.id === answerId)
+  const [updateAnswerLikeStatus] = useUpdateAnswerLikeStatusMutation()
 
-    const isLiked = likedAnswersMap[answerId] ?? answer?.isLiked
-    const likeCount = likeAnswersCounts[answerId] ?? answer?.likeCount ?? 0
+  const handleLikeAnswer = async (
+    commentId: number,
+    answerId: number,
+    currentStatus: LikeStatus
+  ) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
 
-    setLikedAnswersMap(prev => ({ ...prev, [answerId]: !isLiked }))
-    setLikeAnswersCounts(prev => ({
-      ...prev,
-      [answerId]: isLiked ? likeCount - 1 : likeCount + 1,
-    }))
+    try {
+      await updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The answer has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
   }
 
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleAnswerAdded = (commentId: number, answer: AnswersComment) => {
+    setAnswersMap(prev => ({
+      ...prev,
+      [commentId]: [...(prev[commentId] || []), answer],
+    }))
+  }
 
   const handleEditPost = () => {
     setIsEditing(true)
@@ -197,39 +212,27 @@ export const ModalCommentsSection = ({
           </div>
         </div>
         {comments.map(comment => (
-          <CommentItem
-            answers={answersMap[comment.id] ?? []}
+          <CommentItemContainer
+            answersMap={answersMap}
             comment={comment}
-            expanded={expandedAnswersMap[comment.id]}
+            currentUserId={currentUserId}
+            expandedAnswersMap={expandedAnswersMap}
+            handleLikeAnswer={handleLikeAnswer}
+            handleLikeComment={handleLikeComment}
             isAuth={isAuth}
-            isLiked={likedCommentsMap[comment.id] ?? comment.isLiked}
             key={comment.id}
-            likeAnswersCounts={likeAnswersCounts}
-            likeCount={likeCommentsCounts[comment.id] ?? comment.likeCount}
-            likedAnswersMap={likedAnswersMap}
-            onAnswerAdded={newAnswer => {
-              setAnswersMap(prev => ({
-                ...prev,
-                [comment.id]: [newAnswer, ...(prev[comment.id] || [])],
-              }))
-              setExpandedAnswersMap(prev => ({
-                ...prev,
-                [comment.id]: true,
-              }))
-              setReplyingToCommentId(null)
-            }}
-            onLike={() => handleLikeComment(comment.id)}
-            onLikeAnswer={handleLikeAnswer}
-            onReplyClick={() =>
-              setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
-            }
-            replying={replyingToCommentId === comment.id}
-            toggleExpanded={() => toggleAnswersVisibility(comment.id)}
+            onAnswerAdded={handleAnswerAdded}
+            postId={postId}
+            replyingToCommentId={replyingToCommentId}
+            setReplyingToCommentId={setReplyingToCommentId}
+            toggleAnswersVisibility={toggleAnswersVisibility}
           />
         ))}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        {isAuth && (
+          <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        )}
         <PostLikesBox className={s.postLikesBox} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>

@@ -1,0 +1,99 @@
+.answer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.userAva {
+  flex-shrink: 0;
+}
+
+.userComment {
+  width: 100%;
+  margin-right: auto;
+  margin-left: 12px;
+}
+
+.userName {
+  display: inline-flex;
+  margin-right: 5px;
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.userCommentTypography {
+  width: 370px;
+  max-width: 100%;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.userCommentBottom {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+
+  & p {
+    color: var(--light-900);
+  }
+}
+
+.answerButton {
+  display: inline;
+
+  padding: 0;
+  border: none;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--light-900);
+
+  background: none;
+}
+
+.heartIconWrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.iconButton {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+}
+
+.heartIcon {
+  cursor: pointer;
+  align-self: center;
+  width: 16px;
+  height: 16px;
+
+  & path {
+    fill: var(--light-100);
+    transition: opacity 0.3s ease;
+  }
+}
+
+.heartOutlineIcon {
+  @media (hover: hover) {
+    &:hover path {
+      opacity: 0.5;
+    }
+  }
+}
+
+.red {
+  & path {
+    fill: var(--danger-500);
+  }
+}

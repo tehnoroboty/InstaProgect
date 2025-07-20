@@ -1,13 +1,16 @@
 import type {
   AnswersComment,
+  GetAnswerLikesArgs,
+  GetCommentLikesArgs,
   GetCommentsResponse,
   GetFolloweePostsArgs,
   GetFolloweePostsResponse,
   GetLikesArgs,
-  GetPostLikesResponse,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
+  LikeStatus,
+  PaginatedLikesResponse,
   RequestPostsType,
   ResponsePostsType,
   UpdateLikeStatusModel,
@@ -83,6 +86,20 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
       }),
     }),
+    getAnswerLikes: builder.query<PaginatedLikesResponse, GetAnswerLikesArgs>({
+      providesTags: (_res, _err, { answerId }) => [{ id: answerId, type: 'ANSWER_LIKES' }],
+      query: ({ answerId, commentId, postId }) => ({
+        method: 'GET',
+        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
+      }),
+    }),
+    getCommentLikes: builder.query<PaginatedLikesResponse, GetCommentLikesArgs>({
+      providesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],
+      query: ({ commentId, postId }) => ({
+        method: 'GET',
+        url: `/posts/${postId}/comments/${commentId}/likes`,
+      }),
+    }),
     getComments: builder.query<GetCommentsResponse, number>({
       providesTags: (_result, _error, postId) => [{ id: postId, type: 'COMMENTS' }],
       query: postId => ({
@@ -123,7 +140,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/id/${postId}`,
       }),
     }),
-    getPostLikes: builder.query<GetPostLikesResponse, GetLikesArgs>({
+    getPostLikes: builder.query<PaginatedLikesResponse, GetLikesArgs>({
       providesTags: (_result, _error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
       query: ({ cursor, pageNumber, pageSize, postId, search }) => ({
         method: 'GET',
@@ -168,6 +185,28 @@ export const postsApi = baseApi.injectEndpoints({
         return response
       },
     }),
+    updateAnswerLikeStatus: builder.mutation<
+      void,
+      { answerId: number; commentId: number; likeStatus: LikeStatus; postId: number }
+    >({
+      invalidatesTags: (_res, _err, { answerId }) => [{ id: answerId, type: 'ANSWER_LIKES' }],
+      query: ({ answerId, commentId, likeStatus, postId }) => ({
+        body: { likeStatus },
+        method: 'PUT',
+        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
+      }),
+    }),
+    updateCommentLikeStatus: builder.mutation<
+      void,
+      { commentId: number; likeStatus: LikeStatus; postId: number }
+    >({
+      invalidatesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],
+      query: ({ commentId, likeStatus, postId }) => ({
+        body: { likeStatus },
+        method: 'PUT',
+        url: `/posts/${postId}/comments/${commentId}/like-status`,
+      }),
+    }),
     updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
       invalidatesTags: (_result, _err, { postId }) => [
         { id: postId, type: 'POST' },
@@ -198,11 +237,15 @@ export const {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
   useDeletePostMutation,
+  useGetAnswerLikesQuery,
+  useGetCommentLikesQuery,
   useGetCommentsQuery,
   useGetFolloweePostsQuery,
   useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
+  useUpdateAnswerLikeStatusMutation,
+  useUpdateCommentLikeStatusMutation,
   useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi

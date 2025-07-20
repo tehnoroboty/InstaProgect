@@ -104,5 +104,7 @@ export const baseApi = createApi({
     'NOTIFICATIONS',
     'FEED',
     'POST_LIKES',
+    'COMMENT_LIKES',
+    'ANSWER_LIKES',
   ],
 })
