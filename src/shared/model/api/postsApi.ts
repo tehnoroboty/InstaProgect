@@ -112,7 +112,7 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     getPostLikes: builder.query<GetPostLikesResponse, GetLikesArgs>({
       providesTags: (_result, _error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
-      query: ({ cursor, pageNumber, pageSize = 3, postId, search }) => ({
+      query: ({ cursor, pageNumber, pageSize, postId, search }) => ({
         method: 'GET',
         params: {
           cursor,
