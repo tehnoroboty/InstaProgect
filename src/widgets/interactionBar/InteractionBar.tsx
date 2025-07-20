@@ -7,36 +7,46 @@ import {
   BookmarkOutline,
   Heart,
   HeartOutline,
-  MessageCircle,
   MessageCircleOutline,
   PaperPlaneOutline,
 } from '@/src/shared/assets/componentsIcons'
+import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
+import { useUpdateLikeStatusPostMutation } from '@/src/shared/model/api/postsApi'
+import { CustomerError, LikeStatus } from '@/src/shared/model/api/types'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Button } from '@/src/shared/ui/button/Button'
 import clsx from 'clsx'
 
 import s from '@/src/widgets/interactionBar/interactionBar.module.scss'
 
-type LikeStatus = 'DISLIKE' | 'LIKE' | 'NONE'
-
 type Props = {
-  LikeStatus?: LikeStatus
   hasCommentIcon?: boolean
-  isLiked?: boolean
-  likesCount?: number
+  postId: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const InteractionBar = ({
-  LikeStatus,
-  className,
-  hasCommentIcon = true,
-  isLiked,
-  likesCount,
-}: Props) => {
-  const [isLikedPost, setIsLikedPost] = useState<boolean>(false)
+export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Props) => {
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
+  const [updateLikeStatus] = useUpdateLikeStatusPostMutation()
+  const dispatch = useAppDispatch()
 
-  const handleLikePost = () => {
-    setIsLikedPost(prevLikedPost => !prevLikedPost)
+  const { isLiked } = usePostLikes(postId)
+
+  const handleLikePost = async () => {
+    if (!postId) {
+      return
+    }
+    const newLikeStatus: LikeStatus = isLiked ? 'NONE' : 'LIKE'
+
+    try {
+      await updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'Failed to update like status'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
   }
   const handleSavePost = () => {
     setIsSavedPost(prevSavedPost => !prevSavedPost)
@@ -45,25 +55,19 @@ export const InteractionBar = ({
   return (
     <div className={clsx(s.interactionBar, className)}>
       <div className={clsx(s.interactionBarLeftSide, { [s.withMessageIcon]: hasCommentIcon })}>
-        {isLikedPost ? (
-          <Button
-            className={s.interactionIconWrapper}
-            onClick={handleLikePost}
-            title={'Unlike'}
-            variant={'transparent'}
-          >
+        <Button
+          className={clsx(s.interactionIconWrapper, { [s.outlineIcon]: !isLiked })}
+          onClick={handleLikePost}
+          title={isLiked ? 'Unlike' : 'Like'}
+          variant={'transparent'}
+        >
+          {isLiked ? (
             <Heart className={clsx(s.interactionIcon, s.red)} />
-          </Button>
-        ) : (
-          <Button
-            className={clsx(s.interactionIconWrapper, s.outlineIcon)}
-            onClick={handleLikePost}
-            title={'Like'}
-            variant={'transparent'}
-          >
+          ) : (
             <HeartOutline className={s.interactionIcon} />
-          </Button>
-        )}
+          )}
+        </Button>
+
         {hasCommentIcon && (
           <Button
             className={clsx(s.interactionIconWrapper, s.outlineIcon)}
@@ -83,25 +87,18 @@ export const InteractionBar = ({
       </div>
 
       <div className={s.save}>
-        {isSavedPost ? (
-          <Button
-            className={s.interactionIconWrapper}
-            onClick={handleSavePost}
-            title={'Remove'}
-            variant={'transparent'}
-          >
+        <Button
+          className={clsx(s.interactionIconWrapper, { [s.outlineIcon]: !isSavedPost })}
+          onClick={handleSavePost}
+          title={isSavedPost ? 'Remove' : 'Save'}
+          variant={'transparent'}
+        >
+          {isSavedPost ? (
             <Bookmark className={s.interactionIcon} />
-          </Button>
-        ) : (
-          <Button
-            className={clsx(s.interactionIconWrapper, s.outlineIcon)}
-            onClick={handleSavePost}
-            title={'Save'}
-            variant={'transparent'}
-          >
+          ) : (
             <BookmarkOutline className={s.interactionIcon} />
-          </Button>
-        )}
+          )}
+        </Button>
       </div>
     </div>
   )

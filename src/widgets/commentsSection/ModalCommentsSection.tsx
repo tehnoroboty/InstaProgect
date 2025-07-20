@@ -8,7 +8,7 @@ import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { Avatar, Comment } from '@/src/shared/model/api/types'
+import { Comment } from '@/src/shared/model/api/types'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -25,7 +25,6 @@ import { useParams, useRouter } from 'next/navigation'
 import s from './modalCommentsSection.module.scss'
 
 export type ModalCommentsSectionProps = {
-  avatars?: Avatar[]
   commentsData?: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
@@ -33,13 +32,11 @@ export type ModalCommentsSectionProps = {
 }
 
 export const ModalCommentsSection = ({
-  avatars,
   isAuth = false,
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-
   const { data: commentsResponse } = useGetCommentsQuery(postId)
   const comments = commentsResponse?.items ?? []
 
@@ -61,19 +58,6 @@ export const ModalCommentsSection = ({
       [commentId]: isLiked ? likeCount - 1 : likeCount + 1,
     }))
   }
-
-  const avatarsData =
-    avatars ??
-    comments.map(
-      item =>
-        item.from.avatars?.[0] || {
-          createdAt: '2025-02-19T11:58:19.531Z',
-          fileSize: 300,
-          height: 300,
-          url: 'https://example.com/image1.jpg',
-          width: 300,
-        }
-    )
 
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -232,13 +216,8 @@ export const ModalCommentsSection = ({
           .reverse()}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        <PostLikesBox
-          avatars={avatarsData}
-          className={s.postLikesBox}
-          isAuth={isAuth}
-          likesCount={post.likesCount}
-        />
+        <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>

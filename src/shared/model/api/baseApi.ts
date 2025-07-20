@@ -131,5 +131,6 @@ export const baseApi = createApi({
     'PAYMENTS',
     'NOTIFICATIONS',
     'FEED',
+    'POST_LIKES',
   ],
 })

@@ -1,5 +1,6 @@
 import type { Post } from '@/src/entities/post/types'
 
+import { Avatar } from '@/src/entities/user/types'
 import { FormType } from '@/src/widgets/generationInformation/validators'
 
 export type PasswordRecoveryType = {
@@ -149,7 +150,7 @@ export type RequestPostsType = {
 
 export type ResponsePostsType = {
   avatarOwner: string
-  avatarWhoLikes: string[]
+  avatarWhoLikes: boolean
   createdAt: string
   description: string
   id: number
@@ -165,31 +166,9 @@ export type ResponsePostsType = {
 export type GetPublicUserProfileArgs = {
   profileId: number
 }
-export type GetPublicUserProfileResponse = {
-  aboutMe: string
-  avatars: Avatar[]
-  hasPaymentSubscription: boolean
-  id: number
-  userMetadata: UserMetadata
-  userName: string
-}
 
 export type UpdatePostModel = {
   description: string
-}
-
-export type Avatar = {
-  createdAt: string
-  fileSize: number
-  height: number
-  url: string
-  width: number
-}
-
-export type UserMetadata = {
-  followers: number
-  following: number
-  publications: number
 }
 
 export type GetPublicUserPostsResponse = {
@@ -301,4 +280,35 @@ export type GetFolloweePostsResponse = {
   pagesCount: number
   prevCursor: number
   totalCount: number
+}
+
+export type LikeStatus = 'DISLIKE' | 'LIKE' | 'NONE'
+
+export type UpdateLikeStatusModel = {
+  likeStatus: LikeStatus
+}
+
+export type Likes = {
+  avatars: Avatar[]
+  createdAt: string
+  id: number
+  isFollowedBy: boolean
+  isFollowing: boolean
+  userId: number
+  userName: string
+}
+
+export type GetPostLikesResponse = {
+  items: Likes[]
+  notReadCount: number
+  pageSize: number
+  totalCount: number
+}
+
+export type GetLikesArgs = {
+  cursor?: number
+  pageNumber?: number
+  pageSize?: number
+  postId: number
+  search?: string
 }
