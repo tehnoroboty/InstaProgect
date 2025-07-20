@@ -8,6 +8,7 @@ const meta = {
   },
   args: {
     hasCommentIcon: true,
+    postId: 2084,
   },
   component: InteractionBar,
   tags: ['autodocs'],

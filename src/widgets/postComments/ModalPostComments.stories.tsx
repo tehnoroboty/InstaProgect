@@ -9,43 +9,6 @@ import Image from 'next/image'
 const meta = {
   argTypes: {},
   args: {
-    avatars: [
-      {
-        createdAt: '2025-02-19T11:58:19.531Z',
-        fileSize: 300,
-        height: 300,
-        url: 'https://example.com/image1.jpg',
-        width: 300,
-      },
-      {
-        createdAt: '2025-02-19T11:58:19.531Z',
-        fileSize: 300,
-        height: 300,
-        url: 'https://example.com/image2.jpg',
-        width: 300,
-      },
-      {
-        createdAt: '2025-02-19T11:58:19.531Z',
-        fileSize: 300,
-        height: 300,
-        url: 'https://example.com/image3.jpg',
-        width: 300,
-      },
-      {
-        createdAt: '2025-02-19T11:58:19.531Z',
-        fileSize: 300,
-        height: 300,
-        url: 'https://example.com/image4.jpg',
-        width: 300,
-      },
-      {
-        createdAt: '2025-02-19T11:58:19.531Z',
-        fileSize: 300,
-        height: 300,
-        url: 'https://example.com/image5.jpg',
-        width: 300,
-      },
-    ],
     commentsData: [
       {
         answerCount: 12,
