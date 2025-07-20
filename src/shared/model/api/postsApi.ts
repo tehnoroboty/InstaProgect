@@ -1,22 +1,26 @@
-import { Post } from '@/src/entities/post/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
-import {
+import type {
   AnswersComment,
   GetCommentsResponse,
   GetFolloweePostsArgs,
   GetFolloweePostsResponse,
+  GetLikesArgs,
+  GetPostLikesResponse,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
   RequestPostsType,
   ResponsePostsType,
+  UpdateLikeStatusModel,
   UpdatePostModel,
 } from '@/src/shared/model/api/types'
+
+import { Post } from '@/src/entities/post/types'
+import { baseApi } from '@/src/shared/model/api/baseApi'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    addCommentAnswer: builder.mutation<
+    addAnswer: builder.mutation<
       AnswersComment,
       { commentId: number; content: string; postId: number }
     >({
@@ -80,7 +84,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getComments: builder.query<GetCommentsResponse, number>({
-      providesTags: (result, error, postId) => [{ id: postId, type: 'COMMENTS' }],
+      providesTags: (_result, _error, postId) => [{ id: postId, type: 'COMMENTS' }],
       query: postId => ({
         method: 'GET',
         url: `/posts/${postId}/comments`,
@@ -119,6 +123,19 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/id/${postId}`,
       }),
     }),
+    getPostLikes: builder.query<GetPostLikesResponse, GetLikesArgs>({
+      providesTags: (_result, _error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
+      query: ({ cursor, pageNumber, pageSize, postId, search }) => ({
+        method: 'GET',
+        params: {
+          cursor,
+          pageNumber,
+          pageSize,
+          search,
+        },
+        url: `/posts/${postId}/likes`,
+      }),
+    }),
     getPosts: builder.query<GetPostsResponse, GetPostsArgs>({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
@@ -134,7 +151,7 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      providesTags: (result, error, arg) => [{ type: 'POSTS', userId: arg.userId }],
+      providesTags: (_result, _error, arg) => [{ type: 'POSTS', userId: arg.userId }],
       query: ({ endCursorPostId, pageSize, sortBy, sortDirection, userId }) => ({
         method: 'GET',
         params: {
@@ -151,6 +168,20 @@ export const postsApi = baseApi.injectEndpoints({
         return response
       },
     }),
+    updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
+      invalidatesTags: (_result, _err, { postId }) => [
+        { id: postId, type: 'POST' },
+        {
+          id: postId,
+          type: 'POST_LIKES',
+        },
+      ],
+      query: ({ model, postId }) => ({
+        body: model,
+        method: 'PUT',
+        url: `/posts/${postId}/like-status`,
+      }),
+    }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
       invalidatesTags: (_result, _err, { postId }) => [{ id: postId, type: 'POST' }],
       query: ({ model, postId }) => ({
@@ -163,13 +194,15 @@ export const postsApi = baseApi.injectEndpoints({
 })
 
 export const {
-  useAddCommentAnswerMutation: useAddAnswerMutation,
+  useAddAnswerMutation,
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetCommentsQuery,
   useGetFolloweePostsQuery,
+  useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
+  useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi

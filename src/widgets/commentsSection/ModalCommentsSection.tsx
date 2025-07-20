@@ -1,10 +1,15 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
+
 import { Post } from '@/src/entities/post/types'
+import { CommentItem } from '@/src/features/commentItem/CommentItem'
+import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { AnswersComment, Avatar, Comment } from '@/src/shared/model/api/types'
+import { AnswersComment, Comment } from '@/src/shared/model/api/types'
+import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -19,13 +24,8 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
-import { useSelector } from 'react-redux'
-import { selectUserId } from '@/src/shared/model/slices/appSlice'
-import { sortComments } from '@/src/shared/lib/sortComments'
-import { CommentItem } from '@/src/features/commentItem/CommentItem'
 
 export type ModalCommentsSectionProps = {
-  avatars?: Avatar[]
   commentsData?: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
@@ -33,14 +33,13 @@ export type ModalCommentsSectionProps = {
 }
 
 export const ModalCommentsSection = ({
-  avatars,
   isAuth = false,
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
 
-  const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null)
+  const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
   const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
   const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
 
@@ -50,7 +49,10 @@ export const ModalCommentsSection = ({
   const currentUserId = useSelector(selectUserId)
 
   const comments = useMemo(() => {
-    if (!currentUserId) return commentsRaw
+    if (!currentUserId) {
+      return commentsRaw
+    }
+
     return sortComments(commentsRaw, currentUserId)
   }, [commentsRaw, currentUserId])
 
@@ -68,7 +70,9 @@ export const ModalCommentsSection = ({
     const isLiked = likedCommentsMap[commentId] ?? comment?.isLiked
     const likeCount = likeCommentsCounts[commentId] ?? comment?.likeCount ?? 0
 
-    if (!comment) return
+    if (!comment) {
+      return
+    }
 
     setLikedCommentsMap(prev => ({ ...prev, [commentId]: !isLiked }))
     setLikeCommentsCounts(prev => ({
@@ -91,19 +95,6 @@ export const ModalCommentsSection = ({
       [answerId]: isLiked ? likeCount - 1 : likeCount + 1,
     }))
   }
-
-  const avatarsData =
-    avatars ??
-    comments.map(
-      item =>
-        item.from.avatars?.[0] || {
-          createdAt: '2025-02-19T11:58:19.531Z',
-          fileSize: 300,
-          height: 300,
-          url: 'https://example.com/image1.jpg',
-          width: 300,
-        }
-    )
 
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -207,16 +198,15 @@ export const ModalCommentsSection = ({
         </div>
         {comments.map(comment => (
           <CommentItem
-            key={comment.id}
+            answers={answersMap[comment.id] ?? []}
             comment={comment}
+            expanded={expandedAnswersMap[comment.id]}
             isAuth={isAuth}
             isLiked={likedCommentsMap[comment.id] ?? comment.isLiked}
+            key={comment.id}
+            likeAnswersCounts={likeAnswersCounts}
             likeCount={likeCommentsCounts[comment.id] ?? comment.likeCount}
-            onLike={() => handleLikeComment(comment.id)}
-            onReplyClick={() =>
-              setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
-            }
-            replying={replyingToCommentId === comment.id}
+            likedAnswersMap={likedAnswersMap}
             onAnswerAdded={newAnswer => {
               setAnswersMap(prev => ({
                 ...prev,
@@ -228,23 +218,19 @@ export const ModalCommentsSection = ({
               }))
               setReplyingToCommentId(null)
             }}
-            answers={answersMap[comment.id] ?? []}
-            expanded={expandedAnswersMap[comment.id]}
-            toggleExpanded={() => toggleAnswersVisibility(comment.id)}
-            likedAnswersMap={likedAnswersMap}
-            likeAnswersCounts={likeAnswersCounts}
+            onLike={() => handleLikeComment(comment.id)}
             onLikeAnswer={handleLikeAnswer}
+            onReplyClick={() =>
+              setReplyingToCommentId(prev => (prev === comment.id ? null : comment.id))
+            }
+            replying={replyingToCommentId === comment.id}
+            toggleExpanded={() => toggleAnswersVisibility(comment.id)}
           />
         ))}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} />
-        <PostLikesBox
-          avatars={avatarsData}
-          className={s.postLikesBox}
-          isAuth={isAuth}
-          likesCount={post.likesCount}
-        />
+        <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>

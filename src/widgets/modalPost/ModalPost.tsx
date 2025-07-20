@@ -73,6 +73,7 @@ export default function ModalPost({
   const { data: post } = useGetPostQuery(Number(postId), {
     skip: !needInitPostInStore && !Number(postId),
   })
+
   const { data: comments } = useGetCommentsQuery(Number(postId), {
     skip: !needInitCommentsInStore,
   })
