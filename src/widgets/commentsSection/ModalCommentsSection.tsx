@@ -1,19 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Button } from '../../shared/ui/button/Button'
+import { AnswersComment, Comment } from '@/src/entities/comments/types'
+import { CustomerError } from '@/src/entities/errors/types'
+import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
-import Heart from '@/src/shared/assets/componentsIcons/Heart'
-import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
+import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { useDeletePostMutation, useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
-import { Comment } from '@/src/shared/model/api/types'
+import {
+  postsApi,
+  useDeletePostMutation,
+  useGetCommentsQuery,
+  useUpdateAnswerLikeStatusMutation,
+  useUpdateCommentLikeStatusMutation,
+} from '@/src/shared/model/api/postsApi'
+import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
+import { CommentItemContainer } from '@/src/widgets/commentItemContainer/CommentItemContainer'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
@@ -36,31 +46,110 @@ export const ModalCommentsSection = ({
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
-  const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-  const { data: commentsResponse } = useGetCommentsQuery(postId)
-  const comments = commentsResponse?.items ?? []
+  const dispatch = useAppDispatch()
 
-  const [likedCommentsMap, setLikedCommentsMap] = useState<Record<number, boolean>>({})
-  const [likeCounts, setLikeCounts] = useState<Record<number, number>>({})
+  const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
+
+  const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
+  const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
+  const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
+
+  const { data: commentsResponse } = useGetCommentsQuery(postId)
+  const commentsRaw = commentsResponse?.items ?? []
+
+  const currentUserId = useSelector(selectUserId)
+
+  useEffect(() => {
+    const fetchAnswers = async () => {
+      const promises = commentsRaw.map(comment =>
+        dispatch(
+          postsApi.endpoints.getCommentAnswers.initiate({
+            commentId: comment.id,
+            postId,
+          })
+        ).unwrap()
+      )
+
+      try {
+        const responses = await Promise.all(promises)
+        const answersObj: Record<number, AnswersComment[]> = {}
+
+        responses.forEach((res, index) => {
+          answersObj[commentsRaw[index].id] = res.items
+        })
+
+        setAnswersMap(answersObj)
+      } catch (err) {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages[0].message || error.data?.error || 'Error loading answers'
+
+        dispatch(setAppError({ error: errorMessage }))
+      }
+    }
+
+    if (commentsRaw.length) {
+      fetchAnswers()
+    }
+  }, [commentsRaw, dispatch, postId])
+
+  const comments = useMemo(() => {
+    if (!currentUserId) {
+      return commentsRaw
+    }
+
+    return sortComments(commentsRaw, currentUserId)
+  }, [commentsRaw, currentUserId])
 
   const [deletePost] = useDeletePostMutation()
   const router = useRouter()
   const params = useParams<{ userId: string }>()
 
-  const handleLikeComment = (commentId: number) => {
-    const comment = comments.find(c => c.id === commentId)
-    const isLiked = likedCommentsMap[commentId] ?? comment?.isLiked
-    const likeCount = likeCounts[commentId] ?? comment?.likeCount ?? 0
+  const [updateCommentLikeStatus] = useUpdateCommentLikeStatusMutation()
 
-    setLikedCommentsMap(prev => ({ ...prev, [commentId]: !isLiked }))
-    setLikeCounts(prev => ({
-      ...prev,
-      [commentId]: isLiked ? likeCount - 1 : likeCount + 1,
-    }))
+  const handleLikeComment = async (commentId: number, currentStatus: LikeStatus) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
+
+    try {
+      await updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The comments has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
+  }
+
+  const [updateAnswerLikeStatus] = useUpdateAnswerLikeStatusMutation()
+
+  const handleLikeAnswer = async (
+    commentId: number,
+    answerId: number,
+    currentStatus: LikeStatus
+  ) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
+
+    try {
+      await updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The answer has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
   }
 
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleAnswerAdded = (commentId: number, answer: AnswersComment) => {
+    setAnswersMap(prev => ({
+      ...prev,
+      [commentId]: [...(prev[commentId] || []), answer],
+    }))
+  }
 
   const handleEditPost = () => {
     setIsEditing(true)
@@ -77,6 +166,13 @@ export const ModalCommentsSection = ({
     await deletePost({ postId, userId: Number(params.userId) }).unwrap()
     setIsDeleting(false)
     router.push(`/profile/${params.userId}`, { scroll: false })
+  }
+
+  const toggleAnswersVisibility = (commentId: number) => {
+    setExpandedAnswersMap(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }))
   }
 
   if (isEditing) {
@@ -152,71 +248,28 @@ export const ModalCommentsSection = ({
             </Typography>
           </div>
         </div>
-        {comments
-          .map(comment => {
-            const isLiked = likedCommentsMap[comment.id] ?? comment.isLiked
-            const likeCount = likeCounts[comment.id] ?? comment.likeCount
-
-            return (
-              <div className={s.usersCommentBody} key={comment.id}>
-                <div className={s.usersCommentBodyBox}>
-                  <div className={s.userAva}>
-                    <AvatarBox
-                      className={s.smallAva}
-                      size={'xs'}
-                      src={comment.from.avatars?.[0]?.url || ''}
-                    />
-                  </div>
-                  <div className={s.userComment}>
-                    <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-                      {comment.from.username}
-                    </Typography>
-                    <Typography
-                      as={'div'}
-                      className={s.userCommentTypography}
-                      size={'s'}
-                      weight={'regular'}
-                    >
-                      {comment.content}
-                    </Typography>
-                    <div className={s.userCommentBottom}>
-                      <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                        {timeSince(comment.createdAt)}
-                      </Typography>
-                      <Typography
-                        lineHeights={'s'}
-                        size={'xs'}
-                        weight={'semi-bold'}
-                      >{`Like: ${likeCount}`}</Typography>
-                      <Button className={s.answerButton} variant={'transparent'}>
-                        {'Answer'}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                {isAuth && (
-                  <div className={s.heartIconWrapper}>
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(comment.id)}
-                      title={isLiked ? 'Unlike' : 'Like'}
-                      variant={'transparent'}
-                    >
-                      {isLiked ? (
-                        <Heart className={clsx(s.heartIcon, s.red)} />
-                      ) : (
-                        <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                      )}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )
-          })
-          .reverse()}
+        {comments.map(comment => (
+          <CommentItemContainer
+            answersMap={answersMap}
+            comment={comment}
+            currentUserId={currentUserId}
+            expandedAnswersMap={expandedAnswersMap}
+            handleLikeAnswer={handleLikeAnswer}
+            handleLikeComment={handleLikeComment}
+            isAuth={isAuth}
+            key={comment.id}
+            onAnswerAdded={handleAnswerAdded}
+            postId={postId}
+            replyingToCommentId={replyingToCommentId}
+            setReplyingToCommentId={setReplyingToCommentId}
+            toggleAnswersVisibility={toggleAnswersVisibility}
+          />
+        ))}
       </div>
       <div className={s.postActions}>
-        <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        {isAuth && (
+          <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        )}
         <PostLikesBox className={s.postLikesBox} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>

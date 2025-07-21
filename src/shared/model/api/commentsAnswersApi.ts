@@ -1,5 +1,5 @@
+import { Comment } from '@/src/entities/comments/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { Comment } from '@/src/shared/model/api/types'
 
 export const commentsAnswersApi = baseApi.injectEndpoints({
   endpoints: builder => ({

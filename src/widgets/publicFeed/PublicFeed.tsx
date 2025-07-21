@@ -1,14 +1,11 @@
 'use client'
 
-import type { Post } from '@/src/entities/post/types'
-import type {
-  GetCommentsResponse,
-  PublicPostsResponse,
-  UsersCountResponse,
-} from '@/src/shared/model/api/types'
+import type { Post, PublicPostsResponse } from '@/src/entities/post/types'
 
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { UsersCountResponse } from '@/src/entities/users/types'
 import { Card } from '@/src/shared/ui/card/Card'
 import { RegisteredUsersCounter } from '@/src/shared/ui/registeredUsersCounter/RegisteredUsersCounter'
 import { Typography } from '@/src/shared/ui/typography/Typography'

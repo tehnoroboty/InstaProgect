@@ -226,7 +226,7 @@ export const LikedComments: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstration of the Interaction Bar component with a comment icon.',
+        story: 'Demonstration of the Interaction Bar component with a comments icon.',
       },
     },
   },

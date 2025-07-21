@@ -2,6 +2,8 @@
 
 import { useRef, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
+import { RequestPostsType } from '@/src/entities/post/types'
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
@@ -13,7 +15,6 @@ import {
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
-import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'

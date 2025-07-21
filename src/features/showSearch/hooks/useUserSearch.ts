@@ -1,8 +1,9 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { CustomerError } from '@/src/entities/errors/types'
+import { ItemSearch } from '@/src/entities/search/types'
 import { useGetSearchUserQuery } from '@/src/shared/model/api/searchApi'
-import { CustomerError, ItemSearch } from '@/src/shared/model/api/types'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import debounce from 'lodash/debounce'

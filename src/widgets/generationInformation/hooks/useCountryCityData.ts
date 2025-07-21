@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { ResponseTypeCountys } from '@/src/entities/user/types'
+import { ResponseTypeCounties } from '@/src/entities/users/types'
 import { Options } from '@/src/shared/ui/select/SelectBox'
 import {
   fetchCitiesForCountry,
@@ -8,7 +8,7 @@ import {
 } from '@/src/widgets/generationInformation/hooks/fetchCountriesAndCities'
 
 export const useCountryCityData = (selectedCountry: string) => {
-  const [countriesWithCity, setCountriesWithCity] = useState<ResponseTypeCountys>()
+  const [countriesWithCity, setCountriesWithCity] = useState<ResponseTypeCounties>()
   const [countries, setCountries] = useState<Options[]>([])
   const [cites, setCites] = useState<Options[]>([])
 

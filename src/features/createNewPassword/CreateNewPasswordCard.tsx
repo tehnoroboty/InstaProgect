@@ -3,13 +3,13 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/createNewPassword/validators'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import {
   useCreateNewPasswordMutation,
   useRecoveryCodeMutation,
 } from '@/src/shared/model/api/authApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Card } from '@/src/shared/ui/card/Card'

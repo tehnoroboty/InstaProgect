@@ -52,25 +52,16 @@ export type ProfileByUserName = {
   userName: string
 }
 
-export type ResponseTypeCountys = {
-  data: CountrysType[]
+export type ResponseTypeCounties = {
+  data: CountriesType[]
   error: boolean
   msg: string
 }
-export type CountrysType = {
+export type CountriesType = {
   cities: Array<string>
   country: string
   iso2: string
   iso3: string
 }
 
-export type UpdateProfileArg = {
-  aboutMe: null | string
-  city: null | string
-  country: null | string
-  dateOfBirth: string
-  firstName: string
-  lastName: string
-  region: null | string
-  userName: string
-}
+export type UsersCountResponse = { totalCount: number }

@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useMemo } from 'react'
 
-import { PublicProfileTypes } from '@/src/entities/user/types'
+import { PublicProfileTypes } from '@/src/entities/users/types'
 import { useGetUserProfileQuery, usersApi } from '@/src/shared/model/api/usersApi'
 import { useAppSelector } from '@/src/shared/model/store/store'
 

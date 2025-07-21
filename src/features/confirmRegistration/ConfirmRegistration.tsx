@@ -1,9 +1,9 @@
 'use client'
 import { useEffect } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useRegistrationConfirmationMutation } from '@/src/shared/model/api/authApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import Image from 'next/image'

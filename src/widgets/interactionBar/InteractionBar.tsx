@@ -2,6 +2,8 @@
 
 import { ComponentPropsWithoutRef, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
+import { LikeStatus } from '@/src/entities/likes/types'
 import {
   Bookmark,
   BookmarkOutline,
@@ -12,7 +14,6 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
 import { useUpdateLikeStatusPostMutation } from '@/src/shared/model/api/postsApi'
-import { CustomerError, LikeStatus } from '@/src/shared/model/api/types'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Button } from '@/src/shared/ui/button/Button'
