@@ -1,8 +1,8 @@
 'use client'
 import React, { memo } from 'react'
 
+import { Item } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
-import { Item } from '@/src/shared/model/api/types'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'

@@ -1,33 +1,33 @@
 import { KeyboardEvent, useState } from 'react'
 
+import { AnswersComment } from '@/src/entities/comments/types'
 import { useAddAnswer } from '@/src/shared/hooks/useAddAnswer'
 import { Button } from '@/src/shared/ui/button/Button'
 import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import clsx from 'clsx'
 
 import s from './addAnswerForm.module.scss'
-import { AnswersComment } from '@/src/shared/model/api/types'
 
 type Props = {
   buttonText?: string
   className?: string
+  commentId: number
   disabled?: boolean
   maxLength?: number
-  onAnswerAdded?: (result: AnswersComment) => void // Колбэк после успешного добавления
+  onAnswerAdded?: (result: AnswersComment) => void
   placeholder?: string
   postId: number
-  commentId: number
 }
 
 export const AddAnswerForm = ({
   buttonText = 'Publish',
   className,
+  commentId,
   disabled = false,
   maxLength = 300,
   onAnswerAdded,
   placeholder = 'Add an Answer...',
   postId,
-  commentId,
 }: Props) => {
   const { commentText, handleChange, handleSubmit, isLoading } = useAddAnswer(postId, commentId)
 
@@ -38,6 +38,7 @@ export const AddAnswerForm = ({
       e.preventDefault()
 
       const result = await handleSubmit()
+
       if (result) {
         onAnswerAdded?.(result)
       }
@@ -67,6 +68,7 @@ export const AddAnswerForm = ({
         disabled={isSubmitDisabled}
         onClick={async () => {
           const result = await handleSubmit()
+
           if (result) {
             onAnswerAdded?.(result)
           }

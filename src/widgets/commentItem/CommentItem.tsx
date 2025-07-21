@@ -1,7 +1,7 @@
+import { AnswersComment, Comment } from '@/src/entities/comments/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { AnswersComment, Comment } from '@/src/shared/model/api/types'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'

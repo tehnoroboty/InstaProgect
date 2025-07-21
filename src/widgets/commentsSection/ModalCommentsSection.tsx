@@ -1,18 +1,21 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+import { AnswersComment, Comment } from '@/src/entities/comments/types'
+import { CustomerError } from '@/src/entities/errors/types'
+import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
 import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import {
+  postsApi,
   useDeletePostMutation,
   useGetCommentsQuery,
   useUpdateAnswerLikeStatusMutation,
   useUpdateCommentLikeStatusMutation,
 } from '@/src/shared/model/api/postsApi'
-import { AnswersComment, Comment, CustomerError, LikeStatus } from '@/src/shared/model/api/types'
 import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
@@ -56,6 +59,40 @@ export const ModalCommentsSection = ({
 
   const currentUserId = useSelector(selectUserId)
 
+  useEffect(() => {
+    const fetchAnswers = async () => {
+      const promises = commentsRaw.map(comment =>
+        dispatch(
+          postsApi.endpoints.getCommentAnswers.initiate({
+            commentId: comment.id,
+            postId,
+          })
+        ).unwrap()
+      )
+
+      try {
+        const responses = await Promise.all(promises)
+        const answersObj: Record<number, AnswersComment[]> = {}
+
+        responses.forEach((res, index) => {
+          answersObj[commentsRaw[index].id] = res.items
+        })
+
+        setAnswersMap(answersObj)
+      } catch (err) {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages[0].message || error.data?.error || 'Error loading answers'
+
+        dispatch(setAppError({ error: errorMessage }))
+      }
+    }
+
+    if (commentsRaw.length) {
+      fetchAnswers()
+    }
+  }, [commentsRaw, dispatch, postId])
+
   const comments = useMemo(() => {
     if (!currentUserId) {
       return commentsRaw
@@ -78,7 +115,7 @@ export const ModalCommentsSection = ({
     } catch (err) {
       const error = err as CustomerError
       const errorMessage =
-        error.data?.messages[0].message || error.data?.error || 'The comment has not been found'
+        error.data?.messages[0].message || error.data?.error || 'The comments has not been found'
 
       dispatch(setAppError({ error: errorMessage }))
     }

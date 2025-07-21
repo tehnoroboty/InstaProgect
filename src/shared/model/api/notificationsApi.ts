@@ -1,5 +1,5 @@
+import { GetNotificationsArgs, GetNotificationsResponse } from '@/src/entities/notifications/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { GetNotificationsArgs, GetNotificationsResponse } from '@/src/shared/model/api/types'
 
 export const notificationsApi = baseApi.injectEndpoints({
   endpoints: builder => ({

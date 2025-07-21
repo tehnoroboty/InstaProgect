@@ -1,8 +1,8 @@
 import { Dispatch, useEffect, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { GetPostsResponse, SortDirection } from '@/src/entities/post/types'
 import { postsApi, useGetPostsQuery } from '@/src/shared/model/api/postsApi'
-import { GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
 import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 

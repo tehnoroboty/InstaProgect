@@ -1,10 +1,10 @@
 'use client'
 import React, { useCallback } from 'react'
 
-import { Post } from '@/src/entities/post/types'
-import { PublicProfileTypes } from '@/src/entities/user/types'
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { GetPostsResponse, Post } from '@/src/entities/post/types'
+import { PublicProfileTypes } from '@/src/entities/users/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import { Typography } from '@/src/shared/ui/typography/Typography'

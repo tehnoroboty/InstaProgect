@@ -1,8 +1,8 @@
-import { CountrysType, ResponseTypeCountys } from '@/src/entities/user/types'
+import { CountriesType, ResponseTypeCounties } from '@/src/entities/users/types'
 import { Options } from '@/src/shared/ui/select/SelectBox'
 
 export const fetchCountriesAndCities = async (
-  setCountriesWithCity: (data: ResponseTypeCountys) => void,
+  setCountriesWithCity: (data: ResponseTypeCounties) => void,
   setCountries: (items: Options[]) => void
 ): Promise<void> => {
   try {
@@ -12,8 +12,8 @@ export const fetchCountriesAndCities = async (
       console.error(`HTTP error! status: ${res.status}`)
     }
 
-    const data: ResponseTypeCountys = await res.json()
-    const items: Options[] = data.data.map((item: CountrysType) => ({
+    const data: ResponseTypeCounties = await res.json()
+    const items: Options[] = data.data.map((item: CountriesType) => ({
       value: item.country,
       valueTitle: item.country,
     }))
@@ -26,7 +26,7 @@ export const fetchCountriesAndCities = async (
 }
 
 export const fetchCitiesForCountry = async (
-  countriesWithCity: ResponseTypeCountys,
+  countriesWithCity: ResponseTypeCounties,
   selectedCountry: string,
   setCites: (cities: Options[]) => void
 ): Promise<void> => {

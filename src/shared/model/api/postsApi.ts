@@ -1,23 +1,29 @@
 import type {
   AnswersComment,
+  GetAnswersArg,
+  GetAnswersResponse,
+  GetCommentsResponse,
+} from '@/src/entities/comments/types'
+
+import {
   GetAnswerLikesArgs,
   GetCommentLikesArgs,
-  GetCommentsResponse,
+  GetLikesArgs,
+  LikeStatus,
+  PaginatedLikesResponse,
+  UpdateLikeStatusModel,
+} from '@/src/entities/likes/types'
+import {
   GetFolloweePostsArgs,
   GetFolloweePostsResponse,
-  GetLikesArgs,
   GetPostsArgs,
   GetPostsResponse,
   ImageType,
-  LikeStatus,
-  PaginatedLikesResponse,
+  Post,
   RequestPostsType,
   ResponsePostsType,
-  UpdateLikeStatusModel,
   UpdatePostModel,
-} from '@/src/shared/model/api/types'
-
-import { Post } from '@/src/entities/post/types'
+} from '@/src/entities/post/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
@@ -92,6 +98,17 @@ export const postsApi = baseApi.injectEndpoints({
         method: 'GET',
         url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
       }),
+    }),
+    getCommentAnswers: builder.query<GetAnswersResponse, GetAnswersArg>({
+      query: ({
+        commentId,
+        pageNumber = 1,
+        pageSize = 100,
+        postId,
+        sortBy = 'createdAt',
+        sortDirection = 'asc',
+      }) =>
+        `/posts/${postId}/comments/${commentId}/answers?pageSize=${pageSize}&pageNumber=${pageNumber}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
     }),
     getCommentLikes: builder.query<PaginatedLikesResponse, GetCommentLikesArgs>({
       providesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],

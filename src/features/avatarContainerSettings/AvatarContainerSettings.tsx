@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Avatar } from '@/src/entities/user/types'
+import { Avatar } from '@/src/entities/users/types'
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhotoProfile } from '@/src/features/croppingPhoto/CroppingPhotoProfile/CroppingPhotoProfile'
 import { useDeleteProfileAvatarMutation } from '@/src/shared/model/api/usersApi'
