@@ -255,6 +255,7 @@ export const {
   useCreateNewPostMutation,
   useDeletePostMutation,
   useGetAnswerLikesQuery,
+  useGetCommentAnswersQuery,
   useGetCommentLikesQuery,
   useGetCommentsQuery,
   useGetFolloweePostsQuery,
