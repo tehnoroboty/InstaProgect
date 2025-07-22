@@ -25,7 +25,7 @@ export const WithCommentIcon: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstration of the Interaction Bar component with a comment icon.',
+        story: 'Demonstration of the Interaction Bar component with a comments icon.',
       },
     },
   },
@@ -38,7 +38,7 @@ export const WithoutCommentIcon: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstration of the Interaction Bar component without the comment icon.',
+        story: 'Demonstration of the Interaction Bar component without the comments icon.',
       },
     },
   },

@@ -9,7 +9,7 @@ import {
   RecoveryCodeType,
   RegistrationEmailResending,
   RegistrationType,
-} from './types'
+} from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 

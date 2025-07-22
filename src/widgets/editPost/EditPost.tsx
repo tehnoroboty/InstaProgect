@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { useUpdatePostMutation } from '@/src/shared/model/api/postsApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'

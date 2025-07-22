@@ -1,3 +1,5 @@
+import { FormType } from '@/src/widgets/generationInformation/validators'
+
 export type ResponseDevicesType = {
   current: DeviceType
   others: DeviceType[]
@@ -13,4 +15,11 @@ export type DeviceType = {
   lastActive: string
   osName: string
   osVersion: string
+}
+
+export type InputChangeEvent = {
+  target: {
+    name: keyof FormType
+    value: string
+  }
 }

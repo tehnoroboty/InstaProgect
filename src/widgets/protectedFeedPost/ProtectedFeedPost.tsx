@@ -6,8 +6,8 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { CreationTime } from '@/src/shared/ui/creationTime/CreationTime'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import Image from 'next/image'
@@ -50,12 +50,21 @@ export const ProtectedFeedPost = (props: Post) => {
         <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
           {`View All Comments (${data?.items.length})`}
         </Button>
-        <div className={s.addCommentContainer}>
+        {/*<div className={s.addCommentContainer}>
           <div className={s.textareaContainer}>
             <TextArea className={s.textArea} label={''} placeholder={'Add a Comment...'} />
           </div>
           <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>
+        </div>*/}
+        <AddCommentForm
+          className={s.addCommentContainer}
+          onCommentAdded={() => {
+            // например, refetch() или invalidateTags
+          }}
+          postId={id}
+          textAreaClassName={s.textArea}
+          textAreaWrapperClassName={s.textareaContainer}
+        />
       </div>
     </div>
   )

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Post } from '@/src/entities/post/types'
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { ImageType, Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'

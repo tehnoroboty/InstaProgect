@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { InputChangeEvent } from '@/src/entities/devices/types'
+import { CustomerError } from '@/src/entities/errors/types'
 import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
-import { CustomerError, InputChangeEvent } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
@@ -212,7 +213,7 @@ export const GenerationInformation = () => {
               />
               {errorAge && (
                 <Typography as={'span'} className={s.error}>
-                  {'A user under 13 cannot create a profile'}
+                  {'A users under 13 cannot create a profile'}
                   <Link className={s.link} href={'/privacy-policy'}>
                     {' Privacy Policy '}
                   </Link>

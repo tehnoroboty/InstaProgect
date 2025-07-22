@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { useCreateNewCommentMutation } from '@/src/shared/model/api/commentsAnswersApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 
@@ -29,7 +29,7 @@ export const useAddComment = (postId: number) => {
       } catch (err) {
         const error = err as CustomerError
         const errorMessage =
-          error.data?.messages[0].message || error.data?.error || 'Failed to add comment'
+          error.data?.messages[0].message || error.data?.error || 'Failed to add comments'
 
         dispatch(setAppError({ error: errorMessage }))
       }

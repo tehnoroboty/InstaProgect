@@ -1,3 +1,4 @@
+/*
 .commentsBox {
   display: flex;
   flex-direction: column;
@@ -91,10 +92,12 @@
 
 .usersCommentBodyBox {
   display: flex;
-  justify-content: space-between;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .userComment {
+  width: 100%;
   margin-right: auto;
   margin-left: 12px;
 }
@@ -122,6 +125,12 @@
   width: 16px;
   height: 16px;
   padding: 0;
+}
+
+.heartIconWrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
 }
 
 .heartIcon {
@@ -164,6 +173,44 @@
   background: none;
 }
 
+.answer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.viewAnswersButton {
+  cursor: pointer;
+
+  position: relative;
+
+  padding: 6px 0 6px 30px;
+
+  font-size: var(--font-size-xs);
+  color: var(--light-900);
+
+  &::before {
+    cursor: pointer;
+    content: '';
+
+    position: absolute;
+    top: 49%;
+    left: 0;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 1px;
+
+    background-color: var(--light-900);
+  }
+
+  &:hover {
+    &::before {
+      background-color: var(--primary-100); // линия тоже подсвечивается
+    }
+  }
+}
+
 .userName {
   display: inline-flex;
   margin-right: 5px;
@@ -181,4 +228,99 @@
   font-weight: 400;
   line-height: 16px;
   color: var(--light-900);
+}
+*/
+.commentsBox {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  padding: 11px 0;
+
+  background-color: var(--dark-300);
+}
+
+.commentsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 23px 11px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.userAvatarName {
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.commentsBody {
+  overflow-y: auto;
+  flex: 1 1 auto;
+
+  max-height: 50vh;
+  padding: 19px 23px 8px 24px;
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.descriptionBox {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.description {
+  overflow: hidden;
+
+  box-sizing: border-box;
+  width: 370px;
+  max-width: 100%;
+
+  word-wrap: break-word;
+}
+
+.userNameContent {
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+.timeAgo {
+  color: var(--light-900);
+}
+
+.postActions {
+  padding: 11px 23px 7px 24px;
+}
+
+.postActions:has(+ .withBorder) {
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.interactionBar {
+  margin-bottom: 19px;
+}
+
+.postLikesBox {
+  margin-bottom: 5px;
+}
+
+.postDate {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--light-900);
+}
+
+.withBorder {
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.smallAva {
+  flex-shrink: 0;
 }

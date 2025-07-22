@@ -15,6 +15,8 @@ type Props = {
   onCommentAdded?: () => void // Колбэк после успешного добавления
   placeholder?: string
   postId: number
+  textAreaClassName?: string
+  textAreaWrapperClassName?: string
 }
 
 export const AddCommentForm = ({
@@ -25,6 +27,8 @@ export const AddCommentForm = ({
   onCommentAdded,
   placeholder = 'Add a Comment...',
   postId,
+  textAreaClassName,
+  textAreaWrapperClassName,
 }: Props) => {
   const { commentText, handleChange, handleSubmit, isLoading } = useAddComment(postId)
 
@@ -44,9 +48,9 @@ export const AddCommentForm = ({
 
   return (
     <div className={clsx(s.addComment, className)}>
-      <div className={s.textareaWrapper}>
+      <div className={clsx(s.textareaWrapper, textAreaWrapperClassName)}>
         <TextAreaWithValidation
-          className={s.textarea}
+          className={clsx(s.textarea, textAreaClassName)}
           disabled={disabled || isLoading}
           label={''}
           maxLength={maxLength}
@@ -59,6 +63,7 @@ export const AddCommentForm = ({
         />
       </div>
       <Button
+        className={s.btn}
         disabled={isSubmitDisabled}
         onClick={() => handleSubmit(onCommentAdded)}
         variant={'transparent'}
