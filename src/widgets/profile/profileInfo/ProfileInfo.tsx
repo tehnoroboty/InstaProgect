@@ -4,6 +4,7 @@ import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/f
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import { StatisticsItem } from '@/src/widgets/profile/profileInfo/statisticsItem/StatisticsItem'
 import { useRouter } from 'next/navigation'
 
 import s from './profileInfo.module.scss'
@@ -60,30 +61,9 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
               </Typography>
             </div>
             <div className={s.followersStats}>
-              <div className={s.followersStatItem}>
-                <Typography as={'span'} option={'bold_text14'}>
-                  {followingCount}
-                </Typography>
-                <Typography as={'span'} option={'regular_text14'}>
-                  {'Following'}
-                </Typography>
-              </div>
-              <div className={s.followersStatItem}>
-                <Typography as={'span'} option={'bold_text14'}>
-                  {followersCount}
-                </Typography>
-                <Typography as={'span'} option={'regular_text14'}>
-                  {'Followers'}
-                </Typography>
-              </div>
-              <div className={s.followersStatItem}>
-                <Typography as={'span'} option={'bold_text14'}>
-                  {publicationsCount}
-                </Typography>
-                <Typography as={'span'} option={'regular_text14'}>
-                  {'Publications'}
-                </Typography>
-              </div>
+              <StatisticsItem count={followingCount} title={'Following'} />
+              <StatisticsItem count={followersCount} title={'Followers'} />
+              <StatisticsItem clickable={false} count={publicationsCount} title={'Publications'} />
             </div>
           </div>
           <div className={s.buttonsBlock}>
