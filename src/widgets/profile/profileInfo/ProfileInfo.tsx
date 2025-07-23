@@ -118,8 +118,16 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
           {aboutMe}
         </Typography>
       </div>
-      <FollowingModal onClose={onCloseFollowingModal} open={openFollowingModal} />
-      <FollowersModal onClose={onCloseFollowersModal} open={openFollowersModal} />
+      <FollowingModal
+        onClose={onCloseFollowingModal}
+        open={openFollowingModal}
+        userName={profile.userName}
+      />
+      <FollowersModal
+        onClose={onCloseFollowersModal}
+        open={openFollowersModal}
+        userName={profile.userName}
+      />
     </div>
   )
 })

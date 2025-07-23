@@ -1,14 +1,6 @@
 import { Avatar } from '@/src/entities/users/types'
 
-export type GetFollowersArgs = {
-  cursor?: number
-  pageNumber?: number
-  pageSize?: number
-  search?: string
-  userName: string
-}
-
-export type FollowerItem = {
+export type UserFollowItem = {
   avatars: Avatar[]
   createdAt: string
   id: number
@@ -18,8 +10,16 @@ export type FollowerItem = {
   userName: string
 }
 
+export type GetFollowersArgs = {
+  cursor?: number
+  pageNumber?: number
+  pageSize?: number
+  search?: string
+  userName: string
+}
+
 export type GetFollowersResponse = {
-  items: FollowerItem[]
+  items: UserFollowItem[]
   nextCursor: number
   page: number
   pageSize: number
@@ -36,18 +36,8 @@ export type GetFollowingArgs = {
   userName: string
 }
 
-export type FollowingItem = {
-  avatars: Avatar[]
-  createdAt: string
-  id: number
-  isFollowedBy: boolean
-  isFollowing: boolean
-  userId: number
-  userName: string
-}
-
 export type GetFollowingResponse = {
-  items: FollowingItem[]
+  items: UserFollowItem[]
   nextCursor: number
   page: number
   pageSize: number

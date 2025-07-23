@@ -1,16 +1,23 @@
+import { useGetFollowingQuery } from '@/src/shared/model/api/followingApi'
 import { Dialog } from '@/src/shared/ui/dialog'
+import { UserListItem } from '@/src/widgets/userListItem/UserListItem'
 
 type Props = {
   onClose: () => void
   open: boolean
+  userName: string
 }
 
-export const FollowingModal = ({ onClose, open }: Props) => {
+export const FollowingModal = ({ onClose, open, userName }: Props) => {
+  const { data: getFollowingData } = useGetFollowingQuery({ userName })
+
   return (
-    <Dialog modalTitle={'Following'} onClose={onClose} open={open}>
-      <div>1223</div>
-      <div>1223</div>
-      <div>1223</div>
+    <Dialog
+      modalTitle={`${getFollowingData?.items.length} Following`}
+      onClose={onClose}
+      open={open}
+    >
+      <UserListItem data={getFollowingData?.items} />
     </Dialog>
   )
 }
