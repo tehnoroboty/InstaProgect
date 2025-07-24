@@ -1,3 +1,10 @@
-.userAvatarName > p {
-  font-weight: var(--font-weight-regular);
+.userListItem {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.avaNameButtons {
+  display: flex;
+  justify-content: space-between;
 }

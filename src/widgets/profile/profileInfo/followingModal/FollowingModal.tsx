@@ -1,5 +1,7 @@
+import { useState } from 'react'
+
 import { useGetFollowingQuery } from '@/src/shared/model/api/followingApi'
-import { Dialog } from '@/src/shared/ui/dialog'
+import { SocialModal } from '@/src/widgets/socialModal/SocialModal'
 import { UserListItem } from '@/src/widgets/userListItem/UserListItem'
 
 type Props = {
@@ -9,15 +11,17 @@ type Props = {
 }
 
 export const FollowingModal = ({ onClose, open, userName }: Props) => {
-  const { data: getFollowingData } = useGetFollowingQuery({ userName })
+  const [searchValue, setSearchValue] = useState('')
+  const { data: getFollowingData } = useGetFollowingQuery({ search: searchValue, userName })
 
   return (
-    <Dialog
-      modalTitle={`${getFollowingData?.items.length} Following`}
+    <SocialModal
       onClose={onClose}
+      onSearchChange={setSearchValue}
       open={open}
+      title={`${getFollowingData?.items.length} Following`}
     >
       <UserListItem data={getFollowingData?.items} />
-    </Dialog>
+    </SocialModal>
   )
 }
