@@ -1,5 +1,10 @@
+import { RequireAuth } from '@/src/features/requireAuth/RequireAuth'
 import { AddPost } from '@/src/widgets/addPost/AddPost'
 
 export default function CreateNewPost() {
-  return <AddPost />
+  return (
+    <RequireAuth>
+      <AddPost />
+    </RequireAuth>
+  )
 }
