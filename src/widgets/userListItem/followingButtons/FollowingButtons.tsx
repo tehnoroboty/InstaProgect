@@ -1,12 +1,21 @@
 import { Button } from '@/src/shared/ui/button/Button'
 
 type Props = {
-  isFollowing?: boolean
+  isFollowing: boolean
+  // onFollow: (userId: number, isCurrentlyFollowing: boolean) => void
+  openModal: (open: boolean) => void
+  setSelectedUser: (user: { isFollowing: boolean; userId: number }) => void
+  userId: number
 }
 
-export const FollowingButtons = ({ isFollowing }: Props) => {
+export const FollowingButtons = ({ isFollowing, openModal, setSelectedUser, userId }: Props) => {
+  const handleClick = () => {
+    setSelectedUser({ isFollowing, userId })
+    openModal(true)
+  }
+
   return (
-    <Button variant={isFollowing ? 'bordered' : 'primary'}>
+    <Button onClick={handleClick} variant={isFollowing ? 'bordered' : 'primary'}>
       {isFollowing ? 'Unfollow' : 'Follow'}
     </Button>
   )

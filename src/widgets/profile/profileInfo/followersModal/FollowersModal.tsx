@@ -21,7 +21,7 @@ export const FollowersModal = ({ onClose, open, userName }: Props) => {
       open={open}
       title={`${getFollowersData?.items.length} Followers`}
     >
-      <UserListItem data={getFollowersData?.items} isFollowers />
+      <UserListItem data={getFollowersData?.items} isFollowers onFollow={() => {}} />
     </SocialModal>
   )
 }
