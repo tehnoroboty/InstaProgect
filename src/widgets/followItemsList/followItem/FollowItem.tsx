@@ -31,6 +31,7 @@ export const FollowItem = ({ isFollowers, item }: Props) => {
           <FollowersButtons
             isFollowing={item.isFollowing}
             isLoading={isLoading}
+            onFollow={handleFollow}
             openModal={setOpenUnfollowModal}
           />
         ) : (

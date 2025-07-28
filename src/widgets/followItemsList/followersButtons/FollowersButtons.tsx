@@ -5,26 +5,30 @@ import s from './followersButtons.module.scss'
 type Props = {
   isFollowing?: boolean
   isLoading: boolean
-  // onFollow: () => void
+  onFollow: () => void
   openModal: (open: boolean) => void
 }
 
-export const FollowersButtons = ({ isFollowing, isLoading, openModal }: Props) => {
-  const handleClick = () => {
+export const FollowersButtons = ({ isFollowing, isLoading, onFollow, openModal }: Props) => {
+  const handleDeleteClick = () => {
     openModal(true)
+  }
+
+  const handleFollowClick = () => {
+    onFollow()
   }
 
   return (
     <div className={s.buttons}>
       {!isFollowing ? (
-        <Button className={s.deleteButton} disabled={isLoading} onClick={handleClick}>
+        <Button className={s.button} disabled={isLoading} onClick={handleFollowClick}>
           Follow
         </Button>
       ) : (
         <Button
-          className={s.deleteButton}
+          className={s.button}
           disabled={isLoading}
-          onClick={handleClick}
+          onClick={handleDeleteClick}
           variant={'transparent'}
         >
           Delete
