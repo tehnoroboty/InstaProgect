@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from 'react'
 
 import { useGetFollowersQuery } from '@/src/shared/model/api/followingApi'
+import { FollowItemsList } from '@/src/widgets/followItemsList/FollowItemsList'
 import { SocialModal } from '@/src/widgets/socialModal/SocialModal'
-import { UserListItem } from '@/src/widgets/userListItem/UserListItem'
 
 type Props = {
   onClose: () => void
@@ -21,7 +23,7 @@ export const FollowersModal = ({ onClose, open, userName }: Props) => {
       open={open}
       title={`${getFollowersData?.items.length} Followers`}
     >
-      <UserListItem data={getFollowersData?.items} isFollowers onFollow={() => {}} />
+      <FollowItemsList data={getFollowersData?.items} isFollowers />
     </SocialModal>
   )
 }
