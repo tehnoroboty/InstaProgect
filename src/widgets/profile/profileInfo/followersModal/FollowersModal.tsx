@@ -1,24 +1,30 @@
 'use client'
-
 import { useState } from 'react'
 
 import { useGetFollowersQuery } from '@/src/shared/model/api/followingApi'
+import { setIsFollowersModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { FollowItemsList } from '@/src/widgets/followItemsList/FollowItemsList'
 import { SocialModal } from '@/src/widgets/socialModal/SocialModal'
 
 type Props = {
-  onClose: () => void
   open: boolean
   userName: string
 }
 
-export const FollowersModal = ({ onClose, open, userName }: Props) => {
+export const FollowersModal = ({ open, userName }: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const { data: getFollowersData } = useGetFollowersQuery({ search: searchValue, userName })
 
+  const dispatch = useAppDispatch()
+
+  const handleClose = () => {
+    dispatch(setIsFollowersModalOpen({ isOpen: false }))
+  }
+
   return (
     <SocialModal
-      onClose={onClose}
+      onClose={handleClose}
       onSearchChange={setSearchValue}
       open={open}
       title={`${getFollowersData?.items.length} Followers`}
