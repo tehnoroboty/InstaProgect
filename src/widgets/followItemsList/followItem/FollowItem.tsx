@@ -19,7 +19,7 @@ type Props = {
 export const FollowItem = ({ isFollowers, item }: Props) => {
   const [openUnfollowModal, setOpenUnfollowModal] = useState(false)
 
-  const { handleFollow, isLoading } = useFollowUnfollow(item.userId, item.isFollowing)
+  const { handleFollow, isLoading, isMyProfile } = useFollowUnfollow(item.userId, item.isFollowing)
 
   return (
     <div className={s.userListItem}>
@@ -31,6 +31,7 @@ export const FollowItem = ({ isFollowers, item }: Props) => {
           <FollowersButtons
             isFollowing={item.isFollowing}
             isLoading={isLoading}
+            isMyProfile={isMyProfile}
             onFollow={handleFollow}
             openModal={setOpenUnfollowModal}
           />
@@ -38,6 +39,7 @@ export const FollowItem = ({ isFollowers, item }: Props) => {
           <FollowingButtons
             isFollowing={item.isFollowing}
             isLoading={isLoading}
+            isMyProfile={isMyProfile}
             onFollow={handleFollow}
             openModal={setOpenUnfollowModal}
           />
