@@ -17,11 +17,7 @@ import {
   useUpdateCommentLikeStatusMutation,
 } from '@/src/shared/model/api/postsApi'
 import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
-import {
-  selectIsFollowingModalOpen,
-  setIsFollowingModalOpen,
-} from '@/src/shared/model/slices/modalSlice'
-import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -58,8 +54,15 @@ export const ModalCommentsSection = ({
   const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
   const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
   const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
-  const isFollowingModalOpen = useAppSelector(selectIsFollowingModalOpen)
-  const openFollowingModal = () => dispatch(setIsFollowingModalOpen({ isOpen: true }))
+
+  const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
+
+  const onOpenWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(true)
+  }
+  const onCloseWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(false)
+  }
 
   const { data: commentsResponse } = useGetCommentsQuery(postId)
   const commentsRaw = useMemo(() => commentsResponse?.items ?? [], [commentsResponse?.items])
@@ -277,13 +280,13 @@ export const ModalCommentsSection = ({
         {isAuth && (
           <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
         )}
-        <PostLikesBox className={s.postLikesBox} onClick={openFollowingModal} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} onClick={onOpenWhoLikeModal} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>
         {isAuth && <AddCommentForm postId={postId} />}
       </div>
-      <WhoLikeModal open={isFollowingModalOpen} postId={postId} />
+      <WhoLikeModal onClose={onCloseWhoLikeModal} open={isWhoLikeModalOpen} postId={postId} />
     </div>
   )
 }
