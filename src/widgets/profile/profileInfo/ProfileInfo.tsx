@@ -1,13 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 
 import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
-import {
-  selectIsFollowersModalOpen,
-  selectIsFollowingModalOpen,
-  setIsFollowersModalOpen,
-  setIsFollowingModalOpen,
-} from '@/src/shared/model/slices/modalSlice'
-import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -39,9 +32,8 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
   const [unFollow] = useUnFollowMutation()
   const [isFollowing, setIsFollowing] = useState<boolean>(profile.isFollowing)
 
-  const dispatch = useAppDispatch()
-  const isFollowersModalOpen = useAppSelector(selectIsFollowersModalOpen)
-  const isFollowingModalOpen = useAppSelector(selectIsFollowingModalOpen)
+  const [isOpenFollowersModal, setIsOpenFollowersModal] = useState(false)
+  const [isOpenFollowingModal, setIsOpenFollowingModal] = useState(false)
 
   useEffect(() => {
     setIsFollowing(profile.isFollowing)
@@ -62,8 +54,19 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
     setIsFollowing(prev => !prev)
   }
 
-  const openFollowersModal = () => dispatch(setIsFollowersModalOpen({ isOpen: true }))
-  const openFollowingModal = () => dispatch(setIsFollowingModalOpen({ isOpen: true }))
+  const onOpenFollowersModal = () => {
+    setIsOpenFollowersModal(true)
+  }
+  const onCloseFollowersModal = () => {
+    setIsOpenFollowersModal(false)
+  }
+
+  const onOpenFollowingModal = () => {
+    setIsOpenFollowingModal(true)
+  }
+  const onCloseFollowingModal = () => {
+    setIsOpenFollowingModal(false)
+  }
 
   return (
     <div className={s.profileContainer}>
@@ -79,12 +82,12 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
             <div className={s.followersStats}>
               <StatisticsItem
                 count={followingCount}
-                onClick={openFollowingModal}
+                onClick={onOpenFollowingModal}
                 title={'Following'}
               />
               <StatisticsItem
                 count={followersCount}
-                onClick={openFollowersModal}
+                onClick={onOpenFollowersModal}
                 title={'Followers'}
               />
               <StatisticsItem clickable={false} count={publicationsCount} title={'Publications'} />
@@ -113,8 +116,16 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
           {aboutMe}
         </Typography>
       </div>
-      <FollowingModal open={isFollowingModalOpen} userName={profile.userName} />
-      <FollowersModal open={isFollowersModalOpen} userName={profile.userName} />
+      <FollowingModal
+        onClose={onCloseFollowingModal}
+        open={isOpenFollowingModal}
+        userName={profile.userName}
+      />
+      <FollowersModal
+        onClose={onCloseFollowersModal}
+        open={isOpenFollowersModal}
+        userName={profile.userName}
+      />
     </div>
   )
 })
