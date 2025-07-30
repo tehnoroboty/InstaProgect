@@ -17,7 +17,11 @@ import {
   useUpdateCommentLikeStatusMutation,
 } from '@/src/shared/model/api/postsApi'
 import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
-import { useAppDispatch } from '@/src/shared/model/store/store'
+import {
+  selectIsFollowingModalOpen,
+  setIsFollowingModalOpen,
+} from '@/src/shared/model/slices/modalSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -28,6 +32,7 @@ import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -53,9 +58,11 @@ export const ModalCommentsSection = ({
   const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
   const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
   const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
+  const isFollowingModalOpen = useAppSelector(selectIsFollowingModalOpen)
+  const openFollowingModal = () => dispatch(setIsFollowingModalOpen({ isOpen: true }))
 
   const { data: commentsResponse } = useGetCommentsQuery(postId)
-  const commentsRaw = commentsResponse?.items ?? []
+  const commentsRaw = useMemo(() => commentsResponse?.items ?? [], [commentsResponse?.items])
 
   const currentUserId = useSelector(selectUserId)
 
@@ -270,12 +277,13 @@ export const ModalCommentsSection = ({
         {isAuth && (
           <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
         )}
-        <PostLikesBox className={s.postLikesBox} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} onClick={openFollowingModal} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>
         {isAuth && <AddCommentForm postId={postId} />}
       </div>
+      <WhoLikeModal open={isFollowingModalOpen} postId={postId} />
     </div>
   )
 }

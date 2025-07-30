@@ -10,16 +10,17 @@ import clsx from 'clsx'
 import s from '@/src/shared/ui/postLikesBox/postLikesBox.module.scss'
 
 type Props = {
+  onClick?: () => void
   postId: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const PostLikesBox = ({ className, postId }: Props) => {
+export const PostLikesBox = ({ className, onClick, postId }: Props) => {
   const { avatars, likesCount } = usePostLikes(postId)
 
   const avatarClasses = [s.firstAvaLike, s.secondAvaLike, s.thirdAvaLike]
 
   return (
-    <div className={clsx(s.postLikes, className)}>
+    <div className={clsx(s.postLikes, className)} onClick={onClick}>
       {likesCount && likesCount > 0 ? (
         <div className={s.postLikesAvatars}>
           {avatars.map((url, index) => (

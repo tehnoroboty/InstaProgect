@@ -8,9 +8,19 @@ type Props = {
   openModal: (open: boolean) => void
 }
 
-export const FollowingButtons = ({ isFollowing, isLoading, isMyProfile, openModal }: Props) => {
-  const handleClick = () => {
+export const FollowingButtons = ({
+  isFollowing,
+  isLoading,
+  isMyProfile,
+  onFollow,
+  openModal,
+}: Props) => {
+  const handleUnfollowClick = () => {
     openModal(true)
+  }
+
+  const handleFollowClick = () => {
+    onFollow()
   }
 
   return (
@@ -18,7 +28,7 @@ export const FollowingButtons = ({ isFollowing, isLoading, isMyProfile, openModa
       {!isMyProfile && (
         <Button
           disabled={isLoading}
-          onClick={handleClick}
+          onClick={isFollowing ? handleUnfollowClick : handleFollowClick}
           variant={isFollowing ? 'bordered' : 'primary'}
         >
           {isFollowing ? 'Unfollow' : 'Follow'}
