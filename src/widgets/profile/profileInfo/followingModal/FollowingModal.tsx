@@ -12,7 +12,11 @@ type Props = {
 
 export const FollowingModal = ({ onClose, open, userName }: Props) => {
   const [searchValue, setSearchValue] = useState('')
-  const { data: getFollowingData } = useGetFollowingQuery({ search: searchValue, userName })
+  const { data: getFollowingData } = useGetFollowingQuery({
+    pageSize: 100,
+    search: searchValue,
+    userName,
+  })
 
   const handleClose = () => {
     onClose()
