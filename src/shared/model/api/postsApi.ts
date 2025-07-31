@@ -107,7 +107,7 @@ export const postsApi = baseApi.injectEndpoints({
         pageSize = 100,
         postId,
         sortBy = 'createdAt',
-        sortDirection = 'desc',
+        sortDirection = 'asc',
       }) =>
         `/posts/${postId}/comments/${commentId}/answers?pageSize=${pageSize}&pageNumber=${pageNumber}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
     }),
