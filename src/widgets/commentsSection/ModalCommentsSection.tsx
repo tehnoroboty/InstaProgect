@@ -75,7 +75,7 @@ export const ModalCommentsSection = ({
         const answersObj: Record<number, AnswersComment[]> = {}
 
         responses.forEach((res, index) => {
-          answersObj[commentsRaw[index].id] = res.items
+          answersObj[commentsRaw[index].id] = [...res.items].reverse()
         })
 
         setAnswersMap(answersObj)
@@ -147,7 +147,7 @@ export const ModalCommentsSection = ({
   const handleAnswerAdded = (commentId: number, answer: AnswersComment) => {
     setAnswersMap(prev => ({
       ...prev,
-      [commentId]: [...(prev[commentId] || []), answer],
+      [commentId]: [answer, ...(prev[commentId] || [])],
     }))
   }
 
