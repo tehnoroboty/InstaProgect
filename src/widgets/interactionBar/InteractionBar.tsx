@@ -27,15 +27,26 @@ export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Pro
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
   const [updateLikeStatus] = useUpdateLikeStatusPostMutation()
 
-  const { isLiked } = usePostLikes(postId)
+  const { isLiked, likesCount, refetch, setLocalLike } = usePostLikes(postId)
 
-  const handleLikePost = () => {
+  const handleLikePost = async () => {
     if (!postId) {
       return
     }
     const newLikeStatus: LikeStatus = isLiked ? 'NONE' : 'LIKE'
+    const newLikesCount = isLiked ? likesCount - 1 : likesCount + 1
 
-    updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId })
+    setLocalLike({
+      isLiked: !isLiked,
+      likesCount: newLikesCount,
+    })
+    try {
+      await updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId }).unwrap()
+      refetch()
+    } catch (error) {
+      setLocalLike(null)
+    }
+    // updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId })
   }
   const handleSavePost = () => {
     setIsSavedPost(prevSavedPost => !prevSavedPost)
