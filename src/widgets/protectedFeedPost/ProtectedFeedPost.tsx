@@ -1,6 +1,6 @@
 import type { Post, PostImage } from '@/src/entities/post/types'
 
-import { useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
+import { useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'

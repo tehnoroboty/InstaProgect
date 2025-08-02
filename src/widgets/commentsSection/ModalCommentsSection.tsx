@@ -10,12 +10,12 @@ import { Post } from '@/src/entities/post/types'
 import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import {
-  postsApi,
-  useDeletePostMutation,
+  commentsAnswersApi,
   useGetCommentsQuery,
   useUpdateAnswerLikeStatusMutation,
   useUpdateCommentLikeStatusMutation,
-} from '@/src/shared/model/api/postsApi'
+} from '@/src/shared/model/api/commentsAnswersApi'
+import { useDeletePostMutation } from '@/src/shared/model/api/postsApi'
 import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
@@ -63,7 +63,7 @@ export const ModalCommentsSection = ({
     const fetchAnswers = async () => {
       const promises = commentsRaw.map(comment =>
         dispatch(
-          postsApi.endpoints.getCommentAnswers.initiate({
+          commentsAnswersApi.endpoints.getCommentAnswers.initiate({
             commentId: comment.id,
             postId,
           })
@@ -110,6 +110,7 @@ export const ModalCommentsSection = ({
   const handleLikeComment = async (commentId: number, currentStatus: LikeStatus) => {
     const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
 
+    /*
     try {
       await updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId }).unwrap()
     } catch (err) {
@@ -119,6 +120,18 @@ export const ModalCommentsSection = ({
 
       dispatch(setAppError({ error: errorMessage }))
     }
+*/
+    updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId })
+      .unwrap()
+      .catch(err => {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages?.[0]?.message ||
+          error.data?.error ||
+          'The comment has not been found'
+
+        dispatch(setAppError({ error: errorMessage }))
+      })
   }
 
   const [updateAnswerLikeStatus] = useUpdateAnswerLikeStatusMutation()
@@ -130,6 +143,7 @@ export const ModalCommentsSection = ({
   ) => {
     const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
 
+    /*
     try {
       await updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId }).unwrap()
     } catch (err) {
@@ -139,6 +153,16 @@ export const ModalCommentsSection = ({
 
       dispatch(setAppError({ error: errorMessage }))
     }
+*/
+    updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId })
+      .unwrap()
+      .catch(err => {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages?.[0]?.message || error.data?.error || 'The answer has not been found'
+
+        dispatch(setAppError({ error: errorMessage }))
+      })
   }
 
   const [isEditing, setIsEditing] = useState(false)

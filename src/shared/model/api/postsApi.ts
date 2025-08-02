@@ -1,15 +1,5 @@
-import type {
-  AnswersComment,
-  GetAnswersArg,
-  GetAnswersResponse,
-  GetCommentsResponse,
-} from '@/src/entities/comments/types'
-
 import {
-  GetAnswerLikesArgs,
-  GetCommentLikesArgs,
   GetLikesArgs,
-  LikeStatus,
   PaginatedLikesResponse,
   UpdateLikeStatusModel,
 } from '@/src/entities/likes/types'
@@ -29,17 +19,6 @@ import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    addAnswer: builder.mutation<
-      AnswersComment,
-      { commentId: number; content: string; postId: number }
-    >({
-      invalidatesTags: (result, error, { postId }) => [{ id: postId, type: 'COMMENTS' }],
-      query: ({ commentId, content, postId }) => ({
-        body: { content },
-        method: 'POST',
-        url: `/posts/${postId}/comments/${commentId}/answers`,
-      }),
-    }),
     createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
@@ -90,38 +69,6 @@ export const postsApi = baseApi.injectEndpoints({
       query: ({ postId }) => ({
         method: 'DELETE',
         url: `/posts/${postId}`,
-      }),
-    }),
-    getAnswerLikes: builder.query<PaginatedLikesResponse, GetAnswerLikesArgs>({
-      providesTags: (_res, _err, { answerId }) => [{ id: answerId, type: 'ANSWER_LIKES' }],
-      query: ({ answerId, commentId, postId }) => ({
-        method: 'GET',
-        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
-      }),
-    }),
-    getCommentAnswers: builder.query<GetAnswersResponse, GetAnswersArg>({
-      query: ({
-        commentId,
-        pageNumber = 1,
-        pageSize = 100,
-        postId,
-        sortBy = 'createdAt',
-        sortDirection = 'asc',
-      }) =>
-        `/posts/${postId}/comments/${commentId}/answers?pageSize=${pageSize}&pageNumber=${pageNumber}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
-    }),
-    getCommentLikes: builder.query<PaginatedLikesResponse, GetCommentLikesArgs>({
-      providesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],
-      query: ({ commentId, postId }) => ({
-        method: 'GET',
-        url: `/posts/${postId}/comments/${commentId}/likes`,
-      }),
-    }),
-    getComments: builder.query<GetCommentsResponse, number>({
-      providesTags: (_result, _error, postId) => [{ id: postId, type: 'COMMENTS' }],
-      query: postId => ({
-        method: 'GET',
-        url: `/posts/${postId}/comments`,
       }),
     }),
     getFolloweePosts: builder.query<GetFolloweePostsResponse, GetFolloweePostsArgs>({
@@ -202,28 +149,6 @@ export const postsApi = baseApi.injectEndpoints({
         return response
       },
     }),
-    updateAnswerLikeStatus: builder.mutation<
-      void,
-      { answerId: number; commentId: number; likeStatus: LikeStatus; postId: number }
-    >({
-      invalidatesTags: (_res, _err, { answerId }) => [{ id: answerId, type: 'ANSWER_LIKES' }],
-      query: ({ answerId, commentId, likeStatus, postId }) => ({
-        body: { likeStatus },
-        method: 'PUT',
-        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
-      }),
-    }),
-    updateCommentLikeStatus: builder.mutation<
-      void,
-      { commentId: number; likeStatus: LikeStatus; postId: number }
-    >({
-      invalidatesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],
-      query: ({ commentId, likeStatus, postId }) => ({
-        body: { likeStatus },
-        method: 'PUT',
-        url: `/posts/${postId}/comments/${commentId}/like-status`,
-      }),
-    }),
     updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
       invalidatesTags: (_result, _err, { postId }) => [
         { id: postId, type: 'POST' },
@@ -250,20 +175,13 @@ export const postsApi = baseApi.injectEndpoints({
 })
 
 export const {
-  useAddAnswerMutation,
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
   useDeletePostMutation,
-  useGetAnswerLikesQuery,
-  useGetCommentAnswersQuery,
-  useGetCommentLikesQuery,
-  useGetCommentsQuery,
   useGetFolloweePostsQuery,
   useGetPostLikesQuery,
   useGetPostQuery,
   useGetPostsQuery,
-  useUpdateAnswerLikeStatusMutation,
-  useUpdateCommentLikeStatusMutation,
   useUpdateLikeStatusPostMutation,
   useUpdatePostMutation,
 } = postsApi
