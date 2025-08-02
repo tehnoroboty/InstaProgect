@@ -46,7 +46,6 @@ export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Pro
     } catch (error) {
       setLocalLike(null)
     }
-    // updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId })
   }
   const handleSavePost = () => {
     setIsSavedPost(prevSavedPost => !prevSavedPost)

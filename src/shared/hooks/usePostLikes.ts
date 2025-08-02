@@ -11,11 +11,6 @@ export const usePostLikes = (postId: number) => {
   })
   const currentUserId = useAppSelector(state => state.app.userId)
 
-  // const likesCount = likesData?.totalCount
-
-  // const isLiked =
-  //   currentUserId != null && likesData?.items?.some(like => like.userId === currentUserId)
-
   const [localLike, setLocalLike] = useState<{
     isLiked?: boolean
     likesCount?: number
@@ -29,7 +24,6 @@ export const usePostLikes = (postId: number) => {
     return [...(likesData?.items || [])]
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
       .map(user => user.avatars?.[0]?.url)
-    // .filter(Boolean)
   }, [likesData])
 
   return {
