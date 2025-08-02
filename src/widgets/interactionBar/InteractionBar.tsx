@@ -2,7 +2,6 @@
 
 import { ComponentPropsWithoutRef, useState } from 'react'
 
-import { CustomerError } from '@/src/entities/errors/types'
 import { LikeStatus } from '@/src/entities/likes/types'
 import {
   Bookmark,
@@ -14,8 +13,6 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
 import { useUpdateLikeStatusPostMutation } from '@/src/shared/model/api/postsApi'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
-import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Button } from '@/src/shared/ui/button/Button'
 import clsx from 'clsx'
 
@@ -29,25 +26,16 @@ type Props = {
 export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Props) => {
   const [isSavedPost, setIsSavedPost] = useState<boolean>(false)
   const [updateLikeStatus] = useUpdateLikeStatusPostMutation()
-  const dispatch = useAppDispatch()
 
   const { isLiked } = usePostLikes(postId)
 
-  const handleLikePost = async () => {
+  const handleLikePost = () => {
     if (!postId) {
       return
     }
     const newLikeStatus: LikeStatus = isLiked ? 'NONE' : 'LIKE'
 
-    try {
-      await updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId }).unwrap()
-    } catch (err) {
-      const error = err as CustomerError
-      const errorMessage =
-        error.data?.messages[0].message || error.data?.error || 'Failed to update like status'
-
-      dispatch(setAppError({ error: errorMessage }))
-    }
+    updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId })
   }
   const handleSavePost = () => {
     setIsSavedPost(prevSavedPost => !prevSavedPost)
