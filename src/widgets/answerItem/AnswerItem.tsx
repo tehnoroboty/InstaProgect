@@ -39,25 +39,27 @@ export const AnswerItem = ({
   const likeCount = likesData?.items.length ?? 0
 
   return (
-    <div className={s.answer} key={answer.id}>
-      <div className={s.userAva}>
-        <AvatarBox size={'xs'} src={answer.from.avatars?.[0]?.url || ''} />
-      </div>
-      <div className={s.userComment}>
-        <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-          {answer.from.username}
-        </Typography>
-        <Typography className={s.userCommentTypography}>{answer.content}</Typography>
-        <div className={s.userCommentBottom}>
-          <Typography size={'xs'}>{timeSince(answer.createdAt)}</Typography>
-          {isAuth && (
-            <>
-              <Typography size={'xs'} weight={'semi-bold'}>{`Like: ${likeCount}`}</Typography>
-              <Button className={s.answerButton} onClick={onReplyClick} variant={'transparent'}>
-                Answer
-              </Button>
-            </>
-          )}
+    <div className={s.usersAnswerBody}>
+      <div className={s.usersAnswerBodyBox} key={answer.id}>
+        <div className={s.userAva}>
+          <AvatarBox size={'xs'} src={answer.from.avatars?.[0]?.url || ''} />
+        </div>
+        <div className={s.userAnswer}>
+          <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
+            {answer.from.username}
+          </Typography>
+          <Typography className={s.userAnswerTypography}>{answer.content}</Typography>
+          <div className={s.userAnswerBottom}>
+            <Typography size={'xs'}>{timeSince(answer.createdAt)}</Typography>
+            {isAuth && (
+              <>
+                <Typography size={'xs'} weight={'semi-bold'}>{`Like: ${likeCount}`}</Typography>
+                <Button className={s.answerButton} onClick={onReplyClick} variant={'transparent'}>
+                  Answer
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
       {isAuth && (
