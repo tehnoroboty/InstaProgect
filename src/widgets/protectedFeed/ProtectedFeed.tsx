@@ -1,3 +1,5 @@
+'use client'
+
 import type { Post } from '@/src/entities/post/types'
 
 import { useEffect, useRef, useState } from 'react'
