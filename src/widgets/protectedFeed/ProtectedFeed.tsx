@@ -4,8 +4,10 @@ import type { Post } from '@/src/entities/post/types'
 
 import { useEffect, useRef, useState } from 'react'
 
+import { usePostModal } from '@/src/shared/hooks/usePostModal'
 import { useGetFolloweePostsQuery } from '@/src/shared/model/api/postsApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
+import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProtectedFeedPost } from '@/src/widgets/protectedFeedPost/ProtectedFeedPost'
 
 import s from './protectedFeed.module.scss'
@@ -13,6 +15,8 @@ import s from './protectedFeed.module.scss'
 export const ProtectedFeed = () => {
   const [cursor, setCursor] = useState<number | undefined>(undefined)
   const [allPosts, setAllPosts] = useState<Post[]>([])
+
+  const { close, open } = usePostModal()
 
   const { data, isFetching, isLoading } = useGetFolloweePostsQuery(
     {
@@ -36,6 +40,12 @@ export const ProtectedFeed = () => {
   const observerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
+    const element = observerRef.current
+
+    if (!element) {
+      return
+    }
+
     const observer = new IntersectionObserver(
       entries => {
         const [entry] = entries
@@ -51,14 +61,10 @@ export const ProtectedFeed = () => {
       }
     )
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current)
-    }
+    observer.observe(element)
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current)
-      }
+      observer.unobserve(element)
     }
   }, [data?.nextCursor, cursor])
 
@@ -66,11 +72,22 @@ export const ProtectedFeed = () => {
     <div className={s.container}>
       <div className={s.feed}>
         {allPosts.map(post => (
-          <ProtectedFeedPost key={post.id} {...post} />
+          <ProtectedFeedPost
+            key={post.id}
+            {...post}
+            onViewCommentsClick={() => open(String(post.id))}
+          />
         ))}
         <div ref={observerRef} style={{ height: 1 }} />
       </div>
       {(isLoading || isFetching) && <Loader />}
+      <ModalPost
+        commentsDataFromServer={null}
+        isAuth
+        isMyPost={false}
+        onClose={close}
+        postDataFromServer={null}
+      />
     </div>
   )
 }

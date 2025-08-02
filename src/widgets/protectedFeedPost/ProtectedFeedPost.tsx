@@ -10,12 +10,17 @@ import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import clsx from 'clsx'
 import Image from 'next/image'
 
 import s from './protectedFeedPost.module.scss'
 
-export const ProtectedFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, userName } = props
+type Props = Post & {
+  onViewCommentsClick: () => void
+}
+
+export const ProtectedFeedPost = (props: Props) => {
+  const { avatarOwner, createdAt, description, id, images, onViewCommentsClick, userName } = props
 
   const renderImgCarousel = (img: PostImage) => {
     return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
@@ -25,6 +30,7 @@ export const ProtectedFeedPost = (props: Post) => {
 
   const isFollowedBy = true
   const isOurPost = false
+  const showViewCommentsBtn = data?.items.length && data?.items.length > 0
 
   return (
     <div className={s.card} id={String(id)}>
@@ -46,21 +52,21 @@ export const ProtectedFeedPost = (props: Post) => {
             <span className={s.userName}>{userName}</span> {description}
           </p>
         </div>
-        <PostLikesBox className={s.likesBox} postId={id} />
-        <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
-          {`View All Comments (${data?.items.length})`}
-        </Button>
-        {/*<div className={s.addCommentContainer}>
-          <div className={s.textareaContainer}>
-            <TextArea className={s.textArea} label={''} placeholder={'Add a Comment...'} />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>*/}
+        <PostLikesBox
+          className={clsx(s.likesBox, { [s.noMargin]: !showViewCommentsBtn })}
+          postId={id}
+        />
+        {showViewCommentsBtn && (
+          <Button
+            className={s.viewCommentsBtn}
+            onClick={onViewCommentsClick}
+            variant={'transparent'}
+          >
+            {`View All Comments (${data?.items.length})`}
+          </Button>
+        )}
         <AddCommentForm
           className={s.addCommentContainer}
-          onCommentAdded={() => {
-            // например, refetch() или invalidateTags
-          }}
           postId={id}
           textAreaClassName={s.textArea}
           textAreaWrapperClassName={s.textareaContainer}
