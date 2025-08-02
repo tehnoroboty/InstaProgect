@@ -43,10 +43,11 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
-      async onQueryStarted(_args, { queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
+        dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
       },
       query: body => ({
         body,

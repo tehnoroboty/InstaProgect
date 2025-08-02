@@ -1,4 +1,3 @@
-import { AuthWrapper } from '../features/authWrapper/AuthWrapper'
 import { GetCommentsResponse } from '@/src/entities/comments/types'
 import { Post, PublicPostsResponse } from '@/src/entities/post/types'
 import { UsersCountResponse } from '@/src/entities/users/types'
@@ -35,9 +34,5 @@ export default async function Page(props: {
     posts: publicPosts,
   }
 
-  return (
-    <AuthWrapper>
-      <PublicFeed info={publicFeedInfo} />
-    </AuthWrapper>
-  )
+  return <PublicFeed info={publicFeedInfo} />
 }
