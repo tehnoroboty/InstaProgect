@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { GetCommentsResponse } from '@/src/entities/comments/types'
 import { ImageType, Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
-import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
+import { commentsAnswersApi, useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
+import { postsApi, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -48,7 +49,7 @@ export default function ModalPost({
 
   const selectPost = useMemo(() => postsApi.endpoints.getPost.select(Number(postId)), [postId])
   const selectComments = useMemo(
-    () => postsApi.endpoints.getComments.select(Number(postId)),
+    () => commentsAnswersApi.endpoints.getComments.select(Number(postId)),
     [postId]
   )
 
@@ -66,7 +67,13 @@ export default function ModalPost({
 
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
-      dispatch(postsApi.util.upsertQueryData('getComments', Number(postId), commentsDataFromServer))
+      dispatch(
+        commentsAnswersApi.util.upsertQueryData(
+          'getComments',
+          Number(postId),
+          commentsDataFromServer
+        )
+      )
     }
   }, [commentsDataFromServer, dispatch, needInitCommentsInStore, postId])
 

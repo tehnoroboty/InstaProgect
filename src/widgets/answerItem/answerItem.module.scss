@@ -1,4 +1,15 @@
-.answer {
+.usersAnswerBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+}
+
+.usersAnswerBodyBox {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -9,7 +20,7 @@
   flex-shrink: 0;
 }
 
-.userComment {
+.userAnswer {
   width: 100%;
   margin-right: auto;
   margin-left: 12px;
@@ -27,7 +38,7 @@
   }
 }
 
-.userCommentTypography {
+.userAnswerTypography {
   width: 370px;
   max-width: 100%;
 
@@ -36,7 +47,7 @@
   white-space: normal;
 }
 
-.userCommentBottom {
+.userAnswerBottom {
   display: flex;
   gap: 12px;
   margin-top: 5px;

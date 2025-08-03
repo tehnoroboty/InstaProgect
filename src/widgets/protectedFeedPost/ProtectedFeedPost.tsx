@@ -2,7 +2,7 @@ import type { Post, PostImage } from '@/src/entities/post/types'
 
 import { useState } from 'react'
 
-import { useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
+import { useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -62,12 +62,6 @@ export const ProtectedFeedPost = (props: Post) => {
         <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
           {`View All Comments (${data?.items.length})`}
         </Button>
-        {/*<div className={s.addCommentContainer}>
-          <div className={s.textareaContainer}>
-            <TextArea className={s.textArea} label={''} placeholder={'Add a Comment...'} />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>*/}
         <AddCommentForm
           className={s.addCommentContainer}
           onCommentAdded={() => {
