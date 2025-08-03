@@ -2,11 +2,12 @@ import { useMemo } from 'react'
 
 import { PREVIEW_LIKES_LIMIT } from '@/src/shared/lib/constants/post'
 import { useGetPostLikesQuery } from '@/src/shared/model/api/postsApi'
+import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 
 export const usePostLikes = (postId: number) => {
   const { data: likesData } = useGetPostLikesQuery({ pageSize: PREVIEW_LIKES_LIMIT, postId })
-  const currentUserId = useAppSelector(state => state.app.userId)
+  const currentUserId = useAppSelector(selectUserId)
 
   const likesCount = likesData?.totalCount
 

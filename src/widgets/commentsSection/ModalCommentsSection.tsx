@@ -110,7 +110,6 @@ export const ModalCommentsSection = ({
   const handleLikeComment = async (commentId: number, currentStatus: LikeStatus) => {
     const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
 
-    /*
     try {
       await updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId }).unwrap()
     } catch (err) {
@@ -120,18 +119,6 @@ export const ModalCommentsSection = ({
 
       dispatch(setAppError({ error: errorMessage }))
     }
-*/
-    updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId })
-      .unwrap()
-      .catch(err => {
-        const error = err as CustomerError
-        const errorMessage =
-          error.data?.messages?.[0]?.message ||
-          error.data?.error ||
-          'The comment has not been found'
-
-        dispatch(setAppError({ error: errorMessage }))
-      })
   }
 
   const [updateAnswerLikeStatus] = useUpdateAnswerLikeStatusMutation()
@@ -143,7 +130,6 @@ export const ModalCommentsSection = ({
   ) => {
     const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
 
-    /*
     try {
       await updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId }).unwrap()
     } catch (err) {
@@ -153,16 +139,6 @@ export const ModalCommentsSection = ({
 
       dispatch(setAppError({ error: errorMessage }))
     }
-*/
-    updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId })
-      .unwrap()
-      .catch(err => {
-        const error = err as CustomerError
-        const errorMessage =
-          error.data?.messages?.[0]?.message || error.data?.error || 'The answer has not been found'
-
-        dispatch(setAppError({ error: errorMessage }))
-      })
   }
 
   const [isEditing, setIsEditing] = useState(false)

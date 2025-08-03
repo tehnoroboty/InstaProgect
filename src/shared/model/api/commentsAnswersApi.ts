@@ -5,6 +5,7 @@ import {
   type GetAnswersResponse,
   type GetCommentsResponse,
 } from '@/src/entities/comments/types'
+import { CustomerError } from '@/src/entities/errors/types'
 import {
   GetAnswerLikesArgs,
   GetCommentLikesArgs,
@@ -13,7 +14,7 @@ import {
   PaginatedLikesResponse,
 } from '@/src/entities/likes/types'
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { usersApi } from '@/src/shared/model/api/usersApi'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { RootState } from '@/src/shared/model/store/store'
 
 export const commentsAnswersApi = baseApi.injectEndpoints({
@@ -85,38 +86,29 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
           return
         }
 
-        // Предположим, что профиль уже загружен
-        const profile = usersApi.endpoints.getMyProfile.select()(state).data
-
-        if (!profile) {
-          return
+        const optimisticUser: LikeUser = {
+          avatars: [],
+          createdAt: new Date().toISOString(),
+          id: Date.now(),
+          isFollowedBy: false,
+          isFollowing: false,
+          userId,
+          userName: 'You',
         }
 
         const patchResult = dispatch(
           commentsAnswersApi.util.updateQueryData(
-            // обновляем кеш лайков этого ответа
             'getAnswerLikes',
             { answerId, commentId, postId },
             draft => {
-              const alreadyLikedIndex = draft.items.findIndex(user => user.userId === userId)
+              const alreadyLiked = draft.items.some(user => user.userId === userId)
 
-              // Удаляем существующий лайк (если есть)
-              if (alreadyLikedIndex !== -1) {
-                draft.items.splice(alreadyLikedIndex, 1)
-                draft.totalCount--
-              }
-
-              if (likeStatus === 'LIKE') {
-                draft.items.unshift({
-                  avatars: profile.avatars,
-                  createdAt: new Date().toISOString(),
-                  id: Date.now(), // временный ID, не используется
-                  isFollowedBy: false,
-                  isFollowing: false,
-                  userId,
-                  userName: profile.userName,
-                })
-                draft.totalCount++
+              if (alreadyLiked) {
+                draft.items = draft.items.filter(user => user.userId !== userId)
+                draft.totalCount -= 1
+              } else if (likeStatus === 'LIKE') {
+                draft.items.unshift(optimisticUser)
+                draft.totalCount += 1
               }
             }
           )
@@ -124,8 +116,15 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
 
         try {
           await queryFulfilled
-        } catch {
-          patchResult.undo() // если ошибка — откат
+        } catch (err) {
+          patchResult.undo()
+          const error = err as CustomerError
+          const errorMessage =
+            error.data?.messages?.[0]?.message ||
+            error.data?.error ||
+            'Failed to update answer like'
+
+          dispatch(setAppError({ error: errorMessage }))
         }
       },
       query: ({ answerId, commentId, likeStatus, postId }) => ({
@@ -150,10 +149,14 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
           return
         }
 
-        const profile = usersApi.endpoints.getMyProfile.select()(state).data
-
-        if (!profile) {
-          return
+        const optimisticUser: LikeUser = {
+          avatars: [],
+          createdAt: new Date().toISOString(),
+          id: Date.now(),
+          isFollowedBy: false,
+          isFollowing: false,
+          userId,
+          userName: 'You',
         }
 
         const patchResult = dispatch(
@@ -161,28 +164,14 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
             'getCommentLikes',
             { commentId, postId },
             draft => {
-              const existingIndex = draft.items.findIndex(
-                (user: LikeUser) => user.userId === userId
-              )
+              const alreadyLiked = draft.items.some(user => user.userId === userId)
 
-              // Удаляем, если лайк уже есть
-              if (existingIndex !== -1) {
-                draft.items.splice(existingIndex, 1)
-                draft.totalCount--
-              }
-
-              // Добавляем, если ставим лайк
-              if (likeStatus === 'LIKE') {
-                draft.items.unshift({
-                  avatars: profile.avatars ?? [],
-                  createdAt: new Date().toISOString(),
-                  id: Date.now(), // временный ID
-                  isFollowedBy: false,
-                  isFollowing: false,
-                  userId,
-                  userName: profile.userName,
-                })
-                draft.totalCount++
+              if (alreadyLiked) {
+                draft.items = draft.items.filter(user => user.userId !== userId)
+                draft.totalCount -= 1
+              } else if (likeStatus === 'LIKE') {
+                draft.items.unshift(optimisticUser)
+                draft.totalCount += 1
               }
             }
           )
@@ -190,8 +179,15 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
 
         try {
           await queryFulfilled
-        } catch {
+        } catch (err) {
           patchResult.undo()
+          const error = err as CustomerError
+          const errorMessage =
+            error.data?.messages?.[0]?.message ||
+            error.data?.error ||
+            'Failed to update comment like'
+
+          dispatch(setAppError({ error: errorMessage }))
         }
       },
       query: ({ commentId, likeStatus, postId }) => ({
