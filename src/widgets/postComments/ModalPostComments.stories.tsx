@@ -9,52 +9,6 @@ import Image from 'next/image'
 const meta = {
   argTypes: {},
   args: {
-    commentsData: [
-      {
-        answerCount: 12,
-        content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, asperiores?',
-        createdAt: '2025-01-19T11:10:15.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar1' }],
-          id: 1,
-          username: 'Alex',
-        },
-        id: 1,
-        isLiked: false,
-        likeCount: 17,
-        postId: 9,
-      },
-      {
-        answerCount: 12,
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad cum id illo, iste laudantium veritatis.',
-        createdAt: '2025-02-19T11:58:19.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar2' }],
-          id: 2,
-          username: 'Kate',
-        },
-        id: 2,
-        isLiked: false,
-        likeCount: 17,
-        postId: 9,
-      },
-      {
-        answerCount: 12,
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus excepturi magnam voluptas?',
-        createdAt: '2025-03-19T11:15:19.847Z',
-        from: {
-          avatars: [{ url: 'http://avatar3' }],
-          id: 3,
-          username: 'Andrew',
-        },
-        id: 3,
-        isLiked: false,
-        likeCount: 17,
-        postId: 9,
-      },
-    ],
     list: [
       { id: 'slide1', img: sliderImage },
       { id: 'slide1', img: sliderImage },
