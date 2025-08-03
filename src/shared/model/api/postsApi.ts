@@ -33,7 +33,7 @@ export const postsApi = baseApi.injectEndpoints({
       AnswersComment,
       { commentId: number; content: string; postId: number }
     >({
-      invalidatesTags: (result, error, { postId }) => [{ id: postId, type: 'COMMENTS' }],
+      invalidatesTags: (result, error, { commentId }) => [{ id: commentId, type: 'ANSWERS' }],
       query: ({ commentId, content, postId }) => ({
         body: { content },
         method: 'POST',
@@ -100,6 +100,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getCommentAnswers: builder.query<GetAnswersResponse, GetAnswersArg>({
+      providesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'ANSWERS' }],
       query: ({
         commentId,
         pageNumber = 1,
