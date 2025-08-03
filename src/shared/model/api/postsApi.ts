@@ -105,7 +105,10 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getPostLikes: builder.query<PaginatedLikesResponse, GetLikesArgs>({
-      providesTags: (_result, _error, { postId }) => [{ id: postId, type: 'POST_LIKES' }],
+      providesTags: (_result, _error, { postId }) => [
+        { id: postId, type: 'POST_LIKES' },
+        { type: 'FOLLOWING' },
+      ],
       query: ({ cursor, pageNumber, pageSize, postId, search }) => ({
         method: 'GET',
         params: {
