@@ -1,5 +1,8 @@
+import { RootState } from '../store/store'
+import { CustomerError } from '@/src/entities/errors/types'
 import {
   GetLikesArgs,
+  LikeUser,
   PaginatedLikesResponse,
   UpdateLikeStatusModel,
 } from '@/src/entities/likes/types'
@@ -14,7 +17,9 @@ import {
   ResponsePostsType,
   UpdatePostModel,
 } from '@/src/entities/post/types'
+import { PREVIEW_LIKES_LIMIT } from '@/src/shared/lib/constants/post'
 import { baseApi } from '@/src/shared/model/api/baseApi'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
@@ -155,11 +160,57 @@ export const postsApi = baseApi.injectEndpoints({
     updateLikeStatusPost: builder.mutation<void, { model: UpdateLikeStatusModel; postId: number }>({
       invalidatesTags: (_result, _err, { postId }) => [
         { id: postId, type: 'POST' },
-        {
-          id: postId,
-          type: 'POST_LIKES',
-        },
+        { id: postId, type: 'POST_LIKES' },
       ],
+      async onQueryStarted({ postId }, { dispatch, getState, queryFulfilled }) {
+        const state = getState() as RootState
+        const userId = state.app.userId
+
+        if (!userId) {
+          return
+        }
+
+        const optimisticUser: LikeUser = {
+          avatars: [],
+          createdAt: new Date().toISOString(),
+          id: Date.now(),
+          isFollowedBy: false,
+          isFollowing: false,
+          userId,
+          userName: 'You',
+        }
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData(
+            'getPostLikes',
+            {
+              pageSize: PREVIEW_LIKES_LIMIT,
+              postId,
+            },
+            draft => {
+              const alreadyLiked = draft.items.some(user => user.userId === userId)
+
+              if (alreadyLiked) {
+                draft.items = draft.items.filter(user => user.userId !== userId)
+                draft.totalCount -= 1
+              } else {
+                draft.items.unshift(optimisticUser)
+                draft.totalCount += 1
+              }
+            }
+          )
+        )
+
+        try {
+          await queryFulfilled
+        } catch (err) {
+          patchResult.undo()
+          const error = err as CustomerError
+          const errorMessage =
+            error.data?.messages[0].message || error.data?.error || 'Failed to update like status'
+
+          dispatch(setAppError({ error: errorMessage }))
+        }
+      },
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',

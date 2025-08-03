@@ -31,17 +31,25 @@ export const InteractionBar = ({ className, hasCommentIcon = true, postId }: Pro
   const [updateLikeStatus] = useUpdateLikeStatusPostMutation()
   const dispatch = useAppDispatch()
 
-  const { isLiked } = usePostLikes(postId)
+  const { isLiked, likesCount, setLocalLike } = usePostLikes(postId)
 
   const handleLikePost = async () => {
     if (!postId) {
       return
     }
+
     const newLikeStatus: LikeStatus = isLiked ? 'NONE' : 'LIKE'
+    const newLikesCount = isLiked ? likesCount - 1 : likesCount + 1
+
+    setLocalLike({
+      isLiked: !isLiked,
+      likesCount: newLikesCount,
+    })
 
     try {
       await updateLikeStatus({ model: { likeStatus: newLikeStatus }, postId }).unwrap()
     } catch (err) {
+      setLocalLike(null)
       const error = err as CustomerError
       const errorMessage =
         error.data?.messages[0].message || error.data?.error || 'Failed to update like status'
