@@ -1,8 +1,10 @@
 import { Button } from '@/src/shared/ui/button/Button'
+import clsx from 'clsx'
 
 import s from './followersButtons.module.scss'
 
 type Props = {
+  className?: string
   isFollowing?: boolean
   isLoading: boolean
   isMyProfile: boolean
@@ -11,6 +13,7 @@ type Props = {
 }
 
 export const FollowersButtons = ({
+  className,
   isFollowing,
   isLoading,
   isMyProfile,
@@ -30,12 +33,16 @@ export const FollowersButtons = ({
       {!isMyProfile && (
         <div className={s.buttons}>
           {!isFollowing ? (
-            <Button className={s.button} disabled={isLoading} onClick={handleFollowClick}>
+            <Button
+              className={clsx(s.button, className)}
+              disabled={isLoading}
+              onClick={handleFollowClick}
+            >
               Follow
             </Button>
           ) : (
             <Button
-              className={s.button}
+              className={clsx(s.button, className)}
               disabled={isLoading}
               onClick={handleDeleteClick}
               variant={'transparent'}

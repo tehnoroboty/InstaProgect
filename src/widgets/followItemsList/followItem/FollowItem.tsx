@@ -27,23 +27,27 @@ export const FollowItem = ({ isFollowers, item }: Props) => {
         <Link href={`/profile/${item.userId}`}>
           <UserAvatarName url={item?.avatars[0]?.url} username={item.userName} weight={'regular'} />
         </Link>
-        {isFollowers ? (
-          <FollowersButtons
-            isFollowing={item.isFollowing}
-            isLoading={isLoading}
-            isMyProfile={isMyProfile}
-            onFollow={handleFollow}
-            openModal={setOpenUnfollowModal}
-          />
-        ) : (
-          <FollowingButtons
-            isFollowing={item.isFollowing}
-            isLoading={isLoading}
-            isMyProfile={isMyProfile}
-            onFollow={handleFollow}
-            openModal={setOpenUnfollowModal}
-          />
-        )}
+        <div className={s.followButtons}>
+          {isFollowers ? (
+            <FollowersButtons
+              className={s.followButton}
+              isFollowing={item.isFollowing}
+              isLoading={isLoading}
+              isMyProfile={isMyProfile}
+              onFollow={handleFollow}
+              openModal={setOpenUnfollowModal}
+            />
+          ) : (
+            <FollowingButtons
+              className={s.followButton}
+              isFollowing={item.isFollowing}
+              isLoading={isLoading}
+              isMyProfile={isMyProfile}
+              onFollow={handleFollow}
+              openModal={setOpenUnfollowModal}
+            />
+          )}
+        </div>
       </div>
 
       <ConfirmationModal
