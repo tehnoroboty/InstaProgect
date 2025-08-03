@@ -1,7 +1,8 @@
-import { ChangeEvent, ComponentProps, ReactNode } from 'react'
+import { ChangeEvent, ComponentProps, ReactNode, useEffect, useMemo } from 'react'
 
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Input } from '@/src/shared/ui/input'
+import debounce from 'lodash/debounce'
 
 import s from './socialModal.module.scss'
 
@@ -12,9 +13,21 @@ type Props = {
 } & ComponentProps<typeof Dialog>
 
 export const SocialModal = ({ children, onSearchChange, title, ...props }: Props) => {
+  const debouncedOnChange = useMemo(() => {
+    return debounce((value: string) => {
+      onSearchChange?.(value)
+    }, 300)
+  }, [onSearchChange])
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onSearchChange?.(e.target.value)
+    debouncedOnChange(e.target.value)
   }
+
+  useEffect(() => {
+    return () => {
+      debouncedOnChange.cancel()
+    }
+  }, [debouncedOnChange])
 
   return (
     <Dialog modalTitle={title} {...props} className={s.socialModal}>
