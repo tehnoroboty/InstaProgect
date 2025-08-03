@@ -5,7 +5,7 @@ import { useGetPostLikesQuery } from '@/src/shared/model/api/postsApi'
 import { useAppSelector } from '@/src/shared/model/store/store'
 
 export const usePostLikes = (postId: number) => {
-  const { data: likesData, refetch } = useGetPostLikesQuery({
+  const { data: likesData } = useGetPostLikesQuery({
     pageSize: PREVIEW_LIKES_LIMIT,
     postId,
   })
@@ -30,7 +30,6 @@ export const usePostLikes = (postId: number) => {
     avatars,
     isLiked: localLike?.isLiked ?? serverIsLiked,
     likesCount: localLike?.likesCount ?? serverLikesCount,
-    refetch,
     setLocalLike,
   }
 }
