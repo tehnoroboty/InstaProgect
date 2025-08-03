@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { AnswersComment, Comment } from '@/src/entities/comments/types'
+import { AnswersComment } from '@/src/entities/comments/types'
 import { CustomerError } from '@/src/entities/errors/types'
 import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
@@ -36,7 +36,6 @@ import { useParams, useRouter } from 'next/navigation'
 import s from './modalCommentsSection.module.scss'
 
 export type ModalCommentsSectionProps = {
-  commentsData?: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
   post: Post
