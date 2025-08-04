@@ -66,6 +66,7 @@ export const ProtectedFeedPost = (props: Props) => {
         </div>
         <PostLikesBox
           className={clsx(s.likesBox, { [s.noMargin]: !showViewCommentsBtn })}
+          onClick={onOpenWhoLikeModal}
           postId={id}
         />
         {showViewCommentsBtn && (
@@ -77,10 +78,6 @@ export const ProtectedFeedPost = (props: Props) => {
             {`View All Comments (${data?.items.length})`}
           </Button>
         )}
-        <PostLikesBox className={s.likesBox} onClick={onOpenWhoLikeModal} postId={id} />
-        <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
-          {`View All Comments (${data?.items.length})`}
-        </Button>
         <AddCommentForm
           className={s.addCommentContainer}
           postId={id}
