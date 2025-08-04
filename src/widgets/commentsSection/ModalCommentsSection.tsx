@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { AnswersComment, Comment } from '@/src/entities/comments/types'
+import { AnswersComment } from '@/src/entities/comments/types'
 import { CustomerError } from '@/src/entities/errors/types'
 import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
@@ -28,6 +28,7 @@ import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -35,7 +36,6 @@ import { useParams, useRouter } from 'next/navigation'
 import s from './modalCommentsSection.module.scss'
 
 export type ModalCommentsSectionProps = {
-  commentsData?: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
   post: Post
@@ -54,8 +54,17 @@ export const ModalCommentsSection = ({
   const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
   const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
 
+  const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
+
+  const onOpenWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(true)
+  }
+  const onCloseWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(false)
+  }
+
   const { data: commentsResponse } = useGetCommentsQuery(postId)
-  const commentsRaw = commentsResponse?.items ?? []
+  const commentsRaw = useMemo(() => commentsResponse?.items ?? [], [commentsResponse?.items])
 
   const currentUserId = useSelector(selectUserId)
 
@@ -75,7 +84,7 @@ export const ModalCommentsSection = ({
         const answersObj: Record<number, AnswersComment[]> = {}
 
         responses.forEach((res, index) => {
-          answersObj[commentsRaw[index].id] = res.items
+          answersObj[commentsRaw[index].id] = [...res.items].reverse()
         })
 
         setAnswersMap(answersObj)
@@ -147,7 +156,7 @@ export const ModalCommentsSection = ({
   const handleAnswerAdded = (commentId: number, answer: AnswersComment) => {
     setAnswersMap(prev => ({
       ...prev,
-      [commentId]: [...(prev[commentId] || []), answer],
+      [commentId]: [answer, ...(prev[commentId] || [])],
     }))
   }
 
@@ -270,12 +279,13 @@ export const ModalCommentsSection = ({
         {isAuth && (
           <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
         )}
-        <PostLikesBox className={s.postLikesBox} postId={postId} />
+        <PostLikesBox className={s.postLikesBox} onClick={onOpenWhoLikeModal} postId={postId} />
         <div className={s.postDate}>{timeSince(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>
         {isAuth && <AddCommentForm postId={postId} />}
       </div>
+      <WhoLikeModal onClose={onCloseWhoLikeModal} open={isWhoLikeModalOpen} postId={postId} />
     </div>
   )
 }

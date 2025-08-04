@@ -1,5 +1,7 @@
 import type { Post, PostImage } from '@/src/entities/post/types'
 
+import { useState } from 'react'
+
 import { useGetCommentsQuery } from '@/src/shared/model/api/postsApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -10,6 +12,7 @@ import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
 import clsx from 'clsx'
 import Image from 'next/image'
 
@@ -31,6 +34,15 @@ export const ProtectedFeedPost = (props: Props) => {
   const isFollowedBy = true
   const isOurPost = false
   const showViewCommentsBtn = data?.items.length && data?.items.length > 0
+
+  const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
+
+  const onOpenWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(true)
+  }
+  const onCloseWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(false)
+  }
 
   return (
     <div className={s.card} id={String(id)}>
@@ -65,12 +77,17 @@ export const ProtectedFeedPost = (props: Props) => {
             {`View All Comments (${data?.items.length})`}
           </Button>
         )}
+        <PostLikesBox className={s.likesBox} onClick={onOpenWhoLikeModal} postId={id} />
+        <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
+          {`View All Comments (${data?.items.length})`}
+        </Button>
         <AddCommentForm
           className={s.addCommentContainer}
           postId={id}
           textAreaClassName={s.textArea}
           textAreaWrapperClassName={s.textareaContainer}
         />
+        <WhoLikeModal onClose={onCloseWhoLikeModal} open={isWhoLikeModalOpen} postId={id} />
       </div>
     </div>
   )
