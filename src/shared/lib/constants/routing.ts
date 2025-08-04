@@ -9,5 +9,10 @@ export enum AuthRoutes {
 }
 
 export enum AppRoutes {
+  FAVOURITES = '/favourites',
+  FEED = '/feed',
+  MESSENGER = '/messenger',
   PROFILE = '/profile',
+  SEARCH = '/search',
+  STATISTICS = '/statistics',
 }
