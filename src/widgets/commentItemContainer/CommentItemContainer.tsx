@@ -1,6 +1,6 @@
 import { AnswersComment, Comment } from '@/src/entities/comments/types'
 import { LikeStatus } from '@/src/entities/likes/types'
-import { useGetCommentLikesQuery } from '@/src/shared/model/api/postsApi'
+import { useGetCommentLikesQuery } from '@/src/shared/model/api/commentsAnswersApi'
 import { CommentItem } from '@/src/widgets/commentItem/CommentItem'
 
 type Props = {

@@ -25,10 +25,6 @@ export default function ModalPostComments(props: Props) {
 
   const [showDialog, setShowDialog] = useState(true)
 
-  const openModalHandler = () => {
-    setShowDialog(true)
-  }
-
   const closeModalHandler = () => {
     setShowDialog(false)
   }

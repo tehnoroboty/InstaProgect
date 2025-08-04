@@ -9,13 +9,17 @@
   }
 }
 
+.userComment {
+  margin-left: 12px;
+}
+
 .usersCommentBodyBox {
   display: flex;
   flex-grow: 1;
   min-width: 0;
 }
 
-.userCommentTypography {
+.userAnswerTypography {
   width: 370px;
   max-width: 100%;
 
@@ -34,7 +38,7 @@
   }
 }
 
-.answer {
+.usersAnswerBodyBox {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { AnswersComment } from '@/src/entities/comments/types'
 import { CustomerError } from '@/src/entities/errors/types'
-import { useAddAnswerMutation } from '@/src/shared/model/api/postsApi'
+import { useAddAnswerMutation } from '@/src/shared/model/api/commentsAnswersApi'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 
