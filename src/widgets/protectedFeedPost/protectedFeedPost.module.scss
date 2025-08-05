@@ -89,6 +89,10 @@
   margin-bottom: 24px;
 }
 
+.noMargin {
+  margin-bottom: 0;
+}
+
 .viewCommentsBtn {
   margin-bottom: 12px;
   padding: 0;
@@ -105,6 +109,7 @@
   justify-content: space-between;
 
   margin-bottom: 16px;
+  padding: 0;
 }
 
 .textareaContainer {
