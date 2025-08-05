@@ -33,7 +33,7 @@ export const ProtectedFeedPost = (props: Props) => {
 
   const isFollowedBy = true
   const isOurPost = false
-  const showViewCommentsBtn = data?.items.length && data?.items.length > 0
+  const showViewCommentsBtn = (data?.items?.length ?? 0) > 0
 
   const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
 
