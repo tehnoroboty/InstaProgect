@@ -8,6 +8,7 @@ import {
 import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import { DEFAULT_PAGE_SIZE } from '@/src/shared/lib/constants/pagination'
 import { useMyPaymentsQuery } from '@/src/shared/model/api/subscriptionsApi'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Pagination } from '@/src/shared/ui/pagination/Pagination'
 import {
   Table,
@@ -71,7 +72,11 @@ export const MyPayments = () => {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   if (isLoading) {
-    return <div>{'Loading...'}</div>
+    return (
+      <div className={s.loader}>
+        <Loader />
+      </div>
+    )
   }
   /*  if (!data) {
           return <div>No data</div>
