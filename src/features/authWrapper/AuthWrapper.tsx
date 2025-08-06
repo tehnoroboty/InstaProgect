@@ -5,7 +5,6 @@ import { type ReactNode, useEffect } from 'react'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
-import { ProtectedFeed } from '@/src/widgets/protectedFeed/ProtectedFeed'
 import { useRouter } from 'next/navigation'
 
 import s from './authWrapper.module.scss'
@@ -30,9 +29,6 @@ export const AuthWrapper = ({ children }: Props) => {
         <Loader />
       </div>
     )
-  }
-  if (isSuccess) {
-    return <ProtectedFeed />
   }
 
   return <>{children}</>
