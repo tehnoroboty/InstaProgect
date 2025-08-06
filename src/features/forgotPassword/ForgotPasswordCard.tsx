@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { CustomerError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/forgotPassword/validators'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { usePasswordRecoveryMutation } from '@/src/shared/model/api/authApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Card } from '@/src/shared/ui/card/Card'
@@ -67,7 +68,7 @@ export default function ForgotPasswordCard() {
   const onSubmit: SubmitHandler<FormType> = async data => {
     try {
       await passwordRecovery({
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.RECOVERY}`,
         email: data.email,
         recaptcha: data.recaptcha,
       }).unwrap()
