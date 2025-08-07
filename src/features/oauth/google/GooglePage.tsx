@@ -27,11 +27,12 @@ export const GooglePage = () => {
       try {
         await exchangeGoogleCodeForToken({
           code,
-          redirectUrl: (process.env.NEXT_PUBLIC_BASE_URL as string) + AuthRoutes.OAUTH_GOOGLE,
+          redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.HOME}${AuthRoutes.OAUTH_GOOGLE}`,
         }).unwrap()
 
         router.push(AuthRoutes.HOME)
       } catch (err) {
+        console.error('Google OAuth error:', err)
         router.push(AuthRoutes.REGISTRATION)
       }
     }

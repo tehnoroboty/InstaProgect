@@ -18,7 +18,7 @@ export const GoogleOAuthButton = (props: Props) => {
   const login = () => {
     setDisabledButton(true)
     const clientId = getClientId()
-    const REDIRECT_URL = (process.env.NEXT_PUBLIC_BASE_URL as string) + AuthRoutes.OAUTH_GOOGLE
+    const REDIRECT_URL = `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.HOME}${AuthRoutes.OAUTH_GOOGLE}`
     const scope = 'email profile'
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${scope}`
 
