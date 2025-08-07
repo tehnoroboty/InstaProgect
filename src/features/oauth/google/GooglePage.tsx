@@ -32,7 +32,6 @@ export const GooglePage = () => {
 
         router.push(AuthRoutes.HOME)
       } catch (err) {
-        console.error('Google OAuth error:', err)
         router.push(AuthRoutes.REGISTRATION)
       }
     }
