@@ -56,7 +56,7 @@ export const Register = () => {
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationData = {
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.REGISTRATION_CONFIRMATION}`,
         email: formData.email,
         password: formData.password,
         userName: formData.userName,

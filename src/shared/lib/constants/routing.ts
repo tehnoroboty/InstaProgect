@@ -6,6 +6,7 @@ export enum AuthRoutes {
   OAUTH_GOOGLE = 'auth/google',
   RECOVERY = '/auth/recovery',
   REGISTRATION = '/auth/registration',
+  REGISTRATION_CONFIRMATION = '/auth/registration-confirmation',
 }
 
 export enum AppRoutes {
