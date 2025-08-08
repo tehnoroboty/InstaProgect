@@ -1,7 +1,7 @@
 .dialog {
   width: 100%;
   max-width: 972px;
-  padding: 0;
+  padding: 0 !important;
 }
 
 .dialog > div {
@@ -14,7 +14,7 @@
   flex: 1;
   justify-content: center;
 
-  height: 100%;
+  max-height: 564px;
 
   & > img,
   & > div {

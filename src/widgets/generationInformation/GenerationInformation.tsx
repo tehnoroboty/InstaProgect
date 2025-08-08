@@ -9,6 +9,7 @@ import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -239,9 +240,7 @@ export const GenerationInformation = () => {
 */}
               {isFetching || !countriesWithCity ? (
                 <div className={s.selectLoader}>
-                  <div className={s.loader}>
-                    <Typography option={'bold_text14'}>Loading...</Typography>
-                  </div>
+                  <Loader />
                 </div>
               ) : (
                 <>

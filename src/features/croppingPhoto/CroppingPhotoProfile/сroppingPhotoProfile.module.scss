@@ -1,6 +1,6 @@
 .modal {
-  width: 100%;
-  max-width: 492px;
+  width: clamp(420px, 50vw, 1200px);
+  min-width: 50%;
   height: fit-content;
   padding: 28px 22px 108px;
 }
@@ -30,8 +30,8 @@
   width: 53%;
   height: 50vh;
 
-  //width: 400px;
-  //height: 400px;
+  // width: 400px;
+  // height: 400px;
   margin: 0 auto;
 }
 
