@@ -3,7 +3,7 @@ export enum AuthRoutes {
   HOME = '/',
   LOGIN = '/auth/login',
   OAUTH_GITHUB = '/auth/github',
-  OAUTH_GOOGLE = 'auth/google',
+  OAUTH_GOOGLE = '/auth/google',
   RECOVERY = '/auth/recovery',
   REGISTRATION = '/auth/registration',
   REGISTRATION_CONFIRMATION = '/auth/registration-confirmation',
