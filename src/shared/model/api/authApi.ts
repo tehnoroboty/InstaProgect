@@ -59,10 +59,11 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          dispatch(baseApi.util.resetApiState())
-          localStorage.removeItem('accessToken')
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
+        } finally {
+          dispatch(baseApi.util.resetApiState())
+          localStorage.removeItem('accessToken')
         }
       },
       query: () => ({
