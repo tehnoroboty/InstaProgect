@@ -3,6 +3,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import GitHub from '@/src/shared/assets/componentsIcons/Github'
+import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 
 import s from './gitHubOAuthButton.module.scss'
 
@@ -16,8 +17,11 @@ export const GitHubOAuthButton = (props: Props) => {
 
   const login = () => {
     setDisabledButton(true)
+
+    const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.OAUTH_GITHUB}`
+
     window.location.assign(
-      `https://inctagram.work/api/v1/auth/github/login?redirect_url=${process.env.NEXT_PUBLIC_BASE_URL as string}/auth/`
+      `https://inctagram.work/api/v1/auth/github/login?redirect_url=${redirectUrl}`
     )
   }
 
