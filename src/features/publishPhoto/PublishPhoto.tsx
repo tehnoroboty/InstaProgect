@@ -7,7 +7,6 @@ import { RequestPostsType } from '@/src/entities/post/types'
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
-import PinIcon from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { AppRoutes } from '@/src/shared/lib/constants/routing'
 import {
@@ -22,7 +21,6 @@ import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
-import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -165,7 +163,7 @@ export const PublishPhoto = ({ photos }: Props) => {
                 value={value}
               />
             </div>
-            <div className={s.locationBox}>
+            {/*<div className={s.locationBox}>
               <div className={s.inputContainer}>
                 <Input className={s.addLocation} label={'Add location'} />
                 <PinIcon className={s.pinIcon} />
@@ -187,7 +185,7 @@ export const PublishPhoto = ({ photos }: Props) => {
                   {'Washington Square Park'}
                 </Typography>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
       </Dialog>

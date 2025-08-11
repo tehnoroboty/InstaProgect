@@ -11,6 +11,7 @@ import {
   useMarkAsReadMutation,
 } from '@/src/shared/model/api/notificationsApi'
 import { useAppDispatch } from '@/src/shared/model/store/store'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { NotificationItem } from '@/src/widgets/header/dropdownNotification/NotificationItem'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
@@ -95,7 +96,7 @@ export const DropdownNotification = () => {
                   <DropdownMenu.Separator className={s.separator} />
                   {arr.length - 1 === index && hasMorNotifications && (
                     <div className={s.seeMore} ref={ref}>
-                      <Typography option={'bold_text16'}>Loading...</Typography>
+                      <Loader />
                     </div>
                   )}
                 </Fragment>

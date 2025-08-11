@@ -7,8 +7,8 @@ import { PublicProfileTypes } from '@/src/entities/users/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
-import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
@@ -64,7 +64,7 @@ export const Profile = (props: Props) => {
       {!postsDataForRender ? <div>Пусто</div> : <Posts posts={postsDataForRender} />}
       {hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
-          <Typography option={'bold_text16'}>Loading...</Typography>
+          <Loader />
         </div>
       )}
       <ModalPost
