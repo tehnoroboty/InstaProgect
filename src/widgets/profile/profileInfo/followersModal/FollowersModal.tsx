@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 import { useGetFollowersQuery } from '@/src/shared/model/api/followingApi'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppSelector } from '@/src/shared/model/store/store'
 import { FollowItemsList } from '@/src/widgets/followItemsList/FollowItemsList'
 import { SocialModal } from '@/src/widgets/socialModal/SocialModal'
 
@@ -12,7 +14,11 @@ type Props = {
 
 export const FollowersModal = ({ onClose, open, userName }: Props) => {
   const [searchValue, setSearchValue] = useState('')
-  const { data: getFollowersData } = useGetFollowersQuery({ search: searchValue, userName })
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: getFollowersData } = useGetFollowersQuery(
+    { search: searchValue, userName },
+    { skip: !isLoggedIn }
+  )
 
   const handleClose = () => {
     onClose()

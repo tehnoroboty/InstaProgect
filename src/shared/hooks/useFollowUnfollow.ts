@@ -1,13 +1,14 @@
 import { CustomerError } from '@/src/entities/errors/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
-import { useAppDispatch } from '@/src/shared/model/store/store'
+import { selectIsLoggedIn, setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 
 export const useFollowUnfollow = (userId: number, isCurrentlyFollowing: boolean) => {
   const [follow, { isLoading: isLoadingFollow }] = useFollowMutation()
   const [unFollow, { isLoading: isLoadingUnFollow }] = useUnFollowMutation()
-  const { data: meData } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: meData } = useMeQuery(undefined, { skip: !isLoggedIn })
   const isMyProfile = meData?.userId === userId
 
   const isLoading = isLoadingFollow || isLoadingUnFollow

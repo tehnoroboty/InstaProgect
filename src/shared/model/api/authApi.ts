@@ -1,4 +1,4 @@
-import { setAppError, setUserId } from '../slices/appSlice'
+import { setAppError, setIsLoggedIn, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -61,6 +61,8 @@ export const authApi = baseApi.injectEndpoints({
           await queryFulfilled
           dispatch(baseApi.util.resetApiState())
           localStorage.removeItem('accessToken')
+          dispatch(setUserId({ userId: null }))
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
         } catch (error) {
           console.error('Ошибка при разлогине:', error)
         }
@@ -76,9 +78,8 @@ export const authApi = baseApi.injectEndpoints({
           const res = await queryFulfilled
 
           dispatch(setUserId({ userId: res.data.userId }))
-        } catch (error) {
-          console.error('Ошибка ME запроса:', error)
-        }
+          dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        } catch (error) {}
       },
       query: () => 'auth/me',
     }),
