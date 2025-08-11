@@ -19,14 +19,23 @@ import Image from 'next/image'
 import s from './protectedFeedPost.module.scss'
 
 type Props = Post & {
-  onViewCommentsClick: () => void
+  onModalOpen: () => void
 }
 
 export const ProtectedFeedPost = (props: Props) => {
-  const { avatarOwner, createdAt, description, id, images, onViewCommentsClick, userName } = props
+  const { avatarOwner, createdAt, description, id, images, onModalOpen, userName } = props
 
   const renderImgCarousel = (img: PostImage) => {
-    return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
+    return (
+      <Image
+        alt={''}
+        className={s.img}
+        height={img.height}
+        onClick={onModalOpen}
+        src={img.url}
+        width={img.width}
+      />
+    )
   }
 
   const { data } = useGetCommentsQuery(id)
@@ -70,11 +79,7 @@ export const ProtectedFeedPost = (props: Props) => {
           postId={id}
         />
         {showViewCommentsBtn && (
-          <Button
-            className={s.viewCommentsBtn}
-            onClick={onViewCommentsClick}
-            variant={'transparent'}
-          >
+          <Button className={s.viewCommentsBtn} onClick={onModalOpen} variant={'transparent'}>
             {`View All Comments (${data?.items.length})`}
           </Button>
         )}
