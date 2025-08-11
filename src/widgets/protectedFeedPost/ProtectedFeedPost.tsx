@@ -1,5 +1,3 @@
-'use client'
-
 import type { Post, PostImage } from '@/src/entities/post/types'
 
 import { useState } from 'react'
