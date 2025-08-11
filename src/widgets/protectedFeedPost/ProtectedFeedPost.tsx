@@ -1,3 +1,5 @@
+'use client'
+
 import type { Post, PostImage } from '@/src/entities/post/types'
 
 import { useState } from 'react'
@@ -15,6 +17,7 @@ import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
 import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
 import clsx from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import s from './protectedFeedPost.module.scss'
 
@@ -23,7 +26,16 @@ type Props = Post & {
 }
 
 export const ProtectedFeedPost = (props: Props) => {
-  const { avatarOwner, createdAt, description, id, images, onViewCommentsClick, userName } = props
+  const {
+    avatarOwner,
+    createdAt,
+    description,
+    id,
+    images,
+    onViewCommentsClick,
+    ownerId,
+    userName,
+  } = props
 
   const renderImgCarousel = (img: PostImage) => {
     return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
@@ -48,7 +60,9 @@ export const ProtectedFeedPost = (props: Props) => {
     <div className={s.card} id={String(id)}>
       <div className={s.cardHeader}>
         <div className={s.cardHeaderGroup}>
-          <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
+          <Link href={`/profile/${ownerId}`}>
+            <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
+          </Link>
           <CreationTime createdAt={createdAt} />
         </div>
         <DropdownPost isFollowedBy={isFollowedBy} isOurPost={isOurPost} />
@@ -59,9 +73,14 @@ export const ProtectedFeedPost = (props: Props) => {
       <div className={s.cardBody}>
         <InteractionBar postId={id} />
         <div className={s.infoContainer}>
-          <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
+          <Link className={s.userName} href={`/profile/${ownerId}`}>
+            <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
+          </Link>
           <p className={s.postInfo}>
-            <span className={s.userName}>{userName}</span> {description}
+            <Link className={s.userName} href={`/profile/${ownerId}`}>
+              <span>{userName}</span>
+            </Link>{' '}
+            {description}
           </p>
         </div>
         <PostLikesBox
