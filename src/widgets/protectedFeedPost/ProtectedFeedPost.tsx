@@ -61,7 +61,12 @@ export const ProtectedFeedPost = (props: Props) => {
       <div className={s.cardHeader}>
         <div className={s.cardHeaderGroup}>
           <Link href={`/profile/${ownerId}`}>
-            <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
+            <UserAvatarName
+              className={s.owner}
+              url={avatarOwner}
+              username={userName}
+              usernameClassName={s.userName}
+            />
           </Link>
           <CreationTime createdAt={createdAt} />
         </div>
