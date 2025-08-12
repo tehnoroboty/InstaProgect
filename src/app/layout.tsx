@@ -1,6 +1,7 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
+import { InitializedWrapper } from '@/src/features/initializedWrapper/InitializedWrapper'
 import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
 import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang={'en'}>
@@ -37,7 +38,9 @@ export default function RootLayout({
             <ProgressBar />
             <div className={'accountWrapper'}>
               <NavigationPanel />
-              <main>{children}</main>
+              <main>
+                <InitializedWrapper>{children}</InitializedWrapper>
+              </main>
             </div>
           </div>
           <CommonAlert />
