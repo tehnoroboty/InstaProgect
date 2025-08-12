@@ -1,4 +1,4 @@
-import { setAppError, setIsLoggedIn, setUserId } from '../slices/appSlice'
+import { setAppError, setAppSuccess, setIsLoggedIn, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -11,6 +11,7 @@ import {
   RegistrationType,
 } from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
+import { useSuccessAlert } from '@/src/shared/hooks/useSuccessAlert'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const authApi = baseApi.injectEndpoints({
@@ -65,6 +66,7 @@ export const authApi = baseApi.injectEndpoints({
           localStorage.removeItem('accessToken')
           dispatch(setUserId({ userId: null }))
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          dispatch(setAppSuccess({ success: 'Logout completed successfully.' }))
         } catch (error) {
           dispatch(setAppError({ error: 'Ошибка при разлогине' }))
         }

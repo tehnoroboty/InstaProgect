@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { CustomerError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/register/validators'
+import { useSuccessAlert } from '@/src/shared/hooks/useSuccessAlert'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useRegistrationMutation } from '@/src/shared/model/api/authApi'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -50,7 +51,9 @@ export const Register = () => {
     }
   }
 
-  const [registration, { isLoading }] = useRegistrationMutation()
+  const [registration, { isLoading, isSuccess }] = useRegistrationMutation()
+
+  useSuccessAlert(isSuccess, 'You have successfully registration.')
   const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoading
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {

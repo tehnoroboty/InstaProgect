@@ -25,17 +25,12 @@ export const CommonAlert = () => {
       dispatch(setAppSuccess({ success: null }))
     }
   }
+  const type: 'error' | 'success' = errorApi ? 'error' : 'success'
 
   return (
     <>
       {(errorApi || successApi) && (
-        <Alerts
-          autoClose
-          closeFn={closeFn}
-          delay={3000}
-          message={message}
-          type={errorApi ? 'error' : 'success'}
-        />
+        <Alerts autoClose closeFn={closeFn} delay={3000} message={message} type={type} />
       )}
     </>
   )

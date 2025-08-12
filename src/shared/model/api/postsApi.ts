@@ -19,7 +19,7 @@ import {
 } from '@/src/entities/post/types'
 import { PREVIEW_LIKES_LIMIT } from '@/src/shared/lib/constants/post'
 import { baseApi } from '@/src/shared/model/api/baseApi'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { setAppError, setAppSuccess } from '@/src/shared/model/slices/appSlice'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
@@ -43,6 +43,7 @@ export const postsApi = baseApi.injectEndpoints({
         dispatch(setLastPostId({ lastPostId: null }))
         try {
           await queryFulfilled
+          dispatch(setAppSuccess({ success: 'Post added successfully.' }))
         } catch (error) {
           console.error('Failed to create post:', error)
         }
@@ -67,6 +68,7 @@ export const postsApi = baseApi.injectEndpoints({
 
         try {
           await queryFulfilled // Ждем завершения запроса
+          dispatch(setAppSuccess({ success: 'Post delete successfully.' }))
         } catch {
           patchResult.undo() // Если запрос не удался, откатываем изменения
         }

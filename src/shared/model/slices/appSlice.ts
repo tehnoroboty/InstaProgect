@@ -31,7 +31,7 @@ export const appSlice = createSlice({
       state.status = action.payload.status
     }),
     setAppSuccess: create.reducer<{ success: null | string }>((state, action) => {
-      state.error = action.payload.success
+      state.success = action.payload.success
     }),
 
     setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
@@ -50,8 +50,9 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setAppError, setAppStatus, setAppSuccess, setUserId, setIsLoggedIn } = appSlice.actions
-export const { selectAppError, selectAppStatus, selectAppSuccess, selectUserId, selectIsLoggedIn } =
+export const { setAppError, setAppStatus, setAppSuccess, setIsLoggedIn, setUserId } =
+  appSlice.actions
+export const { selectAppError, selectAppStatus, selectAppSuccess, selectIsLoggedIn, selectUserId } =
   appSlice.selectors
 
 export const appReducer = appSlice.reducer
