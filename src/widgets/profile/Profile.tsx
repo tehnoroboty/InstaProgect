@@ -5,7 +5,8 @@ import { GetCommentsResponse } from '@/src/entities/comments/types'
 import { GetPostsResponse, Post } from '@/src/entities/post/types'
 import { PublicProfileTypes } from '@/src/entities/users/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { useAppDispatch } from '@/src/shared/model/store/store'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
@@ -28,7 +29,8 @@ type Props = {
 
 export const Profile = (props: Props) => {
   const dispatch = useAppDispatch()
-  const { data: meData } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: meData } = useMeQuery(undefined, { skip: !isLoggedIn })
   const authProfile = !!meData
   const params = useParams<{ userId: string }>()
   const isMyProfile = meData?.userId === Number(params.userId)

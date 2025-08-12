@@ -20,18 +20,21 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { AppRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { selectIsPostModalOpen, setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
+import { useAppSelector } from '@/src/shared/model/store/store'
 import { AddPost } from '@/src/widgets/addPost/AddPost'
 import { MenuMobile } from '@/src/widgets/navigationPanel/menuMobile/MenuMobile'
 import Sidebar from '@/src/widgets/navigationPanel/sidebar/Sidebar'
 import { MenuItemsType } from '@/src/widgets/navigationPanel/types'
 
 export const NavigationPanel = () => {
-  const { data, isSuccess } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data, isSuccess } = useMeQuery(undefined, { skip: !isLoggedIn })
   const isPostModalOpen = useSelector(selectIsPostModalOpen)
   const dispatch = useDispatch()
 
-  if (!isSuccess || !data) {
+  if (!isSuccess || !data || !isLoggedIn) {
     return null
   }
   const userId = data.userId

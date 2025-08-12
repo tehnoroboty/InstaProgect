@@ -3,6 +3,8 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppSelector } from '@/src/shared/model/store/store'
 import { HeaderMobile } from '@/src/widgets/header/headerMobile/HeaderMobile'
 import { HeaderWeb } from '@/src/widgets/header/headerWeb/HeaderWeb'
 
@@ -15,12 +17,12 @@ type Props = {
 export const Header = (props: Props) => {
   const { title, ...rest } = props
 
-  const { isSuccess } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   return (
     <header {...rest} className={s.header}>
       <HeaderMobile title={title} />
-      <HeaderWeb isLoggedIn={isSuccess} title={title} />
+      <HeaderWeb isLoggedIn={isLoggedIn} title={title} />
     </header>
   )
 }
