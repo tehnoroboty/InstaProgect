@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
 import { InitializedWrapper } from '@/src/features/initializedWrapper/InitializedWrapper'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang={'en'}>

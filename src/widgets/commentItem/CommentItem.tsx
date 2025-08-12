@@ -2,8 +2,7 @@ import { AnswersComment, Comment } from '@/src/entities/comments/types'
 import Heart from '@/src/shared/assets/componentsIcons/Heart'
 import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
 import { timeSince } from '@/src/shared/lib/timeSince'
-import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -43,9 +42,7 @@ export const CommentItem = ({
   replying,
   toggleExpanded,
 }: Props) => {
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const { data } = useMeQuery(undefined, { skip: !isLoggedIn })
-  const currentUserId = data?.userId || null
+  const currentUserId = useAppSelector(selectUserId)
 
   return (
     <div className={s.usersCommentBody}>
