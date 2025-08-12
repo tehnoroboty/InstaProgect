@@ -11,7 +11,6 @@ import {
   RegistrationType,
 } from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
-import { useSuccessAlert } from '@/src/shared/hooks/useSuccessAlert'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const authApi = baseApi.injectEndpoints({
