@@ -18,7 +18,6 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof Pagination>
 
-// Моковые данные для демонстрации
 const mockPaginationProps = {
   currentPage: 1,
   pageSize: 10,

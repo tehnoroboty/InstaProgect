@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { ComponentType } from 'react'
 
 export type MenuItemsType = {
   additional: MenuItemType[]
@@ -7,8 +7,8 @@ export type MenuItemsType = {
 }
 export type MenuItemType = {
   href?: string
-  icon: React.ComponentType
-  iconActive?: React.ComponentType
+  icon: ComponentType
+  iconActive?: ComponentType
   onClick?: () => void
   title: string
 }

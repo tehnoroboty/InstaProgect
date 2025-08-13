@@ -1,6 +1,4 @@
-// @flow
 'use client'
-import * as React from 'react'
 
 import { ItemWrapper } from '@/src/widgets/itemWrapper/ItemWrapper'
 import { MenuItemType } from '@/src/widgets/navigationPanel/types'

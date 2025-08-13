@@ -3,7 +3,6 @@
   padding: 7px 12px;
 }
 
-// Заголовок (месяц и год)
 .caption {
   position: relative;
   display: flex;
@@ -46,7 +45,6 @@
   color: var(--light-100);
 }
 
-// Ячейки сетки календаря
 .cell {
   position: relative;
   padding: 0;
@@ -59,7 +57,6 @@
   }
 }
 
-// Стили дней
 .day {
   cursor: pointer;
 
@@ -161,7 +158,6 @@
   }
 }
 
-// Заголовки дней недели
 .headCell {
   width: 32px;
   padding: 4px 0;
@@ -176,7 +172,6 @@
   display: flex;
 }
 
-// Контейнер месяца
 .month {
   display: flex;
   flex-direction: column;
@@ -188,7 +183,6 @@
   }
 }
 
-// Строка дней
 .row {
   display: flex;
   width: 100%;

@@ -36,13 +36,13 @@
 }
 
 .contentModal::after {
-  pointer-events: none; /* позволяет взаимодействовать с Cropper под этим слоем */
+  pointer-events: none;
   content: '';
 
   position: absolute;
   inset: 0;
 
-  background-color: rgb(0 0 0 / 50%); /* тёмный полупрозрачный фон */
+  background-color: rgb(0 0 0 / 50%);
 
   mask-image: radial-gradient(circle at center, transparent 160px, black 160px);
 }

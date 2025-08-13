@@ -23,10 +23,8 @@ export const usePagination = ({
 }: UsePaginationProps) => {
   return useMemo(() => {
     const totalPageCount = Math.ceil(totalCount / pageSize)
-    // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
     const totalPageNumbers = siblingCount + 5
 
-    // Case 1:
     if (totalPageNumbers >= totalPageCount) {
       return range(1, totalPageCount)
     }
@@ -40,7 +38,6 @@ export const usePagination = ({
     const firstPageIndex = 1
     const lastPageIndex = totalPageCount
 
-    // Case 2: No left dots to show, but rights dots to be shown
     if (!shouldShowLeftDots && shouldShowRightDots) {
       const leftItemCount = 3 + 2 * siblingCount
       const leftRange = range(1, leftItemCount)
@@ -48,7 +45,6 @@ export const usePagination = ({
       return [...leftRange, DOTS, totalPageCount]
     }
 
-    // Case 3: No right dots to show, but left dots to be shown
     if (shouldShowLeftDots && !shouldShowRightDots) {
       const rightItemCount = 3 + 2 * siblingCount
       const rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount)
@@ -56,7 +52,6 @@ export const usePagination = ({
       return [firstPageIndex, DOTS, ...rightRange]
     }
 
-    // Case 4: Both left and right dots to be shown
     if (shouldShowLeftDots && shouldShowRightDots) {
       const middleRange = range(leftSiblingIndex, rightSiblingIndex)
 

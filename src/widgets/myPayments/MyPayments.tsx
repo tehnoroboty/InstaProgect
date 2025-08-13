@@ -78,12 +78,8 @@ export const MyPayments = () => {
       </div>
     )
   }
-  /*  if (!data) {
-          return <div>No data</div>
-        }*/
   const tableData = data ? transformData(data) : transformData(mockTableData)
 
-  // Добавляем выборку данных для текущей страницы
   const paginatedData = tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   return (
