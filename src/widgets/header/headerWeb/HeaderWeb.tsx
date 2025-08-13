@@ -1,5 +1,4 @@
 // @flow
-import * as React from 'react'
 
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { Button } from '@/src/shared/ui/button/Button'

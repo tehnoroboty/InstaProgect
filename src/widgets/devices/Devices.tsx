@@ -54,7 +54,6 @@ export const Devices = () => {
     try {
       await logOutDevice(id).unwrap()
     } catch (error) {
-      console.error(error)
       const err = error as ErrorDataType
 
       setErrorMessage(err.messages[0].message)

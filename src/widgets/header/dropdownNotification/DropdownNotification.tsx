@@ -1,5 +1,4 @@
 'use client'
-import * as React from 'react'
 import { Fragment, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 

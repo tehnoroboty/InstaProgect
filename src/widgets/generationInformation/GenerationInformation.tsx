@@ -182,16 +182,6 @@ export const GenerationInformation = () => {
     }
   }
 
-  /*
-  if (isFetching || !countriesWithCity) {
-    return (
-      <div className={s.pageLoading}>
-        <Loader />
-      </div>
-    )
-  }
-*/
-
   return (
     <>
       <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
@@ -222,22 +212,6 @@ export const GenerationInformation = () => {
               )}
             </div>
             <div className={s.selectBox}>
-              {/*
-              <SelectBox
-                label={'Select your country'}
-                onChangeValue={onSelectCountyHandler}
-                options={countries}
-                placeholder={'Country'}
-                value={selectedCountry || MyProfile?.country || ''}
-              />
-              <SelectBox
-                label={'Select your city'}
-                onChangeValue={onSelectCityHandler}
-                options={cites}
-                placeholder={'City'}
-                value={selectedCity || MyProfile?.city || ''}
-              />
-*/}
               {isFetching || !countriesWithCity ? (
                 <div className={s.selectLoader}>
                   <Loader />

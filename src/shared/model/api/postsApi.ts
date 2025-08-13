@@ -45,7 +45,10 @@ export const postsApi = baseApi.injectEndpoints({
           await queryFulfilled
           dispatch(setAppSuccess({ success: 'Post added successfully.' }))
         } catch (error) {
-          console.error('Failed to create post:', error)
+          const errorMessage =
+            error instanceof Error ? error.message : `Failed to fetch post: ${String(error)}`
+
+          dispatch(setAppError({ error: errorMessage }))
         }
       },
       query: body => ({
@@ -67,10 +70,10 @@ export const postsApi = baseApi.injectEndpoints({
         )
 
         try {
-          await queryFulfilled // Ждем завершения запроса
+          await queryFulfilled
           dispatch(setAppSuccess({ success: 'Post delete successfully.' }))
         } catch {
-          patchResult.undo() // Если запрос не удался, откатываем изменения
+          patchResult.undo()
         }
       },
       query: ({ postId }) => ({
@@ -93,7 +96,6 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      // providesTags: 'FEED',
       query: ({ endCursorPostId, pageNumber, pageSize }) => ({
         method: 'GET',
         params: {

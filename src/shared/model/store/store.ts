@@ -5,7 +5,6 @@ import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
 import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
 import { postsReducer, postsSlice } from '@/src/shared/model/slices/postsSlice'
 import { configureStore } from '@reduxjs/toolkit'
-// import {authApi} from "@/src/shared/model/api/authApi";
 
 export const initializeStore = () => {
   return configureStore({
@@ -13,7 +12,6 @@ export const initializeStore = () => {
     reducer: {
       [appSlice.name]: appReducer,
       [baseApi.reducerPath]: baseApi.reducer,
-      // [authApi.reducerPath]: authApi.reducer,
       [modalSlice.name]: modalReducer,
       [postsSlice.name]: postsReducer,
     },
