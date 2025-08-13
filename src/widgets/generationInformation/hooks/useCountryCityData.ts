@@ -15,7 +15,7 @@ export const useCountryCityData = (selectedCountry: string) => {
   const [cites, setCites] = useState<Options[]>([])
 
   useEffect(() => {
-    fetchCountriesAndCities(dispatch, setCountriesWithCity, setCountries)
+    fetchCountriesAndCities(setCountriesWithCity, setCountries)
   }, [dispatch])
 
   useEffect(() => {
