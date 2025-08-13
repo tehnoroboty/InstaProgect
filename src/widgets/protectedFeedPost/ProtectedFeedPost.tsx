@@ -1,7 +1,8 @@
 import type { Post, PostImage } from '@/src/entities/post/types'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
+import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
 import { useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
@@ -71,7 +72,16 @@ export const ProtectedFeedPost = (props: Props) => {
         <DropdownPost isFollowedBy={isFollowedBy} isOurPost={isOurPost} />
       </div>
       <div className={s.carouselContainer}>
-        <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
+        {images.length > 0 ? (
+          <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
+        ) : (
+          <div className={s.notFound}>
+            <ImageNotFound height={194} width={199} />
+            <div>
+              <b>No Image</b>
+            </div>
+          </div>
+        )}
       </div>
       <div className={s.cardBody}>
         <InteractionBar postId={id} />
