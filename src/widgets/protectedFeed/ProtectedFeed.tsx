@@ -72,7 +72,11 @@ export const ProtectedFeed = () => {
     <div className={s.container}>
       <div className={s.feed}>
         {allPosts.map(post => (
-          <ProtectedFeedPost key={post.id} {...post} onModalOpen={() => open(String(post.id))} />
+          <ProtectedFeedPost
+            key={post.id}
+            {...post}
+            onViewCommentsClick={() => open(String(post.id))}
+          />
         ))}
         <div ref={observerRef} style={{ height: 1 }} />
       </div>
