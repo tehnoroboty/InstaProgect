@@ -1,10 +1,7 @@
 import { CountriesType, ResponseTypeCounties } from '@/src/entities/users/types'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
-import { AppDispatch } from '@/src/shared/model/store/store'
 import { Options } from '@/src/shared/ui/select/SelectBox'
 
 export const fetchCountriesAndCities = async (
-  dispatch: AppDispatch,
   setCountriesWithCity: (data: ResponseTypeCounties) => void,
   setCountries: (items: Options[]) => void
 ): Promise<void> => {
@@ -12,9 +9,7 @@ export const fetchCountriesAndCities = async (
     const res = await fetch('https://countriesnow.space/api/v0.1/countries', {})
 
     if (!res.ok) {
-      const errorMessage = `HTTP error! status: ${res.status}`
-
-      dispatch(setAppError({ error: errorMessage }))
+      console.error(`HTTP error! status: ${res.status}`)
     }
 
     const data: ResponseTypeCounties = await res.json()
@@ -26,9 +21,7 @@ export const fetchCountriesAndCities = async (
     setCountriesWithCity(data)
     setCountries(items)
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err)
-
-    dispatch(setAppError({ error: errorMessage }))
+    console.error('Error fetching countries:', err)
   }
 }
 

@@ -1,3 +1,6 @@
+// @flow
+
+import * as React from 'react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 /* eslint-disable import/no-named-as-default */
 import ReCAPTCHA from 'react-google-recaptcha'

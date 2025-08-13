@@ -1,12 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { Button } from '../../shared/ui/button/Button'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation, useMeQuery } from '@/src/shared/model/api/authApi'
-import { selectIsLoggedIn, setAppError } from '@/src/shared/model/slices/appSlice'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -31,7 +30,6 @@ export const ItemWrapper = ({
   onClick,
   title,
 }: DropdownMenuItemWithLinkProps) => {
-  const dispatch = useDispatch()
   const pathname = usePathname()
   const isActive = href === pathname
   const CurrentIcon = isActive ? IconActive || Icon : Icon
@@ -62,9 +60,7 @@ export const ItemWrapper = ({
         onClick()
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
-
-      dispatch(setAppError({ error: errorMessage }))
+      console.error('Ошибка выхода:', error)
     }
   }
 

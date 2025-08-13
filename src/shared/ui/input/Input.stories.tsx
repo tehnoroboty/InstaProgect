@@ -68,6 +68,7 @@ export const InputError: Story = {
 
 export const InputDisabled: Story = {
   args: {
+    // disabled: true,
     label: 'Text input disabled',
   },
 

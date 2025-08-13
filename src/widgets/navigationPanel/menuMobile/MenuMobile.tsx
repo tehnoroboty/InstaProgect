@@ -1,6 +1,6 @@
+// @flow
 'use client'
-
-import { ElementType } from 'react'
+import * as React from 'react'
 
 import { Button } from '@/src/shared/ui/button/Button'
 import { MenuItemType } from '@/src/widgets/navigationPanel/types'
@@ -13,7 +13,11 @@ import s from './menuMobile.module.scss'
 type Props = {
   items: MenuItemType[]
 }
-const getCurrentIcon = (isActive: boolean, Icon: ElementType, IconActive?: ElementType) => {
+const getCurrentIcon = (
+  isActive: boolean,
+  Icon: React.ElementType,
+  IconActive?: React.ElementType
+) => {
   return isActive ? IconActive || Icon : Icon
 }
 
