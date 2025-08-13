@@ -3,7 +3,7 @@ import { plural } from '@/src/shared/lib/plural'
 export const timeElapsedSince = (date: string) => {
   const now: Date = new Date()
   const pastDate: Date = new Date(date)
-  const diffMs = +now - +pastDate
+  const diffMs = +now - +pastDate // разница в миллисекундах
 
   const seconds = Math.floor(diffMs / 1000)
 

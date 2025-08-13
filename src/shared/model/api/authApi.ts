@@ -28,6 +28,7 @@ export const authApi = baseApi.injectEndpoints({
           const res = await queryFulfilled
 
           localStorage.setItem('accessToken', res.data.accessToken)
+          // ✅ Запускаем `me` после логина через Google
           dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
         } catch (error) {
           const errorResponse = error as { error: { data: { messages: [{ message: string }] } } }

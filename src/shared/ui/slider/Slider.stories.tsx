@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 import { PropsSlider, SliderComponent } from '@/src/shared/ui/slider/Slider'
 import { Meta, StoryFn } from '@storybook/react'
 
