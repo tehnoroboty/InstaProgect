@@ -15,7 +15,6 @@ import {
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
-import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
@@ -86,9 +85,7 @@ export const PublishPhoto = ({ photos }: Props) => {
         )
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
       } else {
-        const errorMessage = 'No files were uploaded successfully.'
-
-        dispatch(setAppError({ error: errorMessage }))
+        console.warn('No files were uploaded successfully.')
       }
     } catch (error) {
       const err = error as CustomerError
@@ -166,6 +163,29 @@ export const PublishPhoto = ({ photos }: Props) => {
                 value={value}
               />
             </div>
+            {/*<div className={s.locationBox}>
+              <div className={s.inputContainer}>
+                <Input className={s.addLocation} label={'Add location'} />
+                <PinIcon className={s.pinIcon} />
+              </div>
+
+              <div className={s.selectedLocation}>
+                <Typography className={s.city} option={'regular_text16'}>
+                  {'New York'}
+                </Typography>
+                <Typography className={s.location} option={'small_text'}>
+                  {'Washington Square Park'}
+                </Typography>
+              </div>
+              <div className={s.selectedLocation}>
+                <Typography className={s.city} option={'regular_text16'}>
+                  {'New York'}
+                </Typography>
+                <Typography className={s.location} option={'small_text'}>
+                  {'Washington Square Park'}
+                </Typography>
+              </div>
+            </div>*/}
           </div>
         </div>
       </Dialog>

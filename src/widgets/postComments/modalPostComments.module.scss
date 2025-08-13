@@ -5,9 +5,9 @@
 }
 
 .container {
-  overflow-y: auto;
+  overflow-y: auto; /* Прокрутка только для контента */
   display: flex;
-  flex: 1;
+  flex: 1; /* Занимает всё доступное пространство */
   gap: 20px;
   align-items: center;
   justify-content: center;

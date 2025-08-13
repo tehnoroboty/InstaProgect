@@ -28,7 +28,7 @@ export function timeSince(isoDate: string): string {
     })
   }
   if (diffMonths > 0) {
-    return `${diffMonths} m ago`
+    return `${diffMonths} mo ago`
   }
   if (diffDays > 0) {
     return `${diffDays} d ago`
