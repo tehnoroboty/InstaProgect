@@ -1,4 +1,4 @@
-import { setAppError, setIsLoggedIn, setUserId } from '../slices/appSlice'
+import { setAppError, setAppSuccess, setIsLoggedIn, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -65,6 +65,7 @@ export const authApi = baseApi.injectEndpoints({
           localStorage.removeItem('accessToken')
           dispatch(setUserId({ userId: null }))
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          dispatch(setAppSuccess({ success: 'Logout completed successfully.' }))
         } catch (error) {
           dispatch(setAppError({ error: 'Ошибка при разлогине' }))
         }

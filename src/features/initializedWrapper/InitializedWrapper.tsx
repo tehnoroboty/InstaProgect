@@ -3,8 +3,8 @@
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
-import { useAppDispatch } from '@/src/shared/model/store/store'
+import { selectIsLoggedIn, setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 
 import s from './initializedWrapper.module.scss'
@@ -16,7 +16,10 @@ type Props = {
 export const InitializedWrapper = ({ children }: Props) => {
   const [isInitialized, setIsInitialized] = useState(false)
   const [trigger, setTrigger] = useState(false)
-  const { isLoading, isSuccess } = useMeQuery(undefined, { skip: !trigger })
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { isLoading, isSuccess } = useMeQuery(undefined, {
+    skip: !trigger || (isLoggedIn && !trigger),
+  })
   const dispatch = useAppDispatch()
 
   useEffect(() => {
