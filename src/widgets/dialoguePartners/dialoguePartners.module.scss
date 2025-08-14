@@ -1,0 +1,17 @@
+.dialoguePartners {
+  overflow-y: auto;
+
+  width: 100%;
+  max-width: 269px;
+  height: calc(100lvh - 240px);
+  border: 1px solid var(--dark-300);
+
+  background: var(--dark-500);
+
+  .searchBox {
+    padding: 17px 12px 19px;
+    .input input {
+      background: var(--dark-500);
+    }
+  }
+}

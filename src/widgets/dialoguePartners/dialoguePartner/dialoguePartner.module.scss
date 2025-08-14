@@ -1,0 +1,23 @@
+.dialoguePartner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 12px;
+  border-top: 1px solid var(--dark-300);
+}
+
+.dialoguePartnerInfo {
+  width: 100%;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .grey {
+    color: var(--dark-100);
+  }
+}
