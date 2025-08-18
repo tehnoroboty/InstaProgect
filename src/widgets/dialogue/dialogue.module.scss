@@ -1,0 +1,38 @@
+.dialogue {
+  overflow-y: auto;
+
+  width: 100%;
+  max-width: 702px;
+  height: calc(100lvh - 240px);
+  border: 1px solid var(--dark-300);
+
+  header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    padding: 12px;
+    border-bottom: 1px solid var(--dark-300);
+
+    background: var(--dark-500);
+  }
+
+  .dialogueBody {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+
+    height: calc(100% - 86px - 48px);
+    padding: 23px;
+  }
+
+  .footer {
+    padding: 12px 24px;
+    border-top: 1px solid var(--dark-300);
+    background: transparent;
+
+    .input {
+      background: transparent;
+    }
+  }
+}
