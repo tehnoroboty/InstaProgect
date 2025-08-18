@@ -26,40 +26,6 @@
     padding: 23px;
   }
 
-  .message {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-  }
-
-  .isMy {
-    align-self: flex-end;
-
-    .text {
-      background: var(--primary-900);
-    }
-
-    .time {
-      color: var(--primary-100);
-    }
-  }
-
-  .text {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    padding: 12px;
-    border-radius: 8px;
-
-    background: var(--dark-300);
-  }
-
-  .time {
-    align-self: flex-end;
-    color: var(--dark-100);
-  }
-
   .footer {
     padding: 12px 24px;
     border-top: 1px solid var(--dark-300);
