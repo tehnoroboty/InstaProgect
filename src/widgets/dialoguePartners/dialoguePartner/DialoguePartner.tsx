@@ -1,23 +1,30 @@
-import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
-import { Typography } from '@/src/shared/ui/typography/Typography'
+import React from 'react'
+
+import { useGetAllMessagesQuery } from '@/src/shared/model/api/messengerApi'
+import { Loader } from '@/src/shared/ui/loader/Loader'
+import { DialoguePartnerItem } from '@/src/widgets/dialoguePartners/dialoguePartnerItem/DialoguePartnerItem'
+import Link from 'next/link'
 
 import s from './dialoguePartner.module.scss'
 
+const PAGE_SIZE = 10
+
 export const DialoguePartner = () => {
+  const { data, isLoading } = useGetAllMessagesQuery({ pageSize: PAGE_SIZE })
+
   return (
     <div className={s.dialoguePartner}>
-      <AvatarBox size={'s'} />
-      <div className={s.dialoguePartnerInfo}>
+      {isLoading && (
         <div>
-          <Typography option={'regular_text14'}>NAME</Typography>
-          <Typography className={s.grey} option={'small_text'}>
-            14:56
-          </Typography>
+          <Loader />
         </div>
-        <Typography className={s.grey} option={'small_text'}>
-          Hi! How are you?
-        </Typography>
-      </div>
+      )}
+
+      {data?.items.map(msg => (
+        <Link className={s.dialoguePartnerLink} href={`/profile/${msg.ownerId}`} key={msg.id}>
+          <DialoguePartnerItem key={msg.id} message={msg} />
+        </Link>
+      ))}
     </div>
   )
 }

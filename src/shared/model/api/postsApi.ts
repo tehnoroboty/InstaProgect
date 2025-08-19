@@ -75,7 +75,7 @@ export const postsApi = baseApi.injectEndpoints({
       },
       query: ({ postId }) => ({
         method: 'DELETE',
-        url: `/posts/${postId}`,
+        url: `posts/${postId}`,
       }),
     }),
     getFolloweePosts: builder.query<GetFolloweePostsResponse, GetFolloweePostsArgs>({
@@ -101,14 +101,14 @@ export const postsApi = baseApi.injectEndpoints({
           pageNumber,
           pageSize,
         },
-        url: `/home/publications-followers`,
+        url: `home/publications-followers`,
       }),
     }),
     getPost: builder.query<Post, number>({
       providesTags: res => (res ? [{ id: res.id, type: 'POST' }] : ['POST']),
       query: postId => ({
         method: 'GET',
-        url: `/posts/id/${postId}`,
+        url: `posts/id/${postId}`,
       }),
     }),
     getPostLikes: builder.query<PaginatedLikesResponse, GetLikesArgs>({
@@ -124,7 +124,7 @@ export const postsApi = baseApi.injectEndpoints({
           pageSize,
           search,
         },
-        url: `/posts/${postId}/likes`,
+        url: `posts/${postId}/likes`,
       }),
     }),
     getPosts: builder.query<GetPostsResponse, GetPostsArgs>({
@@ -150,7 +150,7 @@ export const postsApi = baseApi.injectEndpoints({
           sortBy,
           sortDirection,
         },
-        url: `/public-posts/user/${userId}/${endCursorPostId}`,
+        url: `public-posts/user/${userId}/${endCursorPostId}`,
       }),
       serializeQueryArgs: ({ queryArgs }) => {
         return queryArgs.userId
@@ -216,7 +216,7 @@ export const postsApi = baseApi.injectEndpoints({
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
-        url: `/posts/${postId}/like-status`,
+        url: `posts/${postId}/like-status`,
       }),
     }),
     updatePost: builder.mutation<void, { model: UpdatePostModel; postId: number }>({
@@ -224,7 +224,7 @@ export const postsApi = baseApi.injectEndpoints({
       query: ({ model, postId }) => ({
         body: model,
         method: 'PUT',
-        url: `/posts/${postId}`,
+        url: `posts/${postId}`,
       }),
     }),
   }),

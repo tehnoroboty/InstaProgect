@@ -23,7 +23,7 @@ export const followingApi = baseApi.injectEndpoints({
       query: ({ userName, ...params }) => ({
         method: 'GET',
         params,
-        url: `/users/${userName}/followers`,
+        url: `users/${userName}/followers`,
       }),
     }),
     getFollowing: builder.query<GetFollowingResponse, GetFollowingArgs>({
@@ -31,7 +31,7 @@ export const followingApi = baseApi.injectEndpoints({
       query: ({ userName, ...params }) => ({
         method: 'GET',
         params,
-        url: `/users/${userName}/following`,
+        url: `users/${userName}/following`,
       }),
     }),
     unFollow: builder.mutation<void, number>({
