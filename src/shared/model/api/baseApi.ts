@@ -107,5 +107,6 @@ export const baseApi = createApi({
     'COMMENT_LIKES',
     'ANSWER_LIKES',
     'ANSWERS',
+    'MESSAGES',
   ],
 })
