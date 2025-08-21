@@ -25,3 +25,13 @@
     color: var(--dark-100);
   }
 }
+
+.truncate {
+  overflow: hidden;
+  display: block;
+
+  max-width: 160px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

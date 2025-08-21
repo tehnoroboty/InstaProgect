@@ -8,9 +8,9 @@ export type GetAllMessagesArgs = {
 
 export type GetAllMessagesResponse = {
   items: LastMessage[]
-  notReadCount: 100
-  pageSize: 12
-  totalCount: 100
+  notReadCount: number
+  pageSize: number
+  totalCount: number
 }
 
 export type LastMessage = {

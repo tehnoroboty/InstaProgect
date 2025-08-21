@@ -2,7 +2,7 @@
 
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Dialogue } from '@/src/widgets/dialogue/Dialogue'
-import { DialoguePartners } from '@/src/widgets/dialoguePartners/DialoguePartners'
+import { DialoguePartnersSection } from '@/src/widgets/dialoguePartners/DialoguePartnersSection'
 
 import s from './ShowMessenger.module.scss'
 
@@ -15,7 +15,7 @@ export const ShowMessenger = () => {
         </Typography>
       </div>
       <div className={s.messengerWrapper}>
-        <DialoguePartners />
+        <DialoguePartnersSection />
         <Dialogue />
       </div>
     </div>

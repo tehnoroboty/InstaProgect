@@ -1,9 +1,9 @@
 import { Input } from '@/src/shared/ui/input'
-import { DialoguePartner } from '@/src/widgets/dialoguePartners/dialoguePartner/DialoguePartner'
+import { DialoguePartnersList } from '@/src/widgets/dialoguePartners/dialoguePartner/DialoguePartnersList'
 
 import s from './dialoguePartners.module.scss'
 
-export const DialoguePartners = () => {
+export const DialoguePartnersSection = () => {
   return (
     <div className={s.dialoguePartners}>
       <div className={s.searchBox}>
@@ -14,7 +14,7 @@ export const DialoguePartners = () => {
           type={'search'}
         />
       </div>
-      <DialoguePartner />
+      <DialoguePartnersList />
     </div>
   )
 }

@@ -11,18 +11,17 @@ export const formatMessageDateForMessenger = (dateString: string): string => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
-  // начало недели (понедельник)
   const startOfWeek = new Date(now)
 
   startOfWeek.setDate(now.getDate() - now.getDay() + 1)
   startOfWeek.setHours(0, 0, 0, 0)
 
   if (date >= startOfWeek) {
-    return date.toLocaleDateString([], { weekday: 'short' }) // "Mon", "Tue" / "пн", "вт"
+    return date.toLocaleDateString([], { weekday: 'short' })
   }
 
   if (date.getFullYear() === now.getFullYear()) {
-    return date.toLocaleDateString([], { day: '2-digit', month: '2-digit' }) // "14.08"
+    return date.toLocaleDateString([], { day: '2-digit', month: '2-digit' })
   }
 
   return date.getFullYear().toString()
