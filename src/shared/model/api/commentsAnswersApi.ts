@@ -27,7 +27,7 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
       query: ({ commentId, content, postId }) => ({
         body: { content },
         method: 'POST',
-        url: `/posts/${postId}/comments/${commentId}/answers`,
+        url: `posts/${postId}/comments/${commentId}/answers`,
       }),
     }),
     createNewComment: builder.mutation<Comment, { content: string; postId: number }>({
@@ -35,14 +35,14 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
       query: ({ content, postId }) => ({
         body: { content },
         method: 'POST',
-        url: `/posts/${postId}/comments`,
+        url: `posts/${postId}/comments`,
       }),
     }),
     getAnswerLikes: builder.query<PaginatedLikesResponse, GetAnswerLikesArgs>({
       providesTags: (_res, _err, { answerId }) => [{ id: answerId, type: 'ANSWER_LIKES' }],
       query: ({ answerId, commentId, postId }) => ({
         method: 'GET',
-        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
+        url: `posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
       }),
     }),
     getCommentAnswers: builder.query<GetAnswersResponse, GetAnswersArg>({
@@ -61,14 +61,14 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
       providesTags: (_res, _err, { commentId }) => [{ id: commentId, type: 'COMMENT_LIKES' }],
       query: ({ commentId, postId }) => ({
         method: 'GET',
-        url: `/posts/${postId}/comments/${commentId}/likes`,
+        url: `posts/${postId}/comments/${commentId}/likes`,
       }),
     }),
     getComments: builder.query<GetCommentsResponse, number>({
       providesTags: (_result, _error, postId) => [{ id: postId, type: 'COMMENTS' }],
       query: postId => ({
         method: 'GET',
-        url: `/posts/${postId}/comments`,
+        url: `posts/${postId}/comments`,
       }),
     }),
     updateAnswerLikeStatus: builder.mutation<
@@ -131,7 +131,7 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
       query: ({ answerId, commentId, likeStatus, postId }) => ({
         body: { likeStatus },
         method: 'PUT',
-        url: `/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
+        url: `posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
       }),
     }),
     updateCommentLikeStatus: builder.mutation<
@@ -194,7 +194,7 @@ export const commentsAnswersApi = baseApi.injectEndpoints({
       query: ({ commentId, likeStatus, postId }) => ({
         body: { likeStatus },
         method: 'PUT',
-        url: `/posts/${postId}/comments/${commentId}/like-status`,
+        url: `posts/${postId}/comments/${commentId}/like-status`,
       }),
     }),
   }),

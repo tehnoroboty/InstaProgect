@@ -12,7 +12,7 @@ export const subscriptionsApi = baseApi.injectEndpoints({
       query: () => {
         return {
           method: 'POST',
-          url: '/subscriptions/canceled-auto-renewal',
+          url: 'subscriptions/canceled-auto-renewal',
         }
       },
     }),
