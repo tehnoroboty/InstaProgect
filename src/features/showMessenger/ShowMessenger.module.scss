@@ -27,3 +27,17 @@
   display: flex;
   height: calc(100lvh - 240px);
 }
+
+.placeholder {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderText {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background-color: var(--dark-300);
+}

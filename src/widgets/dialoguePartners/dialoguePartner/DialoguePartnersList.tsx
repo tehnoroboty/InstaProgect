@@ -3,7 +3,7 @@ import { Typography } from '@/src/shared/ui/typography/Typography'
 
 import s from './dialoguePartner.module.scss'
 
-export const DialoguePartner = () => {
+export const DialoguePartnersList = () => {
   return (
     <div className={s.dialoguePartner}>
       <AvatarBox size={'s'} />
