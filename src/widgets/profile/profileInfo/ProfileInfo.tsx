@@ -107,7 +107,14 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
                   <Button onClick={onClickFollowingHandler} variant={'primary'}>
                     {isFollowing ? 'Unfollow' : 'Follow'}
                   </Button>
-                  <Button variant={'secondary'}>Send Message</Button>
+                  <Button
+                    onClick={() => {
+                      router.push(`/messenger/${id}`)
+                    }}
+                    variant={'secondary'}
+                  >
+                    Send Message
+                  </Button>
                 </>
               ))}
           </div>
