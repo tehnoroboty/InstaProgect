@@ -17,6 +17,7 @@ export const Dialogue = ({ userId }: Props) => {
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
   const myId = useAppSelector(selectUserId)
+  const avatarUrl = partner?.avatars?.[0]?.url
 
   if (!partner) {
     return null
@@ -25,7 +26,7 @@ export const Dialogue = ({ userId }: Props) => {
   return (
     <div className={s.dialogue}>
       <header className={s.header}>
-        <AvatarBox size={'s'} src={partner.avatars[0].url} />
+        <AvatarBox size={'s'} src={avatarUrl} />
         <Typography option={'regular_text16'}>{partner.userName}</Typography>
       </header>
       <div className={s.dialogueBody}>
@@ -35,7 +36,7 @@ export const Dialogue = ({ userId }: Props) => {
             key={msg.id}
             text={msg.messageText}
             time={msg.createdAt}
-            userAvatar={partner.avatars[0].url}
+            userAvatar={avatarUrl}
           />
         ))}
       </div>
