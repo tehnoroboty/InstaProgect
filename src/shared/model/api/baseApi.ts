@@ -51,7 +51,7 @@ export const baseQueryWithReauth: BaseQueryFn<
           {
             // credentials: 'include',
             method: 'POST',
-            url: '/auth/update-tokens',
+            url: 'auth/update-tokens',
           },
           api,
           extraOptions
