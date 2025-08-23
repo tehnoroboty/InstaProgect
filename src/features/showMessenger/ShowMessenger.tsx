@@ -23,10 +23,13 @@ export const ShowMessenger = () => {
         {userId ? (
           <Dialogue userId={userId} />
         ) : (
-          <div className={s.placeholder}>
-            <Typography className={s.placeholderText} weight={'medium'}>
-              Choose who you would like to talk to
-            </Typography>
+          <div className={s.messengerBody}>
+            <div className={s.header}></div>
+            <div className={s.placeholder}>
+              <Typography className={s.placeholderText} weight={'medium'}>
+                Choose who you would like to talk to
+              </Typography>
+            </div>
           </div>
         )}
       </div>
