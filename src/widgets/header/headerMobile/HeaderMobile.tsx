@@ -10,6 +10,8 @@ import {
 } from '@/src/shared/assets/componentsIcons'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
+import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Dropdown } from '@/src/shared/ui/dropdown/Dropdown'
@@ -29,6 +31,7 @@ type Props = {
 }
 
 export const HeaderMobile = (props: Props) => {
+  const dispatch = useAppDispatch()
   const { isLoggedIn = true, title } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
@@ -41,9 +44,10 @@ export const HeaderMobile = (props: Props) => {
   }
 
   const onLogoutConfirm = async () => {
-    await logout().unwrap()
     setIsModalOpen(false)
+    dispatch(setIsLoggedIn({ isLoggedIn: false }))
     route.push(AuthRoutes.HOME)
+    await logout().unwrap()
   }
 
   const menuHeaderMobile: MenuItemType[] = [
