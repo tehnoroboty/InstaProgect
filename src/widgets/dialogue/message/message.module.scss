@@ -4,16 +4,9 @@
   align-items: flex-end;
 }
 
-.isMy {
+.time {
   align-self: flex-end;
-
-  .text {
-    background: var(--primary-900);
-  }
-
-  .time {
-    color: var(--primary-100);
-  }
+  color: var(--light-900);
 }
 
 .text {
@@ -27,7 +20,14 @@
   background: var(--dark-300);
 }
 
-.time {
+.isMy {
   align-self: flex-end;
-  color: var(--dark-100);
+
+  .text {
+    background: var(--primary-900);
+  }
+
+  .time {
+    color: var(--primary-100);
+  }
 }
