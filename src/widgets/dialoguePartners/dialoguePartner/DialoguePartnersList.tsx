@@ -8,11 +8,9 @@ import Link from 'next/link'
 
 import s from './dialoguePartner.module.scss'
 
-const PAGE_SIZE = 10
-
 export const DialoguePartnersList = () => {
   const [cursor, setCursor] = useState<number | undefined>(undefined)
-  const { data, isFetching } = useGetAllMessagesQuery({ cursor, pageSize: PAGE_SIZE })
+  const { data, isFetching } = useGetAllMessagesQuery({ cursor })
   const { inView, ref } = useInView()
 
   useEffect(() => {

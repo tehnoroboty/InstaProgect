@@ -12,7 +12,7 @@ export const messengerApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getAllMessages: builder.query<GetAllMessagesResponse, GetAllMessagesArgs>({
       providesTags: ['MESSAGES'],
-      query: ({ cursor, pageSize, searchName }) => ({
+      query: ({ cursor, pageSize = 10, searchName }) => ({
         method: 'GET',
         params: {
           cursor,
