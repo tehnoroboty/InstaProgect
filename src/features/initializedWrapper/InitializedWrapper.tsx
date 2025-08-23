@@ -27,10 +27,11 @@ export const InitializedWrapper = ({ children }: Props) => {
 
     if (token) {
       setTrigger(true)
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
     } else {
       setIsInitialized(false)
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (isLoading) {

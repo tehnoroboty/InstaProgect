@@ -26,6 +26,12 @@ export const RequireAuth = ({ children }: Props) => {
     }
   }, [isError, router])
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.replace(AuthRoutes.LOGIN)
+    }
+  }, [isLoggedIn, router])
+
   if (isLoading) {
     return (
       <div className={s.wrapper}>
