@@ -35,7 +35,7 @@ export const DialoguePartnersList = () => {
     <div className={s.dialoguePartner}>
       {data?.items.map((msg, index, arr) => (
         <Fragment key={msg.id}>
-          <Link className={s.dialoguePartnerLink} href={`/profile/${msg.ownerId}`} key={msg.id}>
+          <Link className={s.dialoguePartnerLink} href={`/messenger/${msg.ownerId}`} key={msg.id}>
             <DialoguePartnerItem message={msg} />
           </Link>
           {arr.length - 1 === index && hasMore && (
