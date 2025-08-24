@@ -1,4 +1,4 @@
-import { formatMessageDateForMessenger } from '@/src/shared/lib/formatMessageDateForMessenger'
+import { formattedTime } from '@/src/shared/lib/formattedTime'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
@@ -13,19 +13,13 @@ type Props = {
 }
 
 export const Message = ({ isMy, text, time, userAvatar }: Props) => {
-  const formattedTime = new Date(time).toLocaleTimeString([], {
-    hour: '2-digit',
-    hour12: false,
-    minute: '2-digit',
-  })
-
   return (
     <div className={clsx(s.message, { [s.isMy]: isMy, [s.isNotMy]: !isMy })}>
       {!isMy && <AvatarBox size={'s'} src={userAvatar} />}
       <div className={s.text}>
         <Typography option={'regular_text14'}>{text}</Typography>
         <Typography className={s.time} option={'small_text'}>
-          {formattedTime}
+          {formattedTime(time)}
         </Typography>
       </div>
     </div>
