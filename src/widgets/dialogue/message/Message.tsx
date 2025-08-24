@@ -14,7 +14,7 @@ type Props = {
 
 export const Message = ({ isMy, text, time, userAvatar }: Props) => {
   return (
-    <div className={clsx(s.message, { [s.isMy]: isMy, [s.isNotMy]: !isMy })}>
+    <div className={clsx(s.message, isMy && s.isMy)}>
       {!isMy && <AvatarBox size={'s'} src={userAvatar} />}
       <div className={s.text}>
         <Typography option={'regular_text14'}>{text}</Typography>
