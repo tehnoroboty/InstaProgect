@@ -3,13 +3,13 @@
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Dialogue } from '@/src/widgets/dialogue/Dialogue'
 import { DialoguePartnersSection } from '@/src/widgets/dialoguePartners/DialoguePartnersSection'
-import { useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 import s from './ShowMessenger.module.scss'
 
 export const ShowMessenger = () => {
-  const params = useParams()
-  const userId = Number(params.userId)
+  const searchParams = useSearchParams()
+  const dialogId = Number(searchParams.get('dialogId'))
 
   return (
     <div className={s.page}>
@@ -20,8 +20,8 @@ export const ShowMessenger = () => {
       </div>
       <div className={s.messengerWrapper}>
         <DialoguePartnersSection />
-        {userId ? (
-          <Dialogue userId={userId} />
+        {dialogId ? (
+          <Dialogue userId={dialogId} />
         ) : (
           <div className={s.messengerBody}>
             <div className={s.header}></div>

@@ -109,7 +109,7 @@ export const ProfileInfo = memo(({ authProfile, isMyProfile, profile }: Props) =
                   </Button>
                   <Button
                     onClick={() => {
-                      router.push(`/messenger/${id}`)
+                      router.push(`/messenger?dialogId=${id}`)
                     }}
                     variant={'secondary'}
                   >
