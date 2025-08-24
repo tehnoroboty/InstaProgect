@@ -6,6 +6,7 @@ import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Message } from '@/src/widgets/dialogue/message/Message'
+import Link from 'next/link'
 
 import s from './dialogue.module.scss'
 
@@ -26,8 +27,10 @@ export const Dialogue = ({ userId }: Props) => {
   return (
     <div className={s.dialogue}>
       <header className={s.header}>
-        <AvatarBox size={'s'} src={avatarUrl} />
-        <Typography option={'regular_text16'}>{partner.userName}</Typography>
+        <Link className={s.dialogueLink} href={`/profile/${userId}`}>
+          <AvatarBox size={'s'} src={avatarUrl} />
+          <Typography option={'regular_text16'}>{partner.userName}</Typography>
+        </Link>
       </header>
       <div className={s.dialogueBody}>
         {messages?.items?.map(msg => (

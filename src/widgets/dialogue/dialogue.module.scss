@@ -5,14 +5,15 @@
   border: 1px solid var(--dark-300);
 
   header {
+    padding: 12px;
+    border-bottom: 1px solid var(--dark-300);
+    background: var(--dark-500);
+  }
+
+  .dialogueLink {
     display: flex;
     gap: 12px;
     align-items: center;
-
-    padding: 12px;
-    border-bottom: 1px solid var(--dark-300);
-
-    background: var(--dark-500);
   }
 
   .dialogueBody {
