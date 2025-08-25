@@ -4,11 +4,6 @@
   align-items: flex-end;
 }
 
-.time {
-  align-self: flex-end;
-  color: var(--light-900);
-}
-
 .text {
   display: flex;
   flex-direction: column;
@@ -18,6 +13,11 @@
   border-radius: 8px;
 
   background: var(--dark-300);
+
+  .time {
+    align-self: flex-end;
+    color: var(--light-900);
+  }
 }
 
 .isMy {
