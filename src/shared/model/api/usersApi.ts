@@ -63,6 +63,7 @@ export const usersApi = baseApi.injectEndpoints({
 export const {
   useDeleteProfileAvatarMutation,
   useGetMyProfileQuery,
+  useGetUserProfileByIdQuery,
   useGetUserProfileQuery,
   usePutUserProfileMutation,
   useUpdateUserAvatarMutation,
