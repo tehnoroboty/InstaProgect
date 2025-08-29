@@ -5,7 +5,7 @@ import { AppDispatch } from '@/src/shared/model/store/store'
 
 export const useConnectSocket = (dispatch: AppDispatch) => {
   const connectSocket = useCallback(() => {
-    SocketIoApi.creatConnection(dispatch)
+    SocketIoApi.createConnection(dispatch)
   }, [dispatch])
   const disconnectSocket = () => {
     SocketIoApi.abortConnection()
