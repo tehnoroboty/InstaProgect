@@ -44,7 +44,12 @@ export const Dialogue = ({ userId }: Props) => {
         ))}
       </div>
       <div className={s.footer}>
-        <Input className={s.input} onInput={() => {}} placeholder={'Type Message'} />
+        <Input
+          className={s.input}
+          onInput={() => {}}
+          placeholder={'Type Message'}
+          type={'message'}
+        />
       </div>
     </div>
   )
