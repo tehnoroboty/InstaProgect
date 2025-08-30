@@ -51,7 +51,7 @@ export const DialoguePartnersSection = () => {
           />
         )}
       </div>
-      <DialoguePartnersList />
+      {!isOpen && <DialoguePartnersList />}
     </div>
   )
 }
