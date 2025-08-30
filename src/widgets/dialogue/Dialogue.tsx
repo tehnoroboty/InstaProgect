@@ -1,8 +1,14 @@
-import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
+import { useState } from 'react'
+
+import {
+  useGetMessagesByUserQuery,
+  useSendMessageMutation,
+} from '@/src/shared/model/api/messengerApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
+import { Button } from '@/src/shared/ui/button/Button'
 import { Input } from '@/src/shared/ui/input'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Message } from '@/src/widgets/dialogue/message/Message'
@@ -15,13 +21,26 @@ type Props = {
 }
 
 export const Dialogue = ({ userId }: Props) => {
+  const [text, setText] = useState('')
+
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
+  const [sendMessage, { isLoading }] = useSendMessageMutation()
+
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
 
   if (!partner) {
     return null
+  }
+
+  const handleSend = async () => {
+    if (!text.trim()) {
+      return
+    }
+
+    await sendMessage({ message: text.trim(), receiverId: userId })
+    setText('') // очищаем поле после отправки
   }
 
   return (
@@ -44,7 +63,24 @@ export const Dialogue = ({ userId }: Props) => {
         ))}
       </div>
       <div className={s.footer}>
-        <Input className={s.input} onInput={() => {}} placeholder={'Type Message'} />
+        <Input
+          className={s.input}
+          onChange={e => setText(e.currentTarget.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              handleSend()
+            }
+          }}
+          placeholder={'Type Message'}
+        />
+        <Button
+          className={s.bth}
+          disabled={!text.trim() || isLoading}
+          onClick={handleSend}
+          variant={'transparent'}
+        >
+          Send message
+        </Button>
       </div>
     </div>
   )

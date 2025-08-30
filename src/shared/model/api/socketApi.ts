@@ -1,17 +1,9 @@
 import { Message } from '@/src/entities/messenger/types'
 import { NotificationSocket, Notifications } from '@/src/entities/notifications/types'
+import { WS_EVENT_PATH } from '@/src/shared/lib/constants/messenger'
 import { notificationsApi } from '@/src/shared/model/api/notificationsApi'
 import { AppDispatch } from '@/src/shared/model/store/store'
 import { Socket, io } from 'socket.io-client'
-
-const WS_EVENT_PATH = {
-  ERROR: 'error',
-  MESSAGE_DELETED: 'message-deleted',
-  MESSAGE_SEND: 'message-send',
-  NOTIFICATIONS: 'notifications',
-  RECEIVE_MESSAGE: 'receive-message',
-  UPDATE_MESSAGE: 'update-message',
-}
 
 const SocketIoApi = {
   abortConnection() {
@@ -63,6 +55,7 @@ const SocketIoApi = {
 
     return () => this.socket?.off(WS_EVENT_PATH.ERROR, handler)
   },
+
   onMessageDeleted(callback: (messageId: number) => void) {
     if (!this.socket) {
       console.error('Socket is not initialized')
