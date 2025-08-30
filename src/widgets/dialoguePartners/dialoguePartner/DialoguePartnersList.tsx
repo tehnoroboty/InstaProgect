@@ -35,7 +35,7 @@ export const DialoguePartnersList = () => {
         <Fragment key={msg.id}>
           <Link
             className={s.dialoguePartnerLink}
-            href={`/messenger?dialogId=${msg.ownerId}`}
+            href={`/messenger?dialogId=${msg.receiverId}`}
             key={msg.id}
           >
             <DialoguePartnerItem message={msg} />
