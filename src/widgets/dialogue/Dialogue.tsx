@@ -40,7 +40,7 @@ export const Dialogue = ({ userId }: Props) => {
     }
 
     await sendMessage({ message: text.trim(), receiverId: userId })
-    setText('') // очищаем поле после отправки
+    setText('')
   }
 
   return (
@@ -72,6 +72,7 @@ export const Dialogue = ({ userId }: Props) => {
             }
           }}
           placeholder={'Type Message'}
+          value={text}
         />
         <Button
           className={s.bth}

@@ -40,6 +40,7 @@ const SocketIoApi = {
     })
   },
 
+  // 💬 Messenger
   deleteMessage(messageId: number) {
     this.socket?.emit(WS_EVENT_PATH.MESSAGE_DELETED, messageId)
   },
@@ -77,6 +78,7 @@ const SocketIoApi = {
       this.socket?.off(WS_EVENT_PATH.MESSAGE_DELETED, handler)
     }
   },
+
   onMessageReceived(callback: (data: Message | Message[]) => void): () => void {
     if (!this.socket || !this.socket.connected) {
       console.error('Socket not initialized or disconnected')
@@ -161,7 +163,6 @@ const SocketIoApi = {
       this.socket?.off(WS_EVENT_PATH.UPDATE_MESSAGE, handler)
     }
   },
-
   // 🔔 Notifications
   onNotificationReceived(dispatch: AppDispatch) {
     if (!this.socket) {
@@ -194,7 +195,6 @@ const SocketIoApi = {
     })
   },
 
-  // 💬 Messenger
   sendMessage(payload: { message: string; receiverId: number }) {
     this.socket?.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, payload)
   },
