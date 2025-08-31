@@ -26,6 +26,7 @@ export type InputProps = {
   onClear?: () => void
   onImageUpload?: (file: File) => void
   placeholder?: string
+  showImageButton?: boolean
 } & ComponentPropsWithoutRef<'input'>
 
 const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
@@ -39,6 +40,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
     onClear,
     onImageUpload,
     placeholder = 'Input text',
+    showImageButton = true,
     type,
     value,
     ...rest
@@ -123,7 +125,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
           />
         )}
 
-        {type === InputType.messageType && (
+        {type === InputType.messageType && showImageButton && (
           <label className={clsx(s.imageUploadLabel, { [s.disabledIcon]: disabled })}>
             <ImageOutline className={s.imageIcon} />
             <input

@@ -1,7 +1,13 @@
 .dialogue {
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  // overflow-y: auto;
+
   width: 100%;
-  height: calc(100lvh - 240px);
+  height: 100%;
+
+  // height: calc(100lvh - 240px);
   border: 1px solid var(--dark-300);
 
   header {
@@ -27,12 +33,33 @@
   }
 
   .footer {
-    padding: 12px 24px;
+    padding: 12px 24px 12px 12px;
     border-top: 1px solid var(--dark-300);
     background: transparent;
 
-    .input {
-      background: transparent;
+    &.noRightPadding {
+      padding-right: 0;
+    }
+
+    .inputButton {
+      display: flex;
+
+      &.input {
+        padding-left: 0;
+      }
     }
   }
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.sendButton {
+  white-space: nowrap;
+}
+
+.imagePreview {
+  padding-bottom: 12px;
+  padding-left: 12px;
 }
