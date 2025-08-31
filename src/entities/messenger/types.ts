@@ -56,24 +56,6 @@ export type SendMessageArgs = {
   receiverId: number
 }
 
-export type OptimisticMessage = Message & { isOptimistic?: boolean }
-
-export type UpdateMessageStatusApiArgs = {
-  ids: number[]
-}
-
-export type UpdateMessageStatus = UpdateMessageStatusApiArgs & {
-  dialoguePartnerId: number
-}
-
-export type DeleteMessageApiArgs = {
-  id: number
-}
-
-export type DeleteMessageArgs = DeleteMessageApiArgs & {
-  dialoguePartnerId: number
-}
-
 export type MessengerMessageType = 'IMAGE' | 'TEXT' | 'VOICE'
 
 export type StatusType = 'READ' | 'RECEIVED' | 'SENT'

@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import {
-  useGetMessagesByUserQuery,
-  useSendMessageMutation,
-} from '@/src/shared/model/api/messengerApi'
+import { SendMessageArgs } from '@/src/entities/messenger/types'
+import { useConnectSocket } from '@/src/shared/hooks/useConnectSocket'
+import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -21,11 +21,14 @@ type Props = {
 }
 
 export const Dialogue = ({ userId }: Props) => {
+  const dispatch = useDispatch()
+
+  const { socket } = useConnectSocket(dispatch)
+
   const [text, setText] = useState('')
 
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
-  const [sendMessage, { isLoading }] = useSendMessageMutation()
 
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
@@ -35,11 +38,15 @@ export const Dialogue = ({ userId }: Props) => {
   }
 
   const handleSend = async () => {
-    if (!text.trim()) {
+    if (!text.trim() || !socket) {
       return
     }
+    const message: SendMessageArgs = {
+      message: text.trim(),
+      receiverId: userId,
+    }
 
-    await sendMessage({ message: text.trim(), receiverId: userId })
+    socket.sendMessage(message)
     setText('')
   }
 
@@ -76,7 +83,7 @@ export const Dialogue = ({ userId }: Props) => {
         />
         <Button
           className={s.bth}
-          disabled={!text.trim() || isLoading}
+          disabled={!text.trim()}
           onClick={handleSend}
           variant={'transparent'}
         >

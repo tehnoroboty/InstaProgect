@@ -1,21 +1,30 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import SocketIoApi from '@/src/shared/model/api/socketApi'
 import { AppDispatch } from '@/src/shared/model/store/store'
 
 export const useConnectSocket = (dispatch: AppDispatch) => {
+  const [socket, setSocket] = useState<any>(null)
+
   const connectSocket = useCallback(() => {
-    SocketIoApi.createConnection(dispatch)
-  }, [dispatch])
-  const disconnectSocket = () => {
-    SocketIoApi.abortConnection()
-  }
+    setSocket(new SocketIoApi())
+  }, [dispatch, socket])
 
   useEffect(() => {
     connectSocket()
 
     return () => {
-      disconnectSocket()
+      if (socket) {
+        socket.abortConnection()
+      }
     }
-  }, [connectSocket])
+  }, [])
+
+  useEffect(() => {
+    if (socket) {
+      socket.createConnection(dispatch)
+    }
+  }, [dispatch, socket])
+
+  return { socket }
 }
