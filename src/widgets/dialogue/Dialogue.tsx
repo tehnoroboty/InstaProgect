@@ -27,7 +27,7 @@ export const Dialogue = ({ userId }: Props) => {
 
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [messageText, setMessageText] = useState('')
-  // const [previewUrl, setPreviewUrl] = useState<null | string>(null)
+
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   if (!partner) {
