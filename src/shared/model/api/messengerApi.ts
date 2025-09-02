@@ -1,50 +1,73 @@
 import {
-  DeleteMessageArgs,
   GetAllMessagesArgs,
   GetAllMessagesResponse,
   GetMessagesByUserArgs,
   GetMessagesByUserResponse,
   SendMessageArgs,
-  UpdateMessageStatus,
 } from '@/src/entities/messenger/types'
-import { MessageStatus } from '@/src/shared/lib/constants/messenger'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import SocketIoApi from '@/src/shared/model/api/socketApi'
 
 export const messengerApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    deleteMessage: builder.mutation<void, DeleteMessageArgs>({
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+    getAllMessages: builder.query<GetAllMessagesResponse, GetAllMessagesArgs>({
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
-          await queryFulfilled
+          await cacheDataLoaded
 
-          dispatch(
-            messengerApi.util.updateQueryData('getAllMessages', {}, draft => {
-              draft.items = draft.items.filter(msg => msg.id !== arg.id)
-              draft.totalCount = Math.max(0, draft.totalCount - 1)
-            })
-          )
+          // Подписка на новые сообщения
+          const unsubscribeReceive = SocketIoApi.onMessageReceived(messages => {
+            updateCachedData(draft => {
+              const newMessages = Array.isArray(messages) ? messages : [messages]
 
-          dispatch(
-            messengerApi.util.updateQueryData(
-              'getMessagesByUser',
-              { dialoguePartnerId: arg.dialoguePartnerId },
-              draft => {
-                draft.items = draft.items.filter(msg => msg.id !== arg.id)
-                draft.totalCount = Math.max(0, draft.totalCount - 1)
+              for (const message of newMessages) {
+                // Найдём, есть ли уже такой диалог (по id собеседника)
+                const existingDialog = draft.items.find(
+                  m =>
+                    (m.ownerId === message.ownerId && m.receiverId === message.receiverId) ||
+                    (m.ownerId === message.receiverId && m.receiverId === message.ownerId)
+                )
+
+                if (existingDialog) {
+                  // 🔹 Обновляем существующий диалог (последнее сообщение)
+                  existingDialog.messageText = message.messageText
+                  existingDialog.updatedAt = message.updatedAt
+                  existingDialog.createdAt = message.createdAt
+                  existingDialog.status = message.status
+                  existingDialog.ownerId = message.ownerId
+                  existingDialog.receiverId = message.receiverId
+
+                  // перемещаем наверх (так как последнее сообщение стало новым)
+                  draft.items = [
+                    existingDialog,
+                    ...draft.items.filter(m => m.id !== existingDialog.id),
+                  ]
+                } else {
+                  // 🔹 Если диалога ещё нет — добавляем новый
+                  draft.items.unshift({
+                    avatars: [], // можно дополнить если придёт из бэка
+                    createdAt: message.createdAt,
+                    id: message.id,
+                    messageText: message.messageText,
+                    messageType: message.messageType,
+                    ownerId: message.ownerId,
+                    receiverId: message.receiverId,
+                    status: message.status,
+                    updatedAt: message.updatedAt,
+                  })
+
+                  draft.totalCount += 1
+                }
               }
-            )
-          )
-        } catch (error) {
-          console.error('Failed to delete message', error)
+            })
+          })
+
+          await cacheEntryRemoved
+          unsubscribeReceive()
+        } catch (e) {
+          console.error('Error in getAllMessages subscription:', e)
         }
       },
-      query: ({ id }) => ({
-        method: 'DELETE',
-        url: `/messenger/${id}`,
-      }),
-    }),
-    getAllMessages: builder.query<GetAllMessagesResponse, GetAllMessagesArgs>({
       providesTags: ['MESSAGES'],
       query: ({ cursor, pageSize = 10, searchName }) => ({
         method: 'GET',
@@ -57,20 +80,6 @@ export const messengerApi = baseApi.injectEndpoints({
       }),
     }),
     getMessagesByUser: builder.query<GetMessagesByUserResponse, GetMessagesByUserArgs>({
-      /*
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled
-          dispatch(setAppError({ error: null }))
-        } catch (err) {
-          const error = err as CustomerError
-          const errorMessage =
-            error.data?.messages?.[0]?.message ?? error.data?.error ?? 'Unknown error'
-
-          dispatch(setAppError({ error: errorMessage }))
-        }
-      },
-*/
       // 🔹 Сортируем сообщения по времени (старые → новые)
       async onCacheEntryAdded(
         { dialoguePartnerId }, // 👉 например { dialoguePartnerId: 42 }
@@ -92,7 +101,7 @@ export const messengerApi = baseApi.injectEndpoints({
                     message.ownerId === dialoguePartnerId ||
                     message.receiverId === dialoguePartnerId
                   ) {
-                    draft.items.push(message)
+                    draft.items.unshift(message)
                     draft.totalCount += 1
                   }
                 }
@@ -100,29 +109,12 @@ export const messengerApi = baseApi.injectEndpoints({
             })
           })
 
-          // 🔗 подписка на удаление сообщений
-          const unsubscribeDelete = SocketIoApi.onMessageDeleted(deletedId => {
-            updateCachedData(draft => {
-              draft.items = draft.items.filter(m => m.id !== deletedId)
-              draft.totalCount = Math.max(0, draft.totalCount - 1)
-            })
-          })
-
           await cacheEntryRemoved
           unsubscribeReceive()
-          unsubscribeDelete()
         } catch (error) {
           console.error('Error in message subscription:', error)
         }
       },
-      /*
-      transformResponse: (response: GetMessagesByUserResponse) => ({
-        ...response,
-        items: response.items.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        ),
-      }),
-*/
       providesTags: (_result, _error, arg) => [{ id: arg.dialoguePartnerId, type: 'MESSAGES' }],
       query: ({ cursor, dialoguePartnerId, pageSize = 12, searchName }) => ({
         method: 'GET',
@@ -135,7 +127,7 @@ export const messengerApi = baseApi.injectEndpoints({
       }),
     }),
     sendMessage: builder.mutation<void, SendMessageArgs>({
-      queryFn: async ({ message, receiverId }) => {
+      queryFn: ({ message, receiverId }) => {
         try {
           SocketIoApi.sendMessage({ message, receiverId })
 
@@ -150,57 +142,10 @@ export const messengerApi = baseApi.injectEndpoints({
         }
       },
     }),
-    updateMessageStatus: builder.mutation<void, UpdateMessageStatus>({
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled
-
-          dispatch(
-            messengerApi.util.updateQueryData('getAllMessages', {}, draft => {
-              arg.ids.forEach(id => {
-                const msg = draft.items.find(dialog => dialog.id === id)
-
-                if (msg) {
-                  msg.status = MessageStatus.READ
-                }
-              })
-            })
-          )
-
-          dispatch(
-            messengerApi.util.updateQueryData(
-              'getMessagesByUser',
-              { dialoguePartnerId: arg.dialoguePartnerId },
-              draft => {
-                arg.ids.forEach(id => {
-                  const msg = draft.items.find(m => m.id === id)
-
-                  if (msg) {
-                    msg.status = MessageStatus.READ
-                  }
-                })
-              }
-            )
-          )
-        } catch (error) {
-          console.error('Failed to update message status', error)
-        }
-      },
-      query: ({ ids }) => ({
-        body: { ids },
-        method: 'PUT',
-        url: `/messenger`,
-      }),
-    }),
   }),
 
   overrideExisting: false,
 })
 
-export const {
-  useDeleteMessageMutation,
-  useGetAllMessagesQuery,
-  useGetMessagesByUserQuery,
-  useSendMessageMutation,
-  useUpdateMessageStatusMutation,
-} = messengerApi
+export const { useGetAllMessagesQuery, useGetMessagesByUserQuery, useSendMessageMutation } =
+  messengerApi
