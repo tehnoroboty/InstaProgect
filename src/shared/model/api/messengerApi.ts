@@ -4,7 +4,9 @@ import {
   GetMessagesByUserArgs,
   GetMessagesByUserResponse,
   SendMessageArgs,
+  UpdateMessageStatusApiArgs,
 } from '@/src/entities/messenger/types'
+import { MessageStatus } from '@/src/shared/lib/constants/messenger'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import SocketIoApi from '@/src/shared/model/api/socketApi'
 
@@ -141,6 +143,32 @@ export const messengerApi = baseApi.injectEndpoints({
           }
         }
       },
+    }),
+    updateMessageStatus: builder.mutation<void, UpdateMessageStatusApiArgs>({
+      invalidatesTags: ['MESSAGES'],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          dispatch(
+            messengerApi.util.updateQueryData('getAllMessages', {}, draft => {
+              arg.ids.forEach(id => {
+                const index = draft.items.findIndex(dialog => dialog.id === id)
+
+                if (index !== -1) {
+                  draft.items[index].status = MessageStatus.READ
+                }
+              })
+            })
+          )
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      query: body => ({
+        body,
+        method: 'PUT',
+        url: `/messenger`,
+      }),
     }),
   }),
 
