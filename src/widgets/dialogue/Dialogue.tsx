@@ -1,7 +1,10 @@
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 import { ImagePreview } from './imagePreview/ImagePreview'
+import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
 import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
+import MessengerSocketApi from '@/src/shared/model/api/messengerSocketApi'
+import { useCreateImageForPostMutation } from '@/src/shared/model/api/postsApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -28,7 +31,17 @@ export const Dialogue = ({ userId }: Props) => {
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [messageText, setMessageText] = useState('')
 
+  const [createImageForPost] = useCreateImageForPostMutation()
+
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  console.log(messages)
+  useConnectMessengerSocket()
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages?.items])
 
   if (!partner) {
     return null
@@ -37,7 +50,7 @@ export const Dialogue = ({ userId }: Props) => {
   const hasContent = messageText.trim() || imageFiles.length > 0
 
   const handleImageUpload = (file: File) => {
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith('image/') && file.size <= 1024 * 1024) {
       setImageFiles(prev => [...prev, file])
     }
   }
@@ -51,7 +64,7 @@ export const Dialogue = ({ userId }: Props) => {
 
     if (files) {
       for (let i = 0; i < files.length; i++) {
-        if (files[i].type.startsWith('image/')) {
+        if (files[i].type.startsWith('image/') && files[i].size <= 1024 * 1024) {
           handleImageUpload(files[i])
         }
       }
@@ -65,19 +78,57 @@ export const Dialogue = ({ userId }: Props) => {
     setImageFiles(prev => prev.filter((_, i) => i !== index))
   }
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (hasContent) {
-      // Отправка сообщения с текстом и/или изображениями
-      console.log('Sending message:', {
-        images: imageFiles,
-        text: messageText,
-      })
+      if (messageText.trim()) {
+        MessengerSocketApi.sendText(userId, messageText.trim())
+      }
 
-      // Очищаем после отправки
+      if (imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const formData = new FormData()
+
+          formData.append('file', file) // Соответствует эндпоинту posts/image
+          try {
+            const result = await createImageForPost({ file }).unwrap()
+            const imageUrl = result.images.url // Предполагаем, что возвращается массив
+
+            MessengerSocketApi.sendImage(userId, imageUrl) // Отправляем URL
+          } catch (error) {
+            console.error('Failed to upload image:', error)
+          }
+        }
+      }
+
       setMessageText('')
       setImageFiles([])
     }
   }
+
+  // const handleSendMessage = () => {
+  //   if (hasContent) {
+  //     // Отправка сообщения с текстом и/или изображениями
+  //     console.log('Sending message:', {
+  //       images: imageFiles,
+  //       text: messageText,
+  //     })
+  //
+  //     if (messageText.trim()) {
+  //       MessengerSocketApi.sendText(userId, messageText.trim())
+  //     }
+  //
+  //     if (imageFiles.length > 0) {
+  //       imageFiles.forEach(file => {
+  //         MessengerSocketApi.sendImage(userId, file)
+  //       })
+  //     } else {
+  //       MessengerSocketApi.sendImage(userId, imageFiles[0])
+  //     }
+  //     // Очищаем после отправки
+  //     setMessageText('')
+  //     setImageFiles([])
+  //   }
+  // }
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && hasContent) {
@@ -94,15 +145,18 @@ export const Dialogue = ({ userId }: Props) => {
         </Link>
       </header>
       <div className={s.dialogueBody}>
-        {messages?.items?.map(msg => (
-          <Message
-            isMy={msg.ownerId === myId}
-            key={msg.id}
-            text={msg.messageText}
-            time={msg.createdAt}
-            userAvatar={avatarUrl}
-          />
-        ))}
+        {messages?.items
+          ?.slice()
+          .reverse()
+          .map(msg => (
+            <Message
+              isMy={msg.ownerId === myId}
+              key={msg.id}
+              message={msg}
+              userAvatar={avatarUrl}
+            />
+          ))}
+        <div ref={bottomRef} />
       </div>
       <div className={clsx(s.footer, { [s.noRightPadding]: hasContent })}>
         <ImagePreview
