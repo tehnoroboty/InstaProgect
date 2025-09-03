@@ -175,5 +175,9 @@ export const messengerApi = baseApi.injectEndpoints({
   overrideExisting: false,
 })
 
-export const { useGetAllMessagesQuery, useGetMessagesByUserQuery, useSendMessageMutation } =
-  messengerApi
+export const {
+  useGetAllMessagesQuery,
+  useGetMessagesByUserQuery,
+  useSendMessageMutation,
+  useUpdateMessageStatusMutation,
+} = messengerApi
