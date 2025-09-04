@@ -46,6 +46,7 @@ export const MessengerSocketApi = {
           }
         )
       )
+      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
     })
 
     // Получение входящего сообщения от собеседника
@@ -70,7 +71,7 @@ export const MessengerSocketApi = {
             }
           )
         )
-
+        dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
         // Подтверждаем доставку
         callback({ message: msg, receiverId: msg.receiverId })
       }
@@ -80,7 +81,7 @@ export const MessengerSocketApi = {
       dispatch(
         messengerApi.util.updateQueryData(
           'getMessagesByUser',
-          { dialoguePartnerId: data.receiverId },
+          { dialoguePartnerId: this.getDialoguePartnerId(data) },
           draft => {
             const index = draft.items.findIndex(item => item.id === data.id)
 
@@ -90,6 +91,7 @@ export const MessengerSocketApi = {
           }
         )
       )
+      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
     })
 
     // Ошибка от сервера
