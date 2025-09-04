@@ -10,6 +10,7 @@ import {
   useGetNotificationsQuery,
   useMarkAsReadMutation,
 } from '@/src/shared/model/api/notificationsApi'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { NotificationItem } from '@/src/widgets/header/dropdownNotification/NotificationItem'
@@ -26,9 +27,10 @@ export const DropdownNotification = () => {
   const [markAsRead, { isLoading: markAsReadIsLoading }] = useMarkAsReadMutation()
   const [deleteNotification, { isLoading: deleteNotificationIsLoading }] =
     useDeleteNotificationMutation()
+  const dispatch = useAppDispatch()
   const { inView, ref } = useInView()
 
-  useConnectSocket()
+  useConnectSocket(dispatch)
 
   const markAsReadHandler = (id: number) => {
     markAsRead({ ids: [id] })

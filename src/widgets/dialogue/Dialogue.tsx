@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import {
-  useGetMessagesByUserQuery,
-  useSendMessageMutation,
-} from '@/src/shared/model/api/messengerApi'
+import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
+import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
+import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -21,26 +20,38 @@ type Props = {
 }
 
 export const Dialogue = ({ userId }: Props) => {
-  const [text, setText] = useState('')
+  useConnectMessengerSocket()
 
+  const [messageText, setMessageText] = useState('')
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
-  const [sendMessage, { isLoading }] = useSendMessageMutation()
 
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
+
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages?.items])
 
   if (!partner) {
     return null
   }
 
-  const handleSend = async () => {
-    if (!text.trim()) {
+  const hasContent = messageText.trim()
+
+  const handleSendMessage = async () => {
+    if (!hasContent) {
       return
     }
-
-    await sendMessage({ message: text.trim(), receiverId: userId })
-    setText('')
+    MessengerSocketApi.sendText(userId, messageText.trim())
+    setMessageText('')
+  }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && hasContent) {
+      handleSendMessage()
+    }
   }
 
   return (
@@ -52,36 +63,38 @@ export const Dialogue = ({ userId }: Props) => {
         </Link>
       </header>
       <div className={s.dialogueBody}>
-        {messages?.items?.map(msg => (
-          <Message
-            isMy={msg.ownerId === myId}
-            key={msg.id}
-            text={msg.messageText}
-            time={msg.createdAt}
-            userAvatar={avatarUrl}
-          />
-        ))}
+        {messages?.items
+          ?.slice()
+          .reverse()
+          .map(msg => (
+            <Message
+              isMy={msg.ownerId === myId}
+              key={msg.id}
+              text={msg.messageText}
+              time={msg.createdAt}
+              userAvatar={avatarUrl}
+            />
+          ))}
+        <div ref={bottomRef} />
       </div>
       <div className={s.footer}>
         <Input
           className={s.input}
-          onChange={e => setText(e.currentTarget.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              handleSend()
-            }
-          }}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setMessageText(e.target.value)}
+          onKeyDown={handleKeyPress}
           placeholder={'Type Message'}
-          value={text}
+          value={messageText}
         />
-        <Button
-          className={s.bth}
-          disabled={!text.trim() || isLoading}
-          onClick={handleSend}
-          variant={'transparent'}
-        >
-          Send message
-        </Button>
+        {hasContent && (
+          <Button
+            className={s.bth}
+            disabled={!hasContent}
+            onClick={handleSendMessage}
+            variant={'transparent'}
+          >
+            Send message
+          </Button>
+        )}
       </div>
     </div>
   )
