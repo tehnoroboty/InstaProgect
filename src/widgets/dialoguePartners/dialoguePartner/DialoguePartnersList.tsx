@@ -16,16 +16,32 @@ export const DialoguePartnersList = () => {
   const [cursor, setCursor] = useState<number | undefined>(undefined)
   const { data, isFetching } = useGetAllMessagesQuery({ cursor })
   const { inView, ref } = useInView()
+  const [allMessages, setAllMessages] = useState<LastMessage[]>([])
+
+  console.log(data)
 
   const getDialoguePartnerId = (message: LastMessage): number => {
     return message.ownerId === myId ? message.receiverId : message.ownerId
   }
 
   useEffect(() => {
-    if (inView && data && data.items.length < data.totalCount && data.items.length !== 0) {
-      setCursor(data.items[data.items.length - 1].id) // берём id последнего сообщения
+    if (!data?.items.length) {
+      return
     }
-  }, [inView, data])
+
+    setAllMessages(prev => {
+      // фильтруем, чтобы не было дублей
+      const newItems = data.items.filter(item => !prev.some(existing => existing.id === item.id))
+
+      return [...prev, ...newItems]
+    })
+  }, [data])
+
+  useEffect(() => {
+    if (inView && data && allMessages.length < data.totalCount && allMessages.length !== 0) {
+      setCursor(allMessages[allMessages.length - 1].id) // берём id последнего сообщения
+    }
+  }, [inView, data, allMessages])
 
   if (!data) {
     return (
@@ -35,11 +51,11 @@ export const DialoguePartnersList = () => {
     )
   }
 
-  const hasMore = data.items.length < data.totalCount
+  const hasMore = allMessages.length < (data?.totalCount ?? 0)
 
   return (
     <div className={s.dialoguePartner}>
-      {data?.items.map((msg, index, arr) => {
+      {allMessages.map((msg, index, arr) => {
         const dialoguePartnerId = getDialoguePartnerId(msg)
 
         return (
@@ -47,7 +63,6 @@ export const DialoguePartnersList = () => {
             <Link
               className={s.dialoguePartnerLink}
               href={`/messenger?dialogId=${dialoguePartnerId}`}
-              key={msg.id}
             >
               <DialoguePartnerItem message={msg} />
             </Link>
@@ -59,7 +74,7 @@ export const DialoguePartnersList = () => {
           </Fragment>
         )
       })}
-      {isFetching && !hasMore && <Loader />}
+      {isFetching && hasMore && <Loader />}
     </div>
   )
 }
