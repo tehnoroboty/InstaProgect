@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
-import { LastMessage } from '@/src/entities/messenger/types'
+import { getDialoguePartnerId } from '@/src/shared/lib/getDialoguePartnerId'
 import { useGetAllMessagesQuery } from '@/src/shared/model/api/messengerApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -14,34 +14,23 @@ import s from './dialoguePartner.module.scss'
 export const DialoguePartnersList = () => {
   const myId = useAppSelector(selectUserId)
   const [cursor, setCursor] = useState<number | undefined>(undefined)
-  const { data, isFetching } = useGetAllMessagesQuery({ cursor })
+  const { data, isFetching } = useGetAllMessagesQuery({ cursor, myId })
   const { inView, ref } = useInView()
-  const [allMessages, setAllMessages] = useState<LastMessage[]>([])
-
-  console.log(data)
-
-  const getDialoguePartnerId = (message: LastMessage): number => {
-    return message.ownerId === myId ? message.receiverId : message.ownerId
-  }
+  const topRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!data?.items.length) {
-      return
+    if (inView && data && data.items.length < data.totalCount) {
+      const lastMessageId = data.items[data.items.length - 1]?.id
+
+      if (lastMessageId && lastMessageId !== cursor) {
+        setCursor(lastMessageId)
+      }
     }
-
-    setAllMessages(prev => {
-      // фильтруем, чтобы не было дублей
-      const newItems = data.items.filter(item => !prev.some(existing => existing.id === item.id))
-
-      return [...prev, ...newItems]
-    })
-  }, [data])
+  }, [inView, data, cursor])
 
   useEffect(() => {
-    if (inView && data && allMessages.length < data.totalCount && allMessages.length !== 0) {
-      setCursor(allMessages[allMessages.length - 1].id) // берём id последнего сообщения
-    }
-  }, [inView, data, allMessages])
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [data?.items])
 
   if (!data) {
     return (
@@ -51,12 +40,13 @@ export const DialoguePartnersList = () => {
     )
   }
 
-  const hasMore = allMessages.length < (data?.totalCount ?? 0)
+  const hasMore = data.items.length < data?.totalCount
 
   return (
     <div className={s.dialoguePartner}>
-      {allMessages.map((msg, index, arr) => {
-        const dialoguePartnerId = getDialoguePartnerId(msg)
+      <div ref={topRef} />
+      {data.items.map((msg, index, arr) => {
+        const dialoguePartnerId = getDialoguePartnerId(msg, myId!)
 
         return (
           <Fragment key={msg.id}>

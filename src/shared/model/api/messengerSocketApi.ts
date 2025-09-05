@@ -20,17 +20,11 @@ export const MessengerSocketApi = {
 
     this.socket = io('https://inctagram.work', options)
 
-    this.socket.onAny((event, ...args) => {
-      console.log('📡 socket event:', event, args)
-    })
-
     this.socket.on('connect', () => {})
 
     this.socket.on('disconnect', () => {})
 
-    // Получение сообщения (отправленного мной или обновлённого после ack)
     this.socket.on(WS_EVENT_PATH.RECEIVE_MESSAGE, (data: MessageType) => {
-      console.log('📩 message received:', data)
       dispatch(
         messengerApi.util.updateQueryData(
           'getMessagesByUser',
@@ -39,9 +33,9 @@ export const MessengerSocketApi = {
             const exists = draft.items.find(m => m.id === data.id)
 
             if (exists) {
-              Object.assign(exists, data) // обновляем статус или текст
+              Object.assign(exists, data)
             } else {
-              draft.items.unshift(data) // добавляем новое сообщение
+              draft.items.unshift(data)
             }
           }
         )
@@ -49,15 +43,12 @@ export const MessengerSocketApi = {
       dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
     })
 
-    // Получение входящего сообщения от собеседника
     this.socket.on(
       WS_EVENT_PATH.MESSAGE_SEND,
       (
         msg: MessageType,
         callback: (data: { message: MessageType; receiverId: number }) => void
       ) => {
-        console.log('📥 MESSAGE_SEND:', msg)
-
         dispatch(
           messengerApi.util.updateQueryData(
             'getMessagesByUser',
@@ -72,11 +63,9 @@ export const MessengerSocketApi = {
           )
         )
         dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
-        // Подтверждаем доставку
         callback({ message: msg, receiverId: msg.receiverId })
       }
     )
-    // Обновление существующего сообщения
     this.socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, (data: MessageType) => {
       dispatch(
         messengerApi.util.updateQueryData(
@@ -94,7 +83,6 @@ export const MessengerSocketApi = {
       dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
     })
 
-    // Ошибка от сервера
     this.socket.on(WS_EVENT_PATH.ERROR, (error: { error: string; message: string }) => {
       console.error('WebSocket Error:', error)
       const errorMessage = error.message || error.error || 'Some error occurred'
@@ -103,10 +91,9 @@ export const MessengerSocketApi = {
     })
   },
 
-  // Вспомогательный метод — чтобы понять кто собеседник
   getDialoguePartnerId(msg: MessageType): number {
     if (!this.myId) {
-      console.log('myId is not set')
+      throw new Error('myId is not set')
     }
 
     return msg.ownerId === this.myId ? msg.receiverId : msg.ownerId
@@ -114,9 +101,7 @@ export const MessengerSocketApi = {
 
   myId: null as null | number,
 
-  // Отправка текста
   sendText(receiverId: number, text: string) {
-    console.log('📤 sending text:', text)
     this.socket?.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, { message: text, receiverId })
   },
 
