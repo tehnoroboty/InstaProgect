@@ -1,6 +1,6 @@
 'use client'
 
-import { useUserSearch } from '@/src/features/showSearch/hooks/useUserSearch'
+import { useUserSearch } from '@/src/shared/hooks/useUserSearch'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'

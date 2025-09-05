@@ -34,13 +34,13 @@ export type GetMessagesByUserArgs = {
 }
 
 export type GetMessagesByUserResponse = {
-  items: Message[]
+  items: MessageType[]
   notReadCount: number
   pageSize: number
   totalCount: number
 }
 
-export type Message = {
+export type MessageType = {
   createdAt: string
   id: number
   messageText: string
@@ -51,5 +51,29 @@ export type Message = {
   updatedAt: string
 }
 
+export type SendMessageArgs = {
+  message: string
+  receiverId: number
+}
+
+export type UpdateMessageStatusApiArgs = {
+  ids: number[]
+}
+
+export type DeleteMessageApiArgs = {
+  id: number
+}
+
+type MessageErrorType = {
+  error: string
+  message: string
+}
+
+type MessageUpdateRequest = {
+  id: number
+  message: string
+}
+
 export type MessengerMessageType = 'IMAGE' | 'TEXT' | 'VOICE'
+
 export type StatusType = 'READ' | 'RECEIVED' | 'SENT'

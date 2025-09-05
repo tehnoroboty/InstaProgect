@@ -1,5 +1,5 @@
 .dialoguePartners {
-  overflow-y: auto;
+  overflow: hidden auto;
 
   width: 100%;
   max-width: 269px;
@@ -9,6 +9,7 @@
   background: var(--dark-500);
 
   .searchBox {
+    position: relative;
     padding: 17px 12px 19px;
 
     .input input {

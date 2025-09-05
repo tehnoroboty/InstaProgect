@@ -27,9 +27,27 @@
   }
 
   .footer {
-    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+
+    padding: 12px;
     border-top: 1px solid var(--dark-300);
+
     background: transparent;
+
+    .bth {
+      white-space: nowrap;
+
+      /*
+      all: unset; !* сброс *!
+
+      cursor: pointer; !* делаем кликабельной *!
+
+      display: inline-flex; !* или block/flex — как нужно *!
+      align-items: center;
+      justify-content: center;
+      */
+    }
 
     .input {
       background: transparent;
