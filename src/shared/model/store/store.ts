@@ -5,7 +5,6 @@ import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
 import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
 import { postsReducer, postsSlice } from '@/src/shared/model/slices/postsSlice'
 import { configureStore } from '@reduxjs/toolkit'
-// import {authApi} from "@/src/shared/model/api/authApi";
 
 export const initializeStore = () => {
   return configureStore({
@@ -27,6 +26,3 @@ export type AppDispatch = StoreType['dispatch']
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppStore = () => useStore<StoreType>()
-
-// store.ts
-export const store = initializeStore()

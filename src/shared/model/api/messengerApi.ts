@@ -8,7 +8,6 @@ import {
 import { getDialoguePartnerId } from '@/src/shared/lib/getDialoguePartnerId'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
-import { store } from '@/src/shared/model/store/store'
 
 export const messengerApi = baseApi.injectEndpoints({
   endpoints: builder => ({
