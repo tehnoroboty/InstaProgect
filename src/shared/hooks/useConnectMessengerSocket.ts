@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import MessengerSocketApi from '@/src/shared/model/api/messengerSocketApi'
+import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 

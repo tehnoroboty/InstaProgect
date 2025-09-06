@@ -1,10 +1,8 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import { ImagePreview } from './imagePreview/ImagePreview'
 import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
 import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
-import MessengerSocketApi from '@/src/shared/model/api/messengerSocketApi'
-import { useCreateImageForPostMutation } from '@/src/shared/model/api/postsApi'
+import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -13,7 +11,6 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Input } from '@/src/shared/ui/input'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { Message } from '@/src/widgets/dialogue/message/Message'
-import clsx from 'clsx'
 import Link from 'next/link'
 
 import s from './dialogue.module.scss'
@@ -23,21 +20,16 @@ type Props = {
 }
 
 export const Dialogue = ({ userId }: Props) => {
+  useConnectMessengerSocket()
+
+  const [messageText, setMessageText] = useState('')
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
+
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
 
-  const [imageFiles, setImageFiles] = useState<File[]>([])
-  const [messageText, setMessageText] = useState('')
-
-  const [createImageForPost] = useCreateImageForPostMutation()
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
-
-  console.log(messages)
-  useConnectMessengerSocket()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -47,90 +39,16 @@ export const Dialogue = ({ userId }: Props) => {
     return null
   }
 
-  const hasContent = messageText.trim() || imageFiles.length > 0
-
-  const handleImageUpload = (file: File) => {
-    if (file && file.type.startsWith('image/') && file.size <= 1024 * 1024) {
-      setImageFiles(prev => [...prev, file])
-    }
-  }
-
-  const handleAddMoreImages = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        if (files[i].type.startsWith('image/') && files[i].size <= 1024 * 1024) {
-          handleImageUpload(files[i])
-        }
-      }
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
-    }
-  }
-
-  const handleRemoveImage = (index: number) => {
-    setImageFiles(prev => prev.filter((_, i) => i !== index))
-  }
+  const hasContent = messageText.trim()
 
   const handleSendMessage = async () => {
-    if (hasContent) {
-      if (messageText.trim()) {
-        MessengerSocketApi.sendText(userId, messageText.trim())
-      }
-
-      if (imageFiles.length > 0) {
-        for (const file of imageFiles) {
-          const formData = new FormData()
-
-          formData.append('file', file) // Соответствует эндпоинту posts/image
-          try {
-            const result = await createImageForPost({ file }).unwrap()
-            const imageUrl = result.images.url // Предполагаем, что возвращается массив
-
-            MessengerSocketApi.sendImage(userId, imageUrl) // Отправляем URL
-          } catch (error) {
-            console.error('Failed to upload image:', error)
-          }
-        }
-      }
-
-      setMessageText('')
-      setImageFiles([])
+    if (!hasContent) {
+      return
     }
+    MessengerSocketApi.sendText(userId, messageText.trim())
+    setMessageText('')
   }
-
-  // const handleSendMessage = () => {
-  //   if (hasContent) {
-  //     // Отправка сообщения с текстом и/или изображениями
-  //     console.log('Sending message:', {
-  //       images: imageFiles,
-  //       text: messageText,
-  //     })
-  //
-  //     if (messageText.trim()) {
-  //       MessengerSocketApi.sendText(userId, messageText.trim())
-  //     }
-  //
-  //     if (imageFiles.length > 0) {
-  //       imageFiles.forEach(file => {
-  //         MessengerSocketApi.sendImage(userId, file)
-  //       })
-  //     } else {
-  //       MessengerSocketApi.sendImage(userId, imageFiles[0])
-  //     }
-  //     // Очищаем после отправки
-  //     setMessageText('')
-  //     setImageFiles([])
-  //   }
-  // }
-
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && hasContent) {
       handleSendMessage()
     }
@@ -153,45 +71,31 @@ export const Dialogue = ({ userId }: Props) => {
               isMy={msg.ownerId === myId}
               key={msg.id}
               message={msg}
+              text={msg.messageText}
+              time={msg.createdAt}
               userAvatar={avatarUrl}
             />
           ))}
         <div ref={bottomRef} />
       </div>
-      <div className={clsx(s.footer, { [s.noRightPadding]: hasContent })}>
-        <ImagePreview
-          className={s.imagePreview}
-          files={imageFiles}
-          onAddMore={handleAddMoreImages}
-          onRemove={handleRemoveImage}
+      <div className={s.footer}>
+        <Input
+          className={s.input}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setMessageText(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder={'Type Message'}
+          value={messageText}
         />
-        <div className={s.inputButton}>
-          <Input
-            className={s.input}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setMessageText(e.target.value)}
-            onImageUpload={handleImageUpload}
-            onInput={() => {}}
-            onKeyDown={handleKeyPress}
-            placeholder={'Type Message'}
-            showImageButton={!hasContent}
-            type={'message'}
-            value={messageText}
-          />
-          <input
-            accept={'image/*'}
-            className={s.hiddenFileInput}
-            multiple
-            onChange={handleFileSelect}
-            ref={fileInputRef}
-            type={'file'}
-          />
-
-          {hasContent && (
-            <Button className={s.sendButton} onClick={handleSendMessage} variant={'transparent'}>
-              {'Send message'}
-            </Button>
-          )}
-        </div>
+        {hasContent && (
+          <Button
+            className={s.bth}
+            disabled={!hasContent}
+            onClick={handleSendMessage}
+            variant={'transparent'}
+          >
+            Send message
+          </Button>
+        )}
       </div>
     </div>
   )

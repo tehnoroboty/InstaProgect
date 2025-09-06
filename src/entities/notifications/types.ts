@@ -20,3 +20,9 @@ export type GetNotificationsArgs = {
   sortBy?: string
   sortDirection?: SortDirection
 }
+
+export type NotificationSocket = {
+  clientId: string
+  eventType: number
+  notifyAt: string
+} & Notifications

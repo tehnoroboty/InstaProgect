@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
-import { LastMessage } from '@/src/entities/messenger/types'
+import { getDialoguePartnerId } from '@/src/shared/lib/getDialoguePartnerId'
 import { useGetAllMessagesQuery } from '@/src/shared/model/api/messengerApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -14,18 +14,23 @@ import s from './dialoguePartner.module.scss'
 export const DialoguePartnersList = () => {
   const myId = useAppSelector(selectUserId)
   const [cursor, setCursor] = useState<number | undefined>(undefined)
-  const { data, isFetching } = useGetAllMessagesQuery({ cursor })
+  const { data, isFetching } = useGetAllMessagesQuery({ cursor, myId })
   const { inView, ref } = useInView()
-
-  const getDialoguePartnerId = (message: LastMessage): number => {
-    return message.ownerId === myId ? message.receiverId : message.ownerId
-  }
+  const topRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (inView && data && data.items.length < data.totalCount && data.items.length !== 0) {
-      setCursor(data.items[data.items.length - 1].id) // берём id последнего сообщения
+    if (inView && data && data.items.length < data.totalCount) {
+      const lastMessageId = data.items[data.items.length - 1]?.id
+
+      if (lastMessageId && lastMessageId !== cursor) {
+        setCursor(lastMessageId)
+      }
     }
-  }, [inView, data])
+  }, [inView, data, cursor])
+
+  useEffect(() => {
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [data?.items])
 
   if (!data) {
     return (
@@ -35,19 +40,19 @@ export const DialoguePartnersList = () => {
     )
   }
 
-  const hasMore = data.items.length < data.totalCount
+  const hasMore = data.items.length < data?.totalCount
 
   return (
     <div className={s.dialoguePartner}>
-      {data?.items.map((msg, index, arr) => {
-        const dialoguePartnerId = getDialoguePartnerId(msg)
+      <div ref={topRef} />
+      {data.items.map((msg, index, arr) => {
+        const dialoguePartnerId = getDialoguePartnerId(msg, myId!)
 
         return (
           <Fragment key={msg.id}>
             <Link
               className={s.dialoguePartnerLink}
               href={`/messenger?dialogId=${dialoguePartnerId}`}
-              key={msg.id}
             >
               <DialoguePartnerItem message={msg} />
             </Link>
@@ -59,7 +64,7 @@ export const DialoguePartnersList = () => {
           </Fragment>
         )
       })}
-      {isFetching && !hasMore && <Loader />}
+      {isFetching && hasMore && <Loader />}
     </div>
   )
 }

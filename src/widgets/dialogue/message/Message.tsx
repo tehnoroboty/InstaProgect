@@ -9,6 +9,8 @@ import s from './message.module.scss'
 type Props = {
   isMy: boolean
   message: MessageType
+  text?: string
+  time?: string
   userAvatar?: string
 }
 

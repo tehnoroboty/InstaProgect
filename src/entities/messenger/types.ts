@@ -51,7 +51,31 @@ export type MessageType = {
   updatedAt: string
 }
 
+export type SendMessageArgs = {
+  message: string
+  receiverId: number
+}
+
+export type UpdateMessageStatusApiArgs = {
+  ids: number[]
+}
+
+export type DeleteMessageApiArgs = {
+  id: number
+}
+
+type MessageErrorType = {
+  error: string
+  message: string
+}
+
+type MessageUpdateRequest = {
+  id: number
+  message: string
+}
+
 export type MessengerMessageType = 'IMAGE' | 'TEXT' | 'VOICE'
+
 export type StatusType = 'READ' | 'RECEIVED' | 'SENT'
 
 export type MessageSendRequest = {
@@ -59,16 +83,6 @@ export type MessageSendRequest = {
   receiverId: number
 }
 
-export type MessageUpdateRequest = {
-  id: number
-  message: string
-}
-
 export type MessageDeletedResponse = {
   id: number
-}
-
-export type MessageErrorType = {
-  error: string
-  message: string
 }
