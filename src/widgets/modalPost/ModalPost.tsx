@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Post } from '@/src/entities/post/types'
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { ImageType, Post } from '@/src/entities/post/types'
 import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
-import { postsApi, useGetCommentsQuery, useGetPostQuery } from '@/src/shared/model/api/postsApi'
-import { GetCommentsResponse, ImageType } from '@/src/shared/model/api/types'
+import { commentsAnswersApi, useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
+import { postsApi, useGetPostQuery } from '@/src/shared/model/api/postsApi'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -48,7 +49,7 @@ export default function ModalPost({
 
   const selectPost = useMemo(() => postsApi.endpoints.getPost.select(Number(postId)), [postId])
   const selectComments = useMemo(
-    () => postsApi.endpoints.getComments.select(Number(postId)),
+    () => commentsAnswersApi.endpoints.getComments.select(Number(postId)),
     [postId]
   )
 
@@ -59,27 +60,38 @@ export default function ModalPost({
   const needInitPostInStore = !!postDataFromServer && !postFromCash
 
   useEffect(() => {
-    if (needInitPostInStore) {
+    if ((needInitPostInStore || !postFromCash) && postDataFromServer) {
       dispatch(postsApi.util.upsertQueryData('getPost', Number(postId), postDataFromServer))
     }
-  }, [dispatch, needInitPostInStore, postDataFromServer, postId])
+  }, [dispatch, needInitPostInStore, postDataFromServer, postFromCash, postId])
 
   useEffect(() => {
     if (needInitCommentsInStore && !!commentsDataFromServer) {
-      dispatch(postsApi.util.upsertQueryData('getComments', Number(postId), commentsDataFromServer))
+      dispatch(
+        commentsAnswersApi.util.upsertQueryData(
+          'getComments',
+          Number(postId),
+          commentsDataFromServer
+        )
+      )
     }
   }, [commentsDataFromServer, dispatch, needInitCommentsInStore, postId])
 
   const { data: post } = useGetPostQuery(Number(postId), {
     skip: !needInitPostInStore && !Number(postId),
   })
+
   const { data: comments } = useGetCommentsQuery(Number(postId), {
     skip: !needInitCommentsInStore,
   })
 
-  const postForRender = post || postFromCash || postDataFromServer
-  const commentsForRender =
-    comments?.items || commentsFromCash?.items || commentsDataFromServer?.items || []
+  const postForRender = useMemo(() => {
+    return post || postFromCash || postDataFromServer
+  }, [post, postFromCash, postDataFromServer])
+
+  const commentsForRender = useMemo(() => {
+    return comments?.items || commentsFromCash?.items || commentsDataFromServer?.items || []
+  }, [comments, commentsFromCash, commentsDataFromServer])
 
   if (!postForRender || !commentsForRender) {
     return null
@@ -114,12 +126,7 @@ export default function ModalPost({
           ) : (
             renderItem(postForRender.images[0])
           )}
-          <ModalCommentsSection
-            commentsData={commentsForRender}
-            isAuth={isAuth}
-            isMyPost={isMyPost}
-            post={postForRender}
-          />
+          <ModalCommentsSection isAuth={isAuth} isMyPost={isMyPost} post={postForRender} />
         </div>
       </Dialog>
     </>

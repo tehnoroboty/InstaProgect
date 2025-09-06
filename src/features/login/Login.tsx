@@ -3,10 +3,11 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { LoginError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/login/validators'
+import { useSuccessAlert } from '@/src/shared/hooks/useSuccessAlert'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLoginMutation } from '@/src/shared/model/api/authApi'
-import { LoginError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Card } from '@/src/shared/ui/card/Card'
 import { Input } from '@/src/shared/ui/input'
@@ -19,10 +20,11 @@ import { useRouter } from 'next/navigation'
 import s from './login.module.scss'
 
 export default function Login() {
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading, isSuccess }] = useLoginMutation()
 
   const router = useRouter()
 
+  useSuccessAlert(isSuccess, 'You have successfully logged in.')
   const {
     formState: { errors, isValid },
     handleSubmit,

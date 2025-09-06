@@ -1,13 +1,14 @@
 'use client'
-import React from 'react'
+import React, { useCallback } from 'react'
 
-import { Post } from '@/src/entities/post/types'
-import { PublicProfileTypes } from '@/src/entities/user/types'
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { GetPostsResponse, Post } from '@/src/entities/post/types'
+import { PublicProfileTypes } from '@/src/entities/users/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
-import { GetCommentsResponse, GetPostsResponse } from '@/src/shared/model/api/types'
-import { useAppDispatch } from '@/src/shared/model/store/store'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
+import { Loader } from '@/src/shared/ui/loader/Loader'
 import { Posts } from '@/src/shared/ui/postsGrid/Posts'
-import { Typography } from '@/src/shared/ui/typography/Typography'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 import { ProfileInfo } from '@/src/widgets/profile/profileInfo/ProfileInfo'
 import { useGetPosts } from '@/src/widgets/profile/useGetPosts'
@@ -28,15 +29,16 @@ type Props = {
 
 export const Profile = (props: Props) => {
   const dispatch = useAppDispatch()
-  const { data: meData } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: meData } = useMeQuery(undefined, { skip: !isLoggedIn })
   const authProfile = !!meData
   const params = useParams<{ userId: string }>()
   const isMyProfile = meData?.userId === Number(params.userId)
   const router = useRouter()
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     router.replace(`/profile/${params.userId}`, { scroll: false })
-  }
+  }, [params.userId, router])
 
   const { hasMorePosts, postsDataForRender, ref } = useGetPosts({
     dispatch,
@@ -62,7 +64,7 @@ export const Profile = (props: Props) => {
       {!postsDataForRender ? <div>Пусто</div> : <Posts posts={postsDataForRender} />}
       {hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
-          <Typography option={'bold_text16'}>Loading...</Typography>
+          <Loader />
         </div>
       )}
       <ModalPost

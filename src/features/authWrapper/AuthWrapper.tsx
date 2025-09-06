@@ -4,6 +4,8 @@ import { type ReactNode, useEffect } from 'react'
 
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppSelector } from '@/src/shared/model/store/store'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { useRouter } from 'next/navigation'
 
@@ -15,7 +17,8 @@ type Props = {
 
 export const AuthWrapper = ({ children }: Props) => {
   const router = useRouter()
-  const { data, isLoading, isSuccess } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data, isLoading, isSuccess } = useMeQuery(undefined, { skip: !isLoggedIn })
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -30,10 +33,6 @@ export const AuthWrapper = ({ children }: Props) => {
       </div>
     )
   }
-
-  if (isSuccess) {
-    return <h1 className={s.h1}>Контент для авторизованных пользователей</h1>
-  } //TODO: добавить ленту постов конкретного пользователя тут
 
   return <>{children}</>
 }

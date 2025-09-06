@@ -1,8 +1,8 @@
 import { Dispatch, useEffect, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { GetPostsResponse, SortDirection } from '@/src/entities/post/types'
 import { postsApi, useGetPostsQuery } from '@/src/shared/model/api/postsApi'
-import { GetPostsResponse, SortDirection } from '@/src/shared/model/api/types'
 import { selectLastPostId, setLastPostId } from '@/src/shared/model/slices/postsSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
 
@@ -46,6 +46,7 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
   }
 
   const { data: posts } = useGetPostsQuery(params)
+
   const totalCount = posts?.totalCount ?? AUTH_PAGE_SIZE
   const postsCount = posts?.items.length ?? totalCount - 1
   const hasMorePosts = totalCount > postsCount
@@ -56,7 +57,9 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
     }
   }, [inView, hasMorePosts, dispatch, posts?.items])
 
-  const postsDataForRender = posts?.items || postsFromCash?.items || postsDataFromServer?.items
+  const postsDataForRender = useMemo(() => {
+    return posts?.items || postsFromCash?.items || postsDataFromServer?.items
+  }, [posts, postsFromCash, postsDataFromServer])
 
   return { hasMorePosts, postsDataForRender, ref }
 }

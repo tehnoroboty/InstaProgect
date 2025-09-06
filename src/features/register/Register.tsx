@@ -3,10 +3,11 @@
 import { useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/register/validators'
+import { useSuccessAlert } from '@/src/shared/hooks/useSuccessAlert'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useRegistrationMutation } from '@/src/shared/model/api/authApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Card } from '@/src/shared/ui/card/Card'
 import { CheckBox } from '@/src/shared/ui/checkbox/CheckBox'
@@ -50,13 +51,15 @@ export const Register = () => {
     }
   }
 
-  const [registration, { isLoading }] = useRegistrationMutation()
+  const [registration, { isLoading, isSuccess }] = useRegistrationMutation()
+
+  useSuccessAlert(isSuccess, 'You have successfully registration.')
   const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoading
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
       const registrationData = {
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL as string,
+        baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.REGISTRATION_CONFIRMATION}`,
         email: formData.email,
         password: formData.password,
         userName: formData.userName,

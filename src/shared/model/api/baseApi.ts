@@ -8,34 +8,6 @@ import {
 } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-/*
-export const baseApi = createApi({
-  baseQuery: async (args, api, extraOptions) => {
-    //для замедления запроса
-    //await new Promise(res => setTimeout(res, 5000))
-    const result = await fetchBaseQuery({
-      baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-      credentials: 'include',
-      prepareHeaders: headers => {
-        // headers.set('API-KEY', `${process.env.NEXT_PUBLIC_SITE_KEY}`)
-        const token = localStorage.getItem('sn-token')
-
-        if (token) {
-          headers.set('Authorization', `Bearer ${token}`)
-        }
-      },
-    })(args, api, extraOptions)
-
-    handleError(api, result)
-
-    return result
-  },
-  endpoints: () => ({}),
-  reducerPath: 'inctagramApi',
-  tagTypes: ['ME'],
-})
-*/
-
 // create a new mutex
 const mutex = new Mutex()
 
@@ -79,7 +51,7 @@ export const baseQueryWithReauth: BaseQueryFn<
           {
             // credentials: 'include',
             method: 'POST',
-            url: '/auth/update-tokens',
+            url: 'auth/update-tokens',
           },
           api,
           extraOptions
@@ -130,5 +102,11 @@ export const baseApi = createApi({
     'SESSIONS',
     'PAYMENTS',
     'NOTIFICATIONS',
+    'FEED',
+    'POST_LIKES',
+    'COMMENT_LIKES',
+    'ANSWER_LIKES',
+    'ANSWERS',
+    'MESSAGES',
   ],
 })

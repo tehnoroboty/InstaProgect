@@ -1,4 +1,4 @@
-import { setAppError, setUserId } from '../slices/appSlice'
+import { setAppError, setAppSuccess, setIsLoggedIn, setUserId } from '../slices/appSlice'
 import {
   ArgsPostGoogleOAuth,
   CreateNewPasswordRecoveryType,
@@ -9,7 +9,7 @@ import {
   RecoveryCodeType,
   RegistrationEmailResending,
   RegistrationType,
-} from './types'
+} from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
@@ -28,6 +28,8 @@ export const authApi = baseApi.injectEndpoints({
           const res = await queryFulfilled
 
           localStorage.setItem('accessToken', res.data.accessToken)
+          // ✅ Запускаем `me` после логина через Google
+          dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
         } catch (error) {
           const errorResponse = error as { error: { data: { messages: [{ message: string }] } } }
 
@@ -43,10 +45,11 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
     login: builder.mutation<{ accessToken: string }, FormType>({
-      async onQueryStarted(_args, { queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
         localStorage.setItem('accessToken', response.data.accessToken)
+        dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
       },
       query: body => ({
         body,
@@ -60,8 +63,11 @@ export const authApi = baseApi.injectEndpoints({
           await queryFulfilled
           dispatch(baseApi.util.resetApiState())
           localStorage.removeItem('accessToken')
+          dispatch(setUserId({ userId: null }))
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          dispatch(setAppSuccess({ success: 'Logout completed successfully.' }))
         } catch (error) {
-          console.error('Ошибка при разлогине:', error)
+          dispatch(setAppError({ error: 'Ошибка при разлогине' }))
         }
       },
       query: () => ({
@@ -75,8 +81,9 @@ export const authApi = baseApi.injectEndpoints({
           const res = await queryFulfilled
 
           dispatch(setUserId({ userId: res.data.userId }))
+          dispatch(setIsLoggedIn({ isLoggedIn: true }))
         } catch (error) {
-          console.error('Ошибка ME запроса:', error)
+          dispatch(setAppError({ error: 'Ошибка при me запросе' }))
         }
       },
       query: () => 'auth/me',

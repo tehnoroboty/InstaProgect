@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 491px;
   border-bottom: 1px solid var(--dark-100);
-  background-color: var(--dark-500);
+  background-color: var(--dark-700);
 }
 
 .cardBody {
@@ -27,6 +27,13 @@
 
   aspect-ratio: 491/504;
   width: 100%;
+}
+
+.notFound {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #646060;
+  border-radius: 10px;
 }
 
 .cardHeaderGroup {
@@ -83,10 +90,22 @@
 
 .userName {
   font-weight: 700;
+  color: var(--light-100);
+  transition: opacity 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 }
 
 .likesBox {
   margin-bottom: 24px;
+}
+
+.noMargin {
+  margin-bottom: 0;
 }
 
 .viewCommentsBtn {
@@ -102,7 +121,10 @@
   display: flex;
   gap: 36px;
   align-items: flex-start;
+  justify-content: space-between;
+
   margin-bottom: 16px;
+  padding: 0;
 }
 
 .textareaContainer {
@@ -116,4 +138,6 @@
 
   font-size: 14px;
   text-align: left;
+
+  background-color: var(--dark-700);
 }
