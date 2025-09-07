@@ -1,11 +1,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
 import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
 import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
+import { useCreateImageForPostMutation } from '@/src/shared/model/api/postsApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
-import { selectUserId } from '@/src/shared/model/slices/appSlice'
-import { useAppSelector } from '@/src/shared/model/store/store'
+import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Input } from '@/src/shared/ui/input'
@@ -23,6 +25,7 @@ type Props = {
 
 export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
+  const [createImageForPost] = useCreateImageForPostMutation()
 
   const [messageText, setMessageText] = useState('')
   const [imageFiles, setImageFiles] = useState<File[]>([])
@@ -35,6 +38,8 @@ export const Dialogue = ({ userId }: Props) => {
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -75,7 +80,7 @@ export const Dialogue = ({ userId }: Props) => {
     setImageFiles(prev => prev.filter((_, i) => i !== index))
   }
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!hasContent) {
       return
     }
@@ -85,48 +90,30 @@ export const Dialogue = ({ userId }: Props) => {
       setMessageText('')
     }
 
-    // imageFiles.forEach(file => {
-    //   MessengerSocketApi.sendImage(userId, file)
-    // })
+    try {
+      for (const file of imageFiles) {
+        const formData = new FormData()
 
-    MessengerSocketApi.sendImage(userId, 'https://via.placeholder.com/300.png')
+        formData.append('file', file)
 
-    // MessengerSocketApi.socket?.emit('receive-message', {
-    //   message:
-    //     'https://staging-it-incubator.s3.eu-central-1.amazonaws.com/trainee-instagram-api/Image/3696907b-54ff-4e9c-9e41-ef1541d55eb0_users/2084/post/41f7c084-35db-4aa4-858c-e4e15771c0dc-images-1440x1440',
-    //   receiverId: userId,
-    // })
+        const response = await createImageForPost({ file }).unwrap() // Получаем { images }
+        const imageUrl = response.images[0].url // Берем первый URL из массива
 
-    // отправляем картинки в base64
-    // imageFiles.forEach(file => {
-    //   const reader = new FileReader()
-    //
-    //   reader.onload = () => {
-    //     const base64 = reader.result as string
-    //
-    //     console.log('Отправляю картинку:', {
-    //       fileName: file.name,
-    //       messageText: base64.slice(0, 100), // только первые 100 символов
-    //       messageType: 'IMAGE',
-    //       mimeType: file.type,
-    //       receiverId: userId,
-    //     })
-    //
-    //     MessengerSocketApi.socket?.emit('receive-message', {
-    //       fileName: file.name,
-    //       messageText: base64, // строка base64 вместо текста
-    //       messageType: 'IMAGE',
-    //       mimeType: file.type,
-    //       receiverId: userId,
-    //     })
-    //   }
-    //   reader.readAsDataURL(file) // вернёт base64 строку
-    // })
-    setImageFiles([])
+        MessengerSocketApi.sendImage(userId, imageUrl) // Отправляем URL
+        setImageFiles([])
+      }
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0]?.message || error.data.error || 'Some error occurred'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
+    setMessageText('')
   }
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && hasContent) {
-      handleSendMessage()
+      void handleSendMessage()
     }
   }
 

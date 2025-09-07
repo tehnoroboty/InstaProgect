@@ -102,22 +102,6 @@ export const MessengerSocketApi = {
 
   myId: null as null | number,
 
-  // sendImage(receiverId: number, file: File) {
-  //   const reader = new FileReader()
-  //
-  //   reader.onload = () => {
-  //     const base64 = reader.result as string
-  //
-  //     console.log('Base64 length:', base64.length)
-  //
-  //     this.socket?.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, {
-  //       message: base64,
-  //       receiverId,
-  //     })
-  //   }
-  //   reader.readAsDataURL(file) // вернёт base64
-  // },
-
   sendImage(receiverId: number, message: string) {
     this.socket?.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, {
       message,

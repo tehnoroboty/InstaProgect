@@ -14,15 +14,19 @@ type Props = {
 }
 
 export const Message = ({ isMy, message, userAvatar }: Props) => {
-  const isImage = message.messageType === 'IMAGE'
-  const isText = message.messageType === 'TEXT'
+  // const isImage = message.messageType === 'IMAGE'
+  // const isText = message.messageType === 'TEXT'
+  const isImage = message.messageType === 'TEXT' && message.messageText?.startsWith('https://')
+  const hasText = !!message.messageText && !isImage
+  const hasImage = message.messageType === 'IMAGE' || isImage
+  // console.log(message)
 
   return (
     <div className={clsx(s.message, isMy && s.isMy)}>
       {!isMy && <AvatarBox size={'s'} src={userAvatar} />}
       <div className={s.text}>
-        {isText && <Typography option={'regular_text14'}>{message.messageText}</Typography>}
-        {isImage && (
+        {hasText && <Typography option={'regular_text14'}>{message.messageText}</Typography>}
+        {hasImage && (
           <Image
             alt={'image'}
             className={s.imageMessage}
