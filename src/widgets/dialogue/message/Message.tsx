@@ -14,17 +14,20 @@ type Props = {
 }
 
 export const Message = ({ isMy, message, userAvatar }: Props) => {
-  // const isImage = message.messageType === 'IMAGE'
-  // const isText = message.messageType === 'TEXT'
   const isImage = message.messageType === 'TEXT' && message.messageText?.startsWith('https://')
   const hasText = !!message.messageText && !isImage
   const hasImage = message.messageType === 'IMAGE' || isImage
   // console.log(message)
 
+  const messageClass = clsx(s.message, {
+    [s.imageOnly]: hasImage && !hasText,
+    [s.textOrMixed]: hasText || (hasImage && hasText),
+  })
+
   return (
-    <div className={clsx(s.message, isMy && s.isMy)}>
+    <div className={clsx(s.messageContainer, isMy && s.isMy)}>
       {!isMy && <AvatarBox size={'s'} src={userAvatar} />}
-      <div className={s.text}>
+      <div className={messageClass}>
         {hasText && <Typography option={'regular_text14'}>{message.messageText}</Typography>}
         {hasImage && (
           <Image
