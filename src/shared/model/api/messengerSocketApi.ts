@@ -123,4 +123,8 @@ export const MessengerSocketApi = {
   },
 
   socket: null as Socket | null,
+
+  updateText(messageId: number, text: string) {
+    this.socket?.emit(WS_EVENT_PATH.UPDATE_MESSAGE, { id: messageId, message: text })
+  },
 }

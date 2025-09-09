@@ -20,10 +20,19 @@ type Props = {
   status: StatusType
   text: string
   time: string
+  updateMessageId: (id: number) => void
   userAvatar?: string
 }
 
-export const Message = ({ isMy, messageId, status, text, time, userAvatar }: Props) => {
+export const Message = ({
+  isMy,
+  messageId,
+  status,
+  text,
+  time,
+  updateMessageId,
+  userAvatar,
+}: Props) => {
   const [deleteMessage] = useDeleteMessageMutation()
 
   const deleteMessageHandler = () => {
@@ -47,7 +56,13 @@ export const Message = ({ isMy, messageId, status, text, time, userAvatar }: Pro
 
       {isMy && (
         <div className={s.actionsPanel}>
-          <Button className={s.actionsPanelBtn} variant={'transparent'}>
+          <Button
+            className={s.actionsPanelBtn}
+            onClick={() => {
+              updateMessageId(messageId)
+            }}
+            variant={'transparent'}
+          >
             <Edit2Outline />
           </Button>
           <Button

@@ -26,6 +26,7 @@ type Props = {
 export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
   const { inView, ref } = useInView({ threshold: 0.1 })
+  const [updateMessageId, setUpdateMessageId] = useState<null | number>(null)
   const [messageText, setMessageText] = useState('')
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
@@ -55,6 +56,16 @@ export const Dialogue = ({ userId }: Props) => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages?.items])
 
+  useEffect(() => {
+    if (updateMessageId) {
+      const message = messages?.items.filter(msg => msg.id === updateMessageId)[0]
+
+      if (message) {
+        setMessageText(message?.messageText)
+      }
+    }
+  }, [updateMessageId])
+
   if (!partner) {
     return null
   }
@@ -72,6 +83,18 @@ export const Dialogue = ({ userId }: Props) => {
     if (e.key === 'Enter' && hasContent) {
       handleSendMessage()
     }
+  }
+
+  const handleUpdateMessageId = (id: number) => {
+    setUpdateMessageId(id)
+  }
+  const handleUpdateMessage = async () => {
+    if (!hasContent || !updateMessageId) {
+      return
+    }
+    MessengerSocketApi.updateText(updateMessageId, messageText.trim())
+    setMessageText('')
+    setUpdateMessageId(null)
   }
 
   return (
@@ -94,6 +117,7 @@ export const Dialogue = ({ userId }: Props) => {
               status={msg.status}
               text={msg.messageText}
               time={msg.createdAt}
+              updateMessageId={handleUpdateMessageId}
               userAvatar={avatarUrl}
             />
           ))}
@@ -108,7 +132,7 @@ export const Dialogue = ({ userId }: Props) => {
           placeholder={'Type Message'}
           value={messageText}
         />
-        {hasContent && (
+        {hasContent && !updateMessageId && (
           <Button
             className={s.bth}
             disabled={!hasContent}
@@ -116,6 +140,16 @@ export const Dialogue = ({ userId }: Props) => {
             variant={'transparent'}
           >
             Send message
+          </Button>
+        )}
+        {hasContent && !!updateMessageId && (
+          <Button
+            className={s.bth}
+            disabled={!hasContent}
+            onClick={handleUpdateMessage}
+            variant={'transparent'}
+          >
+            Update message
           </Button>
         )}
       </div>
