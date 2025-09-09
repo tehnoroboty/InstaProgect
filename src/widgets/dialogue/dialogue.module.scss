@@ -26,27 +26,26 @@
     padding: 23px;
   }
 
+
   .footer {
     display: flex;
     justify-content: space-between;
 
     padding: 12px;
     border-top: 1px solid var(--dark-300);
-
+    gap: 12px;
     background: transparent;
+
+    .micIcon {
+      padding: 0;
+
+      & g {
+        fill: var(--light-100);
+      }
+    }
 
     .bth {
       white-space: nowrap;
-
-      /*
-      all: unset; !* сброс *!
-
-      cursor: pointer; !* делаем кликабельной *!
-
-      display: inline-flex; !* или block/flex — как нужно *!
-      align-items: center;
-      justify-content: center;
-      */
     }
 
     .input {

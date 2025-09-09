@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 
+import { MicOutline, PauseCircle } from '@/src/shared/assets/componentsIcons'
 import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
 import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
 import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
+import { useCreateImageForPostMutation } from '@/src/shared/model/api/postsApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppSelector } from '@/src/shared/model/store/store'
@@ -21,6 +23,90 @@ type Props = {
 
 export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
+  const [isRecording, setIsRecording] = useState(false)
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
+  const [recordingTime, setRecordingTime] = useState(0)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
+  const timerRef = useRef<any>(null)
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const mediaRecorder = new MediaRecorder(stream)
+
+      mediaRecorderRef.current = mediaRecorder
+      audioChunksRef.current = []
+
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' })
+
+        setAudioBlob(audioBlob)
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+      startTimer()
+    } catch (error) {
+      console.error('Error accessing microphone:', error)
+    }
+  }
+
+  const startTimer = () => {
+    setRecordingTime(0)
+    timerRef.current = setInterval(() => {
+      setRecordingTime(prev => prev + 1)
+    }, 1000)
+  }
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop()
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop())
+      setIsRecording(false)
+      stopTimer()
+    }
+  }
+
+  const stopTimer = () => {
+    clearInterval(timerRef.current)
+  }
+
+  const sendAudio = () => {
+    if (audioBlob) {
+      handleSendAudio(audioBlob)
+      setAudioBlob(null)
+      setRecordingTime(0)
+    }
+  }
+
+  const handleSendAudio = async (audioBlob: Blob) => {
+    try {
+      console.log(audioChunksRef)
+      MessengerSocketApi.sendText(userId, audioChunksRef.current)
+    } catch (error) {
+      console.error('Failed to upload image:', error)
+    }
+    // MessengerSocketApi.sendText(userId, base64Audio)
+  }
+
+  const cancelRecording = () => {
+    stopRecording()
+    setAudioBlob(null)
+    setRecordingTime(0)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current && isRecording) {
+        stopRecording()
+      }
+    }
+  }, [])
 
   const [messageText, setMessageText] = useState('')
   const { data: partner } = useGetUserProfileByIdQuery(userId)
@@ -41,7 +127,7 @@ export const Dialogue = ({ userId }: Props) => {
 
   const hasContent = messageText.trim()
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (!hasContent) {
       return
     }
@@ -78,13 +164,42 @@ export const Dialogue = ({ userId }: Props) => {
         <div ref={bottomRef} />
       </div>
       <div className={s.footer}>
-        <Input
-          className={s.input}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setMessageText(e.target.value)}
-          onKeyDown={handleKeyPress}
-          placeholder={'Type Message'}
-          value={messageText}
-        />
+        {isRecording && (
+          <div>
+            <span>Recording... {recordingTime}s</span>
+            <Button className={s.micIcon} onClick={stopRecording} variant={'transparent'}>
+              <PauseCircle />
+            </Button>
+          </div>
+        )}
+
+        {audioBlob && !isRecording ? (
+          <div className={'audio-preview'}>
+            <audio controls src={URL.createObjectURL(audioBlob)} />
+            <div className={'preview-actions'}>
+              <button onClick={sendAudio} type={'button'}>
+                Send
+              </button>
+              <button onClick={cancelRecording} type={'button'}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <Input
+            className={s.input}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setMessageText(e.target.value)}
+            onKeyDown={handleKeyPress}
+            placeholder={'Type Message'}
+            value={messageText}
+          />
+        )}
+        {!isRecording && !audioBlob && (
+          <Button className={s.micIcon} onClick={startRecording} variant={'transparent'}>
+            <MicOutline />
+          </Button>
+        )}
+
         {hasContent && (
           <Button
             className={s.bth}

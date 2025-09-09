@@ -101,7 +101,7 @@ export const MessengerSocketApi = {
 
   myId: null as null | number,
 
-  sendText(receiverId: number, text: string) {
+  sendText(receiverId: number, text: any) {
     this.socket?.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, { message: text, receiverId })
   },
 
