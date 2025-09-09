@@ -25,7 +25,6 @@ export const MessengerSocketApi = {
     this.socket.on('disconnect', () => {})
 
     this.socket.on(WS_EVENT_PATH.RECEIVE_MESSAGE, (data: MessageType) => {
-      console.log('Пришло сообщение из сокета:', data)
       dispatch(
         messengerApi.util.updateQueryData(
           'getMessagesByUser',

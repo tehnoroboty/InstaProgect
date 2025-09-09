@@ -90,16 +90,20 @@ export const Dialogue = ({ userId }: Props) => {
         MessengerSocketApi.sendText(userId, messageText.trim())
       }
 
-      for (const file of imageFiles) {
-        const formData = new FormData()
+      if (imageFiles.length > 0) {
+        const uploadPromises = imageFiles.map(async file => {
+          const formData = new FormData()
 
-        formData.append('file', file)
+          formData.append('file', file)
+          const response = await createImageForPost({ file }).unwrap()
+          const imageUrl = response.images[0].url
 
-        const response = await createImageForPost({ file }).unwrap()
-        const imageUrl = response.images[0].url
+          MessengerSocketApi.sendImage(userId, imageUrl)
+        })
 
-        MessengerSocketApi.sendImage(userId, imageUrl)
+        await Promise.all(uploadPromises)
       }
+
       setMessageText('')
       setImageFiles([])
     } catch (err) {
@@ -174,7 +178,7 @@ export const Dialogue = ({ userId }: Props) => {
                 onClick={handleSendMessage}
                 variant={'transparent'}
               >
-                {'Send message'}
+                {isLoading ? 'Sending...' : 'Send message'}
               </Button>
             )}
           </div>
