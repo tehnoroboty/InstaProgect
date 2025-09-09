@@ -6,6 +6,7 @@ import {
   TrashOutline,
 } from '@/src/shared/assets/componentsIcons'
 import { formattedTime } from '@/src/shared/lib/formattedTime'
+import { useDeleteMessageMutation } from '@/src/shared/model/api/messengerApi'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
@@ -15,13 +16,22 @@ import s from './message.module.scss'
 
 type Props = {
   isMy: boolean
+  messageId: number
   status: StatusType
   text: string
   time: string
   userAvatar?: string
 }
 
-export const Message = ({ isMy, status, text, time, userAvatar }: Props) => {
+export const Message = ({ isMy, messageId, status, text, time, userAvatar }: Props) => {
+  const [deleteMessage] = useDeleteMessageMutation()
+
+  const deleteMessageHandler = () => {
+    if (isMy) {
+      deleteMessage(messageId)
+    }
+  }
+
   return (
     <div className={clsx(s.message, isMy && s.isMy)}>
       {!isMy && <AvatarBox size={'s'} src={userAvatar} />}
@@ -40,7 +50,11 @@ export const Message = ({ isMy, status, text, time, userAvatar }: Props) => {
           <Button className={s.actionsPanelBtn} variant={'transparent'}>
             <Edit2Outline />
           </Button>
-          <Button className={s.actionsPanelBtn} variant={'transparent'}>
+          <Button
+            className={s.actionsPanelBtn}
+            onClick={deleteMessageHandler}
+            variant={'transparent'}
+          >
             <TrashOutline />
           </Button>
         </div>

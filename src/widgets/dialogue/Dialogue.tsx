@@ -70,6 +70,7 @@ export const Dialogue = ({ userId }: Props) => {
             <Message
               isMy={msg.ownerId === myId}
               key={msg.id}
+              messageId={msg.id}
               status={msg.status}
               text={msg.messageText}
               time={msg.createdAt}

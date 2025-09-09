@@ -89,6 +89,33 @@ export const MessengerSocketApi = {
 
       dispatch(setAppError({ error: errorMessage }))
     })
+
+    this.socket.on(WS_EVENT_PATH.MESSAGE_DELETED, (messageId: number) => {
+      const partnerId = this.getDialogIdFromURL()
+
+      if (!partnerId) {
+        return null
+      }
+
+      dispatch(
+        messengerApi.util.updateQueryData(
+          'getMessagesByUser',
+          { dialoguePartnerId: partnerId },
+          draft => {
+            const filteredMsg = draft.items.filter(msg => msg.id !== messageId)
+
+            draft.items = [...filteredMsg]
+          }
+        )
+      )
+    })
+  },
+
+  getDialogIdFromURL(): null | number {
+    const urlParams = new URLSearchParams(window.location.search)
+    const dialogId = urlParams.get('dialogId')
+
+    return dialogId ? parseInt(dialogId, 10) : null
   },
 
   getDialoguePartnerId(msg: MessageType): number {
