@@ -1,4 +1,5 @@
 .message {
+  position: relative;
   display: flex;
   gap: 12px;
   align-items: flex-end;
@@ -28,6 +29,50 @@
   }
 
   .time {
+    display: flex;
+    align-items: center;
     color: var(--primary-100);
   }
+}
+
+.actionsPanel {
+  position: absolute;
+  right: 0;
+  bottom: -26px;
+
+  display: flex;
+  gap: 8px;
+
+  opacity: 0;
+
+  transition: opacity 0.3s;
+}
+
+.actionsPanelBtn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+
+  svg,
+  path {
+    fill: var(--dark-100);
+  }
+}
+
+.isMy:hover {
+  .actionsPanel {
+    opacity: 1;
+  }
+}
+
+.readMsg path {
+  fill: var(--light-100);
+}
+
+.sentMsg path {
+  fill: var(--light-100);
+}
+
+.receivedMsg path {
+  fill: var(--light-900);
 }
