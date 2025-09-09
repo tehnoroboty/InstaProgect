@@ -25,7 +25,7 @@ type Props = {
 
 export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
-  const [createImageForPost] = useCreateImageForPostMutation()
+  const [createImageForPost, { isLoading }] = useCreateImageForPostMutation()
 
   const [messageText, setMessageText] = useState('')
   const [imageFiles, setImageFiles] = useState<File[]>([])
@@ -85,23 +85,23 @@ export const Dialogue = ({ userId }: Props) => {
       return
     }
 
-    if (messageText.trim()) {
-      MessengerSocketApi.sendText(userId, messageText.trim())
-      setMessageText('')
-    }
-
     try {
+      if (messageText.trim()) {
+        MessengerSocketApi.sendText(userId, messageText.trim())
+      }
+
       for (const file of imageFiles) {
         const formData = new FormData()
 
         formData.append('file', file)
 
-        const response = await createImageForPost({ file }).unwrap() // Получаем { images }
-        const imageUrl = response.images[0].url // Берем первый URL из массива
+        const response = await createImageForPost({ file }).unwrap()
+        const imageUrl = response.images[0].url
 
-        MessengerSocketApi.sendImage(userId, imageUrl) // Отправляем URL
-        setImageFiles([])
+        MessengerSocketApi.sendImage(userId, imageUrl)
       }
+      setMessageText('')
+      setImageFiles([])
     } catch (err) {
       const error = err as CustomerError
       const errorMessage =
@@ -109,7 +109,6 @@ export const Dialogue = ({ userId }: Props) => {
 
       dispatch(setAppError({ error: errorMessage }))
     }
-    setMessageText('')
   }
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && hasContent) {
@@ -171,7 +170,7 @@ export const Dialogue = ({ userId }: Props) => {
             {hasContent && (
               <Button
                 className={s.sendButton}
-                disabled={!hasContent}
+                disabled={!hasContent || isLoading}
                 onClick={handleSendMessage}
                 variant={'transparent'}
               >
