@@ -39,9 +39,9 @@ export const Message = ({ isMy, messageId, status, text, time, userAvatar }: Pro
         <Typography option={'regular_text14'}>{text}</Typography>
         <div className={s.time}>
           <Typography option={'small_text'}>{formattedTime(time)}</Typography>
-          {status === 'RECEIVED' && <CheckmarkOutline className={s.receivedMsg} />}
-          {status === 'SENT' && <DoneAllOutline className={s.sentMsg} />}
-          {status === 'READ' && <DoneAllOutline className={s.readMsg} />}
+          {isMy && status === 'RECEIVED' && <CheckmarkOutline className={s.receivedMsg} />}
+          {isMy && status === 'SENT' && <DoneAllOutline className={s.sentMsg} />}
+          {isMy && status === 'READ' && <DoneAllOutline className={s.readMsg} />}
         </div>
       </div>
 

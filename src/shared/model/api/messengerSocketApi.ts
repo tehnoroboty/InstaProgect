@@ -67,20 +67,8 @@ export const MessengerSocketApi = {
       }
     )
     this.socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, (data: MessageType) => {
-      dispatch(
-        messengerApi.util.updateQueryData(
-          'getMessagesByUser',
-          { dialoguePartnerId: this.getDialoguePartnerId(data) },
-          draft => {
-            const index = draft.items.findIndex(item => item.id === data.id)
-
-            if (index !== -1) {
-              draft.items[index] = data
-            }
-          }
-        )
-      )
-      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
+      // eslint-disable-next-line no-console
+      console.log('UPDATE_MESSAGE', data)
     })
 
     this.socket.on(WS_EVENT_PATH.ERROR, (error: { error: string; message: string }) => {
@@ -108,6 +96,8 @@ export const MessengerSocketApi = {
           }
         )
       )
+
+      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
     })
   },
 

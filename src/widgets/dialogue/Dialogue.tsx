@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
-import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
+import {
+  useGetMessagesByUserQuery,
+  useUpdateMessageStatusMutation,
+} from '@/src/shared/model/api/messengerApi'
 import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
 import { selectUserId } from '@/src/shared/model/slices/appSlice'
@@ -21,15 +25,31 @@ type Props = {
 
 export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
-
+  const { inView, ref } = useInView({ threshold: 0.1 })
   const [messageText, setMessageText] = useState('')
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
+  const [updateMessageStatus] = useUpdateMessageStatusMutation()
 
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
 
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (inView) {
+      const sent: number[] = []
+
+      messages?.items.map(msg => {
+        if (msg.status !== 'READ' && myId !== msg.ownerId) {
+          sent.push(msg.id)
+        }
+      })
+      if (sent.length > 0) {
+        updateMessageStatus({ ids: sent })
+      }
+    }
+  }, [inView, messages?.items, myId, updateMessageStatus])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -78,6 +98,7 @@ export const Dialogue = ({ userId }: Props) => {
             />
           ))}
         <div ref={bottomRef} />
+        <div ref={ref} />
       </div>
       <div className={s.footer}>
         <Input
