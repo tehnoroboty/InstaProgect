@@ -66,13 +66,8 @@ export const MessengerSocketApi = {
         callback({ message: msg, receiverId: msg.receiverId })
       }
     )
-    this.socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, (data: MessageType) => {
-      // eslint-disable-next-line no-console
-      console.log('UPDATE_MESSAGE', data)
-    })
 
     this.socket.on(WS_EVENT_PATH.ERROR, (error: { error: string; message: string }) => {
-      console.error('WebSocket Error:', error)
       const errorMessage = error.message || error.error || 'Some error occurred'
 
       dispatch(setAppError({ error: errorMessage }))
