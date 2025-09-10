@@ -72,7 +72,7 @@ export const Dialogue = ({ userId }: Props) => {
 
   const hasContent = messageText.trim()
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (!hasContent) {
       return
     }
@@ -88,7 +88,7 @@ export const Dialogue = ({ userId }: Props) => {
   const handleUpdateMessageId = (id: number) => {
     setUpdateMessageId(id)
   }
-  const handleUpdateMessage = async () => {
+  const handleUpdateMessage = () => {
     if (!hasContent || !updateMessageId) {
       return
     }
