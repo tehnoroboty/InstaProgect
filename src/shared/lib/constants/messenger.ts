@@ -1,9 +1,3 @@
-export enum MessageStatus {
-  READ = 'READ',
-  RECEIVED = 'RECEIVED',
-  SENT = 'SENT',
-}
-
 export const WS_EVENT_PATH = {
   ERROR: 'error',
   MESSAGE_DELETED: 'message-deleted',
