@@ -63,27 +63,27 @@ export const Message = ({ isMy, message, updateMessageId, userAvatar }: Props) =
           {isMy && message.status === 'SENT' && <DoneAllOutline className={s.sentMsg} />}
           {isMy && message.status === 'READ' && <DoneAllOutline className={s.readMsg} />}
         </div>
+        {isMy && (
+          <div className={s.actionsPanel}>
+            <Button
+              className={s.actionsPanelBtn}
+              onClick={() => {
+                updateMessageId(message.id)
+              }}
+              variant={'transparent'}
+            >
+              <Edit2Outline />
+            </Button>
+            <Button
+              className={s.actionsPanelBtn}
+              onClick={deleteMessageHandler}
+              variant={'transparent'}
+            >
+              <TrashOutline />
+            </Button>
+          </div>
+        )}
       </div>
-      {isMy && (
-        <div className={s.actionsPanel}>
-          <Button
-            className={s.actionsPanelBtn}
-            onClick={() => {
-              updateMessageId(message.id)
-            }}
-            variant={'transparent'}
-          >
-            <Edit2Outline />
-          </Button>
-          <Button
-            className={s.actionsPanelBtn}
-            onClick={deleteMessageHandler}
-            variant={'transparent'}
-          >
-            <TrashOutline />
-          </Button>
-        </div>
-      )}
     </div>
   )
 }
