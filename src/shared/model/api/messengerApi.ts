@@ -11,15 +11,6 @@ import { setAppError } from '@/src/shared/model/slices/appSlice'
 
 export const messengerApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    deleteMessage: builder.mutation<void, number>({
-      invalidatesTags: ['MESSAGES'],
-      query: messageId => {
-        return {
-          method: 'delete',
-          url: `messenger/${messageId}`,
-        }
-      },
-    }),
     getAllMessages: builder.query<
       GetAllMessagesResponse,
       GetAllMessagesArgs & { myId: null | number }
@@ -91,23 +82,8 @@ export const messengerApi = baseApi.injectEndpoints({
         url: `messenger/${dialoguePartnerId}`,
       }),
     }),
-    updateMessageStatus: builder.mutation<void, { ids: number[] }>({
-      invalidatesTags: ['MESSAGES'],
-      query: ids => {
-        return {
-          body: ids,
-          method: 'put',
-          url: `messenger`,
-        }
-      },
-    }),
   }),
   overrideExisting: false,
 })
 
-export const {
-  useDeleteMessageMutation,
-  useGetAllMessagesQuery,
-  useGetMessagesByUserQuery,
-  useUpdateMessageStatusMutation,
-} = messengerApi
+export const { useGetAllMessagesQuery, useGetMessagesByUserQuery } = messengerApi

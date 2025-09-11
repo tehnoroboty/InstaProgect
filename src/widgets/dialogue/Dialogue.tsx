@@ -1,12 +1,8 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
 
 import { CustomerError } from '@/src/entities/errors/types'
 import { useConnectMessengerSocket } from '@/src/shared/hooks/useConnectMessengerSocket'
-import {
-  useGetMessagesByUserQuery,
-  useUpdateMessageStatusMutation,
-} from '@/src/shared/model/api/messengerApi'
+import { useGetMessagesByUserQuery } from '@/src/shared/model/api/messengerApi'
 import { MessengerSocketApi } from '@/src/shared/model/api/messengerSocketApi'
 import { useCreateImageForPostMutation } from '@/src/shared/model/api/postsApi'
 import { useGetUserProfileByIdQuery } from '@/src/shared/model/api/usersApi'
@@ -31,14 +27,11 @@ export const Dialogue = ({ userId }: Props) => {
   useConnectMessengerSocket()
   const [createImageForPost, { isLoading }] = useCreateImageForPostMutation()
 
-  const { inView, ref } = useInView({ threshold: 0.1 })
-  const [updateMessageId, setUpdateMessageId] = useState<null | number>(null)
   const [messageText, setMessageText] = useState('')
   const [imageFiles, setImageFiles] = useState<File[]>([])
 
   const { data: partner } = useGetUserProfileByIdQuery(userId)
   const { data: messages } = useGetMessagesByUserQuery({ dialoguePartnerId: userId })
-  const [updateMessageStatus] = useUpdateMessageStatusMutation()
 
   const myId = useAppSelector(selectUserId)
   const avatarUrl = partner?.avatars?.[0]?.url
@@ -49,33 +42,8 @@ export const Dialogue = ({ userId }: Props) => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (inView) {
-      const sent: number[] = []
-
-      messages?.items.map(msg => {
-        if (msg.status !== 'READ' && myId !== msg.ownerId) {
-          sent.push(msg.id)
-        }
-      })
-      if (sent.length > 0) {
-        updateMessageStatus({ ids: sent })
-      }
-    }
-  }, [inView, messages?.items, myId, updateMessageStatus])
-
-  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages?.items])
-
-  useEffect(() => {
-    if (updateMessageId) {
-      const message = messages?.items.filter(msg => msg.id === updateMessageId)[0]
-
-      if (message) {
-        setMessageText(message?.messageText)
-      }
-    }
-  }, [updateMessageId, messages?.items])
 
   if (!partner) {
     return null
@@ -152,18 +120,6 @@ export const Dialogue = ({ userId }: Props) => {
     }
   }
 
-  const handleUpdateMessageId = (id: number) => {
-    setUpdateMessageId(id)
-  }
-  const handleUpdateMessage = () => {
-    if (!hasContent || !updateMessageId) {
-      return
-    }
-    MessengerSocketApi.updateText(updateMessageId, messageText.trim())
-    setMessageText('')
-    setUpdateMessageId(null)
-  }
-
   return (
     <div className={s.dialogue}>
       <header className={s.header}>
@@ -181,12 +137,10 @@ export const Dialogue = ({ userId }: Props) => {
               isMy={msg.ownerId === myId}
               key={msg.id}
               message={msg}
-              updateMessageId={handleUpdateMessageId}
               userAvatar={avatarUrl}
             />
           ))}
         <div ref={bottomRef} />
-        <div ref={ref} />
       </div>
       <div className={clsx(s.footer, { [s.noRightPadding]: hasContent })}>
         <div className={s.inputWrapper}>
@@ -229,16 +183,6 @@ export const Dialogue = ({ userId }: Props) => {
             )}
           </div>
         </div>
-        {hasContent && !!updateMessageId && (
-          <Button
-            className={s.bth}
-            disabled={!hasContent}
-            onClick={handleUpdateMessage}
-            variant={'transparent'}
-          >
-            Update message
-          </Button>
-        )}
       </div>
     </div>
   )

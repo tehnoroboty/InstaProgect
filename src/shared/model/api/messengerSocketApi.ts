@@ -66,41 +66,29 @@ export const MessengerSocketApi = {
         callback({ message: msg, receiverId: msg.receiverId })
       }
     )
+    this.socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, (data: MessageType) => {
+      dispatch(
+        messengerApi.util.updateQueryData(
+          'getMessagesByUser',
+          { dialoguePartnerId: this.getDialoguePartnerId(data) },
+          draft => {
+            const index = draft.items.findIndex(item => item.id === data.id)
+
+            if (index !== -1) {
+              draft.items[index] = data
+            }
+          }
+        )
+      )
+      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
+    })
 
     this.socket.on(WS_EVENT_PATH.ERROR, (error: { error: string; message: string }) => {
+      console.error('WebSocket Error:', error)
       const errorMessage = error.message || error.error || 'Some error occurred'
 
       dispatch(setAppError({ error: errorMessage }))
     })
-
-    this.socket.on(WS_EVENT_PATH.MESSAGE_DELETED, (messageId: number) => {
-      const partnerId = this.getDialogIdFromURL()
-
-      if (!partnerId) {
-        return null
-      }
-
-      dispatch(
-        messengerApi.util.updateQueryData(
-          'getMessagesByUser',
-          { dialoguePartnerId: partnerId },
-          draft => {
-            const filteredMsg = draft.items.filter(msg => msg.id !== messageId)
-
-            draft.items = [...filteredMsg]
-          }
-        )
-      )
-
-      dispatch(messengerApi.util.invalidateTags(['MESSAGES']))
-    })
-  },
-
-  getDialogIdFromURL(): null | number {
-    const urlParams = new URLSearchParams(window.location.search)
-    const dialogId = urlParams.get('dialogId')
-
-    return dialogId ? parseInt(dialogId, 10) : null
   },
 
   getDialoguePartnerId(msg: MessageType): number {
@@ -125,8 +113,4 @@ export const MessengerSocketApi = {
   },
 
   socket: null as Socket | null,
-
-  updateText(messageId: number, text: string) {
-    this.socket?.emit(WS_EVENT_PATH.UPDATE_MESSAGE, { id: messageId, message: text })
-  },
 }
