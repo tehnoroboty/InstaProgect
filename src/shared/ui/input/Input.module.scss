@@ -72,11 +72,17 @@
   padding-right: 35px;
 }
 
+.messagePadding {
+  padding-right: 96px;
+  border: none;
+}
+
 .placeholder {
   color: var(--light-900);
 }
 
 .clear,
+.imageIcon,
 .searchIcon,
 .eyeIcon {
   cursor: pointer;
@@ -102,6 +108,10 @@
   right: 4px;
 }
 
+.imageIcon {
+  right: 0;
+}
+
 .errorMessage {
   margin: 0;
 
@@ -117,4 +127,8 @@
 
 .importantForLabel {
   color: red;
+}
+
+.hiddenFileInput {
+  display: none;
 }

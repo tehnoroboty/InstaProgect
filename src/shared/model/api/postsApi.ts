@@ -24,7 +24,7 @@ import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createImageForPost: builder.mutation<{ images: ImageType }, { file: File }>({
+    createImageForPost: builder.mutation<{ images: ImageType[] }, { file: File }>({
       query: ({ file }) => {
         const formData = new FormData()
 

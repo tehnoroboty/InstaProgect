@@ -1,24 +1,7 @@
-.message {
-  position: relative;
+.messageContainer {
   display: flex;
   gap: 12px;
   align-items: flex-end;
-}
-
-.text {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  padding: 12px;
-  border-radius: 8px;
-
-  background: var(--dark-300);
-
-  .time {
-    align-self: flex-end;
-    color: var(--light-900);
-  }
 }
 
 .isMy {
@@ -33,6 +16,41 @@
     align-items: center;
     color: var(--primary-100);
   }
+}
+
+.message {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 12px;
+  border-radius: 8px;
+
+  background: var(--dark-300);
+
+  .time {
+    align-self: flex-end;
+    color: var(--light-900);
+  }
+
+  &.imageOnly {
+    gap: 5px;
+    padding: 0;
+    background-color: transparent;
+
+    & .time {
+      color: var(--light-100);
+    }
+  }
+}
+
+.imageMessage {
+  max-width: 100%;
+  max-height: 360px;
+  border-radius: 2px;
+  object-fit: cover;
 }
 
 .actionsPanel {
