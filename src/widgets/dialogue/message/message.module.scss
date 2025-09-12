@@ -7,14 +7,16 @@
 .isMy {
   align-self: flex-end;
 
-  .text {
+  .message {
     background: var(--primary-900);
-  }
-
-  .time {
-    display: flex;
-    align-items: center;
-    color: var(--primary-100);
+    .time  {
+      display: flex;
+      align-items: center;
+      color: var(--primary-100);
+    }
+    .time p {
+      color: var(--primary-100);
+    }
   }
 }
 
@@ -84,13 +86,13 @@
 }
 
 .readMsg path {
-  fill: var(--light-100);
+  fill: var(--primary-100);
 }
 
 .sentMsg path {
-  fill: var(--light-900);
+  fill: var(--primary-700);
 }
 
 .receivedMsg path {
-  fill: var(--light-900);
+  fill: var(--primary-700);
 }
