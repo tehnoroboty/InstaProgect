@@ -77,11 +77,17 @@ export const Dialogue = ({ userId }: Props) => {
     }
   }, [updateMessageId, messages?.items])
 
+  const hasContent = messageText.trim() || imageFiles.length > 0
+
+  useEffect(() => {
+    if (!hasContent) {
+      setUpdateMessageId(null)
+    }
+  }, [hasContent])
+
   if (!partner) {
     return null
   }
-
-  const hasContent = messageText.trim() || imageFiles.length > 0
 
   const handleImageUpload = (file: File) => {
     if (file && file.type.startsWith('image/') && file.size <= 1024 * 1024) {
@@ -217,7 +223,7 @@ export const Dialogue = ({ userId }: Props) => {
               type={'file'}
             />
 
-            {hasContent && (
+            {hasContent && !updateMessageId && (
               <Button
                 className={s.sendButton}
                 disabled={!hasContent || isLoading}
@@ -227,18 +233,18 @@ export const Dialogue = ({ userId }: Props) => {
                 {isLoading ? 'Sending...' : 'Send message'}
               </Button>
             )}
+            {hasContent && !!updateMessageId && (
+              <Button
+                className={s.sendButton}
+                disabled={!hasContent}
+                onClick={handleUpdateMessage}
+                variant={'transparent'}
+              >
+                Update message
+              </Button>
+            )}
           </div>
         </div>
-        {hasContent && !!updateMessageId && (
-          <Button
-            className={s.bth}
-            disabled={!hasContent}
-            onClick={handleUpdateMessage}
-            variant={'transparent'}
-          >
-            Update message
-          </Button>
-        )}
       </div>
     </div>
   )
