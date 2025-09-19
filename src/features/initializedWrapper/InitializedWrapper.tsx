@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { selectIsLoggedIn, setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
@@ -17,7 +18,7 @@ export const InitializedWrapper = ({ children }: Props) => {
   const [isInitialized, setIsInitialized] = useState(false)
   const [trigger, setTrigger] = useState(false)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const { isError, isLoading, isSuccess } = useMeQuery(undefined, {
+  const { error, isError, isLoading, isSuccess } = useMeQuery(undefined, {
     skip: !trigger || !isLoggedIn,
   })
   const dispatch = useAppDispatch()
@@ -39,14 +40,18 @@ export const InitializedWrapper = ({ children }: Props) => {
       return
     }
     if (isError) {
-      localStorage.removeItem('accessToken')
-      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      const status = (error as CustomerError)?.status || (error as CustomerError)?.data.statusCode
+
+      if (status === 401) {
+        localStorage.removeItem('accessToken')
+        dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      }
       setIsInitialized(true)
     } else if (isSuccess) {
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
       setIsInitialized(true)
     }
-  }, [dispatch, isSuccess, isLoading, isError])
+  }, [dispatch, isSuccess, isLoading, isError, error])
 
   if (!isInitialized) {
     return (
