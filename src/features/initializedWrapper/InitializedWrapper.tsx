@@ -17,8 +17,8 @@ export const InitializedWrapper = ({ children }: Props) => {
   const [isInitialized, setIsInitialized] = useState(false)
   const [trigger, setTrigger] = useState(false)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const { isLoading, isSuccess } = useMeQuery(undefined, {
-    skip: !trigger || (isLoggedIn && !trigger),
+  const { isError, isLoading, isSuccess } = useMeQuery(undefined, {
+    skip: !trigger || !isLoggedIn,
   })
   const dispatch = useAppDispatch()
 
@@ -29,7 +29,8 @@ export const InitializedWrapper = ({ children }: Props) => {
       setTrigger(true)
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
     } else {
-      setIsInitialized(false)
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      setIsInitialized(true)
     }
   }, [dispatch])
 
@@ -37,11 +38,15 @@ export const InitializedWrapper = ({ children }: Props) => {
     if (isLoading) {
       return
     }
-    setIsInitialized(true)
-    if (isSuccess) {
+    if (isError) {
+      localStorage.removeItem('accessToken')
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      setIsInitialized(true)
+    } else if (isSuccess) {
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      setIsInitialized(true)
     }
-  }, [dispatch, isSuccess, isLoading])
+  }, [dispatch, isSuccess, isLoading, isError])
 
   if (!isInitialized) {
     return (
