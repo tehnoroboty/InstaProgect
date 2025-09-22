@@ -1,5 +1,5 @@
 'use client'
-import { type ElementType, KeyboardEvent, type ReactNode, useId, useState } from 'react'
+import { type ElementType, KeyboardEvent, type ReactNode, useState } from 'react'
 
 import { MoreHorizontalOutline } from '@/src/shared/assets/componentsIcons'
 import { DropdownItem } from '@/src/shared/ui/dropdown/dropdownItem/DropdownItem'
@@ -32,7 +32,6 @@ export const Dropdown = <T extends DropdownMenuItems>(props: Props<T>) => {
 
   const triggerClassName = clsx(s.trigger, { [s.iconActive]: open })
   const contentClassName = clsx(s.content)
-  const id = useId()
   const dropDownMenuItems = list.map((item: T) => {
     const onKeyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
       if (e.code === 'Enter') {
