@@ -71,6 +71,8 @@ export const HeaderMobile = (props: Props) => {
     },
   ]
 
+  const menuGuestMobile = []
+
   const renderItem = (item: any) => (
     <DropdownItem
       Icon={item.icon}
