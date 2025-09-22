@@ -2,9 +2,11 @@ import * as React from 'react'
 import { useId, useState } from 'react'
 
 import {
+  ArrowForwardOutline,
   BookmarkOutline,
   LogOutOutline,
   MoreHorizontalOutline,
+  PersonAddOutline,
   SettingsOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
@@ -54,16 +56,19 @@ export const HeaderMobile = (props: Props) => {
     {
       href: '/statistics',
       icon: TrendingUpOutline,
+      id: 'statistics',
       title: 'Statistics',
     },
     {
       href: '/favorites',
       icon: BookmarkOutline,
+      id: 'favorites',
       title: 'Favorites',
     },
-    { href: '/settings', icon: SettingsOutline, title: 'Profile Settings' },
+    { href: '/settings', icon: SettingsOutline, id: 'settings', title: 'Profile Settings' },
     {
       icon: LogOutOutline,
+      id: 'logout',
       onClick: () => {
         onClickHandler()
       },
@@ -71,7 +76,20 @@ export const HeaderMobile = (props: Props) => {
     },
   ]
 
-  const menuGuestMobile = []
+  const menuGuestMobile: MenuItemType[] = [
+    {
+      href: AuthRoutes.LOGIN,
+      icon: ArrowForwardOutline,
+      id: 'guest-signin',
+      title: 'Sign in',
+    },
+    {
+      href: AuthRoutes.REGISTRATION,
+      icon: PersonAddOutline,
+      id: 'guest-signup',
+      title: 'Sign up',
+    },
+  ]
 
   const renderItem = (item: any) => (
     <DropdownItem
@@ -97,7 +115,7 @@ export const HeaderMobile = (props: Props) => {
       </Link>
       <div className={s.headerActions}>
         <SelectLanguage />
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <>
             <Dropdown list={menuHeaderMobile} renderItem={renderItem} trigger={trigger} />
             <Dialog
@@ -130,6 +148,8 @@ export const HeaderMobile = (props: Props) => {
               </div>
             </Dialog>
           </>
+        ) : (
+          <Dropdown list={menuGuestMobile} renderItem={renderItem} trigger={trigger} />
         )}
       </div>
     </div>

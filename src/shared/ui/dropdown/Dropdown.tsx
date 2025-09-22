@@ -46,7 +46,11 @@ export const Dropdown = <T extends DropdownMenuItems>(props: Props<T>) => {
     }
 
     return (
-      <DropdownMenu.Item className={s.dropdownItem} key={id} onKeyDown={onKeyDownHandler}>
+      <DropdownMenu.Item
+        className={s.dropdownItem}
+        key={item.id ?? item.title}
+        onKeyDown={onKeyDownHandler}
+      >
         {renderItem ? (
           renderItem(item)
         ) : (

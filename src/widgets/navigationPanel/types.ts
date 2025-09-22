@@ -9,6 +9,7 @@ export type MenuItemType = {
   href?: string
   icon: React.ComponentType
   iconActive?: React.ComponentType
+  id?: string
   onClick?: () => void
   title: string
 }
