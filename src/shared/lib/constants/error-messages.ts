@@ -5,6 +5,8 @@ export const ERROR_MESSAGES = {
   EMAIL: {
     FORMAT: 'The email must match the format example@example.com',
     INVALID: 'Invalid email address',
+    MAX: 'The email must contain a maximum of 50 characters',
+    MIN: 'The email must contain at least 6 characters',
     REQUIRED: 'Email is required',
   },
   FIRST_NAME: {
