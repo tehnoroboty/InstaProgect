@@ -4,7 +4,9 @@ import { z } from 'zod'
 
 export const schema = z
   .object({
-    checkbox: z.boolean(),
+    checkbox: z.boolean().refine(val => val === true, {
+      message: ERROR_MESSAGES.CHECKBOX.REQUIRED,
+    }),
     email: z
       .string()
       .min(1, ERROR_MESSAGES.EMAIL.REQUIRED)
