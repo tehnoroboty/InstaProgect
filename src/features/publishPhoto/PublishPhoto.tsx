@@ -32,10 +32,11 @@ import { useRouter } from 'next/navigation'
 import s from './publishPhoto.module.scss'
 
 type Props = {
+  onDiscard: () => void
   photos: string[]
 }
 
-export const PublishPhoto = ({ photos }: Props) => {
+export const PublishPhoto = ({ onDiscard, photos }: Props) => {
   const { data: userProfile } = useGetMyProfileQuery()
   const openModal = useBoolean(true)
   const dispatch = useAppDispatch()
@@ -84,6 +85,7 @@ export const PublishPhoto = ({ photos }: Props) => {
           })
         )
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
+        onDiscard?.()
       } else {
         console.warn('No files were uploaded successfully.')
       }
@@ -107,7 +109,7 @@ export const PublishPhoto = ({ photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto photos={photos} />
+    return <FilteringPhoto onDiscard={onDiscard} photos={photos} />
   }
 
   return (
@@ -163,29 +165,6 @@ export const PublishPhoto = ({ photos }: Props) => {
                 value={value}
               />
             </div>
-            {/*<div className={s.locationBox}>
-              <div className={s.inputContainer}>
-                <Input className={s.addLocation} label={'Add location'} />
-                <PinIcon className={s.pinIcon} />
-              </div>
-
-              <div className={s.selectedLocation}>
-                <Typography className={s.city} option={'regular_text16'}>
-                  {'New York'}
-                </Typography>
-                <Typography className={s.location} option={'small_text'}>
-                  {'Washington Square Park'}
-                </Typography>
-              </div>
-              <div className={s.selectedLocation}>
-                <Typography className={s.city} option={'regular_text16'}>
-                  {'New York'}
-                </Typography>
-                <Typography className={s.location} option={'small_text'}>
-                  {'Washington Square Park'}
-                </Typography>
-              </div>
-            </div>*/}
           </div>
         </div>
       </Dialog>
@@ -193,6 +172,7 @@ export const PublishPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
+        onDiscard={() => {}}
         onSaveDraft={() => {}}
         open={exitModal.value}
       />

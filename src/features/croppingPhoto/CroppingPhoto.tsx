@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { useDispatch } from 'react-redux'
 
@@ -29,9 +29,11 @@ import { Title } from '@radix-ui/react-dialog'
 import s from './croppingPhoto.module.scss'
 
 type Props = {
+  onDiscard: () => void
+  onSaveDraft: () => void
   photos: string[]
 }
-export const CroppingPhoto = ({ photos }: Props) => {
+export const CroppingPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   const openModal = useBoolean(true)
   const dispatch = useDispatch()
   const exitModal = useBoolean()
@@ -57,6 +59,11 @@ export const CroppingPhoto = ({ photos }: Props) => {
   )
   const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
   const currentPhotoSettings = photoSettings[selectedPhotoIndex]
+
+  useEffect(() => {
+    setLocalPhotos(photos)
+    setLocalSelectedPhoto(photos[0] || '')
+  }, [photos])
 
   const handleNextClick = async () => {
     await applyCropToAllPhotos(localPhotos, photoSettings, setLocalPhotos)
@@ -106,7 +113,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto photos={localPhotos} />
+    return <FilteringPhoto onDiscard={onDiscard} photos={localPhotos} />
   }
 
   if (showAddPost.value) {
@@ -227,7 +234,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={() => exitModal.setFalse()}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onSaveDraft={() => {}}
+        onDiscard={onDiscard}
+        onSaveDraft={onSaveDraft}
         open={exitModal.value}
       />
     </>

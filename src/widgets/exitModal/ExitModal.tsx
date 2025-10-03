@@ -9,6 +9,7 @@ type Props = {
   modalType: ModalType
   onCloseModal: () => void
   onCloseParentModal: () => void
+  onDiscard: () => void
   onSaveDraft: () => void
   open: boolean
 }
@@ -17,12 +18,25 @@ export const ExitModal = ({
   modalType,
   onCloseModal,
   onCloseParentModal,
+  onDiscard,
   onSaveDraft,
   open,
 }: Props) => {
-  const onClickDiscard = () => {
+  const handleCloseModal = () => {
+    onCloseModal()
+  }
+
+  const handleClose = () => {
     onCloseModal()
     onCloseParentModal()
+  }
+  const handleDiscard = () => {
+    onDiscard()
+    handleClose()
+  }
+  const handleSaveDraft = () => {
+    onSaveDraft()
+    handleClose()
   }
 
   return (
@@ -36,10 +50,10 @@ export const ExitModal = ({
         <div>
           {closePhotoModalMessage.text}
           <div className={s.additionalModalBtns}>
-            <Button onClick={onClickDiscard} variant={'bordered'}>
+            <Button onClick={handleClose} variant={'bordered'}>
               {'Yes'}
             </Button>
-            <Button onClick={onSaveDraft} variant={'primary'}>
+            <Button onClick={handleCloseModal} variant={'primary'}>
               {'No'}
             </Button>
           </div>
@@ -48,10 +62,10 @@ export const ExitModal = ({
         <div>
           {closeModalMessage.text}
           <div className={s.additionalModalBtns}>
-            <Button onClick={onClickDiscard} variant={'bordered'}>
+            <Button onClick={handleDiscard} variant={'bordered'}>
               {'Discard'}
             </Button>
-            <Button onClick={onSaveDraft} variant={'primary'}>
+            <Button onClick={handleSaveDraft} variant={'primary'}>
               {'Save Draft'}
             </Button>
           </div>
