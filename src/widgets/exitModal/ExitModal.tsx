@@ -1,27 +1,29 @@
-import { ModalType } from '@/src/features/croppingPhoto/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { closeModalMessage, closePhotoModalMessage } from '@/src/widgets/addPost/data'
 
 import s from './exitModal.module.scss'
 
-type Props = {
-  modalType: ModalType
+type BaseProps = {
   onCloseModal: () => void
   onCloseParentModal: () => void
-  onDiscard: () => void
-  onSaveDraft: () => void
   open: boolean
 }
 
-export const ExitModal = ({
-  modalType,
-  onCloseModal,
-  onCloseParentModal,
-  onDiscard,
-  onSaveDraft,
-  open,
-}: Props) => {
+type PhotoProps = BaseProps & {
+  modalType: 'photo'
+}
+
+type PostProps = BaseProps & {
+  modalType: 'post'
+  onDiscard: () => void
+  onSaveDraft: () => void
+}
+type Props = PhotoProps | PostProps
+
+export const ExitModal = (props: Props) => {
+  const { modalType, onCloseModal, onCloseParentModal, open } = props
+
   const handleCloseModal = () => {
     onCloseModal()
   }
@@ -31,12 +33,17 @@ export const ExitModal = ({
     onCloseParentModal()
   }
   const handleDiscard = () => {
-    onDiscard()
-    handleClose()
+    if (props.modalType === 'post') {
+      props.onDiscard()
+      handleClose()
+    }
   }
+
   const handleSaveDraft = () => {
-    onSaveDraft()
-    handleClose()
+    if (props.modalType === 'post') {
+      props.onSaveDraft()
+      handleClose()
+    }
   }
 
   return (
