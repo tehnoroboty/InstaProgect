@@ -18,13 +18,11 @@ export const AddPost = () => {
   }, [])
 
   const saveDraft = () => {
-    debugger
     localStorage.setItem(DRAFT_KEY, JSON.stringify({ photos }))
     setDraftExists(true)
   }
 
   const openDraft = () => {
-    debugger
     const raw = localStorage.getItem(DRAFT_KEY)
 
     if (!raw) {
@@ -36,7 +34,6 @@ export const AddPost = () => {
   }
 
   const discardDraft = () => {
-    debugger
     localStorage.removeItem(DRAFT_KEY)
 
     setDraftExists(false)
@@ -44,7 +41,6 @@ export const AddPost = () => {
   }
 
   const createPhoto = (photo: string) => {
-    debugger
     setPhotos(prevPhotos => [...prevPhotos, photo])
     setAlertMessage('The photo has added')
     setAlertType('success')
