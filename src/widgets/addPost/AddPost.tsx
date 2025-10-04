@@ -3,10 +3,13 @@ import { useEffect, useState } from 'react'
 
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 
 export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
   const [draftExists, setDraftExists] = useState(false)
+  const [alertMessage, setAlertMessage] = useState<null | string>(null)
+  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning'>('success')
 
   const DRAFT_KEY = 'post_draft'
 
@@ -15,11 +18,13 @@ export const AddPost = () => {
   }, [])
 
   const saveDraft = () => {
+    debugger
     localStorage.setItem(DRAFT_KEY, JSON.stringify({ photos }))
     setDraftExists(true)
   }
 
   const openDraft = () => {
+    debugger
     const raw = localStorage.getItem(DRAFT_KEY)
 
     if (!raw) {
@@ -31,13 +36,18 @@ export const AddPost = () => {
   }
 
   const discardDraft = () => {
+    debugger
     localStorage.removeItem(DRAFT_KEY)
+
     setDraftExists(false)
     setPhotos([])
   }
 
   const createPhoto = (photo: string) => {
-    return setPhotos(prevPhotos => [...prevPhotos, photo])
+    debugger
+    setPhotos(prevPhotos => [...prevPhotos, photo])
+    setAlertMessage('The photo has added')
+    setAlertType('success')
   }
 
   return (
@@ -50,6 +60,17 @@ export const AddPost = () => {
       />
       {photos.length !== 0 && (
         <CroppingPhoto onDiscard={discardDraft} onSaveDraft={saveDraft} photos={photos} />
+      )}
+
+      {alertMessage && (
+        <Alerts
+          autoClose
+          closable
+          closeFn={() => setAlertMessage(null)}
+          delay={3000}
+          message={alertMessage}
+          type={alertType}
+        />
       )}
     </>
   )
