@@ -67,7 +67,7 @@ export const authApi = baseApi.injectEndpoints({
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
           dispatch(setAppSuccess({ success: 'Logout completed successfully.' }))
         } catch (error) {
-          dispatch(setAppError({ error: 'Ошибка при разлогине' }))
+          dispatch(setAppError({ error: 'Error on logout' }))
         }
       },
       query: () => ({
@@ -83,7 +83,7 @@ export const authApi = baseApi.injectEndpoints({
           dispatch(setUserId({ userId: res.data.userId }))
           dispatch(setIsLoggedIn({ isLoggedIn: true }))
         } catch (error) {
-          dispatch(setAppError({ error: 'Ошибка при me запросе' }))
+          dispatch(setAppError({ error: 'Error in me query' }))
         }
       },
       query: () => 'auth/me',
