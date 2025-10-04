@@ -34,6 +34,7 @@
 
 .input {
   margin-bottom: 24px;
+  user-select: none;
 
   &:last-child {
     margin-bottom: 0;
@@ -44,6 +45,7 @@
   display: flex;
   justify-content: flex-end;
   padding: 0;
+  user-select: none;
 }
 
 .link {
