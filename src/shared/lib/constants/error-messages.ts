@@ -2,6 +2,9 @@ export const ERROR_MESSAGES = {
   ABOUT_ME: {
     MAX: 'Max 200 characters long',
   },
+  CHECKBOX: {
+    REQUIRED: 'You must agree to the Terms of Service and Privacy Policy',
+  },
   EMAIL: {
     FORMAT: 'The email must match the format example@example.com',
     INVALID: 'Invalid email address',

@@ -47,7 +47,7 @@ export const Register = () => {
     if (ref.current) {
       const value = ref.current.checked
 
-      setValue('checkbox', value)
+      setValue('checkbox', value, { shouldValidate: true })
     }
   }
 
@@ -57,6 +57,14 @@ export const Register = () => {
   const disabledButton = !isValid || Object.keys(errors).length > 0 || isLoading
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const onSubmit: SubmitHandler<FormType> = async formData => {
+    await trigger()
+    if (!isValid) {
+      if (!formData.checkbox) {
+        ref.current?.focus()
+      }
+
+      return
+    }
     try {
       const registrationData = {
         baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.REGISTRATION_CONFIRMATION}`,
