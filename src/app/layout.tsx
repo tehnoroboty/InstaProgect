@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { NavigationPanel } from '../widgets/navigationPanel/NavigationPanel'
 import { InitializedWrapper } from '@/src/features/initializedWrapper/InitializedWrapper'
+import SessionWatcher from '@/src/features/sessionWatcher/SessionWatcher'
 import { StoreWrapper } from '@/src/shared/model/store/StoreWrapper'
 import { CommonAlert } from '@/src/shared/ui/alerts/CommonAlert'
 import { ProgressBar } from '@/src/shared/ui/progressBar/ProgressBar'
@@ -44,6 +45,7 @@ export default function RootLayout({
             </div>
           </div>
           <CommonAlert />
+          <SessionWatcher />
         </StoreWrapper>
       </body>
     </html>
