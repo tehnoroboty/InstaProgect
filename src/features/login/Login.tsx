@@ -74,10 +74,6 @@ export default function Login() {
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           {'Sign In'}
-          <br />
-          e-mail: tehnoroboty@gmail.com
-          <br />
-          pass: qwQW12!
         </Typography>
         <OAuthButtons className={s.boxButtons} disabled={isLoading} />
         <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
