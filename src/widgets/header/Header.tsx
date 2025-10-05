@@ -21,7 +21,7 @@ export const Header = (props: Props) => {
 
   return (
     <header {...rest} className={s.header}>
-      <HeaderMobile title={title} />
+      <HeaderMobile isLoggedIn={isLoggedIn} title={title} />
       <HeaderWeb isLoggedIn={isLoggedIn} title={title} />
     </header>
   )
