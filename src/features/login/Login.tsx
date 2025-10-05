@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { LoginError } from '@/src/entities/errors/types'
@@ -26,19 +26,36 @@ export default function Login() {
 
   useSuccessAlert(isSuccess, 'You have successfully logged in.')
   const {
+    clearErrors,
     formState: { errors, isValid },
     handleSubmit,
     register,
     setError,
+    watch,
   } = useForm<FormType>({
     defaultValues: {
       email: 'tehnoroboty@gmail.com',
       password: 'qwQW12!',
     },
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
   const disabledButton = isLoading || !isValid || Object.keys(errors).length > 0
+
+  const emailValue = watch('email')
+  const passwordValue = watch('password')
+
+  useEffect(() => {
+    if (emailValue && errors.email) {
+      clearErrors('email')
+    }
+  }, [emailValue, errors.email, clearErrors])
+
+  useEffect(() => {
+    if (passwordValue && errors.password) {
+      clearErrors('password')
+    }
+  }, [passwordValue, errors.password, clearErrors])
 
   const onSubmit: SubmitHandler<FormType> = async formData => {
     try {
@@ -57,10 +74,6 @@ export default function Login() {
       <Card className={s.card}>
         <Typography className={s.title} option={'h1'}>
           {'Sign In'}
-          <br />
-          e-mail: tehnoroboty@gmail.com
-          <br />
-          pass: qwQW12!
         </Typography>
         <OAuthButtons className={s.boxButtons} disabled={isLoading} />
         <form className={s.boxInputs} onSubmit={handleSubmit(onSubmit)}>
