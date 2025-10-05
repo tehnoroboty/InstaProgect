@@ -56,10 +56,12 @@ const customFilterOptions = [
 ]
 
 type Props = {
+  onDiscard: () => void
+  onSaveDraft: () => void
   photos: string[]
 }
 
-export const FilteringPhoto = ({ photos }: Props) => {
+export const FilteringPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   const exitModal = useBoolean()
   const openModal = useBoolean(true)
   const showPublishPhoto = useBoolean()
@@ -91,11 +93,11 @@ export const FilteringPhoto = ({ photos }: Props) => {
   }
 
   if (showPublishPhoto.value) {
-    return <PublishPhoto photos={editedPhotos} />
+    return <PublishPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={editedPhotos} />
   }
 
   if (showCroppingPhoto.value) {
-    return <CroppingPhoto photos={editedPhotos} />
+    return <CroppingPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={editedPhotos} />
   }
 
   return (
@@ -149,7 +151,8 @@ export const FilteringPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onSaveDraft={() => {}}
+        onDiscard={onDiscard}
+        onSaveDraft={onSaveDraft}
         open={exitModal.value}
       />
     </>

@@ -114,7 +114,6 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
         modalType={'photo'}
         onCloseModal={() => setExitModal(false)}
         onCloseParentModal={closeStateModal}
-        onSaveDraft={() => setExitModal(false)}
         open={exitModal}
       />
     </>

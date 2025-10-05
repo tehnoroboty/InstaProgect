@@ -15,10 +15,12 @@ import s from './createPostPhoto.module.scss'
 
 type Props = {
   download: (photo: string) => void
+  draftExists?: boolean
   modalType: ModalType
+  openDraft?: () => void
 }
 
-export const CreatePostPhoto = ({ download, modalType }: Props) => {
+export const CreatePostPhoto = ({ download, draftExists, modalType, openDraft }: Props) => {
   const dispatch = useDispatch()
 
   const [openModal, setOpenModel] = useState<boolean>(true)
@@ -98,7 +100,11 @@ export const CreatePostPhoto = ({ download, modalType }: Props) => {
               <input {...getInputProps()} />
               {'Select from Computer'}
             </Button>
-            {modalType !== 'photo' && <Button variant={'bordered'}>{'Open Draft'}</Button>}
+            {modalType !== 'photo' && draftExists && (
+              <Button onClick={openDraft} variant={'bordered'}>
+                {'Open Draft'}
+              </Button>
+            )}
           </div>
         </div>
       </Dialog>

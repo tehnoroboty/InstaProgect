@@ -19,7 +19,7 @@ import s from '@/src/widgets/editPost/editPost.module.scss'
 type Props = {
   avatarOwner: string
   imgSrc?: string
-  onExitEdit: () => void // Колбэк для выхода из режима редактирования
+  onExitEdit: () => void
   postDescription: string
   postId: number
   userName: string
@@ -55,8 +55,8 @@ export const EditPost = ({
   }
 
   const handleConfirmClose = () => {
-    setShowConfirmation(false) // Закрываем ExitModal
-    onExitEdit() // Возвращаемся к ModalPost
+    setShowConfirmation(false)
+    onExitEdit()
   }
 
   const handleCloseEditPost = () => {
