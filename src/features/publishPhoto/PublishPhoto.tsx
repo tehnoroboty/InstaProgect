@@ -33,10 +33,11 @@ import s from './publishPhoto.module.scss'
 
 type Props = {
   onDiscard: () => void
+  onSaveDraft: () => void
   photos: string[]
 }
 
-export const PublishPhoto = ({ onDiscard, photos }: Props) => {
+export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   const { data: userProfile } = useGetMyProfileQuery()
   const openModal = useBoolean(true)
   const dispatch = useAppDispatch()
@@ -109,7 +110,7 @@ export const PublishPhoto = ({ onDiscard, photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto onDiscard={onDiscard} photos={photos} />
+    return <FilteringPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={photos} />
   }
 
   return (
@@ -172,8 +173,8 @@ export const PublishPhoto = ({ onDiscard, photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onDiscard={() => {}}
-        onSaveDraft={() => {}}
+        onDiscard={onDiscard}
+        onSaveDraft={onSaveDraft}
         open={exitModal.value}
       />
     </>

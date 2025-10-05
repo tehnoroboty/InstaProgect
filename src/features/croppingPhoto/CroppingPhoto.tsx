@@ -113,7 +113,7 @@ export const CroppingPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto onDiscard={onDiscard} photos={localPhotos} />
+    return <FilteringPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={localPhotos} />
   }
 
   if (showAddPost.value) {
