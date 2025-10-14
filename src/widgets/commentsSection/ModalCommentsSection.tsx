@@ -7,6 +7,7 @@ import { AnswersComment } from '@/src/entities/comments/types'
 import { CustomerError } from '@/src/entities/errors/types'
 import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
+import { formatDate } from '@/src/shared/lib/formatDate'
 import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
 import {
@@ -280,7 +281,7 @@ export const ModalCommentsSection = ({
           <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
         )}
         <PostLikesBox className={s.postLikesBox} onClick={onOpenWhoLikeModal} postId={postId} />
-        <div className={s.postDate}>{timeSince(createdAt)}</div>
+        <div className={s.postDate}>{formatDate(createdAt)}</div>
       </div>
       <div className={clsx({ [s.withBorder]: isAuth })}>
         {isAuth && <AddCommentForm postId={postId} />}
