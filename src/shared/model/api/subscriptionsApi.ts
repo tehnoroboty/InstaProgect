@@ -3,7 +3,7 @@ import {
   ResponseCurrentPaymentsType,
   ResponseMyPaymentsType,
 } from '@/src/entities/subscription/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const subscriptionsApi = baseApi.injectEndpoints({
   endpoints: builder => ({

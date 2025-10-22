@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { ErrorDataType } from '@/src/entities/errors/types'
+import { ModalSuccessType } from '@/src/entities/subscription/types'
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/src/shared/assets/componentsIcons'
 import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import {
@@ -14,7 +15,6 @@ import {
   useCurrentPaymentsQuery,
   useMyPaymentsQuery,
 } from '@/src/shared/model/api/subscriptionsApi'
-import { ModalSuccessType } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { CheckBox } from '@/src/shared/ui/checkbox/CheckBox'

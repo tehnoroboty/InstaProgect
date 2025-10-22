@@ -1,6 +1,5 @@
 import { ResponseDevicesType } from '@/src/entities/devices/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
-import { BaseQueryArg } from '@reduxjs/toolkit/query'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const devicesApi = baseApi.injectEndpoints({
   endpoints: builder => ({

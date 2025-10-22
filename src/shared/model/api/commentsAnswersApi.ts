@@ -13,7 +13,7 @@ import {
   LikeUser,
   PaginatedLikesResponse,
 } from '@/src/entities/likes/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 import { RootState } from '@/src/shared/model/store/store'
 

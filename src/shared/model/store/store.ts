@@ -1,6 +1,6 @@
 import { type TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux'
 
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 import { appReducer, appSlice } from '@/src/shared/model/slices/appSlice'
 import { modalReducer, modalSlice } from '@/src/shared/model/slices/modalSlice'
 import { postsReducer, postsSlice } from '@/src/shared/model/slices/postsSlice'

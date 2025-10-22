@@ -26,3 +26,7 @@ export type CurrentPaymentType = {
   userId: number
 }
 export type ResponseCurrentPaymentsType = { data: CurrentPaymentType[]; hasAutoRenewal: boolean }
+
+export type ModalSuccessType = {
+  type: 'error' | 'success'
+}

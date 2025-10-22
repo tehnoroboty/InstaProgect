@@ -12,7 +12,7 @@ import {
 } from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
 import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => ({
