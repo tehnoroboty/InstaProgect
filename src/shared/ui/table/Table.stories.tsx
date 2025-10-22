@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './Table'
 import { mockTableData } from './mockData'
-import { transformData } from '@/src/widgets/myPayments/MyPayments'
+import { transformData } from '@/src/widgets/myPayments/lib/transformData'
 
 import s from './table.module.scss'
 

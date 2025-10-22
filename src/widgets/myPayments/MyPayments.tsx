@@ -1,11 +1,5 @@
 import { useState } from 'react'
 
-import {
-  MyPaymentType,
-  SelectedSubscriptionType,
-  SystemPaymentType,
-} from '@/src/entities/subscription/types'
-import { parseISOAndFormat } from '@/src/shared/hooks/parseIsoAndFormat'
 import { DEFAULT_PAGE_SIZE } from '@/src/shared/lib/constants/pagination'
 import { useMyPaymentsQuery } from '@/src/shared/model/api/subscriptionsApi'
 import { Loader } from '@/src/shared/ui/loader/Loader'
@@ -19,82 +13,9 @@ import {
   TableRow,
 } from '@/src/shared/ui/table'
 import { mockTableData } from '@/src/shared/ui/table/mockData'
+import { transformData } from '@/src/widgets/myPayments/lib/transformData'
 
 import s from './myPayments.module.scss'
-
-export type TableData = {
-  dateOfPayment: string
-  endDate: string
-  paymentType: string
-  price: string
-  subscription: string
-}
-
-export const formatPaymentType = (type: SystemPaymentType): string => {
-  switch (type) {
-    case 'CREDIT_CARD':
-      return 'Credit Card'
-    case 'PAYPAL':
-      return 'PayPal'
-    case 'STRIPE':
-      return 'Stripe'
-    default:
-      return type
-  }
-}
-
-export const formatSubscriptionType = (type: SelectedSubscriptionType): string => {
-  switch (type) {
-    case 'DAY':
-      return '1 day'
-    case 'WEEKLY':
-      return '7 days'
-    case 'MONTHLY':
-      return '1 month'
-    default:
-      return type
-  }
-}
-
-export const transformData = (serverData: MyPaymentType[]): TableData[] => {
-  const sorted = [...serverData].sort(
-    (a, b) => new Date(a.dateOfPayment).getTime() - new Date(b.dateOfPayment).getTime()
-  )
-
-  let lastEndDate: Date | null = null
-
-  return sorted.map(item => {
-    const paymentDate = new Date(item.dateOfPayment)
-
-    const startDate = lastEndDate && paymentDate < lastEndDate ? new Date(lastEndDate) : paymentDate
-
-    const endDate = new Date(startDate)
-
-    switch (item.subscriptionType) {
-      case 'DAY':
-        endDate.setDate(endDate.getDate() + 1)
-        break
-      case 'WEEKLY':
-        endDate.setDate(endDate.getDate() + 7)
-        break
-      case 'MONTHLY':
-        endDate.setMonth(endDate.getMonth() + 1)
-        break
-      default:
-        break
-    }
-
-    lastEndDate = new Date(endDate)
-
-    return {
-      dateOfPayment: parseISOAndFormat(startDate.toISOString()),
-      endDate: parseISOAndFormat(endDate.toISOString()),
-      paymentType: formatPaymentType(item.paymentType),
-      price: item.price.toString(),
-      subscription: formatSubscriptionType(item.subscriptionType),
-    }
-  })
-}
 
 export const MyPayments = () => {
   const { data, isLoading } = useMyPaymentsQuery()
@@ -108,12 +29,8 @@ export const MyPayments = () => {
       </div>
     )
   }
-  /*  if (!data) {
-          return <div>No data</div>
-        }*/
   const tableData = data ? transformData(data) : transformData(mockTableData)
 
-  // Добавляем выборку данных для текущей страницы
   const paginatedData = tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   return (

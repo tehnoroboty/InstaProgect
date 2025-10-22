@@ -26,3 +26,11 @@ export type CurrentPaymentType = {
   userId: number
 }
 export type ResponseCurrentPaymentsType = { data: CurrentPaymentType[]; hasAutoRenewal: boolean }
+
+export type TableData = {
+  dateOfPayment: string
+  endDate: string
+  paymentType: string
+  price: string
+  subscription: string
+}
