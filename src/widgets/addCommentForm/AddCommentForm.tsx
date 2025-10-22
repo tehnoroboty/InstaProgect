@@ -12,7 +12,7 @@ type Props = {
   className?: string
   disabled?: boolean
   maxLength?: number
-  onCommentAdded?: () => void // Колбэк после успешного добавления
+  onCommentAdded?: () => void
   placeholder?: string
   postId: number
   textAreaClassName?: string

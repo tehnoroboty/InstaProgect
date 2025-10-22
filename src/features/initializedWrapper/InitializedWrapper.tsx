@@ -3,6 +3,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { CustomerError } from '@/src/entities/errors/types'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { useMeQuery } from '@/src/shared/model/api/authApi'
 import { selectIsLoggedIn, setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
@@ -24,7 +25,7 @@ export const InitializedWrapper = ({ children }: Props) => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
 
     if (token) {
       setTrigger(true)
@@ -43,7 +44,7 @@ export const InitializedWrapper = ({ children }: Props) => {
       const status = (error as CustomerError)?.status || (error as CustomerError)?.data.statusCode
 
       if (status === 401) {
-        localStorage.removeItem('accessToken')
+        localStorage.removeItem(AUTH_KEYS.ACCESS_TOKEN)
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
       }
       setIsInitialized(true)

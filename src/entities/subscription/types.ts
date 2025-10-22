@@ -34,3 +34,7 @@ export type TableData = {
   price: string
   subscription: string
 }
+
+export type ModalSuccessType = {
+  type: 'error' | 'success'
+}

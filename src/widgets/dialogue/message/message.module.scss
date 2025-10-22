@@ -9,17 +9,19 @@
 
   .message {
     background: var(--primary-900);
-    .time  {
+
+    .time {
       display: flex;
       align-items: center;
       color: var(--primary-100);
     }
+
     .time p {
       color: var(--primary-100);
     }
   }
 }
-
+/* stylelint-disable no-descending-specificity */
 .message {
   position: relative;
 

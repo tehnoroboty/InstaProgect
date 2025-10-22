@@ -4,7 +4,7 @@ import {
   GetFollowingArgs,
   GetFollowingResponse,
 } from '@/src/entities/followingFollowers/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const followingApi = baseApi.injectEndpoints({
   endpoints: builder => ({

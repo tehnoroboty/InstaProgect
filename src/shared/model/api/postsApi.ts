@@ -18,7 +18,7 @@ import {
   UpdatePostModel,
 } from '@/src/entities/post/types'
 import { PREVIEW_LIKES_LIMIT } from '@/src/shared/lib/constants/post'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 import { setAppError, setAppSuccess } from '@/src/shared/model/slices/appSlice'
 import { setLastPostId } from '@/src/shared/model/slices/postsSlice'
 
@@ -67,10 +67,10 @@ export const postsApi = baseApi.injectEndpoints({
         )
 
         try {
-          await queryFulfilled // Ждем завершения запроса
+          await queryFulfilled
           dispatch(setAppSuccess({ success: 'Post delete successfully.' }))
         } catch {
-          patchResult.undo() // Если запрос не удался, откатываем изменения
+          patchResult.undo()
         }
       },
       query: ({ postId }) => ({
@@ -93,7 +93,6 @@ export const postsApi = baseApi.injectEndpoints({
           }
         })
       },
-      // providesTags: 'FEED',
       query: ({ endCursorPostId, pageNumber, pageSize }) => ({
         method: 'GET',
         params: {

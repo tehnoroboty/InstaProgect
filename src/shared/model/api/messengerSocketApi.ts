@@ -1,4 +1,5 @@
 import { MessageType } from '@/src/entities/messenger/types'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { WS_EVENT_PATH } from '@/src/shared/lib/constants/messenger'
 import { messengerApi } from '@/src/shared/model/api/messengerApi'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
@@ -15,7 +16,7 @@ export const MessengerSocketApi = {
   },
   createConnection(dispatch: AppDispatch, userId: number) {
     this.myId = userId
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
     const options = { query: { accessToken: token } }
 
     this.socket = io('https://inctagram.work', options)

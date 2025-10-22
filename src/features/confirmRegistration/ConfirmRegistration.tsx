@@ -20,7 +20,6 @@ export const ConfirmRegistration = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        // Получаем параметры через useSearchParams
         const code = searchParams.get('code') as string
 
         await confirmRegistration({ confirmationCode: code }).unwrap()
@@ -28,7 +27,6 @@ export const ConfirmRegistration = () => {
         const error = err as CustomerError
         const errorMessage = error.data?.messages[0]?.message
 
-        // Проверяем сообщение об ошибке и выполняем перенаправление при необходимости
         if (errorMessage === 'Confirmation code is invalid') {
           router.push('/auth/registration-email-resending')
         }
