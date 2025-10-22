@@ -1,3 +1,4 @@
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { handleError } from '@/src/shared/lib/handleError'
 import {
   BaseQueryFn,
@@ -15,7 +16,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   credentials: 'include',
   prepareHeaders: headers => {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
 
     if (token) {
       headers.set('Authorization', `Bearer ${token}`)
@@ -66,7 +67,7 @@ export const baseQueryWithReauth: BaseQueryFn<
           refreshResult.data?.accessToken &&
           typeof refreshResult.data.accessToken === 'string'
         ) {
-          localStorage.setItem('accessToken', refreshResult.data.accessToken)
+          localStorage.setItem(AUTH_KEYS.ACCESS_TOKEN, refreshResult.data.accessToken)
           // retry the initial query
           result = await baseQuery(args, api, extraOptions)
         } else {

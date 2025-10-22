@@ -11,6 +11,7 @@ import {
   RegistrationType,
 } from '@/src/entities/auth/types'
 import { FormType } from '@/src/features/login/validators'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { baseApi } from '@/src/shared/model/api/baseApi'
 
 export const authApi = baseApi.injectEndpoints({
@@ -27,7 +28,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const res = await queryFulfilled
 
-          localStorage.setItem('accessToken', res.data.accessToken)
+          localStorage.setItem(AUTH_KEYS.ACCESS_TOKEN, res.data.accessToken)
           // ✅ Запускаем `me` после логина через Google
           dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
         } catch (error) {
@@ -48,7 +49,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         const response = await queryFulfilled
 
-        localStorage.setItem('accessToken', response.data.accessToken)
+        localStorage.setItem(AUTH_KEYS.ACCESS_TOKEN, response.data.accessToken)
         dispatch(authApi.endpoints.me.initiate(undefined, { forceRefetch: true }))
       },
       query: body => ({
@@ -62,7 +63,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           await queryFulfilled
           dispatch(baseApi.util.resetApiState())
-          localStorage.removeItem('accessToken')
+          localStorage.removeItem(AUTH_KEYS.ACCESS_TOKEN)
           dispatch(setUserId({ userId: null }))
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
           dispatch(setAppSuccess({ success: 'Logout completed successfully.' }))
