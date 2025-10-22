@@ -45,7 +45,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
       onClick: () => {},
       title: 'Copy Link',
     },
-  ] //пользователь, которого мы фолловим
+  ]
   const nonFolloweeActions: DropdownMenuItems[] = [
     {
       icon: PersonAddOutline,
@@ -59,7 +59,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
       onClick: () => {},
       title: 'Copy Link',
     },
-  ] // пользователь, которого НЕ фолловим
+  ]
 
   // eslint-disable-next-line no-nested-ternary
   const menuItems: DropdownMenuItems[] = isOurPost

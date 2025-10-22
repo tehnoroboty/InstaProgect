@@ -4,7 +4,6 @@ import { StoryFn } from '@storybook/react'
 import { appSlice } from '@/src/shared/model/slices/appSlice'
 import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
-// 2. Настраиваем store для Storybook
 const storybookStore = configureStore({
   reducer: {
     app: appSlice.reducer,
@@ -13,7 +12,6 @@ const storybookStore = configureStore({
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
 })
 
-// 3. Создаем декоратор
 export const withReduxDecorator = (Story: StoryFn) => {
   return (
     <Provider store={storybookStore}>

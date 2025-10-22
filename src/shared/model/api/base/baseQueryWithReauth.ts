@@ -13,15 +13,12 @@ export const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  // console.log(args)
-
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock()
 
   let result = await baseQuery(args, api, extraOptions)
 
   handleError(api, result)
-  // console.log(result)
 
   if (result.error && result.error.status === 401) {
     // checking whether the mutex is locked
@@ -40,10 +37,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         )
 
         // )as any //что бы не ругалась на типизацию
-        console.log(refreshResult)
-        debugger
         if (refreshResult.data && isTokens(refreshResult.data)) {
-          debugger
           localStorage.setItem(AUTH_KEYS.ACCESS_TOKEN, refreshResult.data.accessToken)
           // retry the initial query
           result = await baseQuery(args, api, extraOptions)

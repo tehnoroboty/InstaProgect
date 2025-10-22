@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useId, useState } from 'react'
 
 import {

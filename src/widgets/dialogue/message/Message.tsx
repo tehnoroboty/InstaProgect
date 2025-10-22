@@ -26,7 +26,6 @@ export const Message = ({ isMy, message, updateMessageId, userAvatar }: Props) =
   const isImage = message.messageType === 'TEXT' && message.messageText?.startsWith('https://')
   const hasText = !!message.messageText && !isImage
   const hasImage = message.messageType === 'IMAGE' || isImage
-  // console.log(message)
 
   const messageClass = clsx(s.message, {
     [s.imageOnly]: hasImage && !hasText,

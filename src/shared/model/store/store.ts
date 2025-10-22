@@ -12,7 +12,6 @@ export const initializeStore = () => {
     reducer: {
       [appSlice.name]: appReducer,
       [baseApi.reducerPath]: baseApi.reducer,
-      // [authApi.reducerPath]: authApi.reducer,
       [modalSlice.name]: modalReducer,
       [postsSlice.name]: postsReducer,
     },

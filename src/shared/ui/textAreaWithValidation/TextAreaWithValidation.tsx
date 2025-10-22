@@ -16,7 +16,6 @@ export const TextAreaWithValidation = forwardRef<HTMLTextAreaElement, Props>((pr
   const [error, setError] = useState<string | undefined>(undefined)
   const [textValue, setTextValue] = useState('')
 
-  // Синхронизируем value и textValue
   useEffect(() => {
     setTextValue(value)
   }, [value])

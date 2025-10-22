@@ -46,8 +46,6 @@ export const CroppingPhotoProfile = ({ photos }: Props) => {
   const onSaveClick = async () => {
     try {
       await applyCropToAllPhotos([localPhoto], { 0: photoSettings }, async updatedPhotos => {
-        // setLocalPhoto(updatedPhotos[0])
-
         const blob = await fetch(updatedPhotos[0]).then(res => res.blob())
         const file = new File([blob], 'avatar.jpg', { type: blob.type })
 
