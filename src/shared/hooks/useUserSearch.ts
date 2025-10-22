@@ -27,16 +27,14 @@ export const useUserSearch = () => {
     search: searchTerm,
   })
 
-  // обновляем список пользователей после получения данных
   useEffect(() => {
     if (data) {
       setUsers(prev => (cursor === undefined ? data.items : [...prev, ...data.items]))
       setHasMore(!!data.nextCursor)
-      lastFetchedCursor.current = cursor // сохраняем текущий курсор как уже использованный
+      lastFetchedCursor.current = cursor
     }
   }, [data])
 
-  //  скролл вниз: если inView и есть что грузить — загружаем
   useEffect(() => {
     if (
       inView &&
@@ -45,11 +43,10 @@ export const useUserSearch = () => {
       data?.nextCursor !== undefined &&
       data.nextCursor !== lastFetchedCursor.current
     ) {
-      setCursor(data.nextCursor) // именно от события скролла
+      setCursor(data.nextCursor)
     }
   }, [inView, hasMore, isFetching, cursor, data?.nextCursor])
 
-  // обработка ввода в поиске с debounce
   const handleSearchChange = useMemo(
     () =>
       debounce((e: ChangeEvent<HTMLInputElement>) => {
@@ -63,12 +60,10 @@ export const useUserSearch = () => {
     []
   )
 
-  // очистка debounce на размонтирование
   useEffect(() => {
     return () => handleSearchChange.cancel()
   }, [handleSearchChange])
 
-  // обработка ошибок
   useEffect(() => {
     if (isError) {
       const err = error as CustomerError

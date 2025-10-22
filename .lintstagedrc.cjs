@@ -1,10 +1,10 @@
 module.exports = {
   "*.{js,jsx,ts,tsx}": [
-    "eslint --fix",      // Использует .eslintrc.cjs
-    "prettier --write",   // Использует .prettierrc.cjs
+    "eslint --fix",
+    "prettier --write",
   ],
   "*.{css,scss}": [
-    "stylelint --fix",   // Использует .stylelintrc.cjs
+    "stylelint --fix",
     "prettier --write",
   ],
   "*.{json,md}": [

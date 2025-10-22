@@ -89,8 +89,8 @@ export const GenerationInformation = () => {
               const date = new Date(JSON.parse(storedValue))
 
               formUpdates[field] = date.toISOString()
-            } catch {
-              // Если не удалось распарсить, оставляем значение из MyProfile
+            } catch (e) {
+              console.warn('Invalid date in sessionStorage for', field, e)
             }
           } else {
             formUpdates[field] = storedValue
@@ -182,16 +182,6 @@ export const GenerationInformation = () => {
     }
   }
 
-  /*
-  if (isFetching || !countriesWithCity) {
-    return (
-      <div className={s.pageLoading}>
-        <Loader />
-      </div>
-    )
-  }
-*/
-
   return (
     <>
       <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
@@ -222,22 +212,6 @@ export const GenerationInformation = () => {
               )}
             </div>
             <div className={s.selectBox}>
-              {/*
-              <SelectBox
-                label={'Select your country'}
-                onChangeValue={onSelectCountyHandler}
-                options={countries}
-                placeholder={'Country'}
-                value={selectedCountry || MyProfile?.country || ''}
-              />
-              <SelectBox
-                label={'Select your city'}
-                onChangeValue={onSelectCityHandler}
-                options={cites}
-                placeholder={'City'}
-                value={selectedCity || MyProfile?.city || ''}
-              />
-*/}
               {isFetching || !countriesWithCity ? (
                 <div className={s.selectLoader}>
                   <Loader />

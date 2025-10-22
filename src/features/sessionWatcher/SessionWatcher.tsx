@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { CustomerError } from '@/src/entities/errors/types'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { useDevicesQuery } from '@/src/shared/model/api/devicesApi'
 import { selectIsLoggedIn, setIsLoggedIn, setUserId } from '@/src/shared/model/slices/appSlice'
 import { useAppDispatch, useAppSelector } from '@/src/shared/model/store/store'
@@ -14,7 +15,7 @@ export default function SessionWatcher() {
   const [skipCheck, setSkipCheck] = useState(true)
 
   useEffect(() => {
-    if (isLoggedIn && localStorage.getItem('accessToken')) {
+    if (isLoggedIn && localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)) {
       setSkipCheck(false)
     }
   }, [isLoggedIn])
@@ -30,7 +31,7 @@ export default function SessionWatcher() {
       const message = err?.data?.messages?.[0]?.message
 
       if (status === 400 && message?.includes('deviceId')) {
-        localStorage.removeItem('accessToken')
+        localStorage.removeItem(AUTH_KEYS.ACCESS_TOKEN)
         dispatch(setUserId({ userId: null }))
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
       }

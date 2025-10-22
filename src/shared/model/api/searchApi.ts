@@ -1,5 +1,5 @@
 import { GetSearchUserArgs, GetSearchUserResponse } from '@/src/entities/search/types'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const searchApi = baseApi.injectEndpoints({
   endpoints: builder => ({

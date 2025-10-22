@@ -6,7 +6,7 @@ import {
   GetMessagesByUserResponse,
 } from '@/src/entities/messenger/types'
 import { getDialoguePartnerId } from '@/src/shared/lib/getDialoguePartnerId'
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 import { setAppError } from '@/src/shared/model/slices/appSlice'
 
 export const messengerApi = baseApi.injectEndpoints({

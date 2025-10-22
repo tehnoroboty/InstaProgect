@@ -24,14 +24,13 @@ export const AvatarContainerSettings = ({ myProfileAvatars }: Props) => {
 
   const isPhotoModalOpen = useSelector(selectIsPhotoModalOpen)
 
-  const [newAvatar, setNewAvatar] = useState<string[]>([]) // Состояние для хранения загруженного фото
+  const [newAvatar, setNewAvatar] = useState<string[]>([])
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<null | string>(null)
   const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
 
   const [deleteAvatar, { isLoading: isLoadingDelete }] = useDeleteProfileAvatarMutation()
 
-  // Открытие модалки для выбора фото
   const handleAddPhoto = () => {
     dispatch(setIsPhotoModalOpen({ isOpen: true }))
   }
@@ -40,9 +39,8 @@ export const AvatarContainerSettings = ({ myProfileAvatars }: Props) => {
     dispatch(setIsPhotoModalOpen({ isOpen: false }))
   }
 
-  // Функция для обновления аватара (когда пользователь выбрал фото)
   const handlePhotoSelect = (photoUrl: string) => {
-    setNewAvatar([photoUrl]) // Устанавливаем загруженное фото
+    setNewAvatar([photoUrl])
     handleClosePhotoModal()
   }
 

@@ -1,4 +1,5 @@
 import { Notifications } from '@/src/entities/notifications/types'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { notificationsApi } from '@/src/shared/model/api/notificationsApi'
 import { AppDispatch } from '@/src/shared/model/store/store'
 import { Socket, io } from 'socket.io-client'
@@ -19,7 +20,7 @@ class SocketIoApi {
   }
 
   static creatConnection(dispatch: AppDispatch) {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
     const options = { query: { accessToken: token } }
 
     this.socket = io('https://inctagram.work', options)

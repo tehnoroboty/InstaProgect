@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react'
-import * as React from 'react'
 
 import { Notifications } from '@/src/entities/notifications/types'
 import { EyeOutline, TrashOutline } from '@/src/shared/assets/componentsIcons'
