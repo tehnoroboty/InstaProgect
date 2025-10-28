@@ -3,7 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 import ModalPost from '@/src/widgets/modalPost/ModalPost'
 
 const meta = {
-  argTypes: {},
+  argTypes: {
+    onClose: { action: 'closed' },
+  },
   args: {
     commentsDataFromServer: {
       items: [
@@ -56,6 +58,7 @@ const meta = {
       totalCount: 20,
       totalUsers: 20,
     },
+    onClose: () => {},
     postDataFromServer: {
       avatarOwner:
         'https://storage.yandexcloud.net/users-inctagram/users/41/avatar/3359612b-cff9-4b6b-8897-fbbd09153d51-images-45x45',
