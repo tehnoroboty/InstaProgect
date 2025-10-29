@@ -7,6 +7,7 @@ import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -56,18 +57,16 @@ const customFilterOptions = [
 ]
 
 type Props = {
-  onDiscard: () => void
-  onSaveDraft: () => void
   photos: string[]
 }
 
-export const FilteringPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
+export const FilteringPhoto = ({ photos }: Props) => {
   const exitModal = useBoolean()
   const openModal = useBoolean(true)
   const showPublishPhoto = useBoolean()
   const showCroppingPhoto = useBoolean()
   const dispatch = useDispatch()
-
+  const { discardDraft, saveDraft } = usePostFlow()
   const [editedPhotos, setEditedPhotos] = useState<string[]>(photos)
 
   const handleNextClick = () => {
@@ -93,11 +92,11 @@ export const FilteringPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   }
 
   if (showPublishPhoto.value) {
-    return <PublishPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={editedPhotos} />
+    return <PublishPhoto photos={editedPhotos} />
   }
 
   if (showCroppingPhoto.value) {
-    return <CroppingPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={editedPhotos} />
+    return <CroppingPhoto photos={editedPhotos} />
   }
 
   return (
@@ -151,8 +150,8 @@ export const FilteringPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onDiscard={onDiscard}
-        onSaveDraft={onSaveDraft}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>
