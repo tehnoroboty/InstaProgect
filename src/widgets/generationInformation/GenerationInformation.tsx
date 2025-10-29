@@ -80,52 +80,6 @@ export const GenerationInformation = () => {
       return
     }
 
-    /*
-    if (isFormDirty === 'true') {
-      const formUpdates: Partial<FormType> = {}
-      const formFields: Array<keyof FormType> = [
-        'userName',
-        'firstName',
-        'lastName',
-        'dateOfBirth',
-        'country',
-        'city',
-        'aboutMe',
-      ]
-
-      formFields.forEach(field => {
-        const storedValue = sessionStorage.getItem(field)
-
-        if (storedValue !== null) {
-          if (field === 'dateOfBirth') {
-            try {
-              const date = new Date(JSON.parse(storedValue))
-
-              formUpdates[field] = date.toISOString()
-            } catch (e) {
-              console.warn('Invalid date in sessionStorage for', field, e)
-            }
-          } else {
-            formUpdates[field] = storedValue
-          }
-        }
-      })
-
-      reset({ ...baseValues, ...formUpdates })
-
-      if (formUpdates.country !== undefined) {
-        setSelectedCountry(formUpdates.country)
-      }
-      if (formUpdates.city !== undefined) {
-        setSelectedCity(formUpdates.city)
-      }
-    } else {
-      reset(baseValues)
-      setSelectedCountry(MyProfile?.country || '')
-      setSelectedCity(MyProfile?.city || '')
-    }
-*/
-
     const formUpdates: Partial<FormType> = {}
     const formFields: Array<keyof FormType> = [
       'userName',
