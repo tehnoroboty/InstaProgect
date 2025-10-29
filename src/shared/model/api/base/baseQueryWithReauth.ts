@@ -42,6 +42,7 @@ export const baseQueryWithReauth: BaseQueryFn<
           // retry the initial query
           result = await baseQuery(args, api, extraOptions)
         } else {
+          localStorage.removeItem(AUTH_KEYS.ACCESS_TOKEN)
           // window.location.href = '/auth/login'
           // window.location.href = '/'
         }

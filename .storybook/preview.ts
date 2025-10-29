@@ -19,6 +19,9 @@ const preview: Preview = {
     nextjs: {
       appDirectory: true,
     },
+    backgrounds: {
+      default: 'dark',
+    },
   },
 }
 
