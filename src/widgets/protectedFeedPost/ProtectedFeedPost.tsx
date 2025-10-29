@@ -37,7 +37,16 @@ export const ProtectedFeedPost = (props: Props) => {
   } = props
 
   const renderImgCarousel = (img: PostImage) => {
-    return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
+    return (
+      <Image
+        alt={''}
+        className={s.img}
+        height={img.height}
+        priority
+        src={img.url}
+        width={img.width}
+      />
+    )
   }
 
   const { data } = useGetCommentsQuery(id)
