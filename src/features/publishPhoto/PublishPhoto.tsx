@@ -9,6 +9,7 @@ import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { AppRoutes } from '@/src/shared/lib/constants/routing'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import {
   postsApi,
   useCreateImageForPostMutation,
@@ -32,12 +33,10 @@ import { useRouter } from 'next/navigation'
 import s from './publishPhoto.module.scss'
 
 type Props = {
-  onDiscard: () => void
-  onSaveDraft: () => void
   photos: string[]
 }
 
-export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
+export const PublishPhoto = ({ photos }: Props) => {
   const { data: userProfile } = useGetMyProfileQuery()
   const openModal = useBoolean(true)
   const dispatch = useAppDispatch()
@@ -50,6 +49,7 @@ export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   const [addPhotosForPost, { isError: isErrorForPhoto, isLoading: isLoadingForPhoto }] =
     useCreateImageForPostMutation()
   const [addPost, { isError, isLoading }] = useCreateNewPostMutation()
+  const { discardDraft, saveDraft } = usePostFlow()
 
   const onClickPublishHandler = async () => {
     try {
@@ -86,7 +86,7 @@ export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
           })
         )
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
-        onDiscard?.()
+        discardDraft()
       } else {
         console.warn('No files were uploaded successfully.')
       }
@@ -110,7 +110,7 @@ export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={photos} />
+    return <FilteringPhoto photos={photos} />
   }
 
   return (
@@ -173,8 +173,8 @@ export const PublishPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onDiscard={onDiscard}
-        onSaveDraft={onSaveDraft}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>

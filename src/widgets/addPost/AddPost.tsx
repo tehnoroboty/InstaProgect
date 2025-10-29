@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
+import { PostFlowContext } from '@/src/shared/lib/context/PostFlowContext'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 
 export const AddPost = () => {
@@ -54,9 +55,9 @@ export const AddPost = () => {
         modalType={'post'}
         openDraft={openDraft}
       />
-      {photos.length !== 0 && (
-        <CroppingPhoto onDiscard={discardDraft} onSaveDraft={saveDraft} photos={photos} />
-      )}
+      <PostFlowContext.Provider value={{ discardDraft, saveDraft }}>
+        {photos.length !== 0 && <CroppingPhoto photos={photos} />}
+      </PostFlowContext.Provider>
 
       {alertMessage && (
         <Alerts

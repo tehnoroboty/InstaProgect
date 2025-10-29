@@ -15,6 +15,7 @@ import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -29,16 +30,15 @@ import { Title } from '@radix-ui/react-dialog'
 import s from './croppingPhoto.module.scss'
 
 type Props = {
-  onDiscard: () => void
-  onSaveDraft: () => void
   photos: string[]
 }
-export const CroppingPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
+export const CroppingPhoto = ({ photos }: Props) => {
   const openModal = useBoolean(true)
   const dispatch = useDispatch()
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
   const showAddPost = useBoolean()
+  const { discardDraft, saveDraft } = usePostFlow()
 
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
   const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(photos[0])
@@ -113,7 +113,7 @@ export const CroppingPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
   }
 
   if (showFilteringPhoto.value) {
-    return <FilteringPhoto onDiscard={onDiscard} onSaveDraft={onSaveDraft} photos={localPhotos} />
+    return <FilteringPhoto photos={localPhotos} />
   }
 
   if (showAddPost.value) {
@@ -234,8 +234,8 @@ export const CroppingPhoto = ({ onDiscard, onSaveDraft, photos }: Props) => {
         modalType={'post'}
         onCloseModal={() => exitModal.setFalse()}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onDiscard={onDiscard}
-        onSaveDraft={onSaveDraft}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>
