@@ -23,7 +23,7 @@ import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Loader } from '@/src/shared/ui/loader/Loader'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
+import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
@@ -49,6 +49,7 @@ export const PublishPhoto = ({ photos }: Props) => {
   const [addPhotosForPost, { isError: isErrorForPhoto, isLoading: isLoadingForPhoto }] =
     useCreateImageForPostMutation()
   const [addPost, { isError, isLoading }] = useCreateNewPostMutation()
+  const [hasTextAreaError, setHasTextAreaError] = useState<string | undefined>('')
   const { discardDraft, saveDraft } = usePostFlow()
 
   const onClickPublishHandler = async () => {
@@ -112,6 +113,9 @@ export const PublishPhoto = ({ photos }: Props) => {
   if (showFilteringPhoto.value) {
     return <FilteringPhoto photos={photos} />
   }
+  const handleTextAreaError = (hasError: string | undefined) => {
+    setHasTextAreaError(hasError)
+  }
 
   return (
     <>
@@ -134,8 +138,12 @@ export const PublishPhoto = ({ photos }: Props) => {
               {'Publication'}
             </Typography>
           </Title>
-          <Button onClick={onClickPublishHandler} variant={'transparent'}>
-            {'Publish'}
+          <Button
+            disabled={!!hasTextAreaError || isLoading || isLoadingForPhoto}
+            onClick={onClickPublishHandler}
+            variant={'transparent'}
+          >
+            {isLoading || isLoadingForPhoto ? 'Publishing...' : 'Publish'}
           </Button>
         </div>
 
@@ -157,11 +165,12 @@ export const PublishPhoto = ({ photos }: Props) => {
                 url={userProfile?.avatars[0]?.url || ''}
                 username={`${userProfile?.userName}`}
               />
-              <TextArea
+              <TextAreaWithValidation
                 className={s.addPublication}
                 label={'Add publication descriptions'}
                 maxLength={500}
-                onChange={onChangeValue}
+                onErrorChange={handleTextAreaError}
+                onTextChange={onChangeValue}
                 ref={textareaRef}
                 value={value}
               />

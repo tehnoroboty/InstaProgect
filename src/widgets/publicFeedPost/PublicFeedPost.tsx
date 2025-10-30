@@ -50,16 +50,18 @@ export const PublicFeedPost = ({ onClick, post }: Props) => {
         <div className={classNames}>
           <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
           <CreationTime createdAt={createdAt} />
-          <p className={s.descriptionText}>
-            {!isDescriptionLong || open ? description : truncatedDescription}
-          </p>
-          <Collapsible.Trigger asChild>
-            {isDescriptionLong && (
+          <div className={clsx(s.descriptionContainer, { [s.scrollable]: open })}>
+            <p className={s.descriptionText}>
+              {!isDescriptionLong || open ? description : truncatedDescription}
+            </p>
+          </div>
+          {isDescriptionLong && (
+            <Collapsible.Trigger asChild>
               <Button className={s.showmoreBtn} variant={'transparent'}>
                 {open ? 'Hide' : 'Show more'}
               </Button>
-            )}
-          </Collapsible.Trigger>
+            </Collapsible.Trigger>
+          )}
         </div>
       </Collapsible.Root>
     </div>
