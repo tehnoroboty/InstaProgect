@@ -251,6 +251,7 @@ export const GenerationInformation = () => {
               labelClassName={s.labelClassName}
               {...register('aboutMe', {
                 onBlur: () => trigger('aboutMe'),
+                onChange: e => sessionStorage.setItem('aboutMe', e.target.value),
               })}
               error={errors.aboutMe?.message}
             />

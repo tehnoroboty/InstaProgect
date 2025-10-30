@@ -17,7 +17,7 @@ const defaultPost = {
   avatarWhoLikes: [],
   createdAt: '2025-02-17T16:36:44.410Z',
   description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..',
+    'A massive text can be generated on virtually any topic, depending on the specific content and style desired. For example, one could generate a detailed and expansive text about the intricate history of celestial navigation. This could begin with the very earliest observations of the stars by ancient civilizations, tracing the development of primitive star charts and mythological constellations. The narrative could then progress to the scientific breakthroughs...',
   id: 1,
   images: [
     {
