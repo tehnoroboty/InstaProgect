@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_URL: process.env.NODE_ENV === 'production'
-      ? 'https://momenttify.store'
+      ? 'https://momenttify.ru'
       : 'http://localhost:3000',
   },
   images: {
