@@ -1,15 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Переменные окружения загружаются автоматически Next.js:
+  // Переменные окружения загружаются автоматически Next.js из .env файлов:
   // - npm run dev → NODE_ENV=development → загружается .env.development
   // - npm run build → NODE_ENV=production → загружается .env.production
-  //
-  // Если переменные не определены в .env файлах, используются fallback значения
-  env: {
-    NEXT_PUBLIC_BASE_URL: process.env.NODE_ENV === 'production'
-      ? 'https://momenttify.ru'
-      : 'http://localhost:3000',
-  },
+  // Все переменные NEXT_PUBLIC_* из .env файлов автоматически доступны в коде
   images: {
     domains: ['encrypted-tbn0.gstatic.com'],
     remotePatterns: [
