@@ -44,7 +44,7 @@ export const useGetProfile = ({
     return profileByName
       ? {
           aboutMe: profileByName?.aboutMe,
-          avatarUrl: profileByName?.avatars[0]?.url ?? '',
+          avatarUrl: profileByName?.avatars?.[0]?.url ?? '',
           followersCount: profileByName?.followersCount,
           followingCount: profileByName?.followingCount,
           id: +userId,
@@ -54,12 +54,12 @@ export const useGetProfile = ({
         }
       : {
           aboutMe: profileDataFromServer?.aboutMe ?? '',
-          avatarUrl: profileDataFromServer?.avatars[0]?.url ?? '',
-          followersCount: profileDataFromServer?.userMetadata.followers ?? 0,
-          followingCount: profileDataFromServer?.userMetadata.following ?? 0,
+          avatarUrl: profileDataFromServer?.avatars?.[0]?.url ?? '',
+          followersCount: profileDataFromServer?.userMetadata?.followers ?? 0,
+          followingCount: profileDataFromServer?.userMetadata?.following ?? 0,
           id: +userId,
           isFollowing: false,
-          publicationsCount: profileDataFromServer?.userMetadata.publications ?? 0,
+          publicationsCount: profileDataFromServer?.userMetadata?.publications ?? 0,
           userName: profileDataFromServer?.userName ?? '',
         }
   }, [profileByName, profileDataFromServer, userId])
