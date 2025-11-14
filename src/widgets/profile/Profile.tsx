@@ -61,7 +61,11 @@ export const Profile = (props: Props) => {
         isMyProfile={isMyProfile}
         profile={profileDataForRender}
       />
-      {!postsDataForRender ? <div>Пусто</div> : <Posts posts={postsDataForRender} />}
+      {!postsDataForRender || postsDataForRender.length === 0 ? (
+        <div>Пусто</div>
+      ) : (
+        <Posts posts={postsDataForRender} />
+      )}
       {hasMorePosts && (
         <div className={s.loadMore} ref={ref}>
           <Loader />

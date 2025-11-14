@@ -41,7 +41,7 @@ export const Posts = memo(({ posts }: Props) => {
       {posts.map(post => {
         return (
           <div className={s.image} key={post.id} onClick={() => onClickPostHandler(post.id)}>
-            {post.images.length > 0 ? (
+            {post.images && post.images.length > 0 ? (
               <Carousel list={post.images} renderItem={renderImgCarousel} size={'large'} />
             ) : (
               <div className={s.notFound}>
