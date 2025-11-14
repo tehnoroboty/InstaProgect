@@ -162,7 +162,7 @@ export const PublishPhoto = ({ photos }: Props) => {
           <div className={s.descriptionBox}>
             <div className={s.publicationBox}>
               <UserAvatarName
-                url={userProfile?.avatars[0]?.url || ''}
+                url={userProfile?.avatars?.[0]?.url || ''}
                 username={`${userProfile?.userName}`}
               />
               <TextAreaWithValidation

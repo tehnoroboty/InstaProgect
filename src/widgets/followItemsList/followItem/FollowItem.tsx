@@ -25,7 +25,11 @@ export const FollowItem = ({ isFollowers, item }: Props) => {
     <div className={s.userListItem}>
       <div className={s.avaNameButtons}>
         <Link href={`/profile/${item.userId}`}>
-          <UserAvatarName url={item?.avatars[0]?.url} username={item.userName} weight={'regular'} />
+          <UserAvatarName
+            url={item?.avatars?.[0]?.url}
+            username={item.userName}
+            weight={'regular'}
+          />
         </Link>
         <div className={s.followButtons}>
           {isFollowers ? (

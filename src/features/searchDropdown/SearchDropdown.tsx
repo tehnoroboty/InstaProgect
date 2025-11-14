@@ -31,7 +31,7 @@ export const SearchDropdown = forwardRef<HTMLDivElement, Props>(
                 onClose?.()
               }}
             >
-              <AvatarBox size={'s'} src={user.avatars[0]?.url || ''} />
+              <AvatarBox size={'s'} src={user.avatars?.[0]?.url || ''} />
               <div>
                 <Typography option={'medium_text14'}>{user.userName}</Typography>
                 <Typography option={'regular_text14'}>

@@ -34,7 +34,7 @@ export const ShowSearch = () => {
           <div className={s.userBox}>
             {users?.map(user => (
               <div className={s.userCard} key={user.id}>
-                <AvatarBox size={'s'} src={user.avatars[0]?.url || ''} />
+                <AvatarBox size={'s'} src={user.avatars?.[0]?.url || ''} />
                 <div>
                   <Typography
                     as={'a'}
