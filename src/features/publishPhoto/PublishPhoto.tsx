@@ -93,7 +93,7 @@ export const PublishPhoto = ({ photos }: Props) => {
       }
     } catch (error) {
       const err = error as CustomerError
-      const errorMessage = err.data?.messages[0]
+      const errorMessage = err.data?.messages?.[0]
 
       setErrorMessage(errorMessage?.message)
     }

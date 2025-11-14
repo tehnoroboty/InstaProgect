@@ -21,7 +21,7 @@ export const GitHubOAuthButton = (props: Props) => {
     const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${AuthRoutes.OAUTH_GITHUB}`
 
     window.location.assign(
-      `https://inctagram.work/api/v1/auth/github/login?redirect_url=${redirectUrl}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}auth/github/login?redirect_url=${redirectUrl}`
     )
   }
 

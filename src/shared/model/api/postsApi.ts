@@ -207,7 +207,9 @@ export const postsApi = baseApi.injectEndpoints({
           patchResult.undo()
           const error = err as CustomerError
           const errorMessage =
-            error.data?.messages[0].message || error.data?.error || 'Failed to update like status'
+            error.data?.messages?.[0]?.message ||
+            error.data?.error ||
+            'Failed to update like status'
 
           dispatch(setAppError({ error: errorMessage }))
         }

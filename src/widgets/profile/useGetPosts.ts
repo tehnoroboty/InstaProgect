@@ -19,15 +19,15 @@ const SORT_DIRECTION: SortDirection = 'desc'
 
 export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) => {
   const { inView, ref } = useInView({ threshold: 0.1 })
-  const selectPostsFromCash = useMemo(
+
+  const selectPostsFromCashe = useMemo(
     () => postsApi.endpoints.getPosts.select({ userId: Number(userId) }),
     [userId]
   )
-
-  const { data: postsFromCash } = useAppSelector(state => selectPostsFromCash(state))
+  const { data: postsFromCashe } = useAppSelector(state => selectPostsFromCashe(state))
 
   const lastPostId = useAppSelector(selectLastPostId)
-  const needInitPostsInStore = !lastPostId && !!postsDataFromServer && !postsFromCash
+  const needInitPostsInStore = !lastPostId && !!postsDataFromServer && !postsFromCashe
 
   useEffect(() => {
     if (needInitPostsInStore && postsDataFromServer) {
@@ -51,15 +51,23 @@ export const useGetPosts = ({ dispatch, postsDataFromServer, userId }: Props) =>
   const postsCount = posts?.items.length ?? totalCount - 1
   const hasMorePosts = totalCount > postsCount
 
+  const items = posts?.items
+
   useEffect(() => {
-    if (hasMorePosts && inView) {
-      dispatch(setLastPostId({ lastPostId: posts?.items[posts.items.length - 1]?.id }))
+    if (!hasMorePosts || !inView) {
+      return
     }
-  }, [inView, hasMorePosts, dispatch, posts?.items])
+
+    const lastPost = items?.[items.length - 1]
+
+    if (lastPost?.id) {
+      dispatch(setLastPostId({ lastPostId: lastPost.id }))
+    }
+  }, [dispatch, hasMorePosts, inView, items])
 
   const postsDataForRender = useMemo(() => {
-    return posts?.items || postsFromCash?.items || postsDataFromServer?.items
-  }, [posts, postsFromCash, postsDataFromServer])
+    return posts?.items || postsFromCashe?.items || postsDataFromServer?.items
+  }, [posts, postsFromCashe, postsDataFromServer])
 
   return { hasMorePosts, postsDataForRender, ref }
 }
