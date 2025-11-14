@@ -20,7 +20,9 @@ export const baseQueryWithReauth: BaseQueryFn<
 
   handleError(api, result)
 
-  if (result.error && result.error.status === 401) {
+  const shouldSkipReauth = api.endpoint === 'logout'
+
+  if (!shouldSkipReauth && result.error && result.error.status === 401) {
     // checking whether the mutex is locked
     if (!mutex.isLocked()) {
       const release = await mutex.acquire()
