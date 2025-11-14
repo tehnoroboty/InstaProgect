@@ -42,14 +42,15 @@ export const DropdownNotification = () => {
   useEffect(() => {
     if (
       notifications &&
+      notifications.items &&
       notifications.items.length < notifications.totalCount &&
       notifications.items.length !== 0
     ) {
-      setCursor(notifications?.items[notifications.items.length - 1].id)
+      setCursor(notifications.items[notifications.items.length - 1].id)
     }
   }, [inView, notifications])
 
-  if (!notifications) {
+  if (!notifications || !notifications.items) {
     return null
   }
   const hasMorNotifications = notifications.items.length < notifications.totalCount

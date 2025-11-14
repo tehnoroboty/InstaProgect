@@ -43,15 +43,17 @@ export const notificationsApi = baseApi.injectEndpoints({
           currentCache.items = []
         }
 
-        newItems.items.map(newItem => {
-          const findIndex = currentCache.items.findIndex(
-            currentItem => currentItem.id === newItem.id
-          )
+        if (newItems.items && Array.isArray(newItems.items)) {
+          newItems.items.map(newItem => {
+            const findIndex = currentCache.items.findIndex(
+              currentItem => currentItem.id === newItem.id
+            )
 
-          if (findIndex === -1) {
-            currentCache.items.push(newItem)
-          }
-        })
+            if (findIndex === -1) {
+              currentCache.items.push(newItem)
+            }
+          })
+        }
       },
       providesTags: ['NOTIFICATIONS'],
       query: ({ cursor, isRead, pageSize, sortBy, sortDirection }) => ({
@@ -68,7 +70,10 @@ export const notificationsApi = baseApi.injectEndpoints({
         return endpointName
       },
       transformResponse: (response: GetNotificationsResponse, _meta, _arg) => {
-        return response
+        return {
+          ...response,
+          items: response.items || [],
+        }
       },
     }),
     markAsRead: builder.mutation<void, { ids: number[] }>({
