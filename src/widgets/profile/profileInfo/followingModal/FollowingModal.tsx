@@ -16,13 +16,16 @@ export const FollowingModal = ({ onClose, open, userName }: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
+  // Проверяем, что userName валидный перед выполнением запроса
+  const isValidUserName = userName && userName.trim().length > 0
+
   const { data: getFollowingData } = useGetFollowingQuery(
     {
       pageSize: 100,
       search: searchValue,
-      userName,
+      userName: isValidUserName ? userName : '',
     },
-    { skip: !isLoggedIn }
+    { skip: !isLoggedIn || !isValidUserName || !open }
   )
 
   const handleClose = () => {
