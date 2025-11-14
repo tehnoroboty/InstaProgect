@@ -19,7 +19,9 @@ export const MessengerSocketApi = {
     const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
     const options = { query: { accessToken: token } }
 
-    this.socket = io('https://inctagram.work', options)
+    const socketUrl = process.env.NEXT_PUBLIC_WS_BASE_URL ?? 'https://inctagram.work'
+
+    this.socket = io(socketUrl, options)
 
     this.socket.on('connect', () => {})
 
