@@ -112,7 +112,9 @@ export const AccountManagement = () => {
         window.location.assign(res.url)
       }
     } catch (err) {
-      setErrorMessage((err as ErrorDataType).messages[0].message)
+      const message = (err as ErrorDataType).messages?.[0]?.message
+
+      setErrorMessage(message ?? 'Something went wrong')
     }
   }
 

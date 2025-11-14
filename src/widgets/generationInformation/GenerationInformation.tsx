@@ -182,7 +182,7 @@ export const GenerationInformation = () => {
       sessionStorage.clear()
     } catch (err) {
       const error = err as CustomerError
-      const errorMessage = error.data?.messages[0]
+      const errorMessage = error.data?.messages?.[0]
 
       if (errorMessage?.field === 'userName') {
         setError('userName', {
