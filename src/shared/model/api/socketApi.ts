@@ -40,6 +40,10 @@ class SocketIoApi {
 
       dispatch(
         notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+          if (!draft.items) {
+            draft.items = []
+          }
+
           const existsIndex = draft.items.findIndex(item => item.id === data.id)
 
           if (existsIndex === -1) {

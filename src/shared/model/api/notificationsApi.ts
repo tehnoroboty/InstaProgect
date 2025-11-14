@@ -8,6 +8,10 @@ export const notificationsApi = baseApi.injectEndpoints({
       async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             const index = draft.items.findIndex(item => item.id === id)
 
             if (index !== -1) {
@@ -35,6 +39,10 @@ export const notificationsApi = baseApi.injectEndpoints({
         return currentArg?.cursor !== previousArg?.cursor
       },
       merge: (currentCache, newItems) => {
+        if (!currentCache.items) {
+          currentCache.items = []
+        }
+
         newItems.items.map(newItem => {
           const findIndex = currentCache.items.findIndex(
             currentItem => currentItem.id === newItem.id
@@ -68,6 +76,10 @@ export const notificationsApi = baseApi.injectEndpoints({
       async onQueryStarted({ ids }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             ids.map(id => {
               const index = draft.items.findIndex(item => item.id === id)
 

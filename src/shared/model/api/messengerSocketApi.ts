@@ -33,6 +33,10 @@ export const MessengerSocketApi = {
           'getMessagesByUser',
           { dialoguePartnerId: this.getDialoguePartnerId(data) },
           draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             const exists = draft.items.find(m => m.id === data.id)
 
             if (exists) {
@@ -57,6 +61,10 @@ export const MessengerSocketApi = {
             'getMessagesByUser',
             { dialoguePartnerId: this.getDialoguePartnerId(msg) },
             draft => {
+              if (!draft.items) {
+                draft.items = []
+              }
+
               const exists = draft.items.find(m => m.id === msg.id)
 
               if (!exists) {
@@ -88,6 +96,10 @@ export const MessengerSocketApi = {
           'getMessagesByUser',
           { dialoguePartnerId: partnerId },
           draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             const filteredMsg = draft.items.filter(msg => msg.id !== messageId)
 
             draft.items = [...filteredMsg]
