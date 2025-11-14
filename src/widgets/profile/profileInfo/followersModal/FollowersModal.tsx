@@ -15,9 +15,13 @@ type Props = {
 export const FollowersModal = ({ onClose, open, userName }: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
+  // Проверяем, что userName валидный перед выполнением запроса
+  const isValidUserName = userName && userName.trim().length > 0
+
   const { data: getFollowersData } = useGetFollowersQuery(
-    { search: searchValue, userName },
-    { skip: !isLoggedIn }
+    { search: searchValue, userName: isValidUserName ? userName : '' },
+    { skip: !isLoggedIn || !isValidUserName || !open }
   )
 
   const handleClose = () => {
