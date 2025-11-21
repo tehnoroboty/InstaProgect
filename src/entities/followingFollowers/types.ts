@@ -45,3 +45,12 @@ export type GetFollowingResponse = {
   prevCursor: number
   totalCount: number
 }
+
+export type unfollowingError = {
+  data: {
+    error: string
+    messages: string
+    statusCode: number
+  }
+  status: number
+}
