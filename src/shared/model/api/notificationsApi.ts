@@ -1,5 +1,5 @@
-import { baseApi } from '@/src/shared/model/api/baseApi'
-import { GetNotificationsArgs, GetNotificationsResponse } from '@/src/shared/model/api/types'
+import { GetNotificationsArgs, GetNotificationsResponse } from '@/src/entities/notifications/types'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const notificationsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -8,6 +8,10 @@ export const notificationsApi = baseApi.injectEndpoints({
       async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             const index = draft.items.findIndex(item => item.id === id)
 
             if (index !== -1) {
@@ -35,15 +39,21 @@ export const notificationsApi = baseApi.injectEndpoints({
         return currentArg?.cursor !== previousArg?.cursor
       },
       merge: (currentCache, newItems) => {
-        newItems.items.map(newItem => {
-          const findIndex = currentCache.items.findIndex(
-            currentItem => currentItem.id === newItem.id
-          )
+        if (!currentCache.items) {
+          currentCache.items = []
+        }
 
-          if (findIndex === -1) {
-            currentCache.items.push(newItem)
-          }
-        })
+        if (newItems.items && Array.isArray(newItems.items)) {
+          newItems.items.map(newItem => {
+            const findIndex = currentCache.items.findIndex(
+              currentItem => currentItem.id === newItem.id
+            )
+
+            if (findIndex === -1) {
+              currentCache.items.push(newItem)
+            }
+          })
+        }
       },
       providesTags: ['NOTIFICATIONS'],
       query: ({ cursor, isRead, pageSize, sortBy, sortDirection }) => ({
@@ -60,7 +70,10 @@ export const notificationsApi = baseApi.injectEndpoints({
         return endpointName
       },
       transformResponse: (response: GetNotificationsResponse, _meta, _arg) => {
-        return response
+        return {
+          ...response,
+          items: response.items || [],
+        }
       },
     }),
     markAsRead: builder.mutation<void, { ids: number[] }>({
@@ -68,6 +81,10 @@ export const notificationsApi = baseApi.injectEndpoints({
       async onQueryStarted({ ids }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+            if (!draft.items) {
+              draft.items = []
+            }
+
             ids.map(id => {
               const index = draft.items.findIndex(item => item.id === id)
 

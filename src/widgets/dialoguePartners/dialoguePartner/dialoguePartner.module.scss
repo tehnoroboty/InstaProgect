@@ -1,0 +1,20 @@
+.dialoguePartner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dialoguePartnerLink {
+  display: block;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited {
+    color: inherit;
+    text-decoration: none;
+  }
+}

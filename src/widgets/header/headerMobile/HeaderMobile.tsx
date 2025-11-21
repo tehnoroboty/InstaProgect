@@ -1,15 +1,18 @@
-import * as React from 'react'
 import { useId, useState } from 'react'
 
 import {
+  ArrowForwardOutline,
   BookmarkOutline,
   LogOutOutline,
   MoreHorizontalOutline,
+  PersonAddOutline,
   SettingsOutline,
   TrendingUpOutline,
 } from '@/src/shared/assets/componentsIcons'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation } from '@/src/shared/model/api/authApi'
+import { setIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Dropdown } from '@/src/shared/ui/dropdown/Dropdown'
@@ -29,6 +32,7 @@ type Props = {
 }
 
 export const HeaderMobile = (props: Props) => {
+  const dispatch = useAppDispatch()
   const { isLoggedIn = true, title } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [logout, { isLoading }] = useLogoutMutation()
@@ -41,29 +45,48 @@ export const HeaderMobile = (props: Props) => {
   }
 
   const onLogoutConfirm = async () => {
-    await logout().unwrap()
     setIsModalOpen(false)
+    dispatch(setIsLoggedIn({ isLoggedIn: false }))
     route.push(AuthRoutes.HOME)
+    await logout().unwrap()
   }
 
   const menuHeaderMobile: MenuItemType[] = [
     {
       href: '/statistics',
       icon: TrendingUpOutline,
+      id: 'statistics',
       title: 'Statistics',
     },
     {
       href: '/favorites',
       icon: BookmarkOutline,
+      id: 'favorites',
       title: 'Favorites',
     },
-    { href: '/settings', icon: SettingsOutline, title: 'Profile Settings' },
+    { href: '/settings', icon: SettingsOutline, id: 'settings', title: 'Profile Settings' },
     {
       icon: LogOutOutline,
+      id: 'logout',
       onClick: () => {
         onClickHandler()
       },
       title: 'Log Out',
+    },
+  ]
+
+  const menuGuestMobile: MenuItemType[] = [
+    {
+      href: AuthRoutes.LOGIN,
+      icon: ArrowForwardOutline,
+      id: 'guest-signin',
+      title: 'Sign in',
+    },
+    {
+      href: AuthRoutes.REGISTRATION,
+      icon: PersonAddOutline,
+      id: 'guest-signup',
+      title: 'Sign up',
     },
   ]
 
@@ -91,7 +114,7 @@ export const HeaderMobile = (props: Props) => {
       </Link>
       <div className={s.headerActions}>
         <SelectLanguage />
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <>
             <Dropdown list={menuHeaderMobile} renderItem={renderItem} trigger={trigger} />
             <Dialog
@@ -124,6 +147,8 @@ export const HeaderMobile = (props: Props) => {
               </div>
             </Dialog>
           </>
+        ) : (
+          <Dropdown list={menuGuestMobile} renderItem={renderItem} trigger={trigger} />
         )}
       </div>
     </div>

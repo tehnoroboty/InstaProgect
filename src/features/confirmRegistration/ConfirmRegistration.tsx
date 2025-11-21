@@ -1,9 +1,9 @@
 'use client'
 import { useEffect } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useRegistrationConfirmationMutation } from '@/src/shared/model/api/authApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import Image from 'next/image'
@@ -20,7 +20,6 @@ export const ConfirmRegistration = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        // Получаем параметры через useSearchParams
         const code = searchParams.get('code') as string
 
         await confirmRegistration({ confirmationCode: code }).unwrap()
@@ -28,7 +27,6 @@ export const ConfirmRegistration = () => {
         const error = err as CustomerError
         const errorMessage = error.data?.messages[0]?.message
 
-        // Проверяем сообщение об ошибке и выполняем перенаправление при необходимости
         if (errorMessage === 'Confirmation code is invalid') {
           router.push('/auth/registration-email-resending')
         }

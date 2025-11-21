@@ -1,11 +1,6 @@
-import type {
-  GetCommentsResponse,
-  PublicPostsResponse,
-  UsersCountResponse,
-} from '@/src/shared/model/api/types'
-
-import { AuthWrapper } from '../features/authWrapper/AuthWrapper'
-import { Post } from '@/src/entities/post/types'
+import { GetCommentsResponse } from '@/src/entities/comments/types'
+import { Post, PublicPostsResponse } from '@/src/entities/post/types'
+import { UsersCountResponse } from '@/src/entities/users/types'
 import { SearchParams, getUserComments, getUserPost } from '@/src/widgets/profile/getPublicProfile'
 import { PublicFeed } from '@/src/widgets/publicFeed/PublicFeed'
 import { getUsersCount, getUsersPosts } from '@/src/widgets/publicFeed/getPublicPosts'
@@ -39,9 +34,5 @@ export default async function Page(props: {
     posts: publicPosts,
   }
 
-  return (
-    <AuthWrapper>
-      <PublicFeed info={publicFeedInfo} />
-    </AuthWrapper>
-  )
+  return <PublicFeed info={publicFeedInfo} />
 }

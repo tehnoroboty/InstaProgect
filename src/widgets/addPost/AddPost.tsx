@@ -3,36 +3,72 @@ import { useEffect, useState } from 'react'
 
 import { CreatePostPhoto } from '@/src/features/createPost/CreatePostPhoto'
 import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
-import { AuthRoutes } from '@/src/shared/lib/constants/routing'
-import { useRouter } from 'next/navigation'
+import { PostFlowContext } from '@/src/shared/lib/context/PostFlowContext'
+import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 
 export const AddPost = () => {
   const [photos, setPhotos] = useState<string[]>([])
-  const [isAuth, setIsAuth] = useState<boolean | null>(null)
-  const router = useRouter()
+  const [draftExists, setDraftExists] = useState(false)
+  const [alertMessage, setAlertMessage] = useState<null | string>(null)
+  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning'>('success')
+
+  const DRAFT_KEY = 'post_draft'
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
+    setDraftExists(!!localStorage.getItem(DRAFT_KEY))
+  }, [])
 
-    if (!token) {
-      router.push(AuthRoutes.LOGIN)
-    } else {
-      setIsAuth(true)
+  const saveDraft = () => {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ photos }))
+    setDraftExists(true)
+  }
+
+  const openDraft = () => {
+    const raw = localStorage.getItem(DRAFT_KEY)
+
+    if (!raw) {
+      return
     }
-  }, [router])
+    const draft = JSON.parse(raw)
 
-  if (!isAuth) {
-    router.push(AuthRoutes.LOGIN)
+    setPhotos(draft.photos || [])
+  }
+
+  const discardDraft = () => {
+    localStorage.removeItem(DRAFT_KEY)
+
+    setDraftExists(false)
+    setPhotos([])
   }
 
   const createPhoto = (photo: string) => {
-    return setPhotos(prevPhotos => [...prevPhotos, photo])
+    setPhotos(prevPhotos => [...prevPhotos, photo])
+    setAlertMessage('The photo has added')
+    setAlertType('success')
   }
 
   return (
     <>
-      <CreatePostPhoto download={createPhoto} modalType={'post'} />
-      {photos.length !== 0 && <CroppingPhoto photos={photos} />}
+      <CreatePostPhoto
+        download={createPhoto}
+        draftExists={draftExists}
+        modalType={'post'}
+        openDraft={openDraft}
+      />
+      <PostFlowContext.Provider value={{ discardDraft, saveDraft }}>
+        {photos.length !== 0 && <CroppingPhoto photos={photos} />}
+      </PostFlowContext.Provider>
+
+      {alertMessage && (
+        <Alerts
+          autoClose
+          closable
+          closeFn={() => setAlertMessage(null)}
+          delay={3000}
+          message={alertMessage}
+          type={alertType}
+        />
+      )}
     </>
   )
 }

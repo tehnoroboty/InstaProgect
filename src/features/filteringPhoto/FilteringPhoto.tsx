@@ -7,6 +7,7 @@ import { CroppingPhoto } from '@/src/features/croppingPhoto/CroppingPhoto'
 import { PublishPhoto } from '@/src/features/publishPhoto/PublishPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -65,7 +66,7 @@ export const FilteringPhoto = ({ photos }: Props) => {
   const showPublishPhoto = useBoolean()
   const showCroppingPhoto = useBoolean()
   const dispatch = useDispatch()
-
+  const { discardDraft, saveDraft } = usePostFlow()
   const [editedPhotos, setEditedPhotos] = useState<string[]>(photos)
 
   const handleNextClick = () => {
@@ -149,7 +150,8 @@ export const FilteringPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onSaveDraft={() => {}}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>

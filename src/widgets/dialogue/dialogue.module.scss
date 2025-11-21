@@ -1,0 +1,73 @@
+.dialogue {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: calc(100lvh - 240px);
+  border: 1px solid var(--dark-300);
+
+  header {
+    padding: 12px;
+    border-bottom: 1px solid var(--dark-300);
+    background: var(--dark-500);
+  }
+
+  .dialogueLink {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .dialogueBody {
+    overflow-y: auto;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 32px;
+
+    padding: 23px;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    padding: 12px;
+    border-top: 1px solid var(--dark-300);
+
+    &.noRightPadding {
+      padding-right: 0;
+    }
+
+    .inputButton {
+      display: flex;
+      flex-grow: 1;
+      padding-right: 12px;
+    }
+
+    .input {
+      padding-right: 12px;
+      background: transparent;
+    }
+  }
+
+  .inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hiddenFileInput {
+    display: none;
+  }
+
+  .sendButton {
+    white-space: nowrap;
+  }
+
+  .imagePreview {
+    padding-bottom: 12px;
+    padding-left: 12px;
+  }
+}

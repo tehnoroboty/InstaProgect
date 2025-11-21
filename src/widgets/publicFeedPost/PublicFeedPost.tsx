@@ -29,7 +29,16 @@ export const PublicFeedPost = ({ onClick, post }: Props) => {
   const containerClasses = clsx(s.carouselContainer, { [s.open]: open })
 
   const renderImgCarousel = (img: PostImage) => {
-    return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
+    return (
+      <Image
+        alt={''}
+        className={s.img}
+        height={img.height}
+        priority
+        src={img.url}
+        width={img.width}
+      />
+    )
   }
 
   return (
@@ -41,16 +50,18 @@ export const PublicFeedPost = ({ onClick, post }: Props) => {
         <div className={classNames}>
           <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
           <CreationTime createdAt={createdAt} />
-          <p className={s.descriptionText}>
-            {!isDescriptionLong || open ? description : truncatedDescription}
-          </p>
-          <Collapsible.Trigger asChild>
-            {isDescriptionLong && (
+          <div className={clsx(s.descriptionContainer, { [s.scrollable]: open })}>
+            <p className={s.descriptionText}>
+              {!isDescriptionLong || open ? description : truncatedDescription}
+            </p>
+          </div>
+          {isDescriptionLong && (
+            <Collapsible.Trigger asChild>
               <Button className={s.showmoreBtn} variant={'transparent'}>
                 {open ? 'Hide' : 'Show more'}
               </Button>
-            )}
-          </Collapsible.Trigger>
+            </Collapsible.Trigger>
+          )}
         </div>
       </Collapsible.Root>
     </div>

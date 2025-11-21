@@ -19,6 +19,10 @@ export const ProfileInputsSettings = ({
   register,
   trigger,
 }: Props) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    sessionStorage.setItem(e.target.name, e.target.value)
+  }
+
   return (
     <>
       <Input
@@ -26,15 +30,16 @@ export const ProfileInputsSettings = ({
         label={'userName'}
         placeholder={''}
         {...register('userName', {
-          onBlur: () => {
-            trigger('userName'),
-              handleInputChange({
-                target: {
-                  name: 'userName',
-                  value: getValues('userName'),
-                },
-              })
+          onBlur: async () => {
+            await trigger('userName')
+            handleInputChange({
+              target: {
+                name: 'userName',
+                value: getValues('userName'),
+              },
+            })
           },
+          onChange: handleChange,
         })}
         error={errors.userName?.message}
       />
@@ -43,15 +48,16 @@ export const ProfileInputsSettings = ({
         label={'First Name'}
         placeholder={''}
         {...register('firstName', {
-          onBlur: () => {
-            trigger('firstName'),
-              handleInputChange({
-                target: {
-                  name: 'firstName',
-                  value: getValues('firstName'),
-                },
-              })
+          onBlur: async () => {
+            await trigger('firstName')
+            handleInputChange({
+              target: {
+                name: 'firstName',
+                value: getValues('firstName'),
+              },
+            })
           },
+          onChange: handleChange,
         })}
         error={errors.firstName?.message}
       />
@@ -60,15 +66,16 @@ export const ProfileInputsSettings = ({
         label={'Last Name'}
         placeholder={''}
         {...register('lastName', {
-          onBlur: () => {
-            trigger('lastName'),
-              handleInputChange({
-                target: {
-                  name: 'lastName',
-                  value: getValues('lastName'),
-                },
-              })
+          onBlur: async () => {
+            await trigger('lastName')
+            handleInputChange({
+              target: {
+                name: 'lastName',
+                value: getValues('lastName'),
+              },
+            })
           },
+          onChange: handleChange,
         })}
         error={errors.lastName?.message}
       />

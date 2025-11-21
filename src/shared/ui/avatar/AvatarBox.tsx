@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import * as Avatar from '@radix-ui/react-avatar'
 import clsx from 'clsx'
@@ -12,7 +14,7 @@ type Props = {
   src?: string
 }
 
-export const AvatarBox = ({ className, size = 'xl', src }: Props) => {
+export const AvatarBox = memo(({ className, size = 'xl', src }: Props) => {
   const imageSize = size === 'xl' || size === 'l' ? 48 : 24
 
   return (
@@ -28,4 +30,4 @@ export const AvatarBox = ({ className, size = 'xl', src }: Props) => {
       </Avatar.Fallback>
     </Avatar.Root>
   )
-}
+})

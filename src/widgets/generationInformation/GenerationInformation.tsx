@@ -3,18 +3,16 @@
 import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { InputChangeEvent } from '@/src/entities/devices/types'
+import { CustomerError } from '@/src/entities/errors/types'
 import { AvatarContainerSettings } from '@/src/features/avatarContainerSettings/AvatarContainerSettings'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery, usePutUserProfileMutation } from '@/src/shared/model/api/usersApi'
-import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { DatePicker } from '@/src/shared/ui/datePicker/DatePicker'
-import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Loader } from '@/src/shared/ui/loader/Loader'
 import { SelectBox } from '@/src/shared/ui/select/SelectBox'
 import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
-import { useAvatar } from '@/src/widgets/generationInformation/hooks/useAvatar'
 import { useCountryCityData } from '@/src/widgets/generationInformation/hooks/useCountryCityData'
 import { useDateSelection } from '@/src/widgets/generationInformation/hooks/useDateSelection'
 import { FormType, schema } from '@/src/widgets/generationInformation/validators'
@@ -53,18 +51,17 @@ export const GenerationInformation = () => {
   const router = useRouter()
   const params = useSearchParams()
   const isFormDirty = params.get('isFormDirty')
-  const [alertMessage, setAlertMessage] = useState<null | string>(null)
-  const [alertType, setAlertType] = useState<'error' | 'info' | 'success' | 'warning' | null>(null)
-  const { deleteAvatarHandler, deleteModal, isLoadingDelete, setDeleteModal } = useAvatar(
-    setAlertMessage,
-    setAlertType
-  )
-  const [selectedCountry, setSelectedCountry] = useState<string>(MyProfile?.country || '')
+
+  const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [selectedCity, setSelectedCity] = useState<string>('')
-  const { cites, countrys, countrysWithCity, setCites } = useCountryCityData(selectedCountry)
+  const { cites, countries, countriesWithCity, setCites } = useCountryCityData(selectedCountry)
   const { errorAge, onSelectDate } = useDateSelection(setValue)
 
   useEffect(() => {
+    if (!MyProfile || isFetching) {
+      return
+    }
+
     const baseValues = {
       aboutMe: MyProfile?.aboutMe || '',
       city: MyProfile?.city || '',
@@ -75,55 +72,67 @@ export const GenerationInformation = () => {
       userName: MyProfile?.userName || '',
     }
 
-    if (isFormDirty === 'true') {
-      const formUpdates: Partial<FormType> = {}
-      const formFields: Array<keyof FormType> = [
-        'userName',
-        'firstName',
-        'lastName',
-        'dateOfBirth',
-        'country',
-        'city',
-        'aboutMe',
-      ]
-
-      formFields.forEach(field => {
-        const storedValue = sessionStorage.getItem(field)
-
-        if (storedValue !== null) {
-          if (field === 'dateOfBirth') {
-            try {
-              const date = new Date(JSON.parse(storedValue))
-
-              formUpdates[field] = date.toISOString()
-            } catch {
-              // Если не удалось распарсить, оставляем значение из MyProfile
-            }
-          } else {
-            formUpdates[field] = storedValue
-          }
-        }
-      })
-
-      reset({ ...baseValues, ...formUpdates })
-
-      if (formUpdates.country !== undefined) {
-        setSelectedCountry(formUpdates.country)
-      }
-      if (formUpdates.city !== undefined) {
-        setSelectedCity(formUpdates.city)
-      }
-    } else {
+    if (!isFormDirty) {
       reset(baseValues)
       setSelectedCountry(MyProfile?.country || '')
       setSelectedCity(MyProfile?.city || '')
+
+      return
+    }
+
+    const formUpdates: Partial<FormType> = {}
+    const formFields: Array<keyof FormType> = [
+      'userName',
+      'firstName',
+      'lastName',
+      'dateOfBirth',
+      'country',
+      'city',
+      'aboutMe',
+    ]
+
+    formFields.forEach(field => {
+      const storedValue = sessionStorage.getItem(field)
+
+      if (storedValue !== null) {
+        if (field === 'dateOfBirth') {
+          try {
+            const parsed = JSON.parse(storedValue)
+            const date = new Date(parsed)
+
+            if (!isNaN(date.getTime())) {
+              formUpdates[field] = date.toISOString()
+            }
+          } catch (e) {
+            console.warn('Invalid date in sessionStorage for', field, e)
+          }
+        } else {
+          formUpdates[field] = storedValue
+        }
+      }
+    })
+
+    Object.entries({ ...baseValues, ...formUpdates }).forEach(([key, value]) => {
+      setValue(key as keyof FormType, value, { shouldDirty: true })
+    })
+
+    if (formUpdates.country !== undefined) {
+      setSelectedCountry(formUpdates.country)
+    }
+    if (formUpdates.city !== undefined) {
+      setSelectedCity(formUpdates.city)
     }
   }, [MyProfile, isFetching, isFormDirty, reset])
 
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target
+  useEffect(() => {
+    if (MyProfile && !isFormDirty) {
+      setSelectedCountry(prev => (prev ? prev : MyProfile.country || ''))
+      setSelectedCity(prev => (prev ? prev : MyProfile.city || ''))
+    }
+  }, [MyProfile, isFormDirty])
 
-    sessionStorage.setItem(name, value)
+  const handleInputChange = (e: InputChangeEvent) => {
+    sessionStorage.setItem(e.target.name, e.target.value)
   }
 
   const onSelectCountyHandler = (value: string) => {
@@ -171,41 +180,24 @@ export const GenerationInformation = () => {
 
       await updateProfile(registrationData).unwrap()
       sessionStorage.clear()
-      setAlertMessage('Your settings are saved!')
-      setAlertType('success')
     } catch (err) {
       const error = err as CustomerError
-      const errorMessage = error.data?.messages[0]
+      const errorMessage = error.data?.messages?.[0]
 
       if (errorMessage?.field === 'userName') {
         setError('userName', {
           message: errorMessage.message,
           type: 'manual',
         })
-        setAlertMessage('Error! Server is not available!')
-        setAlertType('error')
       }
     }
   }
 
-  if (isFetching || !countrysWithCity) {
-    return (
-      <div className={s.pageLoading}>
-        <Loader />
-      </div>
-    )
-  }
-
   return (
     <>
-      {alertMessage && alertType && <Alerts message={alertMessage} type={alertType} />}
       <form className={s.page} onSubmit={handleSubmit(onSubmit)}>
         <div className={s.inputsContainer}>
-          <AvatarContainerSettings
-            deleteModal={() => setDeleteModal(true)}
-            isLoadingDelete={isLoadingDelete}
-            myProfileAvatars={MyProfile?.avatars}
-          />
+          <AvatarContainerSettings myProfileAvatars={MyProfile?.avatars} />
           <div className={s.informationBox}>
             <ProfileInputsSettings
               errors={errors}
@@ -223,7 +215,7 @@ export const GenerationInformation = () => {
               />
               {errorAge && (
                 <Typography as={'span'} className={s.error}>
-                  {'A user under 13 cannot create a profile'}
+                  {'A users under 13 cannot create a profile'}
                   <Link className={s.link} href={'/privacy-policy'}>
                     {' Privacy Policy '}
                   </Link>
@@ -231,26 +223,35 @@ export const GenerationInformation = () => {
               )}
             </div>
             <div className={s.selectBox}>
-              <SelectBox
-                label={'Select your country'}
-                onChangeValue={onSelectCountyHandler}
-                options={countrys}
-                placeholder={'Country'}
-                value={MyProfile?.country || selectedCountry || ''}
-              />
-              <SelectBox
-                label={'Select your city'}
-                onChangeValue={onSelectCityHandler}
-                options={cites}
-                placeholder={'City'}
-                value={MyProfile?.city || selectedCity || ''}
-              />
+              {isFetching || !countriesWithCity ? (
+                <div className={s.selectLoader}>
+                  <Loader />
+                </div>
+              ) : (
+                <>
+                  <SelectBox
+                    label={'Select your country'}
+                    onChangeValue={onSelectCountyHandler}
+                    options={countries}
+                    placeholder={'Country'}
+                    value={selectedCountry || MyProfile?.country || ''}
+                  />
+                  <SelectBox
+                    label={'Select your city'}
+                    onChangeValue={onSelectCityHandler}
+                    options={cites}
+                    placeholder={'City'}
+                    value={selectedCity || MyProfile?.city || ''}
+                  />
+                </>
+              )}
             </div>
             <TextArea
               label={'About Me'}
               labelClassName={s.labelClassName}
               {...register('aboutMe', {
                 onBlur: () => trigger('aboutMe'),
+                onChange: e => sessionStorage.setItem('aboutMe', e.target.value),
               })}
               error={errors.aboutMe?.message}
             />
@@ -268,24 +269,6 @@ export const GenerationInformation = () => {
           </Button>
         </div>
       </form>
-      <Dialog
-        className={s.modalDeletePhoto}
-        modalTitle={'Delete Photo'}
-        onClose={() => setDeleteModal(false)}
-        open={deleteModal}
-      >
-        <div className={s.modalDeletePhotoContent}>
-          {'Do you really want to delete your profile photo?'}
-          <div className={s.modalBtns}>
-            <Button onClick={deleteAvatarHandler} type={'button'} variant={'bordered'}>
-              {'Yes'}
-            </Button>
-            <Button onClick={() => setDeleteModal(false)} type={'button'} variant={'primary'}>
-              {'No'}
-            </Button>
-          </div>
-        </div>
-      </Dialog>
     </>
   )
 }

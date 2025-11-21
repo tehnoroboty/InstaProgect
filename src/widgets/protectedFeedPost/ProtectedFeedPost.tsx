@@ -1,120 +1,170 @@
-import type { Comment } from '@/src/entities/comment/types'
 import type { Post, PostImage } from '@/src/entities/post/types'
-import type { Avatar } from '@/src/entities/user/types'
 
-import React from 'react'
+import React, { useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
+import { unfollowingError } from '@/src/entities/followingFollowers/types'
+import ImageNotFound from '@/src/shared/assets/componentsIcons/ImageNotFound'
+import { useGetCommentsQuery } from '@/src/shared/model/api/commentsAnswersApi'
+import { useFollowMutation, useUnFollowMutation } from '@/src/shared/model/api/followingApi'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { CreationTime } from '@/src/shared/ui/creationTime/CreationTime'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
+import clsx from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import s from './protectedFeedPost.module.scss'
 
-export const ProtectedFeedPost = (props: Post) => {
-  const { avatarOwner, createdAt, description, id, images, likesCount, userName } = props
+type Props = Post & {
+  onViewCommentsClick: () => void
+}
+
+export const ProtectedFeedPost = (props: Props) => {
+  const {
+    avatarOwner,
+    createdAt,
+    description,
+    id,
+    images,
+    onViewCommentsClick,
+    ownerId,
+    userName,
+  } = props
 
   const renderImgCarousel = (img: PostImage) => {
-    return <Image alt={''} className={s.img} height={img.height} src={img.url} width={img.width} />
+    return (
+      <Image
+        alt={''}
+        className={s.img}
+        height={img.height}
+        priority
+        src={img.url}
+        width={img.width}
+      />
+    )
   }
 
-  const mockAvatars: Avatar[] = [
-    {
-      createdAt: '2025-02-17T16:36:44.101Z',
-      fileSize: 300,
-      height: 512,
-      url: 'https://i.pinimg.com/736x/39/6d/f5/396df568a4325fe46c4a4801e198e7ef.jpg',
-      width: 512,
-    },
-    {
-      createdAt: '2025-02-17T16:36:44.101Z',
-      fileSize: 300,
-      height: 710,
-      url: 'https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k',
-      width: 660,
-    },
-    {
-      createdAt: '2025-02-17T16:36:44.101Z',
-      fileSize: 300,
-      height: 1440,
-      url: 'https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1',
-      width: 2560,
-    },
-  ]
+  const { data } = useGetCommentsQuery(id)
 
-  //TODO: запрос за комментариями к посту по айди поста
-  const mockComments: Comment[] = [
-    {
-      answerCount: 0,
-      content: 'Abshdjbsdkjshdjkhssd',
-      createdAt: '2025-03-01T16:36:44.101Z',
-      from: { avatars: mockAvatars[0], id: 2, username: 'Boba' },
-      id: 123,
-      isLiked: true,
-      likeCount: 1,
-      postId: 1,
-    },
-    {
-      answerCount: 10,
-      content: 'ewoweiopewiopwepiwepiwewopeweew',
-      createdAt: '2025-03-01T16:36:44.101Z',
-      from: { avatars: mockAvatars[1], id: 3, username: 'Lopa' },
-      id: 234,
-      isLiked: false,
-      likeCount: 15,
-      postId: 1,
-    },
-    {
-      answerCount: 340,
-      content: 'Lorem Ipsum lroewwhihwehweweewweieweeeeeeeeeeeeejhsddsd',
-      createdAt: '2025-03-01T16:36:44.101Z',
-      from: { avatars: mockAvatars[2], id: 23, username: 'Biba' },
-      id: 235,
-      isLiked: true,
-      likeCount: 120,
-      postId: 1,
-    },
-  ]
+  const dispatch = useAppDispatch()
+  const isOurPost = false
+  const showViewCommentsBtn = (data?.items?.length ?? 0) > 0
 
-  const isFollowedBy = true //TODO: запрос за пользователем, чтобы узнать, фолловиим ли мы его
-  const isOurPost = false // TODO: сравнить есть ли пост с таким айди у нас
+  const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
+
+  const [follow] = useFollowMutation()
+  const [unFollow] = useUnFollowMutation()
+  const [isFollowedBy, setIsFollowedBy] = useState(true)
+
+  const onOpenWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(true)
+  }
+  const onCloseWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(false)
+  }
+
+  const handleUnfollow = async (userId: number) => {
+    try {
+      await unFollow(userId).unwrap()
+      setIsFollowedBy(false)
+    } catch (err) {
+      const error = err as unfollowingError
+      const errorMessage = error.data?.messages || error.data?.error || 'Failed to unfollow'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
+  }
+
+  const handleFollow = async (userId: number) => {
+    try {
+      await follow(userId).unwrap()
+      setIsFollowedBy(true)
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'Failed to follow'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
+  }
 
   return (
     <div className={s.card} id={String(id)}>
       <div className={s.cardHeader}>
         <div className={s.cardHeaderGroup}>
-          <UserAvatarName className={s.owner} url={avatarOwner} username={userName} />
+          <Link href={`/profile/${ownerId}`}>
+            <UserAvatarName
+              className={s.owner}
+              url={avatarOwner}
+              username={userName}
+              usernameClassName={s.userName}
+            />
+          </Link>
           <CreationTime createdAt={createdAt} />
         </div>
-        <DropdownPost isFollowedBy={isFollowedBy} isOurPost={isOurPost} />
+        <DropdownPost
+          isFollowedBy={isFollowedBy}
+          isOurPost={isOurPost}
+          onFollow={() => handleFollow(ownerId)}
+          onUnfollow={() => handleUnfollow(ownerId)}
+        />
       </div>
       <div className={s.carouselContainer}>
-        <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
+        {images.length > 0 ? (
+          <Carousel list={images} renderItem={renderImgCarousel} size={'large'} />
+        ) : (
+          <div className={s.notFound}>
+            <ImageNotFound height={194} width={199} />
+            <div>
+              <b>No Image</b>
+            </div>
+          </div>
+        )}
       </div>
       <div className={s.cardBody}>
-        <InteractionBar />
+        <InteractionBar postId={id} />
         <div className={s.infoContainer}>
-          <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
+          <Link className={s.userName} href={`/profile/${ownerId}`}>
+            <AvatarBox className={s.avatar} size={'xs'} src={avatarOwner} />
+          </Link>
           <p className={s.postInfo}>
-            <span className={s.userName}>{userName}</span> {description}
+            <Link className={s.userName} href={`/profile/${ownerId}`}>
+              <span>{userName}</span>
+            </Link>{' '}
+            {description}
           </p>
         </div>
-        <PostLikesBox avatars={mockAvatars} className={s.likesBox} likesCount={likesCount} />
-        <Button className={s.viewCommentsBtn} onClick={() => {}} variant={'transparent'}>
-          {`View All Comments (${mockComments.length})`}
-        </Button>
-        <div className={s.addCommentContainer}>
-          <div className={s.textareaContainer}>
-            <TextArea className={s.textArea} label={''} placeholder={'Add a Comment...'} />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>
+        <PostLikesBox
+          className={clsx(s.likesBox, { [s.noMargin]: !showViewCommentsBtn })}
+          onClick={onOpenWhoLikeModal}
+          postId={id}
+        />
+        {showViewCommentsBtn && (
+          <Button
+            className={s.viewCommentsBtn}
+            onClick={onViewCommentsClick}
+            variant={'transparent'}
+          >
+            {`View All Comments (${data?.items.length})`}
+          </Button>
+        )}
+        <AddCommentForm
+          className={s.addCommentContainer}
+          postId={id}
+          textAreaClassName={s.textArea}
+          textAreaWrapperClassName={s.textareaContainer}
+        />
+        <WhoLikeModal onClose={onCloseWhoLikeModal} open={isWhoLikeModalOpen} postId={id} />
       </div>
     </div>
   )

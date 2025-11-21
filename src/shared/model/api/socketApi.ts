@@ -1,5 +1,6 @@
+import { Notifications } from '@/src/entities/notifications/types'
+import { AUTH_KEYS } from '@/src/shared/lib/constants/auth-keys'
 import { notificationsApi } from '@/src/shared/model/api/notificationsApi'
-import { Notifications } from '@/src/shared/model/api/types'
 import { AppDispatch } from '@/src/shared/model/store/store'
 import { Socket, io } from 'socket.io-client'
 
@@ -19,10 +20,12 @@ class SocketIoApi {
   }
 
   static creatConnection(dispatch: AppDispatch) {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem(AUTH_KEYS.ACCESS_TOKEN)
     const options = { query: { accessToken: token } }
 
-    this.socket = io('https://inctagram.work', options)
+    const socketUrl = process.env.NEXT_PUBLIC_WS_BASE_URL ?? 'https://inctagram.work'
+
+    this.socket = io(socketUrl, options)
 
     this.socket.on('connect', () => {})
     this.socket.on('disconnect', () => {})
@@ -37,6 +40,10 @@ class SocketIoApi {
 
       dispatch(
         notificationsApi.util.updateQueryData('getNotifications', {}, draft => {
+          if (!draft.items) {
+            draft.items = []
+          }
+
           const existsIndex = draft.items.findIndex(item => item.id === data.id)
 
           if (existsIndex === -1) {

@@ -5,6 +5,8 @@ import React, { useState } from 'react'
 import { Button } from '../../shared/ui/button/Button'
 import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { useLogoutMutation, useMeQuery } from '@/src/shared/model/api/authApi'
+import { selectIsLoggedIn } from '@/src/shared/model/slices/appSlice'
+import { useAppSelector } from '@/src/shared/model/store/store'
 import { Dialog } from '@/src/shared/ui/dialog/Dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
@@ -35,7 +37,8 @@ export const ItemWrapper = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const [logout, { isLoading }] = useLogoutMutation()
-  const { data: meData } = useMeQuery()
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const { data: meData } = useMeQuery(undefined, { skip: !isLoggedIn })
   const route = useRouter()
 
   const onClickHandler = () => {
