@@ -1,7 +1,15 @@
 'use client'
 
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, useId, useState } from 'react'
+import {
+  ChangeEvent,
+  ComponentPropsWithoutRef,
+  ElementRef,
+  forwardRef,
+  useId,
+  useState,
+} from 'react'
 
+import { ImageOutline } from '@/src/shared/assets/componentsIcons'
 import Close from '@/src/shared/assets/componentsIcons/CloseOutline'
 import EyeOff from '@/src/shared/assets/componentsIcons/EyeOffOutline'
 import Eye from '@/src/shared/assets/componentsIcons/EyeOutline'
@@ -16,7 +24,9 @@ export type InputProps = {
   important?: boolean
   label?: string
   onClear?: () => void
+  onImageUpload?: (file: File) => void
   placeholder?: string
+  showImageButton?: boolean
 } & ComponentPropsWithoutRef<'input'>
 
 const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
@@ -28,7 +38,9 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
     important = false,
     label,
     onClear,
+    onImageUpload,
     placeholder = 'Input text',
+    showImageButton = true,
     type,
     value,
     ...rest
@@ -38,6 +50,7 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
   const finalId = id ?? generatedId
 
   const InputType = {
+    messageType: 'message',
     passwordType: 'password',
     searchType: 'search',
   } as const
@@ -48,6 +61,14 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
+  }
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+
+    if (file && onImageUpload) {
+      onImageUpload(file)
+    }
   }
 
   return (
@@ -70,7 +91,8 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
             { [s.placeholder]: placeholder },
             { [s.error]: error },
             { [s.searchPadding]: type === InputType.searchType },
-            { [s.passwordPadding]: type === InputType.passwordType }
+            { [s.passwordPadding]: type === InputType.passwordType },
+            { [s.messagePadding]: type === InputType.messageType }
           )}
           disabled={disabled}
           id={finalId}
@@ -101,6 +123,18 @@ const Input = forwardRef<ElementRef<'input'>, InputProps>((props, ref) => {
             className={clsx(s.eyeIcon, { [s.disabledIcon]: disabled })}
             onClick={togglePasswordVisibility}
           />
+        )}
+
+        {type === InputType.messageType && showImageButton && (
+          <label className={clsx(s.imageUploadLabel, { [s.disabledIcon]: disabled })}>
+            <ImageOutline className={s.imageIcon} />
+            <input
+              accept={'image/*'}
+              className={s.hiddenFileInput}
+              onChange={handleImageUpload}
+              type={'file'}
+            />
+          </label>
         )}
       </div>
       {error && !disabled && <Typography className={s.errorMessage}>{error}</Typography>}

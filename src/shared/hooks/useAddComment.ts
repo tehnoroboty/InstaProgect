@@ -1,0 +1,46 @@
+import { useCallback, useState } from 'react'
+
+import { CustomerError } from '@/src/entities/errors/types'
+import { useCreateNewCommentMutation } from '@/src/shared/model/api/commentsAnswersApi'
+import { setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
+
+export const useAddComment = (postId: number) => {
+  const [commentText, setCommentText] = useState('')
+  const dispatch = useAppDispatch()
+
+  const [createNewComment, { isLoading }] = useCreateNewCommentMutation()
+
+  const handleChange = (text: string) => {
+    setCommentText(text)
+  }
+
+  const handleSubmit = useCallback(
+    async (onSuccess?: () => void) => {
+      if (!commentText.trim()) {
+        return
+      }
+
+      try {
+        await createNewComment({ content: commentText, postId }).unwrap()
+
+        setCommentText('')
+        onSuccess?.()
+      } catch (err) {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages[0].message || error.data?.error || 'Failed to add comments'
+
+        dispatch(setAppError({ error: errorMessage }))
+      }
+    },
+    [commentText, postId, createNewComment, dispatch]
+  )
+
+  return {
+    commentText,
+    handleChange,
+    handleSubmit,
+    isLoading,
+  }
+}

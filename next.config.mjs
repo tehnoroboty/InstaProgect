@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    NEXT_PUBLIC_BASE_URL: process.env.NODE_ENV === 'production'
-      ? 'https://momenttify.store'
-      : 'http://localhost:3000',
-  },
+  // Переменные окружения загружаются автоматически Next.js из .env файлов:
+  // - npm run dev → NODE_ENV=development → загружается .env.development
+  // - npm run build → NODE_ENV=production → загружается .env.production
+  // Все переменные NEXT_PUBLIC_* из .env файлов автоматически доступны в коде
   images: {
     domains: ['encrypted-tbn0.gstatic.com'],
     remotePatterns: [

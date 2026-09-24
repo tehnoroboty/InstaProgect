@@ -34,7 +34,7 @@ type Props = {
  *
  * @param {string} [props.className] - Additional class names for the alert.
  *
- * @param {boolean} [props.closable=true] - Indicates if the alert can be closed by the user.
+ * @param {boolean} [props.closable=true] - Indicates if the alert can be closed by the users.
  *
  * @param {string} [props.message] - The message to be displayed in the alert.
  *

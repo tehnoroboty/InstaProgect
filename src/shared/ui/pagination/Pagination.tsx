@@ -50,11 +50,9 @@ export const Pagination = (props: PaginationProps) => {
     totalCount,
   } = props
 
-  // Корректируем currentPage, если оно превышает totalPageCount
   const totalPageCount = Math.ceil(totalCount / pageSize)
   const currentPage = propCurrentPage > totalPageCount ? 1 : propCurrentPage
 
-  // Если после корректировки currentPage изменилось, вызываем onPageChange
   useEffect(() => {
     if (propCurrentPage > totalPageCount && totalPageCount > 0) {
       onPageChange(1)

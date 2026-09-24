@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState } from 'react'
 
 import * as Slider from '@radix-ui/react-slider'

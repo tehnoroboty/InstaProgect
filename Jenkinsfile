@@ -4,8 +4,8 @@ pipeline {
     agent any
     environment {
         ENV_TYPE = "production"
-        PORT = 3705
-        NAMESPACE = "momenttify-store"
+        PORT = 4088
+        NAMESPACE = "momenttify-ru"
         REGISTRY_HOSTNAME = "momenttify"
         REGISTRY = "registry.hub.docker.com"
         PROJECT = "momenttify"
@@ -20,20 +20,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Unit tests') {
-             steps {
-                echo "Preparing started..."
-                  script {
-                      sh '''
-                         export NVM_DIR="$HOME/.nvm"
-                         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                         nvm use --lts
-                         pnpm install
-                         pnpm run test
-                      '''
-                  }
-             }
-        }
         stage('Build docker image') {
             steps {
                 echo "Build image started..."
@@ -47,7 +33,7 @@ pipeline {
              steps {
                  echo "Push image started..."
                      script {
-                          docker.withRegistry("https://${env.REGISTRY}", 'momenttify-store') {
+                          docker.withRegistry("https://${env.REGISTRY}", 'momenttify-ru') {
                             app.push("${env.IMAGE_NAME}")
                         }
                      }

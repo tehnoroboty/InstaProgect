@@ -34,7 +34,7 @@ a.item {
     }
   }
 }
-
+/* stylelint-disable no-descending-specificity */
 .active {
   color: var(--primary-500);
 

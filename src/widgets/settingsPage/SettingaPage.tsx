@@ -2,14 +2,13 @@
 
 import React from 'react'
 
-import { AuthRoutes } from '@/src/shared/lib/constants/routing'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared/ui/tabs'
 import { AccountManagement } from '@/src/widgets/accountManager/AccountManagement'
 import { Devices } from '@/src/widgets/devices/Devices'
 import { GenerationInformation } from '@/src/widgets/generationInformation/GenerationInformation'
 import { MyPayments } from '@/src/widgets/myPayments/MyPayments'
 import { Tab } from '@/src/widgets/settingsPage/data'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import s from './settingsPage.module.scss'
 
@@ -32,11 +31,7 @@ export const SettingsPage = ({ userId }: { userId: string }) => {
   const router = useRouter()
   const pathname = usePathname()
   const currentTab = pathname.split('/').pop() || 'general-information'
-  const isAuth = localStorage.getItem('accessToken')
 
-  if (!isAuth) {
-    router.push(AuthRoutes.LOGIN)
-  }
   const handleTabChange = (newTab: string) => {
     router.push(`/profile/${userId}/settings/${newTab}`)
   }

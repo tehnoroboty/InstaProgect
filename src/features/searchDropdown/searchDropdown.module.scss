@@ -1,0 +1,36 @@
+.userCard {
+  cursor: pointer;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  padding: 8px 12px;
+
+  &:hover {
+    background: var(--dark-100);
+  }
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.dropdownEmpty {
+  position: absolute;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+
+  color: #888;
+  text-align: center;
+
+  background: var(--dark-300);
+}

@@ -1,9 +1,8 @@
 import { MouseEvent } from 'react'
-import * as React from 'react'
 
+import { Notifications } from '@/src/entities/notifications/types'
 import { EyeOutline, TrashOutline } from '@/src/shared/assets/componentsIcons'
 import { timeElapsedSince } from '@/src/shared/lib/timeElapsedSince'
-import { Notifications } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'

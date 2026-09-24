@@ -1,0 +1,28 @@
+.addComment {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  padding: 10px 0;
+}
+
+.textareaWrapper {
+  width: 100%;
+}
+
+.textarea textarea {
+  height: 24px;
+  padding: 0 5px;
+  border: none;
+
+  font-size: 14px;
+  color: var(--light-900);
+
+  background-color: var(--dark-500);
+}
+
+.btn {
+  margin-top: -3px;
+  padding: 6px 12px;
+}

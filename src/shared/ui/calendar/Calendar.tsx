@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { ComponentProps } from 'react'
 import { DayPicker } from 'react-day-picker'
 
 import { ArrowIosBackOutline, ArrowIosForwardOutline } from '@/src/shared/assets/componentsIcons'
@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import s from './calendar.module.scss'
 import 'react-day-picker/src/style.css'
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = ComponentProps<typeof DayPicker>
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (

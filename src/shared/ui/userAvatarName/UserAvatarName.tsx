@@ -10,12 +10,14 @@ type Props = {
   url: string
   username: string
   usernameClassName?: string
+  weight?: 'bold' | 'medium' | 'regular' | 'semi-bold'
 } & ComponentPropsWithoutRef<'div'>
 export const UserAvatarName = ({
   className,
   url = '',
   username = 'UserName',
   usernameClassName,
+  weight = 'semi-bold',
 }: Props) => {
   return (
     <div className={clsx(s.userAvaName, className)}>
@@ -23,7 +25,7 @@ export const UserAvatarName = ({
         <AvatarBox size={'xs'} src={url} />
       </div>
       <div className={usernameClassName}>
-        <Typography size={'m'} weight={'semi-bold'}>
+        <Typography size={'m'} weight={weight}>
           {username}
         </Typography>
       </div>

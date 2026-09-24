@@ -1,98 +1,165 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Button } from '../../shared/ui/button/Button'
+import { AnswersComment } from '@/src/entities/comments/types'
+import { CustomerError } from '@/src/entities/errors/types'
+import { LikeStatus } from '@/src/entities/likes/types'
 import { Post } from '@/src/entities/post/types'
-import Heart from '@/src/shared/assets/componentsIcons/Heart'
-import HeartOutline from '@/src/shared/assets/componentsIcons/HeartOutline'
+import { formatDate } from '@/src/shared/lib/formatDate'
+import { sortComments } from '@/src/shared/lib/sortComments'
 import { timeSince } from '@/src/shared/lib/timeSince'
+import {
+  commentsAnswersApi,
+  useGetCommentsQuery,
+  useUpdateAnswerLikeStatusMutation,
+  useUpdateCommentLikeStatusMutation,
+} from '@/src/shared/model/api/commentsAnswersApi'
 import { useDeletePostMutation } from '@/src/shared/model/api/postsApi'
-import { Comment } from '@/src/shared/model/api/types'
+import { selectUserId, setAppError } from '@/src/shared/model/slices/appSlice'
+import { useAppDispatch } from '@/src/shared/model/store/store'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { PostLikesBox } from '@/src/shared/ui/postLikesBox/PostLikesBox'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
+import { AddCommentForm } from '@/src/widgets/addCommentForm/AddCommentForm'
+import { CommentItemContainer } from '@/src/widgets/commentItemContainer/CommentItemContainer'
 import { DropdownPost } from '@/src/widgets/dropdownPost/DropdownPost'
 import { EditPost } from '@/src/widgets/editPost/EditPost'
 import { ConfirmationModal } from '@/src/widgets/editPost/сonfirmationModal/ConfirmationModal'
+import { InteractionBar } from '@/src/widgets/interactionBar/InteractionBar'
+import { WhoLikeModal } from '@/src/widgets/profile/profileInfo/whoLikeModal/whoLikeModal'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 
 import s from './modalCommentsSection.module.scss'
 
-type Avatar = {
-  createdAt: string
-  fileSize: number
-  height: number
-  url: string
-  width: number
-}
-
 export type ModalCommentsSectionProps = {
-  avatars?: Avatar[]
-  commentsData: Comment[]
   isAuth?: boolean
   isMyPost?: boolean
   post: Post
 }
 
 export const ModalCommentsSection = ({
-  avatars,
-  commentsData,
   isAuth = false,
   isMyPost = false,
   post,
 }: ModalCommentsSectionProps) => {
+  const dispatch = useAppDispatch()
+
   const { avatarOwner, createdAt, description, id: postId, ownerId, userName } = post
-  const [comments, setComments] = useState<Comment[]>(commentsData)
-  const textArea = useRef<HTMLTextAreaElement>(null)
+
+  const [replyingToCommentId, setReplyingToCommentId] = useState<null | number>(null)
+  const [answersMap, setAnswersMap] = useState<Record<number, AnswersComment[]>>({})
+  const [expandedAnswersMap, setExpandedAnswersMap] = useState<Record<number, boolean>>({})
+
+  const [isWhoLikeModalOpen, setIsWhoLikeModalOpen] = useState(false)
+
+  const onOpenWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(true)
+  }
+  const onCloseWhoLikeModal = () => {
+    setIsWhoLikeModalOpen(false)
+  }
+
+  const { data: commentsResponse } = useGetCommentsQuery(postId)
+  const commentsRaw = useMemo(() => commentsResponse?.items ?? [], [commentsResponse?.items])
+
+  const currentUserId = useSelector(selectUserId)
+
+  useEffect(() => {
+    const fetchAnswers = async () => {
+      const promises = commentsRaw.map(comment =>
+        dispatch(
+          commentsAnswersApi.endpoints.getCommentAnswers.initiate({
+            commentId: comment.id,
+            postId,
+          })
+        ).unwrap()
+      )
+
+      try {
+        const responses = await Promise.all(promises)
+        const answersObj: Record<number, AnswersComment[]> = {}
+
+        responses.forEach((res, index) => {
+          answersObj[commentsRaw[index].id] = [...res.items].reverse()
+        })
+
+        setAnswersMap(answersObj)
+      } catch (err) {
+        const error = err as CustomerError
+        const errorMessage =
+          error.data?.messages[0].message || error.data?.error || 'Error loading answers'
+
+        dispatch(setAppError({ error: errorMessage }))
+      }
+    }
+
+    if (commentsRaw.length) {
+      fetchAnswers()
+    }
+  }, [commentsRaw, dispatch, postId])
+
+  const comments = useMemo(() => {
+    if (!currentUserId) {
+      return commentsRaw
+    }
+
+    return sortComments(commentsRaw, currentUserId)
+  }, [commentsRaw, currentUserId])
+
   const [deletePost] = useDeletePostMutation()
   const router = useRouter()
   const params = useParams<{ userId: string }>()
 
-  const handleChangeHeight = () => {
-    if (textArea.current) {
-      textArea.current.style.height = '24px'
-      const textAreaHeight = Math.min(textArea.current.scrollHeight, 120)
+  const [updateCommentLikeStatus] = useUpdateCommentLikeStatusMutation()
 
-      textArea.current.style.height = textAreaHeight + 'px'
+  const handleLikeComment = async (commentId: number, currentStatus: LikeStatus) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
+
+    try {
+      await updateCommentLikeStatus({ commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The comments has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
     }
   }
-  const handleLikeComment = (commentId: number) => {
-    setComments(prevComments =>
-      prevComments.map(comment =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              isLiked: !comment.isLiked,
-              likeCount: comment.isLiked ? comment.likeCount - 1 : comment.likeCount + 1,
-            }
-          : comment
-      )
-    )
-  }
 
-  const avatarsData =
-    avatars ??
-    commentsData.map(item => {
-      if (item.from.avatars.length < 1) {
-        return {
-          createdAt: '2025-02-19T11:58:19.531Z',
-          fileSize: 300,
-          height: 300,
-          url: 'https://example.com/image1.jpg',
-          width: 300,
-        }
-      } else {
-        return item.from.avatars[0]
-      }
-    })
+  const [updateAnswerLikeStatus] = useUpdateAnswerLikeStatusMutation()
+
+  const handleLikeAnswer = async (
+    commentId: number,
+    answerId: number,
+    currentStatus: LikeStatus
+  ) => {
+    const nextStatus: LikeStatus = currentStatus === 'LIKE' ? 'NONE' : 'LIKE'
+
+    try {
+      await updateAnswerLikeStatus({ answerId, commentId, likeStatus: nextStatus, postId }).unwrap()
+    } catch (err) {
+      const error = err as CustomerError
+      const errorMessage =
+        error.data?.messages[0].message || error.data?.error || 'The answer has not been found'
+
+      dispatch(setAppError({ error: errorMessage }))
+    }
+  }
 
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleAnswerAdded = (commentId: number, answer: AnswersComment) => {
+    setAnswersMap(prev => ({
+      ...prev,
+      [commentId]: [answer, ...(prev[commentId] || [])],
+    }))
+  }
 
   const handleEditPost = () => {
     setIsEditing(true)
@@ -109,6 +176,13 @@ export const ModalCommentsSection = ({
     await deletePost({ postId, userId: Number(params.userId) }).unwrap()
     setIsDeleting(false)
     router.push(`/profile/${params.userId}`, { scroll: false })
+  }
+
+  const toggleAnswersVisibility = (commentId: number) => {
+    setExpandedAnswersMap(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }))
   }
 
   if (isEditing) {
@@ -184,93 +258,35 @@ export const ModalCommentsSection = ({
             </Typography>
           </div>
         </div>
-        {comments
-          ?.map(el => (
-            <div className={s.usersCommentBody} key={el.id}>
-              <div className={s.usersCommentBodyBox}>
-                <div className={s.userAva}>
-                  <AvatarBox
-                    className={s.smallAva}
-                    size={'xs'}
-                    src={el.from.avatars?.[0]?.url || ''}
-                  />
-                </div>
-                <div className={s.userComment}>
-                  <Typography as={'h3'} className={s.userName} size={'s'} weight={'bold'}>
-                    {el.from.username}
-                  </Typography>
-                  <Typography
-                    as={'div'}
-                    className={s.userCommentTypography}
-                    size={'s'}
-                    weight={'regular'}
-                  >
-                    {el.content}
-                  </Typography>
-                  <div className={s.userCommentBottom}>
-                    <Typography lineHeights={'s'} size={'xs'} weight={'regular'}>
-                      {timeSince(el.createdAt)}
-                    </Typography>
-                    <Typography
-                      lineHeights={'s'}
-                      size={'xs'}
-                      weight={'semi-bold'}
-                    >{`Like: ${el.likeCount}`}</Typography>
-                    <Button className={s.answerButton} variant={'transparent'}>
-                      {'Answer'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              {isAuth && (
-                <div className={s.heartIconWrapper}>
-                  {el.isLiked ? (
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(el.id)}
-                      title={'Unlike'}
-                      variant={'transparent'}
-                    >
-                      <Heart className={clsx(s.heartIcon, s.red)} />
-                    </Button>
-                  ) : (
-                    <Button
-                      className={s.iconButton}
-                      onClick={() => handleLikeComment(el.id)}
-                      title={'Like'}
-                      variant={'transparent'}
-                    >
-                      <HeartOutline className={clsx(s.heartIcon, s.heartOutlineIcon)} />
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          ))
-          .reverse()}
+        {comments.map(comment => (
+          <CommentItemContainer
+            answersMap={answersMap}
+            comment={comment}
+            currentUserId={currentUserId}
+            expandedAnswersMap={expandedAnswersMap}
+            handleLikeAnswer={handleLikeAnswer}
+            handleLikeComment={handleLikeComment}
+            isAuth={isAuth}
+            key={comment.id}
+            onAnswerAdded={handleAnswerAdded}
+            postId={postId}
+            replyingToCommentId={replyingToCommentId}
+            setReplyingToCommentId={setReplyingToCommentId}
+            toggleAnswersVisibility={toggleAnswersVisibility}
+          />
+        ))}
       </div>
       <div className={s.postActions}>
-        <PostLikesBox
-          avatars={avatarsData}
-          className={s.postLikesBox}
-          isAuth={isAuth}
-          likesCount={post.likesCount}
-        />
-        <div className={s.postDate}>{timeSince(createdAt)}</div>
+        {isAuth && (
+          <InteractionBar className={s.interactionBar} hasCommentIcon={false} postId={postId} />
+        )}
+        <PostLikesBox className={s.postLikesBox} onClick={onOpenWhoLikeModal} postId={postId} />
+        <div className={s.postDate}>{formatDate(createdAt)}</div>
       </div>
-      {isAuth && (
-        <div className={s.addComment}>
-          <div className={s.textareaWrapper}>
-            <TextArea
-              className={s.textarea}
-              label={''}
-              onChange={handleChangeHeight}
-              placeholder={'Add a Comment...'}
-            />
-          </div>
-          <Button variant={'transparent'}>{'Publish'}</Button>
-        </div>
-      )}
+      <div className={clsx({ [s.withBorder]: isAuth })}>
+        {isAuth && <AddCommentForm postId={postId} />}
+      </div>
+      <WhoLikeModal onClose={onCloseWhoLikeModal} open={isWhoLikeModalOpen} postId={postId} />
     </div>
   )
 }

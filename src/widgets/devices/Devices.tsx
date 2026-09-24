@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { DeviceType } from '@/src/entities/devices/devices'
+import { DeviceType } from '@/src/entities/devices/types'
+import { ErrorDataType } from '@/src/entities/errors/types'
 import {
   Brave,
   Chrome,
@@ -21,7 +22,6 @@ import {
   useDevicesQuery,
   useTerminateAllSessionsMutation,
 } from '@/src/shared/model/api/devicesApi'
-import { ErrorDataType } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Loader } from '@/src/shared/ui/loader/Loader'
