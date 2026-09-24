@@ -1,5 +1,6 @@
 #Устанавливаем зависимости
 FROM node:20.11-alpine as dependencies
+RUN npm install -g corepack@latest && corepack enable
 RUN npm install -g pnpm@9.15.1
 WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
@@ -9,6 +10,7 @@ RUN pnpm install --frozen-lockfile
 #Кэширование зависимостей — если файлы в проекте изменились,
 #но package.json остался неизменным, то стейдж с установкой зависимостей повторно не выполняется, что экономит время.
 FROM node:20.11-alpine as builder
+RUN npm install -g corepack@latest && corepack enable
 RUN npm install -g pnpm@9.15.1
 WORKDIR /app
 COPY . .
@@ -17,6 +19,7 @@ RUN pnpm run build:production
 
 #Стейдж запуска
 FROM node:20.11-alpine as runner
+RUN npm install -g corepack@latest && corepack enable
 RUN npm install -g pnpm@9.15.1
 WORKDIR /app
 ENV NODE_ENV production
