@@ -65,24 +65,6 @@
   color: var(--light-900);
 }
 
-.modalDeletePhoto {
-  width: clamp(420px, 20vw, 438px);
-  min-width: 30%;
-  height: 240px;
-
-  .modalDeletePhotoContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px 10px;
-
-    .modalBtns {
-      display: flex;
-      flex-direction: row;
-      gap: 24px;
-      justify-content: flex-end;
-
-      margin-top: 54px;
-    }
-  }
+.selectLoader {
+  margin: 0 auto;
 }

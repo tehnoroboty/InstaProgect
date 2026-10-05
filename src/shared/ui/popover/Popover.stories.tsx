@@ -4,7 +4,7 @@ import ExpandOutline from '@/src/shared/assets/componentsIcons/ExpandOutline'
 import { PopoverComponent } from '@/src/shared/ui/popover/Popover'
 import { Meta, StoryObj } from '@storybook/react'
 
-import s from '@/src/features/croppingPhoto/croppingPhoto.module.scss' // Предположим,
+import s from '@/src/features/croppingPhoto/croppingPhoto.module.scss'
 
 const meta: Meta<typeof PopoverComponent> = {
   argTypes: {

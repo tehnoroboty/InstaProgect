@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import CalendarOutline from '@/src/shared/assets/componentsIcons/CalendarOutline'
 import { Calendar } from '@/src/shared/ui/calendar/Calendar'
@@ -15,11 +15,21 @@ type Props = {
   error?: boolean
   label?: string
   onSelect?: (value?: Date) => void
-  value?: any
+  value?: Date | string
 }
 
 export const DatePicker = ({ error, label, onSelect, value }: Props) => {
-  const [date, setDate] = useState<Date | undefined>(value)
+  const [date, setDate] = useState<Date | undefined>(() => {
+    return value ? new Date(value) : undefined
+  })
+
+  useEffect(() => {
+    if (value) {
+      const parsed = typeof value === 'string' ? new Date(value) : value
+
+      setDate(parsed)
+    }
+  }, [value])
 
   const onSelectHandler = (selectedDate: Date | undefined) => {
     setDate(selectedDate)

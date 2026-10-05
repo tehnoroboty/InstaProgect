@@ -1,5 +1,5 @@
+import { GetCommentsResponse } from '@/src/entities/comments/types'
 import { Post } from '@/src/entities/post/types'
-import { GetCommentsResponse } from '@/src/shared/model/api/types'
 import { Profile } from '@/src/widgets/profile/Profile'
 import {
   SearchParams,

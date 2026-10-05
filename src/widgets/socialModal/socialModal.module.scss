@@ -1,0 +1,19 @@
+.socialModal {
+  width: 40.25rem;
+  min-width: 40.25rem;
+  height: 35.25rem;
+}
+
+.inputWrapper {
+  padding-top: 16px;
+  padding-bottom: 24px;
+}
+
+.input input {
+  background-color: var(--dark-300);
+}
+
+.content {
+  overflow-y: auto;
+  max-height: calc(35.25rem - 168px);
+}

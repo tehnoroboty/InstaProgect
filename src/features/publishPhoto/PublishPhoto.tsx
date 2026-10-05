@@ -2,18 +2,19 @@
 
 import { useRef, useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
+import { RequestPostsType } from '@/src/entities/post/types'
 import { FilteringPhoto } from '@/src/features/filteringPhoto/FilteringPhoto'
 import { urlToFile } from '@/src/features/publishPhoto/hooks/uploadPhoto'
 import ArrowIosBackOutline from '@/src/shared/assets/componentsIcons/ArrowIosBackOutline'
-import PinIcon from '@/src/shared/assets/componentsIcons/PinOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
 import { AppRoutes } from '@/src/shared/lib/constants/routing'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import {
   postsApi,
   useCreateImageForPostMutation,
   useCreateNewPostMutation,
 } from '@/src/shared/model/api/postsApi'
-import { CustomerError, RequestPostsType } from '@/src/shared/model/api/types'
 import { useGetMyProfileQuery } from '@/src/shared/model/api/usersApi'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { useAppDispatch } from '@/src/shared/model/store/store'
@@ -21,9 +22,8 @@ import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
 import { Dialog } from '@/src/shared/ui/dialog'
-import { Input } from '@/src/shared/ui/input'
 import { Loader } from '@/src/shared/ui/loader/Loader'
-import { TextArea } from '@/src/shared/ui/textArea/TextArea'
+import { TextAreaWithValidation } from '@/src/shared/ui/textAreaWithValidation/TextAreaWithValidation'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import { UserAvatarName } from '@/src/shared/ui/userAvatarName/UserAvatarName'
 import { ExitModal } from '@/src/widgets/exitModal/ExitModal'
@@ -49,6 +49,8 @@ export const PublishPhoto = ({ photos }: Props) => {
   const [addPhotosForPost, { isError: isErrorForPhoto, isLoading: isLoadingForPhoto }] =
     useCreateImageForPostMutation()
   const [addPost, { isError, isLoading }] = useCreateNewPostMutation()
+  const [hasTextAreaError, setHasTextAreaError] = useState<string | undefined>('')
+  const { discardDraft, saveDraft } = usePostFlow()
 
   const onClickPublishHandler = async () => {
     try {
@@ -85,12 +87,13 @@ export const PublishPhoto = ({ photos }: Props) => {
           })
         )
         router.push(`${AppRoutes.PROFILE}/${userProfile?.id}`)
+        discardDraft()
       } else {
         console.warn('No files were uploaded successfully.')
       }
     } catch (error) {
       const err = error as CustomerError
-      const errorMessage = err.data?.messages[0]
+      const errorMessage = err.data?.messages?.[0]
 
       setErrorMessage(errorMessage?.message)
     }
@@ -109,6 +112,9 @@ export const PublishPhoto = ({ photos }: Props) => {
 
   if (showFilteringPhoto.value) {
     return <FilteringPhoto photos={photos} />
+  }
+  const handleTextAreaError = (hasError: string | undefined) => {
+    setHasTextAreaError(hasError)
   }
 
   return (
@@ -132,8 +138,12 @@ export const PublishPhoto = ({ photos }: Props) => {
               {'Publication'}
             </Typography>
           </Title>
-          <Button onClick={onClickPublishHandler} variant={'transparent'}>
-            {'Publish'}
+          <Button
+            disabled={!!hasTextAreaError || isLoading || isLoadingForPhoto}
+            onClick={onClickPublishHandler}
+            variant={'transparent'}
+          >
+            {isLoading || isLoadingForPhoto ? 'Publishing...' : 'Publish'}
           </Button>
         </div>
 
@@ -152,40 +162,18 @@ export const PublishPhoto = ({ photos }: Props) => {
           <div className={s.descriptionBox}>
             <div className={s.publicationBox}>
               <UserAvatarName
-                url={userProfile?.avatars[0]?.url || ''}
+                url={userProfile?.avatars?.[0]?.url || ''}
                 username={`${userProfile?.userName}`}
               />
-              <TextArea
+              <TextAreaWithValidation
                 className={s.addPublication}
                 label={'Add publication descriptions'}
                 maxLength={500}
-                onChange={onChangeValue}
+                onErrorChange={handleTextAreaError}
+                onTextChange={onChangeValue}
                 ref={textareaRef}
                 value={value}
               />
-            </div>
-            <div className={s.locationBox}>
-              <div className={s.inputContainer}>
-                <Input className={s.addLocation} label={'Add location'} />
-                <PinIcon className={s.pinIcon} />
-              </div>
-
-              <div className={s.selectedLocation}>
-                <Typography className={s.city} option={'regular_text16'}>
-                  {'New York'}
-                </Typography>
-                <Typography className={s.location} option={'small_text'}>
-                  {'Washington Square Park'}
-                </Typography>
-              </div>
-              <div className={s.selectedLocation}>
-                <Typography className={s.city} option={'regular_text16'}>
-                  {'New York'}
-                </Typography>
-                <Typography className={s.location} option={'small_text'}>
-                  {'Washington Square Park'}
-                </Typography>
-              </div>
             </div>
           </div>
         </div>
@@ -194,7 +182,8 @@ export const PublishPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={exitModal.setFalse}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onSaveDraft={() => {}}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>

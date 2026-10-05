@@ -1,4 +1,10 @@
-import { baseApi } from '@/src/shared/model/api/baseApi'
+import {
+  GetFollowersArgs,
+  GetFollowersResponse,
+  GetFollowingArgs,
+  GetFollowingResponse,
+} from '@/src/entities/followingFollowers/types'
+import { baseApi } from '@/src/shared/model/api/base/baseApi'
 
 export const followingApi = baseApi.injectEndpoints({
   endpoints: builder => ({
@@ -11,6 +17,22 @@ export const followingApi = baseApi.injectEndpoints({
           url: 'users/following',
         }
       },
+    }),
+    getFollowers: builder.query<GetFollowersResponse, GetFollowersArgs>({
+      providesTags: ['FOLLOWING'],
+      query: ({ userName, ...params }) => ({
+        method: 'GET',
+        params,
+        url: `users/${userName}/followers`,
+      }),
+    }),
+    getFollowing: builder.query<GetFollowingResponse, GetFollowingArgs>({
+      providesTags: ['FOLLOWING'],
+      query: ({ userName, ...params }) => ({
+        method: 'GET',
+        params,
+        url: `users/${userName}/following`,
+      }),
     }),
     unFollow: builder.mutation<void, number>({
       invalidatesTags: ['FOLLOWING'],
@@ -25,4 +47,9 @@ export const followingApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useFollowMutation, useUnFollowMutation } = followingApi
+export const {
+  useFollowMutation,
+  useGetFollowersQuery,
+  useGetFollowingQuery,
+  useUnFollowMutation,
+} = followingApi

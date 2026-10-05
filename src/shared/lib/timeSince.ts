@@ -1,5 +1,5 @@
 /**
- * Counts the time since post/comment was created
+ * Counts the time since post/comments was created
  * @param {string} isoDate - Creation time in ISO date format
  * @returns {string} - Time since creation in minutes, hours, days, months, years
  */

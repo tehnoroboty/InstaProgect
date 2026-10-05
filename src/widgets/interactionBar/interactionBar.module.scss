@@ -30,14 +30,14 @@
   }
 }
 
-.outlineIcon {
-  &:hover path {
-    opacity: 0.5;
-  }
-}
-
 .red {
   & path {
     fill: var(--danger-500);
+  }
+}
+
+.outlineIcon {
+  &:hover path {
+    opacity: 0.5;
   }
 }

@@ -4,12 +4,15 @@ import { z } from 'zod'
 
 export const schema = z
   .object({
-    checkbox: z.boolean(),
+    checkbox: z.boolean().refine(val => val === true, {
+      message: ERROR_MESSAGES.CHECKBOX.REQUIRED,
+    }),
     email: z
       .string()
-      .min(1, ERROR_MESSAGES.EMAIL.REQUIRED)
+      .min(6, ERROR_MESSAGES.EMAIL.MIN)
       .email(ERROR_MESSAGES.EMAIL.INVALID)
-      .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL.FORMAT),
+      .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL.FORMAT)
+      .max(50, ERROR_MESSAGES.EMAIL.MAX),
     password: z
       .string()
       .nonempty(ERROR_MESSAGES.PASSWORD.REQUIRED)

@@ -1,55 +1,39 @@
+'use client'
+
 import { ComponentPropsWithoutRef } from 'react'
 
+import { usePostLikes } from '@/src/shared/hooks/usePostLikes'
 import { AvatarBox } from '@/src/shared/ui/avatar/AvatarBox'
 import { Typography } from '@/src/shared/ui/typography/Typography'
 import clsx from 'clsx'
 
 import s from '@/src/shared/ui/postLikesBox/postLikesBox.module.scss'
 
-type Avatar = {
-  createdAt: string
-  fileSize: number
-  height: number
-  url: string
-  width: number
-}
-
 type Props = {
-  avatars?: { url: string }[] | Avatar[]
-  isAuth?: boolean
-  likesCount?: number
+  onClick?: () => void
+  postId: number
 } & ComponentPropsWithoutRef<'div'>
 
-export const PostLikesBox = ({ avatars = [], className, isAuth, likesCount }: Props) => {
-  const firstThreeAvatars = avatars.slice(0, 3)
+export const PostLikesBox = ({ className, onClick, postId }: Props) => {
+  const { avatars, likesCount } = usePostLikes(postId)
+
   const avatarClasses = [s.firstAvaLike, s.secondAvaLike, s.thirdAvaLike]
 
   return (
-    <div className={clsx(s.postLikes, className)}>
-      {avatars.length === 0 && (!likesCount || likesCount === 0) ? (
-        <Typography as={'div'} className={s.likeCount}>
-          {isAuth ? 'Be the first to like this' : 'No likes here yet'}
+    <div className={clsx(s.postLikes, className)} onClick={onClick}>
+      {likesCount && likesCount > 0 ? (
+        <div className={s.postLikesAvatars}>
+          {avatars.map((url, index) => (
+            <AvatarBox className={avatarClasses[index]} key={url} size={'xxs'} src={url} />
+          ))}
+        </div>
+      ) : null}
+      <div className={s.likeCount}>
+        <Typography as={'span'}>{likesCount}</Typography>
+        <Typography as={'span'} option={'bold_text14'}>
+          {likesCount === 1 ? ` "Like"` : ` "Likes"`}
         </Typography>
-      ) : (
-        <>
-          <div className={s.postLikesAvatars}>
-            {firstThreeAvatars.map((avatar, index) => (
-              <AvatarBox
-                className={avatarClasses[index]}
-                key={avatar.url}
-                size={'xxs'}
-                src={avatar.url}
-              />
-            ))}
-          </div>
-          <div className={s.likeCount}>
-            <Typography as={'span'}>{likesCount}</Typography>
-            <Typography as={'span'} option={'bold_text14'}>
-              {likesCount && likesCount > 1 ? ` "Likes"` : ` "Like"`}
-            </Typography>
-          </div>
-        </>
-      )}
+      </div>
     </div>
   )
 }

@@ -81,13 +81,23 @@
   word-wrap: break-word;
 }
 
+.descriptionContainer {
+  overflow: hidden; // Чтобы текст не переполнял
+  max-height: none; // По умолчанию без ограничения (для закрытого состояния)
+}
+
+.scrollable {
+  overflow-y: auto; // Скролл по вертикали
+  max-height: 200px; // Или любая фиксированная высота, чтобы текст не растягивал карточку (подберите под дизайн)
+  padding-right: 8px; // Опционально, чтобы скроллбар не перекрывал текст
+}
+
 .showmoreBtn {
   cursor: pointer;
 
   display: inline;
 
-  margin: 0;
-  margin-left: 2px;
+  margin: 0 0 0 2px;
   padding: 0;
   border: none;
 

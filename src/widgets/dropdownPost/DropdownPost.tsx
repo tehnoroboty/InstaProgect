@@ -15,9 +15,19 @@ type Props = {
   isOurPost: boolean
   onDelete?: () => void
   onEdit?: () => void
+  onFollow?: () => void
+  onUnfollow?: () => void
 }
 
-export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onEdit }: Props) => {
+export const DropdownPost = ({
+  className,
+  isFollowedBy,
+  isOurPost,
+  onDelete,
+  onEdit,
+  onFollow,
+  onUnfollow,
+}: Props) => {
   const ourPostActions: DropdownMenuItems[] = [
     {
       icon: Edit2Outline,
@@ -36,7 +46,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
     {
       icon: PersonRemoveOutline,
       id: '1',
-      onClick: () => {},
+      onClick: onUnfollow,
       title: 'Unfollow',
     },
     {
@@ -45,12 +55,12 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
       onClick: () => {},
       title: 'Copy Link',
     },
-  ] //пользователь, которого мы фолловим
+  ]
   const nonFolloweeActions: DropdownMenuItems[] = [
     {
       icon: PersonAddOutline,
       id: '1',
-      onClick: () => {},
+      onClick: onFollow,
       title: 'Follow',
     },
     {
@@ -59,7 +69,7 @@ export const DropdownPost = ({ className, isFollowedBy, isOurPost, onDelete, onE
       onClick: () => {},
       title: 'Copy Link',
     },
-  ] // пользователь, которого НЕ фолловим
+  ]
 
   // eslint-disable-next-line no-nested-ternary
   const menuItems: DropdownMenuItems[] = isOurPost

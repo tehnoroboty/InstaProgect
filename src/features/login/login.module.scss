@@ -33,6 +33,7 @@
 }
 
 .input {
+  user-select: none;
   margin-bottom: 24px;
 
   &:last-child {
@@ -41,6 +42,7 @@
 }
 
 .forgotPassword {
+  user-select: none;
   display: flex;
   justify-content: flex-end;
   padding: 0;

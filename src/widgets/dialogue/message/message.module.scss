@@ -1,0 +1,100 @@
+.messageContainer {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.isMy {
+  align-self: flex-end;
+
+  .message {
+    background: var(--primary-900);
+
+    .time {
+      display: flex;
+      align-items: center;
+      color: var(--primary-100);
+    }
+
+    .time p {
+      color: var(--primary-100);
+    }
+  }
+}
+/* stylelint-disable no-descending-specificity */
+.message {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 12px;
+  border-radius: 8px;
+
+  background: var(--dark-300);
+
+  .time p {
+    align-self: flex-end;
+    color: var(--light-900);
+  }
+
+  &.imageOnly {
+    gap: 5px;
+    padding: 0;
+    background-color: transparent;
+
+    & .time {
+      color: var(--light-100);
+    }
+  }
+}
+
+.imageMessage {
+  max-width: 100%;
+  max-height: 360px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.actionsPanel {
+  position: absolute;
+  right: 0;
+  bottom: -26px;
+
+  display: flex;
+  gap: 8px;
+
+  opacity: 0;
+
+  transition: opacity 0.3s;
+}
+
+.actionsPanelBtn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+
+  svg,
+  path {
+    fill: var(--dark-100);
+  }
+}
+
+.isMy:hover {
+  .actionsPanel {
+    opacity: 1;
+  }
+}
+
+.readMsg path {
+  fill: var(--primary-100);
+}
+
+.sentMsg path {
+  fill: var(--primary-700);
+}
+
+.receivedMsg path {
+  fill: var(--primary-700);
+}

@@ -7,6 +7,8 @@ export const schema = z.object({
     .string()
     .min(1, ERROR_MESSAGES.EMAIL.REQUIRED)
     .email(ERROR_MESSAGES.EMAIL.INVALID)
+    .trim()
+    .toLowerCase()
     .regex(EMAIL_REGEX, ERROR_MESSAGES.EMAIL.FORMAT),
 })
 

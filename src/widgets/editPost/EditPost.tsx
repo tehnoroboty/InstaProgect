@@ -1,10 +1,8 @@
-'use client'
-
 import React, { useState } from 'react'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import CloseIcon from '@/src/shared/assets/componentsIcons/CloseOutline'
 import { useUpdatePostMutation } from '@/src/shared/model/api/postsApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Alerts } from '@/src/shared/ui/alerts/Alerts'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
@@ -21,7 +19,7 @@ import s from '@/src/widgets/editPost/editPost.module.scss'
 type Props = {
   avatarOwner: string
   imgSrc?: string
-  onExitEdit: () => void // Колбэк для выхода из режима редактирования
+  onExitEdit: () => void
   postDescription: string
   postId: number
   userName: string
@@ -57,8 +55,8 @@ export const EditPost = ({
   }
 
   const handleConfirmClose = () => {
-    setShowConfirmation(false) // Закрываем ExitModal
-    onExitEdit() // Возвращаемся к ModalPost
+    setShowConfirmation(false)
+    onExitEdit()
   }
 
   const handleCloseEditPost = () => {

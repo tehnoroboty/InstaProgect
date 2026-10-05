@@ -1,28 +1,49 @@
-import { ModalType } from '@/src/features/croppingPhoto/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { closeModalMessage, closePhotoModalMessage } from '@/src/widgets/addPost/data'
 
 import s from './exitModal.module.scss'
 
-type Props = {
-  modalType: ModalType
+type BaseProps = {
   onCloseModal: () => void
   onCloseParentModal: () => void
-  onSaveDraft: () => void
   open: boolean
 }
 
-export const ExitModal = ({
-  modalType,
-  onCloseModal,
-  onCloseParentModal,
-  onSaveDraft,
-  open,
-}: Props) => {
-  const onClickDiscard = () => {
+type PhotoProps = BaseProps & {
+  modalType: 'photo'
+}
+
+type PostProps = BaseProps & {
+  modalType: 'post'
+  onDiscard: () => void
+  onSaveDraft: () => void
+}
+type Props = PhotoProps | PostProps
+
+export const ExitModal = (props: Props) => {
+  const { modalType, onCloseModal, onCloseParentModal, open } = props
+
+  const handleCloseModal = () => {
+    onCloseModal()
+  }
+
+  const handleClose = () => {
     onCloseModal()
     onCloseParentModal()
+  }
+  const handleDiscard = () => {
+    if (props.modalType === 'post') {
+      props.onDiscard()
+      handleClose()
+    }
+  }
+
+  const handleSaveDraft = () => {
+    if (props.modalType === 'post') {
+      props.onSaveDraft()
+      handleClose()
+    }
   }
 
   return (
@@ -36,10 +57,10 @@ export const ExitModal = ({
         <div>
           {closePhotoModalMessage.text}
           <div className={s.additionalModalBtns}>
-            <Button onClick={onClickDiscard} variant={'bordered'}>
+            <Button onClick={handleClose} variant={'bordered'}>
               {'Yes'}
             </Button>
-            <Button onClick={onSaveDraft} variant={'primary'}>
+            <Button onClick={handleCloseModal} variant={'primary'}>
               {'No'}
             </Button>
           </div>
@@ -48,10 +69,10 @@ export const ExitModal = ({
         <div>
           {closeModalMessage.text}
           <div className={s.additionalModalBtns}>
-            <Button onClick={onClickDiscard} variant={'bordered'}>
+            <Button onClick={handleDiscard} variant={'bordered'}>
               {'Discard'}
             </Button>
-            <Button onClick={onSaveDraft} variant={'primary'}>
+            <Button onClick={handleSaveDraft} variant={'primary'}>
               {'Save Draft'}
             </Button>
           </div>

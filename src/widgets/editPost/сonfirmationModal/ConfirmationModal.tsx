@@ -1,10 +1,12 @@
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Typography } from '@/src/shared/ui/typography/Typography'
+import clsx from 'clsx'
 
 import s from './сonfirmationModal.module.scss'
 
 type Props = {
+  className?: string
   modalMessage: string
   modalTitle: string
   onClickNo: () => void
@@ -14,6 +16,7 @@ type Props = {
 }
 
 export const ConfirmationModal = ({
+  className,
   modalMessage,
   modalTitle,
   onClickNo,
@@ -28,7 +31,7 @@ export const ConfirmationModal = ({
 
   return (
     <Dialog
-      className={s.additionalModal}
+      className={clsx(s.additionalModal, className)}
       modalTitle={modalTitle}
       onClose={onCloseModal}
       open={open}

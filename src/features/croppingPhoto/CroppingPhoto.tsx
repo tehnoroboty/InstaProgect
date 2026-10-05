@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { useDispatch } from 'react-redux'
 
@@ -15,6 +15,7 @@ import ImageOutline from '@/src/shared/assets/componentsIcons/ImageOutline'
 import Maximize from '@/src/shared/assets/componentsIcons/Maximize'
 import MaximizeOutline from '@/src/shared/assets/componentsIcons/MaximizeOutline'
 import { useBoolean } from '@/src/shared/hooks/useBoolean'
+import { usePostFlow } from '@/src/shared/lib/context/PostFlowContext'
 import { setIsPostModalOpen } from '@/src/shared/model/slices/modalSlice'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Carousel } from '@/src/shared/ui/carousel/Carousel'
@@ -37,6 +38,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
   const exitModal = useBoolean()
   const showFilteringPhoto = useBoolean()
   const showAddPost = useBoolean()
+  const { discardDraft, saveDraft } = usePostFlow()
 
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
   const [localSelectedPhoto, setLocalSelectedPhoto] = useState<string>(photos[0])
@@ -57,6 +59,11 @@ export const CroppingPhoto = ({ photos }: Props) => {
   )
   const selectedPhotoIndex = localPhotos.indexOf(localSelectedPhoto)
   const currentPhotoSettings = photoSettings[selectedPhotoIndex]
+
+  useEffect(() => {
+    setLocalPhotos(photos)
+    setLocalSelectedPhoto(photos[0] || '')
+  }, [photos])
 
   const handleNextClick = async () => {
     await applyCropToAllPhotos(localPhotos, photoSettings, setLocalPhotos)
@@ -115,7 +122,7 @@ export const CroppingPhoto = ({ photos }: Props) => {
 
   return (
     <>
-      <Dialog className={s.modal} isSimple onClose={exitModal.setFalse} open={openModal.value}>
+      <Dialog className={s.modal} isSimple onClose={exitModal.setTrue} open={openModal.value}>
         <div className={s.header}>
           <Button className={s.buttonBack} onClick={handleBackClick} variant={'transparent'}>
             <ArrowIosBackOutline color={'white'} />
@@ -227,7 +234,8 @@ export const CroppingPhoto = ({ photos }: Props) => {
         modalType={'post'}
         onCloseModal={() => exitModal.setFalse()}
         onCloseParentModal={() => dispatch(setIsPostModalOpen({ isOpen: false }))}
-        onSaveDraft={() => {}}
+        onDiscard={discardDraft}
+        onSaveDraft={saveDraft}
         open={exitModal.value}
       />
     </>

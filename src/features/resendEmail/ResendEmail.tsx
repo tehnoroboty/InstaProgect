@@ -2,9 +2,9 @@
 import { ChangeEvent, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { CustomerError } from '@/src/entities/errors/types'
 import { FormType, schema } from '@/src/features/resendEmail/validators'
 import { useRegistrationEmailResendingMutation } from '@/src/shared/model/api/authApi'
-import { CustomerError } from '@/src/shared/model/api/types'
 import { Button } from '@/src/shared/ui/button/Button'
 import { Dialog } from '@/src/shared/ui/dialog'
 import { Input } from '@/src/shared/ui/input/Input'
